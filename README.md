@@ -1,4 +1,4 @@
-# D10-RT01 ---------- HOCHO -----------
+# D10-RT01 ----------- HOCHO ------------
 Build a management system that provides an online educational and entertainment environment for children.
 
 ## Create the project :
