@@ -32,7 +32,7 @@ Dependencies :
 spring.application.name=Hocho
 
 # MS SQL Server Config
-spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=demo_01;encrypt=false;trustServerCertificate=true
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=hocho;encrypt=false;trustServerCertificate=true
 spring.datasource.username=sa
 spring.datasource.password=123
 spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
