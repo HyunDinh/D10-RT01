@@ -1,12 +1,13 @@
 # D10-RT01 ----------- HOCHO ------------
 Build a management system that provides an online educational and entertainment environment for children.
 ( this branch demonstrates how to create the project or how to clone the project, also setup tasks guilds )
+
 ## Create the project :
 
 ```bash
 REQUIREMENTS : INTELLIJ ULTIMATE - SPRING WEB
 
-including :
+Including :
 - maven
 - JDK : openJDK 17 or higher
 - Java version : 17
@@ -21,4 +22,37 @@ Dependencies :
 - Spring Boot Devtools
 - Spring Boot Actuator
 - Lombok
+```
+
+## Application.properties :
+
+
+
+```bash
+spring.application.name=Hocho
+
+# MS SQL Server Config
+spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=demo_01;encrypt=false;trustServerCertificate=true
+spring.datasource.username=sa
+spring.datasource.password=123
+spring.datasource.driver-class-name=com.microsoft.sqlserver.jdbc.SQLServerDriver
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.jpa.open-in-view=false
+
+# default default
+spring.security.user.name=admin
+spring.security.user.password=123
+
+# Actuator config
+management.endpoints.web.exposure.include=health,info
+
+# Server config
+server.port=8080
+
+# thymeleaf setting
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.mvc.static-path-pattern=/**
+spring.web.resources.static-locations=classpath:/static/
 ```
