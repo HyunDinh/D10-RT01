@@ -5,11 +5,13 @@ Build a management system that provides an online educational and entertainment 
 
 ```bash
 REQUIREMENTS : INTELLIJ ULTIMATE - SPRING WEB
+
 including :
 - maven
 - JDK : openJDK 17 or higher
 - Java version : 17
 - Packaging : jar
+
 Dependencies :
 - Spring web
 - Spring Data JPA
