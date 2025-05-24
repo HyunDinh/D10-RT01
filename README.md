@@ -56,3 +56,14 @@ spring.thymeleaf.suffix=.html
 spring.mvc.static-path-pattern=/**
 spring.web.resources.static-locations=classpath:/static/
 ```
+
+## Push project into github with branch :
+```bash
+git init
+git remote add origin https://github.com/HyunDinh/D10-RT01.git
+git fetch origin
+git checkout -b Dinh_Hung origin/Dinh_Hung
+git add .
+git commit -m "Update code in Dinh_Hung"
+git push
+```
