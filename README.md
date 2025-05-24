@@ -62,8 +62,8 @@ spring.web.resources.static-locations=classpath:/static/
 git init
 git remote add origin https://github.com/HyunDinh/D10-RT01.git
 git fetch origin
-git checkout -b Dinh_Hung origin/Dinh_Hung
+git checkout -b Dinh-Hung origin/Dinh-Hung
 git add .
-git commit -m "Update code in Dinh_Hung"
+git commit -m "Update code in Dinh-Hung"
 git push
 ```
