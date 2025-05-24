@@ -1,0 +1,6 @@
+
+
+COURSE VIEW PAGE :
+- As a student, i wanna see the full courses of a teacher so that i can select one to add to cart.
+- As a teacher, i wanna post the video for my course and also post the tutorial files (pdf/pptx) below that video so that my students can start learning.
+- As a teacher, i want my student be able to post questions below the course and i can answer so that i can help my student study better.
