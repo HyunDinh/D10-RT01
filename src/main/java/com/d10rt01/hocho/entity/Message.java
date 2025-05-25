@@ -14,6 +14,10 @@ public class Message {
     private Long messageId;
 
     @ManyToOne
+    @JoinColumn(name = "chat_session_id", nullable = false)
+    private ChatSession chatSession;
+
+    @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
