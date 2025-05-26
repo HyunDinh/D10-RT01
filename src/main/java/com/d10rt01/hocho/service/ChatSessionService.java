@@ -30,6 +30,15 @@ public class ChatSessionService {
 
     @Transactional
     public ChatSession createChatSession(Long user1Id, Long user2Id) {
+        if (user1Id.equals(user2Id)) {
+            throw new RuntimeException("Cannot create chat session with the same user");
+        }
+        // Kiểm tra đã tồn tại phiên chat giữa hai user này chưa (cả hai chiều)
+        boolean exists = chatSessionRepository.existsByUser1_UserIdAndUser2_UserId(user1Id, user2Id)
+                || chatSessionRepository.existsByUser1_UserIdAndUser2_UserId(user2Id, user1Id);
+        if (exists) {
+            throw new RuntimeException("Chat session between these users already exists");
+        }
         User user1 = userRepository.findById(user1Id)
                 .orElseThrow(() -> new RuntimeException("User 1 not found"));
         User user2 = userRepository.findById(user2Id)

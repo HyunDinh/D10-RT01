@@ -8,5 +8,5 @@ Hoàn thành demo chức năng cho giáo viên tạo , chỉnh sửa , xóa thô
 
 Note những ghi chú , giải thích vào từng chức năng . 
 
-
+Update thêm một vài tính năng phần nhắn tin ( thêm validation ) .Thêm chức năng tạo,chỉnh sửa,xóa câu hỏi  . Thêm chức năng tạo,chỉnh sửa,xóa câu trả lời .Thêm 2 bảng Quesion và Answer 
 

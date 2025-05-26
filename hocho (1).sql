@@ -381,3 +381,33 @@ CREATE TABLE tutors (
     updated_at DATETIME,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+-- Bảng questions: Lưu trữ câu hỏi của học sinh
+-- Chức năng:
+-- 1. Học sinh đăng câu hỏi bài tập
+-- 2. Lưu kèm ảnh câu hỏi, môn học, lớp
+CREATE TABLE questions (
+    question_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi câu hỏi
+    user_id INT NOT NULL, -- ID người dùng đăng câu hỏi (học sinh)
+    content NVARCHAR(MAX) NOT NULL, -- Nội dung câu hỏi
+    image_url VARCHAR(255), -- URL ảnh đính kèm
+    subject NVARCHAR(200) NOT NULL, -- Môn học
+    grade INT NOT NULL, -- Lớp (1-9)
+    created_at DATETIME DEFAULT GETDATE(), -- Thời gian đăng câu hỏi
+    FOREIGN KEY (user_id) REFERENCES users(user_id) -- Liên kết với bảng users
+);
+
+-- Bảng answers: Lưu trữ câu trả lời cho câu hỏi
+-- Chức năng:
+-- 1. Mọi người trả lời câu hỏi của học sinh
+-- 2. Lưu kèm ảnh lời giải
+CREATE TABLE answers (
+    answer_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi câu trả lời
+    question_id INT NOT NULL, -- ID câu hỏi được trả lời
+    user_id INT NOT NULL, -- ID người dùng trả lời
+    content NVARCHAR(MAX) NOT NULL, -- Nội dung câu trả lời
+    image_url VARCHAR(255), -- URL ảnh đính kèm
+    created_at DATETIME DEFAULT GETDATE(), -- Thời gian trả lời
+    FOREIGN KEY (question_id) REFERENCES questions(question_id), -- Liên kết với bảng questions
+    FOREIGN KEY (user_id) REFERENCES users(user_id) -- Liên kết với bảng users
+);

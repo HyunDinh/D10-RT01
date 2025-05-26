@@ -26,7 +26,7 @@ public class MessageController {
         return ResponseEntity.ok(chatSessionService.createChatSession(user1Id, user2Id));
     }
 
-    // Lấy danh sách các cuộc trò chuyện của người dùng
+    // Lấy danh sách các cuộc trò chuyện của người dùng (đã đăng nhập)
     @GetMapping("/sessions")
     public ResponseEntity<List<ChatSession>> getUserChatSessions() {
         return ResponseEntity.ok(chatSessionService.getCurrentUserChatSessions());

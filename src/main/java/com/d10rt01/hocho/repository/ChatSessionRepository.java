@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ChatSessionRepository extends JpaRepository<ChatSession, Long> {
     List<ChatSession> findByUser1OrUser2(User user1, User user2);
+    boolean existsByUser1_UserIdAndUser2_UserId(Long user1Id, Long user2Id);
 }
