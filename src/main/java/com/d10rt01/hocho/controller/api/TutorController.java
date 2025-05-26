@@ -38,7 +38,6 @@ public class TutorController {
     //Xoa thong tin gia su dua tren Id
     @DeleteMapping("/profile/{userId}")
     public ResponseEntity<Void> deleteTutorProfile(@PathVariable Long userId) {
-        // Again, userId should ideally be from authenticated context
         tutorService.deleteTutorProfile(userId);
         return ResponseEntity.noContent().build();
     }

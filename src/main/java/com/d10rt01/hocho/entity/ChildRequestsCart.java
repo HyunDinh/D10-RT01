@@ -24,6 +24,7 @@ public class ChildRequestsCart {
     @Column(name = "added_at")
     private LocalDateTime addedAt;
 
+    //Trước khi lưu xuống database sẽ gọi phương thức set thời gian hiện tại này
     @PrePersist
     protected void onCreate() {
         addedAt = LocalDateTime.now();

@@ -22,26 +22,34 @@ public class TutorServiceImpl implements TutorService {
     @Autowired
     private UserRepository userRepository;
 
+
+    //Tạo hoặc update profile gia sư
     @Override
     @Transactional
     public Tutor createOrUpdateTutorProfile(Long userId, Tutor tutorDetails) {
+        //Kiểm tra user có tồn tại không
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        // Check user co role la Teacher khong
+
+        //Check user co role la Teacher khong
         if (!"teacher".equals(user.getRole().toString().toLowerCase())) {
              throw new RuntimeException("User is not a teacher");
         }
 
+        //Kiểm tra thông tin gia sư đã tồn tại chưa
         Tutor existingTutor = tutorRepository.findByUser_UserId(userId);
 
+        //Thông tin gia sư chưa tồn tại
         if (existingTutor == null) {
             //Tao profile
-            tutorDetails.setUser(user);
+            tutorDetails.setUser(user); //SET Id từ Id giáo viên
             tutorDetails.setCreatedAt(LocalDateTime.now());
             tutorDetails.setUpdatedAt(LocalDateTime.now());
             //Luu xuong
             return tutorRepository.save(tutorDetails);
-        } else {
-            // Cap Nhat Profile neu da ton tai
+        }
+
+        // Cap Nhat Profile neu da ton tai
+        else {
             existingTutor.setSpecialization(tutorDetails.getSpecialization());
             existingTutor.setExperience(tutorDetails.getExperience());
             existingTutor.setEducation(tutorDetails.getEducation());
@@ -69,12 +77,13 @@ public class TutorServiceImpl implements TutorService {
         }
     }
 
+    //Lay tat ca cac gia su len
     @Override
     public List<Tutor> getAllTutorProfiles() {
-        //Lay tat ca cac gia su len
         return tutorRepository.findAll();
     }
-    
+
+    //Phê duyệt thông tin cho gia sư (Quản trị viên phê duyệt)
     @Override
     @Transactional
     public Tutor updateTutorStatus(Long tutorId, TutorStatus newStatus) {

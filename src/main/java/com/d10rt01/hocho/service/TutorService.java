@@ -8,7 +8,6 @@ public interface TutorService {
     Tutor createOrUpdateTutorProfile(Long userId, Tutor tutorDetails);
     Tutor getTutorProfileByUserId(Long userId);
     void deleteTutorProfile(Long userId);
-    List<Tutor> getAllTutorProfiles(); // For displaying all tutors to parents
-    
-    Tutor updateTutorStatus(Long tutorId, TutorStatus newStatus); // New method for Admin
+    List<Tutor> getAllTutorProfiles();
+    Tutor updateTutorStatus(Long tutorId, TutorStatus newStatus);
 } 

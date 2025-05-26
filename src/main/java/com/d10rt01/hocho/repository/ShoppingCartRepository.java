@@ -8,6 +8,10 @@ import java.util.List;
 
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long> {
+
+    //Hiển thị các khóa học trong giỏ hàng của Parent
     List<ShoppingCart> findByParentUserId(Long parentId);
+
+    //Kiểm tra khóa học đã tồn tại trong giỏ hàng chưa (đã khớp với ChildId -- CourseId chưa)
     boolean existsByParentUserIdAndChildUserIdAndCourseCourseId(Long parentId, Long childId, Long courseId);
 }

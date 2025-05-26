@@ -189,12 +189,14 @@ CREATE TABLE time_restrictions (
 -- 2. Hỗ trợ gửi file và hình ảnh
 CREATE TABLE messages (
     message_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi tin nhắn
+    chat_session_id INT NOT NULL, -- ID phiên chat
     sender_id INT NOT NULL, -- ID người gửi
     receiver_id INT NOT NULL, -- ID người nhận
     content NVARCHAR(MAX) NOT NULL, -- Nội dung tin nhắn
     message_type VARCHAR(20) CHECK (message_type IN ('text', 'image', 'file')), -- Loại tin nhắn
     is_read BIT DEFAULT 0, -- Trạng thái đã đọc
     created_at DATETIME DEFAULT GETDATE(), -- Thời gian gửi
+    FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(session_id), -- Đảm bảo chat_session_id tồn tại
     FOREIGN KEY (sender_id) REFERENCES users(user_id), -- Đảm bảo sender_id tồn tại
     FOREIGN KEY (receiver_id) REFERENCES users(user_id) -- Đảm bảo receiver_id tồn tại
 );

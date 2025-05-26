@@ -21,7 +21,7 @@ public class Lesson {
     private String title;
 
     @Column(name = "duration")
-    private Integer duration;
+    private int duration;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
