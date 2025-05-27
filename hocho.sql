@@ -1,6 +1,8 @@
 -- CREATE DATABASE
 CREATE DATABASE hocho;
 
+Use hocho
+
 -- change role from master to hocho
 
 -- Bảng users: Lưu thông tin tài khoản người dùng
@@ -14,6 +16,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL, -- Mật khẩu đã được mã hóa
     email VARCHAR(100) UNIQUE , -- Email liên hệ và khôi phục tài khoản
     phone_number VARCHAR(15) UNIQUE, -- Số điện thoại liên hệ
+    avatar_url VARCHAR(255), -- URL ảnh đại diện của người dùng
     full_name NVARCHAR(100), -- Họ tên đầy đủ của người dùng
     date_of_birth DATE, -- Ngày sinh, dùng để xác định độ tuổi
     role VARCHAR(20) NOT NULL CHECK (role IN ('child', 'parent', 'teacher', 'admin')), -- Vai trò người dùng trong hệ thống
@@ -187,12 +190,14 @@ CREATE TABLE time_restrictions (
 -- 2. Hỗ trợ gửi file và hình ảnh
 CREATE TABLE messages (
     message_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi tin nhắn
+    chat_session_id INT NOT NULL, -- ID phiên chat
     sender_id INT NOT NULL, -- ID người gửi
     receiver_id INT NOT NULL, -- ID người nhận
     content NVARCHAR(MAX) NOT NULL, -- Nội dung tin nhắn
     message_type VARCHAR(20) CHECK (message_type IN ('text', 'image', 'file')), -- Loại tin nhắn
     is_read BIT DEFAULT 0, -- Trạng thái đã đọc
     created_at DATETIME DEFAULT GETDATE(), -- Thời gian gửi
+    FOREIGN KEY (chat_session_id) REFERENCES chat_sessions(session_id), -- Đảm bảo chat_session_id tồn tại
     FOREIGN KEY (sender_id) REFERENCES users(user_id), -- Đảm bảo sender_id tồn tại
     FOREIGN KEY (receiver_id) REFERENCES users(user_id) -- Đảm bảo receiver_id tồn tại
 );
@@ -362,4 +367,48 @@ CREATE TABLE learning_history (
     FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id), -- Đảm bảo lesson_id tồn tại
     FOREIGN KEY (game_id) REFERENCES games(game_id), -- Đảm bảo game_id tồn tại
     FOREIGN KEY (video_id) REFERENCES videos(video_id) -- Đảm bảo video_id tồn tại
+);
+
+
+CREATE TABLE tutors (
+    tutor_id INT PRIMARY KEY IDENTITY(1,1),
+    user_id INT NOT NULL, -- Liên kết với tài khoản giáo viên
+    specialization NVARCHAR(200), -- Chuyên môn
+    experience INT, -- Số năm kinh nghiệm
+    education NVARCHAR(500), -- Học vấn
+    introduction NVARCHAR(1000), -- Giới thiệu bản thân
+    status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')), -- Trạng thái duyệt
+    created_at DATETIME DEFAULT GETDATE(),
+    updated_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+-- Bảng questions: Lưu trữ câu hỏi của học sinh
+-- Chức năng:
+-- 1. Học sinh đăng câu hỏi bài tập
+-- 2. Lưu kèm ảnh câu hỏi, môn học, lớp
+CREATE TABLE questions (
+    question_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi câu hỏi
+    user_id INT NOT NULL, -- ID người dùng đăng câu hỏi (học sinh)
+    content NVARCHAR(MAX) NOT NULL, -- Nội dung câu hỏi
+    image_url VARCHAR(255), -- URL ảnh đính kèm
+    subject NVARCHAR(200) NOT NULL, -- Môn học
+    grade INT NOT NULL, -- Lớp (1-9)
+    created_at DATETIME DEFAULT GETDATE(), -- Thời gian đăng câu hỏi
+    FOREIGN KEY (user_id) REFERENCES users(user_id) -- Liên kết với bảng users
+);
+
+-- Bảng answers: Lưu trữ câu trả lời cho câu hỏi
+-- Chức năng:
+-- 1. Mọi người trả lời câu hỏi của học sinh
+-- 2. Lưu kèm ảnh lời giải
+CREATE TABLE answers (
+    answer_id INT PRIMARY KEY IDENTITY(1,1), -- ID định danh cho mỗi câu trả lời
+    question_id INT NOT NULL, -- ID câu hỏi được trả lời
+    user_id INT NOT NULL, -- ID người dùng trả lời
+    content NVARCHAR(MAX) NOT NULL, -- Nội dung câu trả lời
+    image_url VARCHAR(255), -- URL ảnh đính kèm
+    created_at DATETIME DEFAULT GETDATE(), -- Thời gian trả lời
+    FOREIGN KEY (question_id) REFERENCES questions(question_id), -- Liên kết với bảng questions
+    FOREIGN KEY (user_id) REFERENCES users(user_id) -- Liên kết với bảng users
 );
