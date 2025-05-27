@@ -16,6 +16,7 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL, -- Mật khẩu đã được mã hóa
     email VARCHAR(100) UNIQUE , -- Email liên hệ và khôi phục tài khoản
     phone_number VARCHAR(15) UNIQUE, -- Số điện thoại liên hệ
+    avatar_url VARCHAR(255), -- URL ảnh đại diện của người dùng
     full_name NVARCHAR(100), -- Họ tên đầy đủ của người dùng
     date_of_birth DATE, -- Ngày sinh, dùng để xác định độ tuổi
     role VARCHAR(20) NOT NULL CHECK (role IN ('child', 'parent', 'teacher', 'admin')), -- Vai trò người dùng trong hệ thống

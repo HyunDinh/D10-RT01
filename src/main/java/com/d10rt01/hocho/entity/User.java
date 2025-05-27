@@ -26,6 +26,9 @@ public class User {
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @Column(name = "full_name")
     private String fullName;
 
