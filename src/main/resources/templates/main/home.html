@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Hocho - Trang chủ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<!-- Include Header -->
+<div th:replace="fragments :: header"></div>
+
+<!-- Main Content -->
+<div class="container my-5">
+    <h1 class="text-center">Chào mừng đến với Hocho</h1>
+    <p class="lead text-center">Hệ thống quản lý giáo dục thông minh cho học sinh, phụ huynh và giáo viên.</p>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Học sinh</h5>
+                    <p class="card-text">Theo dõi tiến độ học tập và thông tin cá nhân của học sinh.</p>
+                    <a th:href="@{/hocho/childList}" class="btn btn-primary">Xem danh sách học sinh</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Phụ huynh</h5>
+                    <p class="card-text">Kết nối với giáo viên và theo dõi hoạt động của con bạn.</p>
+                    <a th:href="@{/hocho/parent}" class="btn btn-primary">Thông tin phụ huynh</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Giáo viên</h5>
+                    <p class="card-text">Quản lý khóa học và thông tin học sinh dễ dàng.</p>
+                    <a th:href="@{/hocho/teacher}" class="btn btn-primary">Quản lý khóa học</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Footer -->
+<div th:replace="fragments :: footer"></div>
+</body>
+</html>

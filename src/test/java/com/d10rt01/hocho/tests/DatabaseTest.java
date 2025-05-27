@@ -1,5 +1,7 @@
 package com.d10rt01.hocho.tests;
 
+import com.d10rt01.hocho.model.User;
+import com.d10rt01.hocho.service.user.UserService;
 import test.TestTerminalUI;
 
 import javax.sql.DataSource;
@@ -9,13 +11,18 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.sql.*;
+import java.time.Instant;
+
 
 public class DatabaseTest {
 
     private final DataSource dataSource;
+    private final UserService userService;
 
-    public DatabaseTest(DataSource dataSource) {
+    public DatabaseTest(DataSource dataSource, UserService userService) {
         this.dataSource = dataSource;
+        this.userService = userService;
     }
 
     public void testDatabaseInformation() throws SQLException {
@@ -64,6 +71,43 @@ public class DatabaseTest {
         }
     }
 
+    public void addNewUser() {
+        TestTerminalUI.printTestTitle("Add New User Test");
+
+        try {
+            // Tạo một User mới
+            User user = new User();
+            user.setUsername("admin");
+            user.setPasswordHash("123");
+            user.setEmail("testuser@example.com");
+            user.setPhoneNumber("1234567890");
+            user.setFullName("Test User");
+            user.setRole("admin");
+            user.setIsActive(true);
+            user.setCreatedAt(Instant.now());
+            user.setUpdatedAt(Instant.now());
+
+            // Gọi UserService để thêm User
+            User savedUser = userService.addUser(user);
+
+            // In kết quả
+            Map<String, String> userInfo = new LinkedHashMap<>();
+            userInfo.put("User ID", savedUser.getId() != null ? savedUser.getId().toString() : "N/A");
+            userInfo.put("Username", savedUser.getUsername());
+            userInfo.put("Email", savedUser.getEmail());
+            userInfo.put("Role", savedUser.getRole());
+            userInfo.put("Active", savedUser.getIsActive().toString());
+            TestTerminalUI.printKeyValueTable("New User Added", userInfo);
+            TestTerminalUI.printStatus(true, "Add User: SUCCESS");
+        } catch (IllegalArgumentException e) {
+            TestTerminalUI.printStatus(false, "Add User: FAILED - " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            TestTerminalUI.printStatus(false, "Add User: FAILED - Unexpected error: " + e.getMessage());
+            throw new RuntimeException("Failed to add user", e);
+        }
+    }
+
     private List<String> getTableNames(Connection connection) throws SQLException {
         List<String> tableNames = new ArrayList<>();
         // Danh sách các bảng cần bỏ qua
@@ -101,4 +145,5 @@ public class DatabaseTest {
         }
         return recordCounts;
     }
+
 }

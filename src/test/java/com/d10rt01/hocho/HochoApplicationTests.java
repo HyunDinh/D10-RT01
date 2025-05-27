@@ -1,5 +1,6 @@
 package com.d10rt01.hocho;
 
+import com.d10rt01.hocho.service.user.UserService;
 import com.d10rt01.hocho.tests.DatabaseTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,28 @@ class HochoApplicationTests {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private UserService userService;
+
     @Test
     void contextLoads() {
     }
 
     @Test
     void databaseConnection() throws SQLException {
-        new DatabaseTest(dataSource).testDatabaseInformation();
+
+        String type = "connection";
+
+        switch (type) {
+            case "add" -> {
+                new DatabaseTest(dataSource,userService).addNewUser();
+            }
+            case "connection" -> {
+                new DatabaseTest(dataSource,userService).testDatabaseInformation();
+            }
+        }
+
+
     }
 
 
