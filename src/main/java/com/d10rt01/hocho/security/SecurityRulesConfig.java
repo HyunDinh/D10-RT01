@@ -8,13 +8,9 @@ import org.springframework.security.config.annotation.web.configurers.AuthorizeH
 public class SecurityRulesConfig {
 
     public void configureSecurityRules(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
-        // Các đường dẫn public
-        auth.requestMatchers("/hocho", "/hocho/home", "/hocho/dashboard", "/login", "/css/**").permitAll()
-                .requestMatchers("/hocho/access-denied").permitAll()
-                // Đường dẫn yêu cầu ROLE_admin
-                .requestMatchers("/hocho/clients","/api/Users/**").hasRole("admin")
-                // đường dẫn yêu cầu xác thực
-                // Các đường dẫn khác yêu cầu xác thực
+        auth.requestMatchers("/hocho", "/hocho/home", "/hocho/dashboard", "/hocho/login", "/api/hocho/home", "/api/hocho/dashboard", "/api/hocho/access-denied", "/css/**", "/js/**", "/index.html", "/").permitAll()
+                .requestMatchers("/hocho/clients", "/api/clients/**").hasRole("admin")
+                .requestMatchers("/api/hocho/welcome", "/api/hocho/role").authenticated()
                 .anyRequest().authenticated();
     }
 }
