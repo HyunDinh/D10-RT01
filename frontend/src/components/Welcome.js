@@ -9,12 +9,29 @@ function Welcome() {
     useEffect(() => {
         axios.get('http://localhost:8080/api/hocho/welcome', { withCredentials: true })
             .then(response => setData(response.data))
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error fetching welcome data:', error));
     }, []);
 
     const handleLogout = async () => {
-        await axios.post('http://localhost:8080/logout', {}, { withCredentials: true });
-        navigate('/hocho/login?logout');
+        try {
+            // Gửi yêu cầu logout và không tự động theo dõi redirect
+            await axios.post('http://localhost:8080/logout', {}, {
+                withCredentials: true,
+                maxRedirects: 0 // Ngăn trình duyệt tự động redirect
+            });
+            // Chuyển hướng thủ công sang trang login
+            navigate('/hocho/login?logout');
+        } catch (err) {
+            console.error('Logout error:', err);
+            // Nếu có lỗi (bao gồm 302), vẫn chuyển hướng thủ công
+            navigate('/hocho/login?logout');
+            // Hiển thị thông báo lỗi nếu cần
+            if (err.response) {
+                console.log('Server response:', err.response.status, err.response.data);
+            } else {
+                console.log('Network error:', err.message);
+            }
+        }
     };
 
     return (

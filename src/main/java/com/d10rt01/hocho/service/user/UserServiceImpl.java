@@ -28,30 +28,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User addUser(User User) {
-        if (User.getUsername() == null || User.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Tên người dùng là bắt buộc");
-        }
-        if (User.getPasswordHash() == null || User.getPasswordHash().isEmpty()) {
-            throw new IllegalArgumentException("Mật khẩu là bắt buộc");
-        }
-        if (User.getEmail() == null || User.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("Email là bắt buộc");
-        }
-        if (User.getPhoneNumber() == null || User.getPhoneNumber().isEmpty()) {
-            throw new IllegalArgumentException("Số điện thoại là bắt buộc");
-        }
-        if (User.getRole() == null || User.getRole().isEmpty()) {
-            throw new IllegalArgumentException("Vai trò là bắt buộc");
-        }
-        if (!User.getRole().equals("child") && !User.getRole().equals("parent") && !User.getRole().equals("teacher") && !User.getRole().equals("admin")) {
-            throw new IllegalArgumentException("Vai trò phải là CUSTOMER, MANAGER hoặc ADMIN");
-        }
-        if (UserRepository.findByUsername(User.getUsername()).isPresent()) {
+    public User addUser(User user) {
+        if (findByUsername(user.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Tên người dùng đã tồn tại");
         }
-        User.setPasswordHash(passwordEncoder.encode(User.getPasswordHash()));
-        return UserRepository.save(User);
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            throw new IllegalArgumentException("Tên người dùng là bắt buộc");
+        }
+        if (user.getPasswordHash() == null || user.getPasswordHash().isEmpty()) {
+            throw new IllegalArgumentException("Mật khẩu là bắt buộc");
+        }
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new IllegalArgumentException("Email là bắt buộc");
+        }
+        if ("child".equals(user.getRole())) {
+            user.setPhoneNumber("none");
+        }
+        if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+            throw new IllegalArgumentException("Số điện thoại là bắt buộc");
+        }
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            throw new IllegalArgumentException("Vai trò là bắt buộc");
+        }
+        if (!user.getRole().equals("child") && !user.getRole().equals("parent") && !user.getRole().equals("teacher") && !user.getRole().equals("admin")) {
+            throw new IllegalArgumentException("Vai trò phải là CUSTOMER, MANAGER hoặc ADMIN");
+        }
+        if (UserRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Tên người dùng đã tồn tại");
+        }
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        return UserRepository.save(user);
     }
 
     @Override
