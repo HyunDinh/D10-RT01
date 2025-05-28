@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher List</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>Teacher List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Email</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="teacher : ${teachers}">
+    <td th:text="${teacher.id}"></td>
+    <td th:text="${teacher.name}"></td>
+    <td th:text="${teacher.email}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
