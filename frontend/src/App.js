@@ -6,7 +6,9 @@ import Login from './components/Login';
 import Welcome from './components/Welcome';
 import Clients from './components/Clients';
 import AccessDenied from './components/AccessDenied';
+import Profile from "./components/Profile";
 import './App.css';
+
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
             <Route path="/hocho/home" element={<Home />} />
             <Route path="/hocho/dashboard" element={<Dashboard />} />
             <Route path="/hocho/login" element={<Login />} />
+            <Route path="/hocho/profile" element={<Profile />} />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/hocho/clients" element={<Clients />} />
             <Route path="/hocho/access-denied" element={<AccessDenied />} />

@@ -2,5 +2,10 @@
 
 ### `npm start`
 
-# Package.json
+```bash
 
+npm install
+
+
+
+```

@@ -31,6 +31,9 @@ public class User {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
+    @Column(name = "avatar_url")
+    private String avatarUrl;
+
     @Nationalized
     @Column(name = "full_name", length = 100)
     private String fullName;

@@ -3,13 +3,11 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 function Login() {
-    // State cho form đăng nhập
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [logoutMessage, setLogoutMessage] = useState('');
 
-    // State cho form đăng ký
     const [registerUsername, setRegisterUsername] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
@@ -18,7 +16,6 @@ function Login() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [registerError, setRegisterError] = useState('');
 
-    // State để chuyển đổi giữa form đăng nhập và đăng ký
     const [isRegistering, setIsRegistering] = useState(false);
 
     const navigate = useNavigate();
@@ -83,15 +80,17 @@ function Login() {
         try {
             const userData = {
                 username: registerUsername,
-                passwordHash: registerPassword,
+                password: registerPassword, // Sửa thành password
                 role,
-                email: email,
-                phoneNumber: phoneNumber // Backend sẽ gán "none" nếu role là child
+                email,
+                phoneNumber: role === 'child' ? 'none' : phoneNumber // Gán none cho child
             };
-            await axios.post('http://localhost:8080/api/clients', userData, {
+            console.log('Sending register payload:', JSON.stringify(userData, null, 2)); // Debug payload
+            const response = await axios.post('http://localhost:8080/api/clients', userData, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });
+            console.log('Register response:', response.data); // Debug response
             setIsRegistering(false);
             setLogoutMessage('Đăng ký thành công! Vui lòng đăng nhập.');
             setRegisterUsername('');
@@ -102,12 +101,12 @@ function Login() {
             setPhoneNumber('');
             setRegisterError('');
         } catch (err) {
+            console.error('Register error:', err.response?.data); // Log chi tiết lỗi
             if (err.response) {
-                setRegisterError(err.response.data?.message || 'Đăng ký thất bại');
+                setRegisterError(err.response.data?.message || `Đăng ký thất bại (Status: ${err.response.status})`);
             } else {
                 setRegisterError('Không thể kết nối đến server');
             }
-            console.error(err);
         }
     };
 

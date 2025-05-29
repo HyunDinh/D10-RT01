@@ -25,7 +25,7 @@ class HochoApplicationTests {
     @Test
     void databaseConnection() throws SQLException {
 
-        String type = "connection";
+        String type = "add";
 
         switch (type) {
             case "add" -> {

@@ -8,7 +8,7 @@ function Clients() {
     const [clients, setClients] = useState([]);
     const [formData, setFormData] = useState({
         username: '',
-        passwordHash: '',
+        password: '',
         email: '',
         phoneNumber: '',
         role: ''
@@ -24,7 +24,7 @@ function Clients() {
                 if (error.response && error.response.status === 403) {
                     navigate('/hocho/access-denied');
                 } else {
-                    console.error('Error:', error);
+                    console.error('Error fetching clients:', error);
                 }
             });
     }, [navigate]);
@@ -39,13 +39,23 @@ function Clients() {
         setErrorMessage('');
         setSuccessMessage('');
 
+        const payload = {
+            ...formData,
+            phoneNumber: formData.role === 'child' ? 'none' : formData.phoneNumber
+        };
+        console.log('Sending payload to /api/clients:', JSON.stringify(payload, null, 2)); // Debug payload
         try {
-            const response = await axios.post('http://localhost:8080/api/clients', formData, { withCredentials: true });
+            const response = await axios.post('http://localhost:8080/api/clients', payload, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'application/json' }
+            });
+            console.log('Response from server:', response.data); // Debug response
             setClients([...clients, response.data]);
-            setFormData({ username: '', passwordHash: '', email: '', phoneNumber: '', role: '' });
+            setFormData({ username: '', password: '', email: '', phoneNumber: '', role: '' });
             setSuccessMessage('Thêm tài khoản thành công!');
         } catch (error) {
-            setErrorMessage(error.response?.data?.message || 'Không thể thêm tài khoản');
+            console.error('Error adding client:', error.response?.data); // Log chi tiết lỗi
+            setErrorMessage(error.response?.data?.message || 'Không thể thêm tài khoản. Vui lòng kiểm tra dữ liệu.');
         }
     };
 
@@ -84,9 +94,9 @@ function Clients() {
                             <input
                                 type="password"
                                 className="form-control"
-                                name="passwordHash"
+                                name="password"
                                 placeholder="Mật khẩu"
-                                value={formData.passwordHash}
+                                value={formData.password}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -110,7 +120,8 @@ function Clients() {
                                 placeholder="Số điện thoại"
                                 value={formData.phoneNumber}
                                 onChange={handleInputChange}
-                                required
+                                disabled={formData.role === 'child'}
+                                required={formData.role !== 'child'}
                             />
                         </div>
                         <div className="col-md-2">
