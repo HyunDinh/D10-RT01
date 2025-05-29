@@ -1,6 +1,6 @@
 package org.example.coursemanager.repository;
 
-import org.example.coursemanager.dto.TeacherDAO;
+import org.example.coursemanager.dao.TeacherDao;
 import org.example.coursemanager.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -8,33 +8,43 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class TeacherRepositoryImpl {
-    TeacherDAO teacherDAO;
-
+public class TeacherRepositoryImpl implements TeacherRepository {
     @Autowired
-    public TeacherRepositoryImpl(TeacherDAO teacherDAO) {
-        this.teacherDAO = teacherDAO;
+    private TeacherDao teacherDao;
+
+    @Override
+    public List<Teacher> findAll() {
+        return teacherDao.findAllTeachers();
     }
 
-    public List<Teacher> getAllTeachers() {
-        return teacherDAO.getAllTeachers();
-    }
-
-
+    @Override
     public Teacher findById(int id) {
-        return teacherDAO.findById(id);
+        return teacherDao.findById(id);
     }
-
-
-    public void saveTeacher(Teacher teacher) {
-        teacherDAO.saveTeacher(teacher);
-    }
-
-    public void deleteById(int id) {
-        teacherDAO.deleteById(id);
-    }
-
-    public void update(Teacher teacher) {
-        teacherDAO.updateTeacher(teacher);
-    }
+//    TeacherDao teacherDAO;
+//
+//    @Autowired
+//    public TeacherRepositoryImpl(TeacherDao teacherDAO) {
+//        this.teacherDAO = teacherDAO;
+//    }
+//
+//    public List<Teacher> getAllTeachers() {
+//        return teacherDAO.getAllTeachers();
+//    }
+//
+//    public Teacher findById(int id) {
+//        return teacherDAO.findById(id);
+//    }
+//
+//    public void saveTeacher(Teacher teacher) {
+//        teacherDAO.saveTeacher(teacher);
+//    }
+//
+//    public void deleteById(int id) {
+//        teacherDAO.deleteById(id);
+//    }
+//
+//    public void update(Teacher teacher) {
+//        teacherDAO.updateTeacher(teacher);
+//    }
 }

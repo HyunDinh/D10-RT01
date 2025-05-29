@@ -1,16 +1,17 @@
 package org.example.coursemanager.repository;
 
-import org.springframework.data.domain.Example;
+import io.micrometer.common.lang.NonNullApi;
+import org.example.coursemanager.entity.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TeacherRepository<Teacher> extends JpaRepository<Teacher, Integer> {
-    List<Teacher> getAllTeachers();
+public interface TeacherRepository {
+    List<Teacher> findAll();
     Teacher findById(int id);
-    void saveTeacher(Teacher teacher);
-    void deleteById(int id);
-    void update(Teacher teacher);
+//    void saveTeacher(Teacher teacher);
+//    void deleteById(int id);
+//    void update(Teacher teacher);
 }
