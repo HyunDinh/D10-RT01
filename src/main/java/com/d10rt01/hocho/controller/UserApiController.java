@@ -1,5 +1,6 @@
-package com.d10rt01.hocho.controller.api;
+package com.d10rt01.hocho.controller;
 
+import com.d10rt01.hocho.config.Configs;
 import com.d10rt01.hocho.model.User;
 import com.d10rt01.hocho.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,13 +57,27 @@ public class UserApiController {
     @PutMapping("/profile/password")
     public ResponseEntity<User> updatePassword(Authentication authentication, @RequestBody Map<String, String> request) {
         String username = authentication.getName();
-        String newPassword = request.get("password");
+        String oldPassword = request.get("oldPassword");
+        String newPassword = request.get("newPassword");
+        String confirmPassword = request.get("confirmPassword");
+
+        if (oldPassword == null || oldPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Mật khẩu cũ không được để trống");
+        }
         if (newPassword == null || newPassword.trim().isEmpty()) {
             throw new IllegalArgumentException("Mật khẩu mới không được để trống");
         }
-        User updated = userService.updateUserPassword(username, newPassword);
+        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Xác nhận mật khẩu không được để trống");
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            throw new IllegalArgumentException("Mật khẩu mới và xác nhận mật khẩu không khớp");
+        }
+
+        User updated = userService.updateUserPassword(username, oldPassword, newPassword);
         return ResponseEntity.ok(updated);
     }
+
 
     @PostMapping("/profile/upload")
     public ResponseEntity<User> uploadProfilePicture(Authentication authentication, @RequestParam("file") MultipartFile file, @RequestParam("username") String username) throws IOException {
@@ -94,11 +109,11 @@ public class UserApiController {
 
     @GetMapping("/profile/{filename}")
     public ResponseEntity<Resource> getProfileImage(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get("D:/code/intellij_Ultimate/res/static/profile/" + filename);
+        Path filePath = Paths.get(Configs.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + filename);
         Resource resource = new FileSystemResource(filePath);
 
         if (!resource.exists()) {
-            filePath = Paths.get("src/main/resources/static/profile/default.png");
+            filePath = Paths.get(Configs.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR);
             resource = new FileSystemResource(filePath);
         }
 

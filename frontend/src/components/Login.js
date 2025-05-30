@@ -49,7 +49,7 @@ function Login() {
         } catch (err) {
             if (err.response) {
                 if (err.response.status === 401) {
-                    setError('Tên người dùng hoặc mật khẩu không đúng');
+                    setError('Wrong username or password');
                 } else if (err.response.status === 403) {
                     setError('Truy cập bị từ chối. Vui lòng kiểm tra CORS hoặc quyền truy cập');
                 } else {

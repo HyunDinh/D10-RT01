@@ -2,7 +2,7 @@ package com.d10rt01.hocho.tests;
 
 import com.d10rt01.hocho.model.User;
 import com.d10rt01.hocho.service.user.UserService;
-import test.TestTerminalUI;
+import com.d10rt01.hocho.testExtension.TestTerminalUI;
 
 import javax.sql.DataSource;
 import java.sql.*;

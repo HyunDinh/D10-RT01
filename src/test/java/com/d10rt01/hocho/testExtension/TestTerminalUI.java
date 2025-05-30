@@ -1,4 +1,4 @@
-package test;
+package com.d10rt01.hocho.testExtension;
 
 import java.util.List;
 import java.util.Map;

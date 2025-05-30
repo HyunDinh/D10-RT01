@@ -1,4 +1,4 @@
-package com.d10rt01.hocho.controller.api;
+package com.d10rt01.hocho.controller;
 
 import com.d10rt01.hocho.model.User;
 import com.d10rt01.hocho.dto.UserDTO;

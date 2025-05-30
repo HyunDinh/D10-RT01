@@ -1,4 +1,4 @@
-package com.d10rt01.hocho.controller.api;
+package com.d10rt01.hocho.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

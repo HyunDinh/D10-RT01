@@ -11,7 +11,11 @@ function Clients() {
         password: '',
         email: '',
         phoneNumber: '',
-        role: ''
+        role: '',
+        fullName: '',
+        dateOfBirth: '',
+        avatarUrl: '',
+        isActive: true
     });
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
@@ -21,13 +25,19 @@ function Clients() {
         axios.get('http://localhost:8080/api/clients', { withCredentials: true })
             .then(response => setClients(response.data))
             .catch(error => {
-                if (error.response && error.response.status === 403) {
-                    navigate('/hocho/access-denied');
-                } else {
-                    console.error('Error fetching clients:', error);
+                if (error.response) {
+                    if (error.response.status === 403) {
+                        // Chuyển hướng đến trang access-denied khi không có quyền
+                        navigate('/hocho/access-denied');
+                    } else if (error.response.status === 401) {
+                        // Chuyển hướng đến trang login nếu chưa đăng nhập
+                        navigate('/hocho/login');
+                    }
                 }
+                console.error('Error fetching clients:', error);
             });
     }, [navigate]);
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -41,17 +51,27 @@ function Clients() {
 
         const payload = {
             ...formData,
-            phoneNumber: formData.role === 'child' ? 'none' : formData.phoneNumber
+            phoneNumber: formData.role === 'child' ? 'none' : formData.phoneNumber,
+            isActive: true
         };
-        console.log('Sending payload to /api/clients:', JSON.stringify(payload, null, 2)); // Debug payload
+
         try {
             const response = await axios.post('http://localhost:8080/api/clients', payload, {
                 withCredentials: true,
                 headers: { 'Content-Type': 'application/json' }
             });
-            console.log('Response from server:', response.data); // Debug response
             setClients([...clients, response.data]);
-            setFormData({ username: '', password: '', email: '', phoneNumber: '', role: '' });
+            setFormData({
+                username: '',
+                password: '',
+                email: '',
+                phoneNumber: '',
+                role: '',
+                fullName: '',
+                dateOfBirth: '',
+                avatarUrl: '',
+                isActive: true
+            });
             setSuccessMessage('Thêm tài khoản thành công!');
         } catch (error) {
             console.error('Error adding client:', error.response?.data); // Log chi tiết lỗi
@@ -70,6 +90,11 @@ function Clients() {
         } catch (error) {
             setErrorMessage(error.response?.data?.message || 'Không thể xóa tài khoản');
         }
+    };
+
+    const formatDateTime = (dateTimeString) => {
+        if (!dateTimeString) return '';
+        return new Date(dateTimeString).toLocaleString();
     };
 
     return (
@@ -112,7 +137,26 @@ function Clients() {
                                 required
                             />
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="fullName"
+                                placeholder="Họ và tên"
+                                value={formData.fullName}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="col-md-3">
+                            <input
+                                type="date"
+                                className="form-control"
+                                name="dateOfBirth"
+                                value={formData.dateOfBirth}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div className="col-md-3">
                             <input
                                 type="text"
                                 className="form-control"
@@ -124,7 +168,7 @@ function Clients() {
                                 required={formData.role !== 'child'}
                             />
                         </div>
-                        <div className="col-md-2">
+                        <div className="col-md-3">
                             <select
                                 className="form-select"
                                 name="role"
@@ -139,50 +183,62 @@ function Clients() {
                                 <option value="admin">ADMIN</option>
                             </select>
                         </div>
-                        <div className="col-md-1">
+                        <div className="col-md-3">
                             <button type="submit" className="btn btn-primary w-100">Thêm</button>
                         </div>
                     </div>
                     {errorMessage && <div className="error-message" style={{ color: 'red', marginTop: '10px' }}>{errorMessage}</div>}
                     {successMessage && <div className="success-message" style={{ color: 'green', marginTop: '10px' }}>{successMessage}</div>}
                 </form>
-                <table className="table table-striped table-bordered">
-                    <thead className="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên người dùng</th>
-                        <th>Email</th>
-                        <th>Số điện thoại</th>
-                        <th>Vai trò</th>
-                        <th>Hành động</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {clients.length > 0 ? (
-                        clients.map(client => (
-                            <tr key={client.id}>
-                                <td>{client.id}</td>
-                                <td>{client.username}</td>
-                                <td>{client.email}</td>
-                                <td>{client.phoneNumber}</td>
-                                <td>{client.role}</td>
-                                <td>
-                                    <button
-                                        className="btn btn-danger btn-sm"
-                                        onClick={() => handleDelete(client.id)}
-                                    >
-                                        Xóa
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    ) : (
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered">
+                        <thead className="table-dark">
                         <tr>
-                            <td colSpan="6" className="text-center">Không tìm thấy tài khoản</td>
+                            <th>ID</th>
+                            <th>Tên người dùng</th>
+                            <th>Email</th>
+                            <th>Họ và tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Cập nhật lần cuối</th>
+                            <th>Hành động</th>
                         </tr>
-                    )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {clients.length > 0 ? (
+                            clients.map(client => (
+                                <tr key={client.id}>
+                                    <td>{client.id}</td>
+                                    <td>{client.username}</td>
+                                    <td>{client.email}</td>
+                                    <td>{client.fullName}</td>
+                                    <td>{client.dateOfBirth}</td>
+                                    <td>{client.phoneNumber}</td>
+                                    <td>{client.role}</td>
+                                    <td>{client.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                    <td>{formatDateTime(client.createdAt)}</td>
+                                    <td>{formatDateTime(client.updatedAt)}</td>
+                                    <td>
+                                        <button
+                                            className="btn btn-danger btn-sm"
+                                            onClick={() => handleDelete(client.id)}
+                                        >
+                                            Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="11" className="text-center">Không tìm thấy tài khoản</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <Footer />
         </div>

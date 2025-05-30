@@ -12,6 +12,9 @@ import java.sql.SQLException;
 @SpringBootTest
 class HochoApplicationTests {
 
+    private static final String databaseOption = "1";
+
+
     @Autowired
     private DataSource dataSource;
 
@@ -19,25 +22,15 @@ class HochoApplicationTests {
     private UserService userService;
 
     @Test
-    void contextLoads() {
-    }
-
-    @Test
     void databaseConnection() throws SQLException {
-
-        String type = "add";
-
-        switch (type) {
-            case "add" -> {
-                new DatabaseTest(dataSource,userService).addNewUser();
-            }
-            case "connection" -> {
+        switch (databaseOption) {
+            case "0" -> {
                 new DatabaseTest(dataSource,userService).testDatabaseInformation();
             }
+            case "1" -> {
+                new DatabaseTest(dataSource,userService).addNewUser();
+            }
         }
-
-
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.d10rt01.hocho.security;
 
 
+import com.d10rt01.hocho.config.Notifications;
 import com.d10rt01.hocho.service.user.UserService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<com.d10rt01.hocho.model.User> clientOpt = clientService.findByUsername(username);
-        com.d10rt01.hocho.model.User user = clientOpt.orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy người dùng: " + username));
+        com.d10rt01.hocho.model.User user = clientOpt.orElseThrow(() -> new UsernameNotFoundException(Notifications.ERROR_USER_NOT_FOUND + " : " + username));
 
         String password = user.getPasswordHash();
         if (password.startsWith("{bcrypt}")) {

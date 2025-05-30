@@ -1,34 +1,44 @@
+// src/components/Header.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../styles/Header.css';
 
 function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState({});
+    const [role, setRole] = useState(null);
     const [refreshKey, setRefreshKey] = useState(0); // Thêm refreshKey
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Kiểm tra trạng thái đăng nhập bằng cách gọi API profile
-        axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true })
-            .then(response => {
-                setUser(response.data);
+        // Kiểm tra trạng thái đăng nhập và lấy vai trò
+        const fetchUserData = async () => {
+            try {
+                const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
+                setUser(profileResponse.data);
                 setIsLoggedIn(true);
-                console.log('Fetched user data in header:', response.data);
-            })
-            .catch(err => {
+
+                // Lấy vai trò từ API
+                const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', { withCredentials: true });
+                setRole(roleResponse.data.role);
+            } catch (err) {
                 setIsLoggedIn(false);
                 console.error('Error checking login status:', err);
                 if (err.response && err.response.status === 401) {
                     navigate('/hocho/login');
                 }
-            });
+            }
+        };
+        fetchUserData();
     }, [navigate, refreshKey]); // Thêm refreshKey vào dependency
 
     const handleLogout = () => {
         axios.post('http://localhost:8080/logout', {}, { withCredentials: true, maxRedirects: 0 })
             .then(() => {
                 setIsLoggedIn(false);
+                setRole(null);
+                setUser({});
                 navigate('/hocho/login?logout');
             })
             .catch(err => {
@@ -50,19 +60,49 @@ function Header() {
         setRefreshKey(prevKey => prevKey + 1);
     };
 
+    // Render menu dựa trên vai trò
+    const renderMenu = () => {
+        if (!role || !isLoggedIn) return null;
+
+        const menuItems = {
+            'ROLE_admin': [
+                { path: '/hocho/clients', name: 'Quản lý tài khoản' },
+                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
+                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
+                { path: '/hocho/video', name: 'Quản lý video' },
+            ],
+            'ROLE_teacher': [
+                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
+                { path: '/hocho/dashboard', name: 'Giai tri & Nội dung' },
+            ],
+            'ROLE_parent': [
+                { path: '/hocho/parent', name: 'Thông tin Phụ huynh' },
+                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
+            ],
+            'ROLE_child': [
+                { path: '/hocho/childList', name: 'Giai tri & Nội dung' },
+            ],
+        };
+
+        return (
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {menuItems[role].map((item, index) => (
+                    <li className="nav-item" key={index}>
+                        <Link className="nav-link" to={item.path}>
+                            {item.name}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        );
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/hocho/home">Hocho</Link>
                 <div className="collapse navbar-collapse">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/hocho/home">Home</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/hocho/dashboard">Dashboard</Link>
-                        </li>
-                    </ul>
+                    {isLoggedIn && renderMenu()}
                     <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         {!isLoggedIn ? (
                             <li className="nav-item">

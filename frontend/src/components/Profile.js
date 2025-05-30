@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,16 +9,17 @@ function Profile() {
     const [editedFullName, setEditedFullName] = useState('');
     const [editedDateOfBirth, setEditedDateOfBirth] = useState('');
     const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const [refreshKey, setRefreshKey] = useState(0); // State để force re-render
+    const [refreshKey, setRefreshKey] = useState(0);
     const fileInputRef = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Lấy thông tin user từ API
         fetchProfileData();
-    }, [navigate, refreshKey]); // Thêm refreshKey để re-render khi thay đổi
+    }, [navigate, refreshKey]);
 
     const fetchProfileData = async () => {
         try {
@@ -25,7 +27,7 @@ function Profile() {
             setUser(response.data);
             setEditedFullName(response.data.fullName || '');
             setEditedDateOfBirth(response.data.dateOfBirth ? response.data.dateOfBirth.split('T')[0] : '');
-            console.log('Fetched user data:', response.data); // Debug dữ liệu
+            console.log('Fetched user data:', response.data);
         } catch (err) {
             console.error('Error fetching profile:', err);
             setError('Không thể tải thông tin profile. Vui lòng thử lại.');
@@ -57,56 +59,87 @@ function Profile() {
 
     const handleUpdatePassword = () => {
         setShowPasswordModal(true);
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setError('');
     };
 
     const handleSavePassword = () => {
+        // Validate passwords
+        if (!oldPassword) {
+            setError('Vui lòng nhập mật khẩu cũ');
+            return;
+        }
+        if (!newPassword) {
+            setError('Vui lòng nhập mật khẩu mới');
+            return;
+        }
+        if (!confirmPassword) {
+            setError('Vui lòng xác nhận mật khẩu mới');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            setError('Mật khẩu mới và xác nhận mật khẩu không khớp');
+            return;
+        }
+
         axios.put('http://localhost:8080/api/hocho/profile/password', {
-            password: newPassword
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+            confirmPassword: confirmPassword
         }, { withCredentials: true })
             .then(response => {
                 setShowPasswordModal(false);
+                setOldPassword('');
                 setNewPassword('');
+                setConfirmPassword('');
                 setError('Cập nhật mật khẩu thành công!');
             })
             .catch(err => {
                 console.error('Error updating password:', err);
-                setError('Cập nhật mật khẩu thất bại. Vui lòng thử lại.');
+                setError(err.response?.data?.message || 'Cập nhật mật khẩu thất bại. Vui lòng thử lại.');
             });
     };
 
     const handleFileChange = async (event) => {
+        setError('Uploading ...');
         const file = event.target.files[0];
         if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('username', user.username); // Gửi username để xác định user
-
+            formData.append('username', user.username);
             try {
                 const response = await axios.post('http://localhost:8080/api/hocho/profile/upload', formData, {
                     withCredentials: true,
                     headers: { 'Content-Type': 'multipart/form-data' }
                 });
-                console.log('Upload response:', response.data); // Debug dữ liệu trả về
-                // Force re-render và reload dữ liệu
+                console.log('Upload response:', response.data);
                 setRefreshKey(prevKey => prevKey + 1);
-                await fetchProfileData(); // Chờ dữ liệu mới
-                fileInputRef.current.value = ''; // Reset input file
+                await fetchProfileData();
+                fileInputRef.current.value = '';
                 setError('Cập nhật ảnh đại diện thành công!');
             } catch (err) {
                 console.error('Error uploading profile picture:', err);
-                setError('Cập nhật ảnh đại diện thất bại. Vui lòng thử lại.');
+                if (err.response && err.response.data) {
+                    setError(err.response.data);
+                } else {
+                    setError('Cập nhật ảnh đại diện thất bại. Vui lòng thử lại.');
+                }
+                fileInputRef.current.value = '';
             }
         } else {
             setError('Vui lòng chọn file PNG hoặc JPG.');
+            fileInputRef.current.value = '';
         }
     };
 
     const getAvatarUrl = () => {
         const baseUrl = 'http://localhost:8080';
         if (!user.avatarUrl || user.avatarUrl === 'none') {
-            return `${baseUrl}/profile/default.png?t=${new Date().getTime()}`; // Thêm timestamp để tránh cache
+            return `${baseUrl}/profile/default.png?t=${new Date().getTime()}`;
         }
-        return `${baseUrl}/profile/${user.avatarUrl}?t=${new Date().getTime()}`; // Thêm timestamp để tránh cache
+        return `${baseUrl}/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
     return (
@@ -235,14 +268,28 @@ function Profile() {
 
                 {/* Password Modal */}
                 {showPasswordModal && (
-                    <div style={{ position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div style={{ position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
                         <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '10px', textAlign: 'center', width: '300px' }}>
                             <h3 style={{ fontSize: '20px', color: '#333', marginBottom: '15px' }}>Update Password</h3>
+                            <input
+                                type="password"
+                                value={oldPassword}
+                                onChange={(e) => setOldPassword(e.target.value)}
+                                placeholder="Enter old password"
+                                style={{ width: '100%', padding: '8px', marginBottom: '15px', border: '1px solid #ced4da', borderRadius: '4px' }}
+                            />
                             <input
                                 type="password"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 placeholder="Enter new password"
+                                style={{ width: '100%', padding: '8px', marginBottom: '15px', border: '1px solid #ced4da', borderRadius: '4px' }}
+                            />
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Confirm new password"
                                 style={{ width: '100%', padding: '8px', marginBottom: '15px', border: '1px solid #ced4da', borderRadius: '4px' }}
                             />
                             <div>
@@ -255,7 +302,13 @@ function Profile() {
                                 </button>
                                 <button
                                     className="btn btn-secondary"
-                                    onClick={() => setShowPasswordModal(false)}
+                                    onClick={() => {
+                                        setShowPasswordModal(false);
+                                        setOldPassword('');
+                                        setNewPassword('');
+                                        setConfirmPassword('');
+                                        setError('');
+                                    }}
                                     style={{ padding: '8px 20px', fontSize: '16px' }}
                                 >
                                     Cancel

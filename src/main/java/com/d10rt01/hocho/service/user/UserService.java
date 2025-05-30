@@ -16,6 +16,6 @@ public interface UserService {
     Optional<User> findByUsername(String username);
 
     User updateUserProfile(String username, User updatedUser);
-    User updateUserPassword(String username, String newPassword);
+    User updateUserPassword(String username, String oldPassword, String newPassword);
     User updateProfilePicture(String username, MultipartFile file) throws IOException;
 }
