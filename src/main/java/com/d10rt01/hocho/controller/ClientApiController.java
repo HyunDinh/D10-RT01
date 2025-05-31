@@ -58,7 +58,7 @@ public class ClientApiController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteClient(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
         try {
             clientService.deleteUser(id);
             return ResponseEntity.ok().build();

@@ -12,7 +12,7 @@ public interface UserService {
 
     List<User> getAllUsers();
     User addUser(User User);
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
     Optional<User> findByUsername(String username);
 
     User updateUserProfile(String username, User updatedUser);
