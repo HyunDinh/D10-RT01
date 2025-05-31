@@ -22,6 +22,11 @@ public class TeacherServiceImpl implements TeacherService {
     public Teacher findById(int id) {
         return teacherRepository.findById(id);
     }
+
+    @Override
+    public List<Course> findCoursesByTeacherId(int teacherId) {
+        return teacherRepository.findCoursesByTeacherId(teacherId);
+    }
 //
 //    @Override
 //    public Teacher findById(int id) {

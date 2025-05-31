@@ -1,6 +1,8 @@
 package org.example.coursemanager.repository;
 
-import org.example.coursemanager.dao.TeacherDao;
+import org.example.coursemanager.dao.CourseDaoImpl;
+import org.example.coursemanager.dao.TeacherDaoImpl;
+import org.example.coursemanager.entity.Course;
 import org.example.coursemanager.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -10,7 +12,10 @@ import java.util.List;
 @Repository
 public class TeacherRepositoryImpl implements TeacherRepository {
     @Autowired
-    private TeacherDao teacherDao;
+    private TeacherDaoImpl teacherDao;
+
+    @Autowired
+    private CourseDaoImpl courseDao;
 
     @Override
     public List<Teacher> findAll() {
@@ -20,6 +25,11 @@ public class TeacherRepositoryImpl implements TeacherRepository {
     @Override
     public Teacher findById(int id) {
         return teacherDao.findById(id);
+    }
+
+    @Override
+    public List<Course> findCoursesByTeacherId(int teacherId) {
+        return courseDao.findCoursesByTeacherId(teacherId);
     }
 //    TeacherDao teacherDAO;
 //

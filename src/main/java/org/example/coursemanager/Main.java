@@ -15,10 +15,10 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 public class Main {
-    TeacherService<Teacher, Course> teacherService;
+    TeacherService teacherService;
 
     @Autowired
-    public Main(TeacherService<Teacher, Course> teacherService) {
+    public Main(TeacherService teacherService) {
         this.teacherService = teacherService;
     }
 

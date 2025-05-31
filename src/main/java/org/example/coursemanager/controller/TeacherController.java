@@ -22,6 +22,12 @@ public class TeacherController {
         return "teachers";
     }
 
+    @GetMapping("/teachers/{id}/courses")
+    public String getCoursesByTeacherId(@PathVariable int id, Model model) {
+        model.addAttribute("courses", teacherService.findCoursesByTeacherId(id));
+        return "courses";
+    }
+
 //    @GetMapping("/teachers/add")
 //    public void addTeacher(Teacher teacher) {
 //        teacherService.save(teacher);
