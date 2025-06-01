@@ -33,6 +33,7 @@ public class UserApiController {
         User user = userService.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("Người dùng không tồn tại"));
         Map<String, Object> response = new HashMap<>();
+        response.put("id", user.getId());
         response.put("username", user.getUsername());
         response.put("passwordHash", user.getPasswordHash());
         response.put("email", user.getEmail());

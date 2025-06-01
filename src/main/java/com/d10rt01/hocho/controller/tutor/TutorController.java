@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tutors")
@@ -19,8 +20,13 @@ public class TutorController {
 
     //Tao thong tin tutor tu giao vien
     @PostMapping("/profile")
-    public ResponseEntity<Tutor> createOrUpdateTutorProfile(@RequestParam Long userId, @RequestBody Tutor tutorDetails) {
-
+    public ResponseEntity<Tutor> createOrUpdateTutorProfile(@RequestBody Map<String, Object> body) {
+        Long userId = Long.valueOf(body.get("userId").toString());
+        Tutor tutorDetails = new Tutor();
+        tutorDetails.setSpecialization((String) body.get("specialization"));
+        tutorDetails.setExperience(Integer.valueOf(body.get("experience").toString()));
+        tutorDetails.setEducation((String) body.get("education"));
+        tutorDetails.setIntroduction((String) body.get("introduction"));
         Tutor createdOrUpdatedTutor = tutorService.createOrUpdateTutorProfile(userId, tutorDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrUpdatedTutor);
     }

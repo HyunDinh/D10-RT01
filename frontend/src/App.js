@@ -7,8 +7,18 @@ import Welcome from './components/Welcome';
 import Clients from './components/Clients';
 import AccessDenied from './components/AccessDenied';
 import Profile from "./components/Profile";
+import ChildCart from './components/shoppingCart/ChildCart';
+import ParentCart from './components/shoppingCart/ParentCart';
+import TutorList from './components/tutor/TutorList';
+import TutorProfile from './components/tutor/TutorProfile';
+import TutorForm from './components/tutor/TutorForm';
+import AdminTutorList from './components/tutor/AdminTutorList';
+import PublicTutorList from './components/tutor/PublicTutorList';
+import QuestionForm from './components/question/QuestionForm';
+import QuestionList from './components/question/QuestionList';
+import QuestionEdit from './components/question/QuestionEdit';
+import AnswerForm from './components/question/AnswerForm';
 import './App.css';
-
 
 function App() {
   return (
@@ -28,6 +38,21 @@ function App() {
             <Route path="/hocho/parent" element={<div>Parent Page (To be implemented)</div>} />
             <Route path="/hocho/teacher" element={<div>Teacher Page (To be implemented)</div>} />
             <Route path="/hocho/teacher/course" element={<div>Course Page (To be implemented)</div>} />
+            
+            {/* Routes cho trẻ em */}
+            <Route path="/hocho/child/cart" element={<ChildCart />} />
+            
+            {/* Routes cho phụ huynh */}
+            <Route path="/hocho/parent/cart" element={<ParentCart />} />
+
+            <Route path="/hocho/tutors/admin" element={<AdminTutorList />} />
+            <Route path="/hocho/tutors" element={<PublicTutorList />} />
+            <Route path="/hocho/tutors/profile/:userId" element={<TutorProfile />} />
+            <Route path="/hocho/tutors/form" element={<TutorForm />} />
+            <Route path="/hocho/questions/new" element={<QuestionForm />} />
+            <Route path="/hocho/questions" element={<QuestionList />} />
+            <Route path="/hocho/questions/:id/edit" element={<QuestionEdit />} />
+            <Route path="/hocho/questions/:id/answer" element={<AnswerForm />} />
           </Routes>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </div>

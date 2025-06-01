@@ -7,6 +7,11 @@ import com.d10rt01.hocho.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +26,17 @@ public class QuestionController {
 
     // Đăng câu hỏi
     @PostMapping
-    public ResponseEntity<Question> createQuestion(@RequestBody Map<String, Object> req) {
-        Long userId = Long.valueOf(req.get("userId").toString());
-        String content = req.get("content").toString();
-        String imageUrl = req.get("imageUrl") != null ? req.get("imageUrl").toString() : null;
-        String subject = req.get("subject").toString();
-        Integer grade = Integer.valueOf(req.get("grade").toString());
+    public ResponseEntity<Question> createQuestion(
+            @RequestParam("userId") Long userId,
+            @RequestParam("content") String content,
+            @RequestParam("subject") String subject,
+            @RequestParam("grade") Integer grade,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+    ) {
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = saveAnswerImage(imageFile);
+        }
         Question question = questionService.createQuestion(userId, content, imageUrl, subject, grade);
         return ResponseEntity.ok(question);
     }
@@ -46,10 +56,16 @@ public class QuestionController {
 
     // Trả lời câu hỏi
     @PostMapping("/{id}/answers")
-    public ResponseEntity<Answer> createAnswer(@PathVariable Long id, @RequestBody Map<String, Object> req) {
-        Long userId = Long.valueOf(req.get("userId").toString());
-        String content = req.get("content").toString();
-        String imageUrl = req.get("imageUrl") != null ? req.get("imageUrl").toString() : null;
+    public ResponseEntity<Answer> createAnswer(
+        @PathVariable Long id,
+        @RequestParam("userId") Long userId,
+        @RequestParam("content") String content,
+        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+    ) {
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = saveAnswerImage(imageFile);
+        }
         Answer answer = answerService.createAnswer(id, userId, content, imageUrl);
         return ResponseEntity.ok(answer);
     }
@@ -91,15 +107,17 @@ public class QuestionController {
 
     // Chỉnh sửa câu trả lời
     @PutMapping("/{questionId}/answers/{answerId}")
-    public ResponseEntity<Answer> updateAnswer(@PathVariable Long questionId, @PathVariable Long answerId, @RequestBody Map<String, Object> req) {
-         // Kiểm tra trường bắt buộc userId
-        if (!req.containsKey("userId") || req.get("userId") == null) {
-             return ResponseEntity.badRequest().build(); // Hoặc trả về một đối tượng lỗi cụ thể hơn
+    public ResponseEntity<Answer> updateAnswer(
+        @PathVariable Long questionId,
+        @PathVariable Long answerId,
+        @RequestParam("userId") Long userId,
+        @RequestParam("content") String content,
+        @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
+    ) {
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = saveAnswerImage(imageFile);
         }
-        Long userId = Long.valueOf(req.get("userId").toString());
-        // Lấy các trường cần cập nhật (có thể null)
-        String content = req.containsKey("content") && req.get("content") != null ? req.get("content").toString() : null;
-        String imageUrl = req.containsKey("imageUrl") && req.get("imageUrl") != null ? req.get("imageUrl").toString() : null;
         Answer updatedAnswer = answerService.updateAnswer(answerId, userId, content, imageUrl);
         return ResponseEntity.ok(updatedAnswer);
     }
@@ -114,5 +132,52 @@ public class QuestionController {
         Long userId = Long.valueOf(req.get("userId").toString());
         answerService.deleteAnswer(answerId, userId);
         return ResponseEntity.ok().build();
+    }
+
+    // Upload ảnh tạm cho chỉnh sửa câu hỏi
+    @PostMapping("/upload-image")
+    public Map<String, String> uploadQuestionImage(@RequestParam("imageFile") MultipartFile imageFile) {
+        String imageUrl = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            imageUrl = saveAnswerImage(imageFile);
+        }
+        return Map.of("imageUrl", imageUrl);
+    }
+
+    private String saveAnswerImage(MultipartFile file) {
+        try {
+            String uploadDir = "D:/res/static/answer/";
+            System.out.println("[LOG] Bắt đầu lưu file ảnh...");
+            System.out.println("[LOG] Đường dẫn thư mục: " + uploadDir);
+            
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            System.out.println("[LOG] Tên file sẽ lưu: " + fileName);
+            
+            Path uploadPath = Paths.get(uploadDir);
+            System.out.println("[LOG] Kiểm tra thư mục tồn tại: " + uploadPath.toAbsolutePath());
+            
+            if (!Files.exists(uploadPath)) {
+                System.out.println("[LOG] Thư mục chưa tồn tại, đang tạo mới...");
+                Files.createDirectories(uploadPath);
+                System.out.println("[LOG] Đã tạo thư mục thành công: " + uploadPath.toAbsolutePath());
+            } else {
+                System.out.println("[LOG] Thư mục đã tồn tại");
+            }
+            
+            Path filePath = uploadPath.resolve(fileName);
+            System.out.println("[LOG] Đường dẫn file đầy đủ: " + filePath.toAbsolutePath());
+            
+            file.transferTo(filePath.toFile());
+            System.out.println("[LOG] Đã lưu file thành công");
+            
+            String imageUrl = "/answer/" + fileName;
+            System.out.println("[LOG] URL trả về cho frontend: " + imageUrl);
+            
+            return imageUrl;
+        } catch (IOException e) {
+            System.out.println("[LOG] Lỗi khi lưu file: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi lưu file ảnh", e);
+        }
     }
 } 

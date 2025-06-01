@@ -1,0 +1,29 @@
+.tutor-form {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.10);
+  padding: 40px 32px 32px 32px;
+}
+.card {
+  border-radius: 14px;
+  transition: box-shadow 0.2s;
+}
+.card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+}
+.form-label {
+  font-weight: 600;
+}
+.btn-primary {
+  background: linear-gradient(90deg, #007bff 60%, #00c6ff 100%);
+  border: none;
+}
+.btn-primary:hover {
+  background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+}
+.alert {
+  max-width: 600px;
+  margin: 24px auto;
+} 
