@@ -16,24 +16,31 @@
                     <h4 class="mb-0">Add New Course</h4>
                 </div>
                 <div class="card-body">
-                    <form action="/courses/add" method="post">
+                    <form th:action="@{/teachers/{id}/courses/add(id=${teacherId})}" th:object="${course}" method="post">
                         <div class="mb-3">
-                            <label for="courseName" class="form-label">Course Name</label>
-                            <input type="text" class="form-control" id="courseName" name="name" placeholder="Enter course name" required>
+                            <label for="courseName" class="form-label">Course Title</label>
+                            <input type="text" class="form-control" th:field="*{title}" id="courseName" name="name" placeholder="Enter course title" required>
+                            <div class="invalid-feedback">Please enter the course title</div>
                         </div>
                         <div class="mb-3">
                             <label for="courseDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="courseDescription" name="description" rows="3" placeholder="Enter course description" required></textarea>
+                            <textarea class="form-control" th:field="*{description}" id="courseDescription" name="description" rows="3" placeholder="Enter course description" required></textarea>
+                            <div class="invalid-feedback">Please enter the course description</div>
                         </div>
                         <div class="mb-3">
-<!--                            <label for="teacher" class="form-label">Teacher ID</label>-->
-<!--                            <select class="form-select" id="teacher" name="teacherId" required>-->
-<!--                                <option value="" disabled selected>Select a teacher</option>-->
-<!--                                &lt;!&ndash; Example options, replace with Thymeleaf iteration &ndash;&gt;-->
-<!--&lt;!&ndash;                                <option th:each="teacher : ${teachers}" th:value="${teacher.id}" th:text="${teacher.name}"></option>&ndash;&gt;-->
-
-<!--                            </select>-->
-<!--                            <input type="text" class="form-control" id="teacher" name="teacherId" >-->
+                            <label for="ageGroup" class="form-label">Age Group</label>
+                            <select th:field="*{age_group}" class="form-select" id="ageGroup" name="ageGroup" required>
+                                <option value="" disabled selected>Select age group</option>
+                                <option value="4-6">4-6</option>
+                                <option value="7-9">7-9</option>
+                                <option value="10-12">10-12</option>
+                                <option value="13-15">13-15</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" th:field="*{price}" class="form-control" id="price" name="price" placeholder="Enter course price">
+                            <div class="invalid-feedback">Please enter the course price</div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Add Course</button>
                     </form>

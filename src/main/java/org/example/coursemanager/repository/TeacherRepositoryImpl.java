@@ -31,6 +31,17 @@ public class TeacherRepositoryImpl implements TeacherRepository {
     public List<Course> findCoursesByTeacherId(int teacherId) {
         return courseDao.findCoursesByTeacherId(teacherId);
     }
+
+    @Override
+    public void addCourseByTeacherId(int teacherId, Course course) {
+        Teacher teacher = teacherDao.findById(teacherId);
+        if (teacher != null) {
+            course.setTeacher(teacher);
+            courseDao.addCourseByTeacherId(teacherId, course);
+        } else {
+            throw new IllegalArgumentException("Teacher not found with ID: " + teacherId);
+        }
+    }
 //    TeacherDao teacherDAO;
 //
 //    @Autowired

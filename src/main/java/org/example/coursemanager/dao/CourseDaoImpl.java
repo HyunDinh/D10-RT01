@@ -2,9 +2,11 @@ package org.example.coursemanager.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.example.coursemanager.entity.Course;
 import org.example.coursemanager.entity.Teacher;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class CourseDaoImpl implements CourseDao {
     }
 
     @Override
+    @Transactional
     public void addCourseByTeacherId(int teacherId, Course course) {
         course.setTeacher(em.find(Teacher.class, teacherId));
         em.persist(course);

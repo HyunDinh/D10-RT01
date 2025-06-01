@@ -13,6 +13,7 @@ public interface TeacherRepository {
     List<Teacher> findAll();
     Teacher findById(int id);
     List<Course> findCoursesByTeacherId(int teacherId);
+    void addCourseByTeacherId(int teacherId, Course course);
 //    void saveTeacher(Teacher teacher);
 //    void deleteById(int id);
 //    void update(Teacher teacher);

@@ -57,7 +57,7 @@ public class Course {
      * Cannot be null and has a maximum length of 20 characters.
      */
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
+    private String status = "pending";
 
     /**
      * The timestamp when the course was created.

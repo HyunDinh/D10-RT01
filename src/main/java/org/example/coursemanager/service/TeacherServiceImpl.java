@@ -48,17 +48,10 @@ public class TeacherServiceImpl implements TeacherService {
 //        teacherRepository.update(t);
 //    }
 //
-//    @Override
-//    public void addCourseToTeacher(int teacherId, Course course) {
-//        Teacher teacher = teacherRepository.findById(teacherId);
-//        if (teacher != null) {
-//            course.setTeacher(teacher);
-//            teacher.getCourses().add(course);
-//            teacherRepository.save(teacher);
-//        } else {
-//            throw new IllegalArgumentException("Teacher not found with ID: " + teacherId);
-//        }
-//    }
+    @Override
+    public void addCourseToTeacher(int teacherId, Course course) {
+        teacherRepository.addCourseByTeacherId(teacherId, course);
+    }
 
 
 }

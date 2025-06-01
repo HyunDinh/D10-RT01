@@ -10,7 +10,13 @@
 <div class="container mt-5">
     <h1 class="mb-4">Course List</h1>
     <div class="mb-3">
-        <a href="/courses/add" class="btn btn-success">Add New Course</a>
+        <a th:href="@{/teachers/{id}/courses/add(id=${teacherId})}" class="btn btn-success">
+            Add New Course
+        </a>
+        <a th:href="@{/teachers}" class="btn btn-secondary">
+            Back to Teachers
+        </a>
+    </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead class="table-dark">
@@ -35,9 +41,6 @@
                 <td th:text="${c.status}"></td>
                 <td th:text="${c.created_at}"></td>
                 <td th:text="${c.updated_at}"></td>
-<!--                <td>-->
-<!--                    <a th:href="@{/teachers/edit/{id}(id=${teacher.user_id})}" class="btn btn-primary btn-sm">View courses</a>-->
-                    <!--          <a th:href="@{/teachers/delete/{id}(id=${teacher.user_id})}" class="btn btn-danger btn-sm">Delete</a>-->
             </tr>
             </tbody>
         </table>
