@@ -131,7 +131,7 @@ const AnswerForm = () => {
           <p className="card-text mb-1"><b>Môn:</b> {question.subject} &nbsp; <b>Lớp:</b> {question.grade}</p>
           <p className="card-text mb-1"><b>Người hỏi:</b> {question.user?.fullName || 'Ẩn danh'}</p>
           <p className="card-text mb-1"><b>Thời gian:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}</p>
-          {question.imageUrl && <img src={question.imageUrl} alt="Ảnh minh họa" className="img-fluid rounded mb-3" style={{maxHeight:200}} />}
+          {question.imageUrl && <img src={`http://localhost:8080${question.imageUrl}`} alt="Ảnh minh họa" className="img-fluid rounded mb-3" style={{maxHeight:200}} />}
           <form onSubmit={handleSubmit} className="mb-4">
             <label className="form-label">Nhập câu trả lời của bạn</label>
             <textarea className="form-control mb-2" value={content} onChange={e => setContent(e.target.value)} required rows={3} />
@@ -168,7 +168,7 @@ const AnswerForm = () => {
                   <>
                     <div>{a.content}</div>
                     {a.imageUrl && (
-                      <img src={a.imageUrl} alt="Ảnh trả lời" className="img-fluid rounded mb-2" style={{maxHeight:150}} />
+                      <img src={`http://localhost:8080${a.imageUrl}`} alt="Ảnh trả lời" className="img-fluid rounded mb-2" style={{maxHeight:150}} />
                     )}
                   </>
                 )}

@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './TutorList.css';
 
 const PublicTutorList = () => {
     const [tutors, setTutors] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchTutors();
+        fetchCurrentUser();
     }, []);
+
+    const fetchCurrentUser = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/hocho/profile', {
+                withCredentials: true
+            });
+            setCurrentUser(response.data);
+        } catch (err) {
+            // Không cần báo lỗi nếu chưa đăng nhập
+        }
+    };
 
     const fetchTutors = async () => {
         try {
@@ -23,6 +35,22 @@ const PublicTutorList = () => {
         } catch (err) {
             setError('Không thể tải danh sách gia sư');
             setLoading(false);
+        }
+    };
+
+    const handleEdit = (userId) => {
+        navigate(`/hocho/tutors/form/${userId}`);
+    };
+
+    const handleDelete = async (userId) => {
+        if (!window.confirm('Bạn có chắc muốn xóa gia sư này?')) return;
+        try {
+            await axios.delete(`http://localhost:8080/api/tutors/profile/${userId}`, {
+                withCredentials: true
+            });
+            fetchTutors();
+        } catch (err) {
+            setError('Không thể xóa gia sư');
         }
     };
 
@@ -53,6 +81,22 @@ const PublicTutorList = () => {
                                         >
                                             <i className="bi bi-eye"></i> Xem chi tiết
                                         </button>
+                                        {currentUser && tutor.user && currentUser.id === tutor.user.id && (
+                                            <>
+                                                <button
+                                                    className="btn btn-outline-warning btn-sm"
+                                                    onClick={() => handleEdit(tutor.user.id)}
+                                                >
+                                                    <i className="bi bi-pencil"></i> Sửa
+                                                </button>
+                                                <button
+                                                    className="btn btn-outline-danger btn-sm"
+                                                    onClick={() => handleDelete(tutor.user.id)}
+                                                >
+                                                    <i className="bi bi-trash"></i> Xóa
+                                                </button>
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -72,7 +72,14 @@ const QuestionList = () => {
                   <p className="card-text mb-1"><b>Môn:</b> {q.subject} &nbsp; <b>Lớp:</b> {q.grade}</p>
                   <p className="card-text mb-1"><b>Người hỏi:</b> {q.user?.fullName || 'Ẩn danh'}</p>
                   <p className="card-text mb-1"><b>Thời gian:</b> {q.createdAt ? new Date(q.createdAt).toLocaleString() : ''}</p>
-                  {q.imageUrl && <img src={q.imageUrl} alt="Ảnh minh họa" className="img-fluid rounded mb-2" style={{maxHeight:150}} />}
+                  {q.imageUrl && (
+                    <img
+                      src={`http://localhost:8080${q.imageUrl}`}
+                      alt="Ảnh minh họa"
+                      className="img-fluid rounded mb-2"
+                      style={{ maxHeight: 150, maxWidth: '100%', objectFit: 'contain', display: 'block', margin: '0 auto' }}
+                    />
+                  )}
                   <div className="d-flex gap-2 flex-wrap mt-2">
                     <button className="btn btn-outline-primary btn-sm" onClick={() => navigate(`/hocho/questions/${q.questionId}/answer`)}>
                       Đặt câu trả lời

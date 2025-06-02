@@ -1,9 +1,11 @@
 package com.d10rt01.hocho.controller.message;
 
+import com.d10rt01.hocho.config.Configs;
 import com.d10rt01.hocho.model.Answer;
 import com.d10rt01.hocho.model.Question;
 import com.d10rt01.hocho.service.AnswerService;
 import com.d10rt01.hocho.service.QuestionService;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 
 import java.util.List;
 import java.util.Map;
@@ -35,7 +39,7 @@ public class QuestionController {
     ) {
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = saveAnswerImage(imageFile);
+            imageUrl = saveQuestionImage(imageFile);
         }
         Question question = questionService.createQuestion(userId, content, imageUrl, subject, grade);
         return ResponseEntity.ok(question);
@@ -139,45 +143,115 @@ public class QuestionController {
     public Map<String, String> uploadQuestionImage(@RequestParam("imageFile") MultipartFile imageFile) {
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
-            imageUrl = saveAnswerImage(imageFile);
+            imageUrl = saveQuestionImage(imageFile);
         }
         return Map.of("imageUrl", imageUrl);
     }
 
     private String saveAnswerImage(MultipartFile file) {
         try {
-            String uploadDir = "D:/res/static/answer/";
-            System.out.println("[LOG] Bắt đầu lưu file ảnh...");
-            System.out.println("[LOG] Đường dẫn thư mục: " + uploadDir);
+            String uploadDir = Configs.ABSOLUTE_PATH_ANSWER_UPLOAD_DIR;
+            System.out.println("[LOG] Bắt đầu lưu file ảnh câu trả lời...");
+            
+            // Xử lý và nén ảnh
+            byte[] processedFileBytes = processImageFile(file);
             
             String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            System.out.println("[LOG] Tên file sẽ lưu: " + fileName);
-            
             Path uploadPath = Paths.get(uploadDir);
-            System.out.println("[LOG] Kiểm tra thư mục tồn tại: " + uploadPath.toAbsolutePath());
             
             if (!Files.exists(uploadPath)) {
-                System.out.println("[LOG] Thư mục chưa tồn tại, đang tạo mới...");
                 Files.createDirectories(uploadPath);
-                System.out.println("[LOG] Đã tạo thư mục thành công: " + uploadPath.toAbsolutePath());
-            } else {
-                System.out.println("[LOG] Thư mục đã tồn tại");
             }
             
             Path filePath = uploadPath.resolve(fileName);
-            System.out.println("[LOG] Đường dẫn file đầy đủ: " + filePath.toAbsolutePath());
-            
-            file.transferTo(filePath.toFile());
-            System.out.println("[LOG] Đã lưu file thành công");
+            Files.write(filePath, processedFileBytes);
             
             String imageUrl = "/answer/" + fileName;
-            System.out.println("[LOG] URL trả về cho frontend: " + imageUrl);
+            System.out.println("[LOG] Đã lưu file câu trả lời thành công: " + imageUrl);
             
             return imageUrl;
         } catch (IOException e) {
-            System.out.println("[LOG] Lỗi khi lưu file: " + e.getMessage());
+            System.out.println("[LOG] Lỗi khi lưu file câu trả lời: " + e.getMessage());
             e.printStackTrace();
-            throw new RuntimeException("Lỗi lưu file ảnh", e);
+            throw new RuntimeException("Lỗi lưu file ảnh câu trả lời", e);
         }
+    }
+
+    private String saveQuestionImage(MultipartFile file) {
+        try {
+            String uploadDir = Configs.ABSOLUTE_PATH_QUESTION_UPLOAD_DIR;
+            System.out.println("[LOG] Bắt đầu lưu file ảnh câu hỏi...");
+            
+            // Xử lý và nén ảnh
+            byte[] processedFileBytes = processImageFile(file);
+            
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path uploadPath = Paths.get(uploadDir);
+            
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            
+            Path filePath = uploadPath.resolve(fileName);
+            Files.write(filePath, processedFileBytes);
+            
+            String imageUrl = "/question/" + fileName;
+            System.out.println("[LOG] Đã lưu file câu hỏi thành công: " + imageUrl);
+            
+            return imageUrl;
+        } catch (IOException e) {
+            System.out.println("[LOG] Lỗi khi lưu file câu hỏi: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi lưu file ảnh câu hỏi", e);
+        }
+    }
+
+    private byte[] processImageFile(MultipartFile file) throws IOException {
+        byte[] fileBytes = file.getBytes();
+        long fileSize = fileBytes.length;
+
+        // Kiểm tra loại file
+        String contentType = file.getContentType();
+        if (!"image/png".equals(contentType) && !"image/jpeg".equals(contentType)) {
+            throw new IllegalArgumentException("Chỉ chấp nhận file PNG hoặc JPG");
+        }
+
+        // Nếu file nhỏ hơn giới hạn, không cần scale
+        if (fileSize <= Configs.MAX_QUESTION_ANSWER_IMAGE_SIZE) {
+            return fileBytes;
+        }
+
+        // Scale file để giảm kích thước
+        double quality = 0.8; // Chất lượng ban đầu (0.0 - 1.0)
+        double scale = 1.0;   // Tỷ lệ resize ban đầu
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        while (fileSize > Configs.MAX_QUESTION_ANSWER_IMAGE_SIZE && quality > 0.1 && scale > 0.1) {
+            outputStream.reset(); // Reset stream để ghi lại từ đầu
+            Thumbnails.of(new ByteArrayInputStream(fileBytes))
+                    .scale(scale) // Resize kích thước ảnh
+                    .outputQuality(quality) // Giảm chất lượng ảnh
+                    .toOutputStream(outputStream);
+
+            fileBytes = outputStream.toByteArray();
+            fileSize = fileBytes.length;
+
+            // Giảm scale hoặc quality nếu vẫn vượt giới hạn
+            if (fileSize > Configs.MAX_QUESTION_ANSWER_IMAGE_SIZE) {
+                if (scale > 0.1) {
+                    scale -= 0.1; // Giảm kích thước ảnh 10%
+                } else {
+                    quality -= 0.1; // Giảm chất lượng 10%
+                    scale = 1.0; // Reset scale nếu đã giảm quality
+                }
+            }
+        }
+
+        // Nếu vẫn không đạt yêu cầu sau khi scale tối đa, throw exception
+        if (fileSize > Configs.MAX_QUESTION_ANSWER_IMAGE_SIZE) {
+            throw new IllegalArgumentException("Không thể giảm kích thước file xuống dưới 10MB. Vui lòng chọn file nhỏ hơn.");
+        }
+
+        return fileBytes;
     }
 } 

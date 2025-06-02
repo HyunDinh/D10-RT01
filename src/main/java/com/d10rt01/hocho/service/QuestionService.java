@@ -4,6 +4,7 @@ import com.d10rt01.hocho.model.Question;
 import com.d10rt01.hocho.model.User;
 import com.d10rt01.hocho.repository.QuestionRepository;
 import com.d10rt01.hocho.repository.UserRepository;
+import com.d10rt01.hocho.repository.AnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,9 @@ public class QuestionService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @Transactional
     public Question createQuestion(Long userId, String content, String imageUrl, String subject, Integer grade) {
@@ -76,6 +80,11 @@ public class QuestionService {
         if (!question.getUser().getId().equals(userId)) {
             throw new RuntimeException("User is not authorized to delete this question");
         }
+        
+        // Xóa tất cả câu trả lời liên quan trước
+        answerRepository.deleteByQuestion(question);
+        
+        // Sau đó mới xóa câu hỏi
         questionRepository.delete(question);
     }
 } 

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import './TutorForm.css';
 
 const SUBJECTS = [
@@ -7,6 +8,7 @@ const SUBJECTS = [
 ];
 
 const TutorForm = () => {
+    const { userId } = useParams();
     const [form, setForm] = useState({
         specialization: '',
         experience: '',
@@ -14,7 +16,7 @@ const TutorForm = () => {
         introduction: '',
         phoneNumber: ''
     });
-    const [userId, setUserId] = useState('');
+    const [currentUserId, setCurrentUserId] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
@@ -23,13 +25,35 @@ const TutorForm = () => {
         const fetchProfile = async () => {
             try {
                 const res = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
-                setUserId(res.data.id);
+                setCurrentUserId(res.data.id);
             } catch (err) {
                 setError('Không thể lấy thông tin người dùng');
             }
         };
         fetchProfile();
     }, []);
+
+    useEffect(() => {
+        if (userId) {
+            // Nếu có userId trên URL, fetch thông tin gia sư để sửa
+            const fetchTutor = async () => {
+                try {
+                    const res = await axios.get(`http://localhost:8080/api/tutors/profile/${userId}`, { withCredentials: true });
+                    const t = res.data;
+                    setForm({
+                        specialization: t.specialization || '',
+                        experience: t.experience || '',
+                        education: t.education || '',
+                        introduction: t.introduction || '',
+                        phoneNumber: t.user?.phoneNumber || ''
+                    });
+                } catch (err) {
+                    setError('Không thể tải thông tin gia sư');
+                }
+            };
+            fetchTutor();
+        }
+    }, [userId]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -41,11 +65,14 @@ const TutorForm = () => {
         setError(null);
         setSuccess(null);
         try {
-            await axios.post('http://localhost:8080/api/tutors/profile', { ...form, userId }, {
+            // Dù là tạo mới hay sửa đều gọi POST và truyền userId
+            await axios.post('http://localhost:8080/api/tutors/profile', { ...form, userId: userId || currentUserId }, {
                 withCredentials: true
             });
-            setSuccess('Lưu thông tin gia sư thành công!');
-            setForm({ specialization: '', experience: '', education: '', introduction: '', phoneNumber: '' });
+            setSuccess(userId ? 'Cập nhật thông tin gia sư thành công!' : 'Lưu thông tin gia sư thành công!');
+            if (!userId) {
+                setForm({ specialization: '', experience: '', education: '', introduction: '', phoneNumber: '' });
+            }
         } catch (err) {
             setError('Không thể lưu thông tin gia sư');
         }
@@ -54,7 +81,7 @@ const TutorForm = () => {
 
     return (
         <div className="container tutor-form mt-5">
-            <h2 className="text-primary mb-4 text-center">Tạo/Cập nhật thông tin gia sư</h2>
+            <h2 className="text-primary mb-4 text-center">{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo/Cập nhật thông tin gia sư'}</h2>
             <form className="card mx-auto p-4 shadow" style={{maxWidth: 600}} onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label">Chuyên môn</label>
@@ -78,8 +105,8 @@ const TutorForm = () => {
                 {error && <div className="alert alert-danger text-center">{error}</div>}
                 {success && <div className="alert alert-success text-center">{success}</div>}
                 <div className="d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary" disabled={loading || !userId}>
-                        {loading ? 'Đang lưu...' : 'Lưu thông tin'}
+                    <button type="submit" className="btn btn-primary" disabled={loading || (!userId && !currentUserId)}>
+                        {loading ? 'Đang lưu...' : (userId ? 'Cập nhật' : 'Lưu thông tin')}
                     </button>
                 </div>
             </form>
