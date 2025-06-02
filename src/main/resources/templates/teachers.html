@@ -26,7 +26,6 @@
         <td th:text="${teacher.email}"></td>
         <td>
           <a th:href="@{/teachers/{id}/courses(id=${teacher.user_id})}" class="btn btn-primary btn-sm">View courses</a>
-<!--          <a th:href="@{/teachers/delete/{id}(id=${teacher.user_id})}" class="btn btn-danger btn-sm">Delete</a>-->
       </tr>
       </tbody>
     </table>

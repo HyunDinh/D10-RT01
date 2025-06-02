@@ -1,5 +1,6 @@
 package org.example.coursemanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +35,8 @@ public class Teacher {
     @Column(name = "is_active", nullable = false)
     private boolean is_active;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "teacher_id")
     private Set<Course> courses;
 
