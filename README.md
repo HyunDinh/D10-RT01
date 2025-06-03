@@ -2,8 +2,8 @@
 Build a management system that provides an online educational and entertainment environment for children.
 
 Hoàn thành backend front end cho giỏ hàng (trẻ em xem giỏ hàng ,thêm khóa học vào giỏ hàng , xóa khóa học khỏi giỏ hàng , gửi yêu cầu cho phụ huynh mua khóa học . Phụ huynh xem được giỏ hàng , phê duyệt đơn hàng (đồng ý hoặc từ chối mua) , xóa đơn hàng khỏi giỏ hàng , thêm trực tiếp khóa học vào giỏ hàng) , chưa có trang để thêm khóa học vào giỏ hàng của trẻ em và phụ huynh
-, gia sư (tạo hồ sơ gia sư , hiển thị tất cả gia sư , sửa thông tin gia sư , xóa thông tin gia sư , xem chi tiết gia sư , phê duyệt gia sư (đồng ý , từ chối) ) 
-câu hỏi và trả lời (Update lại  QuestionService và aAnswerRepository để có thể khi xóa câu hỏi thì xóa hết câu trả lời của câu hỏi đó . ).
+,gia sư (tạo hồ sơ gia sư , hiển thị tất cả gia sư , sửa thông tin gia sư , xóa thông tin gia sư , xem chi tiết gia sư , phê duyệt gia sư (đồng ý , từ chối) ) 
+,câu hỏi và trả lời (Update lại  QuestionService và aAnswerRepository để có thể khi xóa câu hỏi thì xóa hết câu trả lời của câu hỏi đó .Frontend và backend hoàn thành tạo chỉnh sửa xóa câu hỏi , hoàn thành tạo chỉnh sửa xóa câu trả lời).
 
 
 

@@ -31,6 +31,7 @@ const ChildCart = () => {
         }
     };
 
+    //Hàm xử lý khi trẻ em  muốn xóa một khóa học khỏi giỏ hàng.
     const handleRemoveItem = async (courseId) => {
         try {
             const userResponse = await axios.get('http://localhost:8080/api/hocho/profile', {
@@ -48,6 +49,7 @@ const ChildCart = () => {
         }
     };
 
+    //Hàm xử lý khi trẻ em muốn gửi yêu cầu mua khóa học đến phụ huynh.
     const handleSendToParent = async () => {
         try {
             const userResponse = await axios.get('http://localhost:8080/api/hocho/profile', {
