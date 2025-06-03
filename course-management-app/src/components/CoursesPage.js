@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from "axios";
 
-const CoursesPage = () => {
+export default function CoursesPage() {
   const { teacherId } = useParams(); // teacherId should be provided via route params
   const [courses, setCourses] = useState([]);
 
@@ -60,5 +60,3 @@ const CoursesPage = () => {
     </div>
   );
 };
-
-export default CoursesPage;
