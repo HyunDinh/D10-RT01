@@ -12,7 +12,7 @@ export default function TeachersPage() {
     }, []);
 
     const fetchTeachers = async() => {
-        const result = await axios.get('/teachers');
+        const result = await axios.get("/api/teachers");
         setTeachers(result.data);
     }
 
@@ -32,11 +32,11 @@ export default function TeachersPage() {
                     <tbody>
                     {teachers.map((teacher) => (
                         <tr>
-                            <th>{teacher.user_id}</th>
-                            <td>{teacher.full_name}</td>
+                            <th>{teacher.userId}</th>
+                            <td>{teacher.fullName}</td>
                             <td>{teacher.email}</td>
                             <td>
-                                    <Link to={`/teachers/${teacher.user_id}/courses`} className="btn btn-primary mx-2">
+                                    <Link to={`/teachers/${teacher.userId}/courses`} className="btn btn-primary mx-2">
                                         View Courses
                                     </Link>
                             </td>

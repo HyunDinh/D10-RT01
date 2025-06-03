@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function AddCoursePage() {
-    const { teacherId } = useParams();
+    const { userId } = useParams();
     const navigate = useNavigate();
     const [course, setCourse] = useState({
         title: '',
@@ -34,10 +34,10 @@ export default function AddCoursePage() {
         e.preventDefault();
         if (!validate()) return;
         try {
-            await axios.post("/teachers/" + teacherId + "/courses/add", course);
+            await axios.post(`/api/teachers/${userId}/courses/add`, course);
             toast.success("Course added successfully!");
             setTimeout(() => {
-                navigate("/teachers/" + teacherId + "/courses");
+                navigate(`/teachers/${userId}/courses`);
             }, 1500); // Delay to let the toast display
         } catch (error) {
             console.error(error);
@@ -53,7 +53,7 @@ export default function AddCoursePage() {
                             <h4 className="mb-0">Add New Course</h4>
                         </div>
                         <div className="card-body">
-                            <form onSubmit={(e) => handleSubmit(e)}>
+                            <form onSubmit={handleSubmit}>
                                 <div className="mb-3">
                                     <label htmlFor="courseName" className="form-label">Course Title</label>
                                     <input
@@ -93,10 +93,10 @@ export default function AddCoursePage() {
                                         required
                                     >
                                         <option value="">Select age group</option>
-                                        <option value="4-6">4-6</option>
-                                        <option value="7-9">7-9</option>
-                                        <option value="10-12">10-12</option>
-                                        <option value="13-15">13-15</option>
+                                        <option value="AGE_4_6">AGE\_4\_6</option>
+                                        <option value="AGE_5_7">AGE\_7\_9</option>
+                                        <option value="AGE_10_12">AGE\_10\_12</option>
+                                        <option value="AGE_13_15">AGE\_13\_15</option>
                                     </select>
                                     {errors.age_group && <div className="text-danger">{errors.age_group}</div>}
                                 </div>

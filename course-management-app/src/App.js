@@ -9,8 +9,8 @@ function App() {
   return (
     <Router>
         <Routes>
-            <Route exact path="/teachers/:teacherId/courses/add" element={<AddCoursePage/>} />
-            <Route exact path="/teachers/:teacherId/courses" element={<CoursesPage/>} />
+            <Route exact path="/teachers/:userId/courses/add" element={<AddCoursePage/>} />
+            <Route exact path="/teachers/:userId/courses" element={<CoursesPage/>} />
             <Route exact path="/" element={<TeachersPage/>} />
         </Routes>
     </Router>
