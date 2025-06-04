@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -30,13 +31,23 @@ public class TeacherController {
         return ResponseEntity.ok(teachers);
     }
 
+    @GetMapping("/age-groups")
+    public ResponseEntity<List<String>> getAgeGroups() {
+        return ResponseEntity.ok(Arrays.asList(
+                "AGE_4_6",
+                "AGE_7_9",
+                "AGE_10_12",
+                "AGE_13_15"
+        ));
+    }
+
     @GetMapping("/{id}/courses")
     public ResponseEntity<List<Course>> getCoursesByTeacherId(@PathVariable Long id) {
         if (id == null) {
             return ResponseEntity.badRequest().build();
         }
         User teacher = teacherService.findTeacherById(id);
-        List<Course> courses = courseService.getCourseById(id);
+        List<Course> courses = courseService.getCourseByTeacherId(id);
         return ResponseEntity.ok(courses);
     }
 
@@ -50,7 +61,23 @@ public class TeacherController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/courses/{courseId}")
+    @GetMapping("/{id}/courses/{courseId}/edit")
+    public ResponseEntity<Course> getCourseForEdit(@PathVariable Long id, @PathVariable Long courseId) {
+        if (id == null || courseId == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        User teacher = teacherService.findTeacherById(id);
+        Course course = courseService.getCourseByTeacherId(id).stream()
+                .filter(c -> c.getCourseId().equals(courseId))
+                .findFirst()
+                .orElse(null);
+        if (course == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(course);
+    }
+
+    @PutMapping("/{id}/courses/{courseId}/edit")
     public ResponseEntity<Void> editCourse(@PathVariable Long id, @PathVariable Long courseId, @Valid @RequestBody Course course) {
         if (id == null || courseId == null) {
             return ResponseEntity.badRequest().build();

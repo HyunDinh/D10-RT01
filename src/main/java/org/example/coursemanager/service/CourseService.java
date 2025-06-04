@@ -23,7 +23,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public List<Course> getCourseById(long teacherId) {
+    public List<Course> getCourseByTeacherId(long teacherId) {
         return courseRepository.findCoursesByTeacherId(teacherId);
     }
 
@@ -32,7 +32,6 @@ public class CourseService {
         if (course == null || teacherId == null || teacherId <= 0) {
             throw new IllegalArgumentException("Course and teacher ID must not be null");
         }
-
         User teacher = userRepository.findById(teacherId)
             .orElseThrow(() -> new IllegalArgumentException("Teacher not found with ID: " + teacherId));
 
@@ -46,6 +45,7 @@ public class CourseService {
             Course existingCourse = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
             existingCourse.setTitle(course.getTitle());
             existingCourse.setDescription(course.getDescription());
+            existingCourse.setAgeGroup(course.getAgeGroup());
             existingCourse.setPrice(course.getPrice());
             existingCourse.setTeacher(course.getTeacher());
             courseRepository.save(existingCourse);

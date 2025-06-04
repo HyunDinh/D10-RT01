@@ -40,11 +40,6 @@ export default function TeachersPage() {
                                         View Courses
                                     </Link>
                             </td>
-                            {/*<td>{teacher.teacher_id}</td>*/}
-                            {/*<td>{teacher.name}</td>*/}
-                            {/*<td>{teacher.email}</td>*/}
-                            {/*<td>*/}
-                            {/*</td>*/}
                         </tr>
                     ))}
                     </tbody>

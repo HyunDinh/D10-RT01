@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+
     // This method retrieves all courses associated with a specific teacher by their ID
     @Query("SELECT c FROM Course c WHERE c.teacher.userId = ?1")
     List<Course> findCoursesByTeacherId(Long teacherId);

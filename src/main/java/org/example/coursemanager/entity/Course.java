@@ -1,17 +1,17 @@
 package org.example.coursemanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * Represents a Course entity in the system.
  * Maps to the "courses" table in the database.
  */
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "courses")
 public class Course {
@@ -22,66 +22,65 @@ public class Course {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int course_id;
+    @Column(name = "course_id")
+    private Long courseId;
 
     /**
      * The title of the course.
      * Cannot be null and has a maximum length of 100 characters.
      */
-    @Column(name = "title", nullable = false, length = 100)
+    @Column(name = "title", nullable = false)
     private String title;
 
     /**
      * A brief description of the course.
      * Optional and has a maximum length of 500 characters.
      */
-    @Column(name = "description", length = 500)
+    @Column(name = "description")
     private String description;
 
     /**
      * The target age group for the course.
      * Cannot be null and has a maximum length of 10 characters.
      */
-    @Column(name = "age_group", nullable = false, length = 10)
-    private String age_group;
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private User teacher;
+
+    @JsonProperty("age_group")
+    @Column(name = "age_group", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private AgeGroup ageGroup;
 
     /**
      * The price of the course.
      * Cannot be null.
      */
-    @Column(name = "price", nullable = false)
-    private Double price;
+    @Column(name = "price", precision = 10, scale = 2)
+    private BigDecimal price;
 
     /**
      * The current status of the course (e.g., active, inactive).
      * Cannot be null and has a maximum length of 20 characters.
      */
-    @Column(name = "status", nullable = false, length = 20)
-    private String status = "pending";
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private CourseStatus status = CourseStatus.PENDING;
 
     /**
      * The timestamp when the course was created.
      * Automatically set before the entity is persisted.
      * Cannot be updated.
      */
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     /**
      * The timestamp when the course was last updated.
      * Automatically set before the entity is updated.
      */
     @Column(name = "updated_at")
-    private LocalDateTime updated_at;
-
-    /**
-     * The teacher associated with the course.
-     * Uses a many-to-one relationship with cascading operations.
-     * Maps to the "teacher_id" column in the database.
-     */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
+    private LocalDateTime updatedAt;
 
     /**
      * Default constructor.
@@ -100,11 +99,11 @@ public class Course {
     public Course(Course course) {
         this.title = course.title;
         this.description = course.description;
-        this.age_group = course.age_group;
+        this.ageGroup = course.ageGroup;
         this.price = course.price;
         this.status = course.status;
-        this.created_at = course.created_at;
-        this.updated_at = course.updated_at;
+        this.createdAt = course.createdAt;
+        this.updatedAt = course.updatedAt;
     }
 
     /**
@@ -113,14 +112,14 @@ public class Course {
      *
      * @param title       The title of the course.
      * @param description The description of the course.
-     * @param age_group   The target age group for the course.
+     * @param ageGroup    The target age group for the course.
      * @param price       The price of the course.
      * @param status      The status of the course.
      */
-    public Course(String title, String description, String age_group, Double price, String status) {
+    public Course(String title, String description, AgeGroup ageGroup, BigDecimal price, CourseStatus status) {
         this.title = title;
         this.description = description;
-        this.age_group = age_group;
+        this.ageGroup = ageGroup;
         this.price = price;
         this.status = status;
     }
@@ -131,7 +130,7 @@ public class Course {
      */
     @PrePersist
     protected void onCreate() {
-        this.created_at = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
 
     /**
@@ -140,6 +139,19 @@ public class Course {
      */
     @PreUpdate
     protected void onUpdate() {
-        this.updated_at = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
+}
+
+enum AgeGroup {
+    AGE_4_6,
+    AGE_7_9,
+    AGE_10_12,
+    AGE_13_15
+}
+
+enum CourseStatus {
+    PENDING,
+    APPROVED,
+    REJECTED
 }

@@ -1,10 +1,11 @@
 // File: `course-management-app/src/components/CoursesPage.js`
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
+import {toast} from "react-toastify";
 
 export default function CoursesPage() {
-  const { userId } = useParams();
+  const { userId, courseId } = useParams();
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
@@ -16,13 +17,33 @@ export default function CoursesPage() {
   const fetchCourses = async () => {
     try {
       const result = await axios.get(`/api/teachers/${userId}/courses`);
-      setCourses(result.data);
+      const mappedCourses = result.data.map(course => ({
+        ...course,
+        ageGroup: course.age_group || course.ageGroup,
+      }));
+      setCourses(mappedCourses);
     } catch (error) {
       console.error('Error fetching courses:', error);
     }
   };
 
-  return (
+  const handleDelete = async (courseId) => {
+    if (!window.confirm('Are you sure you want to delete this course?')) {
+      return;
+    }
+    try {
+      await axios.delete(`/api/teachers/${userId}/courses/${courseId}`);
+      toast.success('Course deleted successfully!');
+      // Refresh course list
+      fetchCourses();
+    } catch (error) {
+      console.error('Error deleting course:', error);
+      toast.error('Failed to delete course');
+    }
+  }
+
+
+    return (
       <div className="container mt-5">
         <h1 className="mb-4">Course List</h1>
         <div className="mb-3">
@@ -45,6 +66,7 @@ export default function CoursesPage() {
               <th>Status</th>
               <th>Created at</th>
               <th>Updated at</th>
+              <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -58,6 +80,17 @@ export default function CoursesPage() {
                   <td>{course.status}</td>
                   <td>{new Date(course.createdAt).toLocaleString()}</td>
                   <td>{course.updatedAt && new Date(course.updatedAt).toLocaleString()}</td>
+                  <td>
+                    {/* Added Edit and Delete buttons */}
+                    <Link to={`/teachers/${userId}/courses/${course.courseId}/edit`} className="btn btn-success w-100 mt-2">
+                      Edit
+                    </Link>
+                    <button
+                        className="btn btn-danger w-100 mt-2"
+                        onClick={() => handleDelete(course.courseId)}>
+                      Delete
+                    </button>
+                  </td>
                 </tr>
             ))}
             </tbody>

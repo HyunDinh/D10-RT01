@@ -1,13 +1,12 @@
-// File: src/components/AddCoursePage.js
-import React, {useEffect, useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function AddCoursePage() {
+export default function EditCoursePage() {
     const [ageGroups, setAgeGroups] = useState([]);
-    const { userId } = useParams();
+    const { userId, courseId } = useParams();
     const navigate = useNavigate();
     const [course, setCourse] = useState({
         title: '',
@@ -18,8 +17,19 @@ export default function AddCoursePage() {
     const [errors, setErrors] = useState({});
 
     useEffect(() => {
+        fetchCourse();
         fetchAgeGroups();
-    })
+    }, [userId, courseId]);
+
+    const fetchCourse = async () => {
+        try {
+            const response = await axios.get(`/api/teachers/${userId}/courses/${courseId}/edit`);
+            setCourse(response.data);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch course data.");
+        }
+    };
 
     const fetchAgeGroups = async () => {
         try {
@@ -48,13 +58,14 @@ export default function AddCoursePage() {
         e.preventDefault();
         if (!validate()) return;
         try {
-            await axios.post(`/api/teachers/${userId}/courses/add`, course);
-            toast.success("Course added successfully!");
+            await axios.put(`/api/teachers/${userId}/courses/${courseId}/edit`, course);
+            toast.success("Course updated successfully!");
             setTimeout(() => {
                 navigate(`/teachers/${userId}/courses`);
             }, 1500); // Delay to let the toast display
         } catch (error) {
             console.error(error);
+            toast.error("Failed to update course.");
         }
     };
 
@@ -63,8 +74,8 @@ export default function AddCoursePage() {
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <div className="card shadow">
-                        <div className="card-header bg-primary text-white">
-                            <h4 className="mb-0">Add New Course</h4>
+                        <div className="card-header bg-warning text-white">
+                            <h4 className="mb-0">Edit Course</h4>
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
@@ -127,7 +138,7 @@ export default function AddCoursePage() {
                                     />
                                     {errors.price && <div className="text-danger">{errors.price}</div>}
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100">Add Course</button>
+                                <button type="submit" className="btn btn-warning w-100">Save Changes</button>
                                 <button type="button" className="btn btn-secondary w-100 mt-2" onClick={() => navigate(-1)}>
                                     Cancel
                                 </button>
