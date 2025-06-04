@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -26,17 +27,17 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status = OrderStatus.PENDING;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
+
+    @OneToOne(mappedBy = "order")
+    private Payment payment;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
+        orderDate = LocalDateTime.now();
     }
-}
-
-enum OrderStatus {
-    PENDING,
-    COMPLETED,
-    CANCELLED
 } 

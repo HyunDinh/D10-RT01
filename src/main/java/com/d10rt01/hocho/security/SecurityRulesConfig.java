@@ -1,4 +1,3 @@
-
 package com.d10rt01.hocho.security;
 
 import org.springframework.context.annotation.Configuration;
@@ -20,10 +19,11 @@ public class SecurityRulesConfig {
                         "/css/**",
                         "/js/**",
                         "/index.html",
+                        "/hocho/payment/webhook", // Thêm endpoint webhook vào permitAll
                         "/").permitAll()
                 .requestMatchers("/hocho/clients").hasRole("admin")  // Đảm bảo chỉ ROLE_admin mới truy cập được trang client
                 .requestMatchers("/api/clients/**").hasRole("admin") // Đảm bảo chỉ ROLE_admin mới truy cập được API clients
-                .requestMatchers("/api/hocho/welcome", "/api/hocho/role").authenticated()
+                .requestMatchers("/api/hocho/welcome", "/api/hocho/role", "/api/parent-cart/**", "/api/payments/**").authenticated()
                 .anyRequest().authenticated();
     }
 }

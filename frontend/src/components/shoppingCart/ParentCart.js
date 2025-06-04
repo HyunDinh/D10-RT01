@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { paymentService } from '../../services/paymentService';
 import './Cart.css';
 
 const ParentCart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [paymentLoading, setPaymentLoading] = useState(false);
     const [error, setError] = useState(null);
+    
+    // State để lưu kết quả tính toán
+    const [calculatedPayableItems, setCalculatedPayableItems] = useState([]);
+    const [calculatedTotalAmount, setCalculatedTotalAmount] = useState(0);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -23,11 +30,25 @@ const ParentCart = () => {
             const response = await axios.get(`http://localhost:8080/api/parent-cart/${parentId}`, {
                 withCredentials: true
             });
-            setCartItems(response.data);
+            const fetchedCartItems = response.data; // Lưu dữ liệu nhận được vào biến tạm
+            setCartItems(fetchedCartItems); // Cập nhật state cartItems
+            console.log("Cart Items Data:", fetchedCartItems); // Log dữ liệu thô
+
+            // Tính toán và cập nhật state payableItems và totalAmount ngay sau khi nhận dữ liệu
+            const payableItemsAfterFetch = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'ADDED_DIRECTLY'));
+            const totalAmountAfterFetch = payableItemsAfterFetch.reduce((sum, item) => sum + (item.course.price || 0), 0);
+            
+            setCalculatedPayableItems(payableItemsAfterFetch); // Cập nhật state đã tính toán
+            setCalculatedTotalAmount(totalAmountAfterFetch); // Cập nhật state đã tính toán
+
+            console.log("Payable Items (after fetch and state update):", payableItemsAfterFetch);
+            console.log("Total Amount (after fetch and state update):", totalAmountAfterFetch);
+
             setLoading(false);
         } catch (err) {
             setError('Không thể tải giỏ hàng');
             setLoading(false);
+            console.error("Fetch Cart Error:", err);
         }
     };
 
@@ -42,7 +63,7 @@ const ParentCart = () => {
                 withCredentials: true
             });
             alert('Đã chấp nhận yêu cầu');
-            fetchCart(); // Tải lại giỏ hàng
+            fetchCart(); // Fetch lại giỏ hàng để cập nhật trạng thái và tính toán lại tổng tiền
         } catch (err) {
             setError('Không thể chấp nhận yêu cầu');
         }
@@ -59,7 +80,7 @@ const ParentCart = () => {
                 withCredentials: true
             });
             alert('Đã từ chối yêu cầu');
-            fetchCart(); // Tải lại giỏ hàng
+            fetchCart(); // Fetch lại giỏ hàng
         } catch (err) {
             setError('Không thể từ chối yêu cầu');
         }
@@ -76,9 +97,63 @@ const ParentCart = () => {
                 withCredentials: true
             });
             alert('Đã xóa khóa học khỏi giỏ hàng');
-            fetchCart(); // Tải lại giỏ hàng
+            fetchCart(); // Fetch lại giỏ hàng
         } catch (err) {
             setError('Không thể xóa khóa học khỏi giỏ hàng');
+        }
+    };
+
+    // Sử dụng state đã tính toán cho hiển thị và logic
+    const handleCheckout = async () => {
+        // Sử dụng state đã tính toán cho điều kiện kiểm tra
+        if (calculatedPayableItems.length === 0) {
+            alert('Không có mặt hàng nào trong giỏ hàng có thể thanh toán.');
+            return;
+        }
+
+        try {
+            setPaymentLoading(true);
+            const userResponse = await axios.get('http://localhost:8080/api/hocho/profile', {
+                withCredentials: true
+            });
+             const userId = userResponse.data.id;
+
+            const description = "Thanh toán giỏ hàng";
+            // Lấy danh sách cartItemIds từ các mục có thể thanh toán
+            const cartItemIds = calculatedPayableItems.map(item => item.cartId);
+
+            console.log("Cart Item IDs to send:", cartItemIds); // Log trước khi gửi
+
+            // Gọi service backend với userId và danh sách cartItemIds
+            const payment = await paymentService.createPayment(userId, cartItemIds);
+
+            console.log("Payment object received:", payment); // Log đối tượng paym
+            console.log("Type of payment.paymentUrl:", typeof payment.paymentUrl);
+            console.log("Value of payment.paymentUrl:", payment.paymentUrl); // Log
+
+            // Parse the JSON string if payment is a string
+            let paymentObject = payment;
+            if (typeof payment === 'string') {
+              try {
+                paymentObject = JSON.parse(payment);
+              } catch (e) {
+                console.error("Failed to parse payment JSON:", e);
+                setError('Không nhận được URL thanh toán hợp lệ từ backend.');
+                return;
+              }
+            }
+
+            // Kiểm tra rõ ràng hơn: payment là đối tượng, paymentUrl là chuỗi và kl
+            if (paymentObject && typeof paymentObject.paymentUrl === 'string' && paymentObject.paymentUrl) {
+              window.location.href = paymentObject.paymentUrl;
+            } else {
+              setError('Không nhận được URL thanh toán hợp lệ từ backend.');
+            }
+
+        } catch (err) {
+            setError('Không thể tạo yêu cầu thanh toán: ' + (err.response?.data || err.message));
+        } finally {
+            setPaymentLoading(false);
         }
     };
 
@@ -119,12 +194,14 @@ const ParentCart = () => {
                                             <p className="card-text status">
                                                 Trạng thái: {item.statusByParent === 'PENDING_APPROVAL' ? (
                                                     <span className="badge bg-warning text-dark">Chờ phê duyệt</span>
-                                                ) : item.statusByParent === 'ACCEPTED' ? (
+                                                ) : item.statusByParent && item.statusByParent.trim() === 'ACCEPTED' ? (
                                                     <span className="badge bg-success">Đã chấp nhận</span>
-                                                ) : item.statusByParent === 'REJECTED' ? (
+                                                ) : item.statusByParent && item.statusByParent.trim() === 'REJECTED' ? (
                                                     <span className="badge bg-danger">Đã từ chối</span>
-                                                ) : (
+                                                ) : item.statusByParent && item.statusByParent.trim() === 'DIRECTLY_ADDED' ? (
                                                     <span className="badge bg-primary">Đã thêm trực tiếp</span>
+                                                ) : ( // Fallback nếu trạng thái không khớp
+                                                    <span className="badge bg-secondary">{item.statusByParent || 'Không rõ'}</span>
                                                 )}
                                             </p>
                                             <div className="d-flex gap-2 flex-wrap mt-2">
@@ -133,12 +210,14 @@ const ParentCart = () => {
                                                         <button
                                                             className="btn btn-outline-success btn-sm"
                                                             onClick={() => handleApprove(item.cartId)}
+                                                            disabled={paymentLoading}
                                                         >
                                                             <i className="bi bi-check-circle"></i> Chấp nhận
                                                         </button>
                                                         <button
                                                             className="btn btn-outline-danger btn-sm"
                                                             onClick={() => handleReject(item.cartId)}
+                                                            disabled={paymentLoading}
                                                         >
                                                             <i className="bi bi-x-circle"></i> Từ chối
                                                         </button>
@@ -147,6 +226,7 @@ const ParentCart = () => {
                                                 <button
                                                     className="btn btn-outline-secondary btn-sm"
                                                     onClick={() => handleRemoveItem(item.cartId)}
+                                                    disabled={paymentLoading}
                                                 >
                                                     <i className="bi bi-trash"></i> Xóa
                                                 </button>
@@ -157,6 +237,23 @@ const ParentCart = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {cartItems.length > 0 && ( 
+                <div className="cart-summary mt-4">
+                    {/* Sử dụng state đã tính toán cho hiển thị tổng tiền */}
+                    <h4 className="text-end">Tổng tiền: {calculatedTotalAmount.toLocaleString('vi-VN')} VNĐ</h4>
+                    <div className="d-grid gap-2">
+                        <button 
+                            className="btn btn-success btn-lg" 
+                            onClick={handleCheckout}
+                            // Sử dụng state đã tính toán cho điều kiện disabled
+                            disabled={paymentLoading || calculatedPayableItems.length === 0}
+                        >
+                            {paymentLoading ? 'Đang xử lý thanh toán...' : 'Thanh toán giỏ hàng'}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
