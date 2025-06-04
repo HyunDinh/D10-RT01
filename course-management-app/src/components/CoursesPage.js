@@ -7,6 +7,7 @@ import {toast} from "react-toastify";
 export default function CoursesPage() {
   const { userId, courseId } = useParams();
   const [courses, setCourses] = useState([]);
+  const [filter, setFilter] = useState('All');
 
   useEffect(() => {
     if (userId && userId !== 'undefined') {
@@ -14,6 +15,7 @@ export default function CoursesPage() {
     }
   }, [userId]);
 
+  // Fetch and sort courses by ageGroup alphabetically
   const fetchCourses = async () => {
     try {
       const result = await axios.get(`/api/teachers/${userId}/courses`);
@@ -21,6 +23,7 @@ export default function CoursesPage() {
         ...course,
         ageGroup: course.age_group || course.ageGroup,
       }));
+      mappedCourses.sort((a, b) => a.ageGroup.localeCompare(b.ageGroup));
       setCourses(mappedCourses);
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -42,8 +45,17 @@ export default function CoursesPage() {
     }
   }
 
+  // Get distinct age groups for the dropdown
+  const ageGroups = Array.from(new Set(courses.map(course => course.ageGroup))).filter(Boolean);
 
-    return (
+  // Filter courses based on the dropdown selection
+  const filteredCourses = filter === 'All'
+      ? courses
+      : courses.filter(course => course.ageGroup === filter);
+
+
+
+  return (
       <div className="container mt-5">
         <h1 className="mb-4">Course List</h1>
         <div className="mb-3">
@@ -53,6 +65,19 @@ export default function CoursesPage() {
           <Link to="/" className="btn btn-secondary">
             Back to Teachers
           </Link>
+        </div>
+        {/* Dropdown for filtering courses by age group */}
+        <div className="mb-3">
+          <select
+              className="form-select"
+              value={filter}
+              onChange={e => setFilter(e.target.value)}
+          >
+            <option value="All">All</option>
+            {ageGroups.map(group => (
+                <option key={group} value={group}>{group}</option>
+            ))}
+          </select>
         </div>
         <div className="table-responsive">
           <table className="table table-striped">
@@ -70,7 +95,7 @@ export default function CoursesPage() {
             </tr>
             </thead>
             <tbody>
-            {courses.map(course => (
+            {filteredCourses.map(course => (
                 <tr key={course.courseId}>
                   <td>{course.courseId}</td>
                   <td>{course.title}</td>
