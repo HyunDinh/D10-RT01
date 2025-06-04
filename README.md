@@ -17,7 +17,6 @@ Dependencies :
 - Spring web
 - Spring Data JPA
 - Spring security
-- Thymeleaf
 - MS SQL Server Driver
 - Spring Boot Devtools
 - Spring Boot Actuator
@@ -49,12 +48,6 @@ management.endpoints.web.exposure.include=health,info
 
 # Server config
 server.port=8080
-
-# thymeleaf setting
-spring.thymeleaf.prefix=classpath:/templates/
-spring.thymeleaf.suffix=.html
-spring.mvc.static-path-pattern=/**
-spring.web.resources.static-locations=classpath:/static/
 ```
 
 ## Push project into github with branch :
