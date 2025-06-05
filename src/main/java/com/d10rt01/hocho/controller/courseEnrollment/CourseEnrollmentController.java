@@ -1,4 +1,4 @@
-package com.d10rt01.hocho.controller.course;
+package com.d10rt01.hocho.controller.courseEnrollment;
 
 import com.d10rt01.hocho.model.CourseEnrollment;
 import com.d10rt01.hocho.repository.CourseEnrollmentRepository;
