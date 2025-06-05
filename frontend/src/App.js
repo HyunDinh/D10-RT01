@@ -17,6 +17,9 @@ import QuestionForm from './components/question/QuestionForm';
 import QuestionList from './components/question/QuestionList';
 import QuestionEdit from './components/question/QuestionEdit';
 import AnswerForm from './components/question/AnswerForm';
+import PaymentPage from './components/payment/PaymentPage';
+import PaymentHistoryPage from './components/payment/PaymentHistoryPage';
+import HandlePayosReturn from './components/payment/HandlePayosReturn';
 import './App.css';
 
 function App() {
@@ -49,6 +52,12 @@ function App() {
             <Route path="/hocho/questions" element={<QuestionList />} />
             <Route path="/hocho/questions/:id/edit" element={<QuestionEdit />} />
             <Route path="/hocho/questions/:id/answer" element={<AnswerForm />} />
+            
+            {/* Payment Routes - Tương ứng với API của project thanh toán */}
+            <Route path="/hocho/checkout/:courseId" element={<PaymentPage />} /> {/* Tương ứng với /create-payment-link */}
+            <Route path="/hocho/order/:orderId" element={<PaymentPage />} /> {/* Tương ứng với /order/{orderId} */}
+            <Route path="/hocho/payment/history" element={<PaymentHistoryPage />} /> {/* Hiển thị lịch sử thanh toán */}
+            <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn />} />
           </Routes>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </div>

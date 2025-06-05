@@ -31,5 +31,22 @@ public class ChatSession {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        if (user1 != null && user2 != null && user1.getId() > user2.getId()) {
+            User temp = user1;
+            user1 = user2;
+            user2 = temp;
+        }
+    }
+
+    public boolean isParticipant(Long userId) {
+        return user1 != null && user2 != null && 
+               (user1.getId().equals(userId) || user2.getId().equals(userId));
+    }
+
+    public User getOtherParticipant(Long userId) {
+        if (user1 != null && user2 != null) {
+            return user1.getId().equals(userId) ? user2 : user1;
+        }
+        return null;
     }
 } 
