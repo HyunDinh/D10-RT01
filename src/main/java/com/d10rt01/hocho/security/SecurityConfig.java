@@ -51,7 +51,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(securityRulesConfig::configureSecurityRules)
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/api/payments/webhook").permitAll();
+                    securityRulesConfig.configureSecurityRules(auth);
+                })
                 .formLogin(form -> form
                         .loginPage("/hocho/login")
                         .loginProcessingUrl("/loginSubmit")
