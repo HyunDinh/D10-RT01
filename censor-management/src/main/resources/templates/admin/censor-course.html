@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Approval</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Admin Dashboard</span>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Pending Course Approvals</h2>
+
+    <div th:if="${#lists.isEmpty(coursesList)}" class="alert alert-warning text-center">
+        No courses pending approval.
+    </div>
+
+    <table class="table table-bordered table-hover" th:if="${not #lists.isEmpty(coursesList)}">
+        <thead class="table-light">
+        <tr>
+            <th>Course ID</th>
+            <th>Title</th>
+            <th>Teacher</th>
+            <th>Age Group</th>
+            <th>Price</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="course : ${coursesList}">
+            <td th:text="${course.courseId}"></td>
+            <td th:text="${course.title}"></td>
+            <td th:text="${course.teacher != null ? course.teacher.fullName : 'N/A'}"></td>
+            <td th:text="${course.ageGroup}"></td>
+            <td th:text="${#numbers.formatDecimal(course.price, 0, 'COMMA', 2, 'POINT')}"></td>
+            <td th:text="${#temporals.format(course.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+            <td>
+                <span th:if="${course.status.name()== 'APPROVED'}" class="text-success" th:text="${course.status}"></span>
+                <span th:if="${course.status.name() == 'REJECTED'}" class="text-danger" th:text="${course.status}"></span>
+                <span th:if="${course.status.name() == 'PENDING'}" class="text-warning" th:text="${course.status}"></span>
+            </td>
+
+            <td>
+                <form th:action="@{/admin/courses/{id}/approve(id=${course.courseId})}" method="post" style="display:inline-block;">
+                    <button type="submit" class="btn btn-success btn-sm">✅ Accept</button>
+                </form>
+                <form th:action="@{/admin/courses/{id}/reject(id=${course.courseId})}" method="post" style="display:inline-block;" class="ms-1">
+                    <button type="submit" class="btn btn-danger btn-sm">❌ Reject</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
