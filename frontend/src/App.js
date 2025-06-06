@@ -24,6 +24,7 @@ import './App.css';
 import CoursesPage from "./components/course/CoursesPage";
 import AddCoursePage from "./components/course/AddCoursePage";
 import EditCoursePage from "./components/course/EditCoursePage";
+// import LessonsPage from "./components/course/LessonsPage";
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
             <Route path="/hocho/childList" element={<div>Child List Page (To be implemented)</div>} />
             <Route path="/hocho/parent" element={<div>Parent Page (To be implemented)</div>} />
             <Route path="/hocho/teacher" element={<div>Teacher Page (To be implemented)</div>} />
-            <Route path="/hocho/teacher/course" element={<div>Course Page (To be implemented)</div>} />
+            <Route path="/hocho/teacher/course" element={<CoursesPage />} />
             
             <Route path="/hocho/child/cart" element={<ChildCart />} />
             <Route path="/hocho/parent/cart" element={<ParentCart />} />
@@ -56,9 +57,9 @@ function App() {
             <Route path="/hocho/questions/:id/edit" element={<QuestionEdit />} />
             <Route path="/hocho/questions/:id/answer" element={<AnswerForm />} />
 
-            <Route path="/hocho/teachers/:userId/courses" element={<CoursesPage />} />
-            <Route path="/hocho/teachers/:userId/courses/add" element={<AddCoursePage />} />
-            <Route path="/hocho/teachers/:userId/courses/:courseId/edit" element={<EditCoursePage />} />
+            <Route path="/hocho/teacher/course/add" element={<AddCoursePage />} />
+            {/*<Route path="/hocho/teacher/course/:courseId" element={<LessonsPage />} />*/}
+            <Route path="/hocho/teacher/course/edit" element={<EditCoursePage />} />
 
             {/* Payment Routes - Tương ứng với API của project thanh toán */}
             <Route path="/hocho/checkout/:courseId" element={<PaymentPage />} /> {/* Tương ứng với /create-payment-link */}
