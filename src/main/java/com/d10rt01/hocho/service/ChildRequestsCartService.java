@@ -26,18 +26,36 @@ public class ChildRequestsCartService {
     @Autowired
     private ShoppingCartRepository shoppingCartRepository;
 
+    @Autowired
+    private CourseEnrollmentRepository courseEnrollmentRepository;
+
     //Thêm khóa học vào giỏ hàng
     @Transactional
     public ChildRequestsCart addToCart(Long childId, Long courseId) {
+
+        // Lấy thông tin trẻ em để kiểm tra mối quan hệ với phụ huynh
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy trẻ em."));
+
+        // Kiểm tra xem khóa học đã được đăng ký chưa
+        if (courseEnrollmentRepository.existsByChildIdAndCourseCourseId(childId, courseId)) {
+            throw new RuntimeException("Khóa học này đã được đăng ký.");
+        }
+
+        // Kiểm tra xem khóa học đã có trong giỏ hàng của phụ huynh chưa (cho trẻ này)
+        // Cần tìm parentId của trẻ trước
+        ParentChildMapping parentMapping = parentChildMappingRepository.findByChildId(childId);
+        if (parentMapping != null) {
+            Long parentId = parentMapping.getParent().getId();
+            if (shoppingCartRepository.existsByParentIdAndChildIdAndCourseCourseId(parentId, childId, courseId)) {
+                 throw new RuntimeException("Khóa học này đã có trong giỏ hàng của phụ huynh.");
+            }
+        }
 
         // Kiểm tra xem khóa học đã có trong giỏ hàng yêu cầu của trẻ chưa
         if (childRequestsCartRepository.existsByChildIdAndCourseCourseId(childId, courseId)) {
             throw new RuntimeException("Khóa học đã có trong giỏ yêu cầu.");
         }
-
-        // Lấy thông tin trẻ em
-        User child = userRepository.findById(childId)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy trẻ em."));
 
         // Lấy thông tin khóa học
         Course course = courseRepository.findById(courseId)

@@ -81,7 +81,7 @@ const TutorForm = () => {
 
     return (
         <div className="container tutor-form mt-5">
-            <h2 className="text-primary mb-4 text-center">{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo/Cập nhật thông tin gia sư'}</h2>
+            <h2 className="text-primary mb-4 text-center">{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo thông tin gia sư'}</h2>
             <form className="card mx-auto p-4 shadow" style={{maxWidth: 600}} onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label">Chuyên môn</label>

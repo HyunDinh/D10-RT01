@@ -19,6 +19,9 @@ import java.io.ByteArrayOutputStream;
 
 import java.util.List;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
+import com.d10rt01.hocho.model.User;
+import com.d10rt01.hocho.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/questions")
@@ -27,6 +30,8 @@ public class QuestionController {
     private QuestionService questionService;
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private UserRepository userRepository;
 
     // Đăng câu hỏi
     @PostMapping
@@ -37,6 +42,14 @@ public class QuestionController {
             @RequestParam("grade") Integer grade,
             @RequestParam(value = "imageFile", required = false) MultipartFile imageFile
     ) {
+        // Kiểm tra role của user
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (!user.getRole().equalsIgnoreCase("CHILD")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(null);
+        }
+
         String imageUrl = null;
         if (imageFile != null && !imageFile.isEmpty()) {
             imageUrl = saveQuestionImage(imageFile);
