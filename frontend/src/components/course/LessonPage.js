@@ -34,7 +34,7 @@ export default function LessonPage() {
             return;
         }
         try {
-            await axios.delete(`/api/teacher/lesson/${lessonId}`, {
+            await axios.delete(`/api/lessons/${lessonId}`, {
                 withCredentials: true
             });
             fetchLessons(); // Refresh the list after deletion
@@ -76,6 +76,7 @@ export default function LessonPage() {
                         <th>Title</th>
                         <th>Duration</th>
                         <th>Created At</th>
+                        <th>Updated At</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
@@ -85,10 +86,12 @@ export default function LessonPage() {
                             <td>{lesson.title}</td>
                             <td>{lesson.duration}</td>
                             <td>{new Date(lesson.createdAt).toLocaleString()}</td>
+                            <td>{new Date(lesson.updatedAt).toLocaleString()}</td>
                             <td>
                                 <Link
-                                    to={`/hocho/teacher/course/${courseId}/lesson/edit/${lesson.lessonId}`}
-                                    className="btn btn-warning btn-sm me-2">
+                                    to={`/hocho/teacher/course/${courseId}/lesson/${lesson.lessonId}/edit`}
+                                    className="btn btn-warning btn-sm me-2"
+                                    state={{ lesson }}>
                                     Edit
                                 </Link>
                                 <Link

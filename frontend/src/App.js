@@ -28,6 +28,7 @@ import LessonPage from "./components/course/LessonPage";
 import AddLessonPage from "./components/course/AddLessonPage";
 import LessonContentPage from "./components/course/LessonContentPage";
 import AddLessonContentPage from "./components/course/AddLessonContentPage";
+import EditLessonPage from "./components/course/EditLessonPage";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
             <Route path="/hocho/teacher/course/:courseId/lesson" element={<LessonPage/>} />
             <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>} />
             <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>} />
+            <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<EditLessonPage/>} />
             <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add" element={<AddLessonContentPage/>} />
 
             <Route path="/hocho/child/cart" element={<ChildCart />} />
