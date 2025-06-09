@@ -8,4 +8,5 @@ import java.util.List;
 public class PaymentRequest {
     private Long userId;
     private List<Long> cartItemIds;
+    private String description;
 } 

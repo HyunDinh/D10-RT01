@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-import com.d10rt01.hocho.dto.payment.PaymentRequest;
-import com.d10rt01.hocho.dto.payment.PaymentResponse;
+import com.d10rt01.hocho.dto.payment.request.PaymentRequest;
+import com.d10rt01.hocho.dto.payment.response.PaymentResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.d10rt01.hocho.service.user.UserService;
