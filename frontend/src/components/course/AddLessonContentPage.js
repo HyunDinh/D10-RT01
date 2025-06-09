@@ -23,8 +23,8 @@ export default function AddLessonContentPage() {
 
     const validate = () => {
         const tempErrors = {};
-        if (!content.contentTitle) tempErrors.contentTitle = 'Required';
-        if (!content.contentBody) tempErrors.contentBody = 'Required';
+        if (!content.contentType) tempErrors.contentBody = 'Required';
+        if (!content.contentUrl) tempErrors.contentUrl = 'Required';
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
     };
