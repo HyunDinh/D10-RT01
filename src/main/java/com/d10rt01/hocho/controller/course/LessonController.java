@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -59,7 +60,7 @@ public class LessonController {
         return ResponseEntity.ok(contents);
     }
 
-    @PostMapping("/{lessonId}/contents")
+    @PostMapping("/{lessonId}/contents/add")
     public ResponseEntity<LessonContent> addLessonContent(
             @PathVariable Long lessonId,
             @RequestBody LessonContent content) {
@@ -79,5 +80,14 @@ public class LessonController {
     public ResponseEntity<Void> deleteLessonContent(@PathVariable Long contentId) {
         lessonContentService.deleteContent(contentId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/content-types")
+    public ResponseEntity<List<String>> getContentTypes() {
+        return ResponseEntity.ok(Arrays.asList(
+                "PDF",
+                "VIDEO",
+                "INTERACTIVE"
+        ));
     }
 }

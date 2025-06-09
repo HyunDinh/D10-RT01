@@ -120,7 +120,7 @@ export default function CoursesPage() {
                 <td>{course.status}</td>
                 <td>{new Date(course.createdAt).toLocaleString()}</td>
                 <td>
-                  <Link to={`/hocho/teacher/course/${course.courseId}`} className="btn btn-dark btn-sm me-2">
+                  <Link to={`/hocho/teacher/course/${course.courseId}/lesson`} className="btn btn-dark btn-sm me-2">
                     View Lessons
                   </Link>
                   <Link 
