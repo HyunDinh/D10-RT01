@@ -17,7 +17,6 @@ import QuestionForm from './components/question/QuestionForm';
 import QuestionList from './components/question/QuestionList';
 import QuestionEdit from './components/question/QuestionEdit';
 import AnswerForm from './components/question/AnswerForm';
-import PaymentPage from './components/payment/PaymentPage';
 import PaymentHistoryPage from './components/payment/PaymentHistoryPage';
 import HandlePayosReturn from './components/payment/HandlePayosReturn';
 import './App.css';
@@ -61,8 +60,6 @@ function App() {
             <Route path="/hocho/teachers/:userId/courses/:courseId/edit" element={<EditCoursePage />} />
 
             {/* Payment Routes - Tương ứng với API của project thanh toán */}
-            <Route path="/hocho/checkout/:courseId" element={<PaymentPage />} /> {/* Tương ứng với /create-payment-link */}
-            <Route path="/hocho/order/:orderId" element={<PaymentPage />} /> {/* Tương ứng với /order/{orderId} */}
             <Route path="/hocho/payment/history" element={<PaymentHistoryPage />} /> {/* Hiển thị lịch sử thanh toán */}
             <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn />} />
           </Routes>

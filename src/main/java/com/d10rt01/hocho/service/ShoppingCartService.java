@@ -11,6 +11,8 @@ import com.d10rt01.hocho.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.d10rt01.hocho.repository.CourseEnrollmentRepository;
+import com.d10rt01.hocho.repository.ChildRequestsCartRepository;
 
 import java.util.List;
 
@@ -28,6 +30,12 @@ public class ShoppingCartService {
 
     @Autowired
     private ParentChildMappingRepository parentChildMappingRepository;
+
+    @Autowired
+    private CourseEnrollmentRepository courseEnrollmentRepository;
+
+    @Autowired
+    private ChildRequestsCartRepository childRequestsCartRepository;
 
     //Hiển thị danh sách các khóa học có trong giỏ hàng của phụ huynh
     public List<ShoppingCart> getParentCart(Long parentId) {
@@ -104,9 +112,19 @@ public class ShoppingCartService {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy khóa học"));
 
-        // Kiểm tra xem khóa học đã có trong giỏ hàng chưa
+        // Kiểm tra xem khóa học đã được đăng ký chưa
+        if (courseEnrollmentRepository.existsByChildIdAndCourseCourseId(childId, courseId)) {
+            throw new RuntimeException("Khóa học này đã được đăng ký bởi trẻ.");
+        }
+
+        // Kiểm tra xem khóa học đã có trong giỏ yêu cầu của trẻ chưa
+        if (childRequestsCartRepository.existsByChildIdAndCourseCourseId(childId, courseId)) {
+             throw new RuntimeException("Khóa học này đã có trong giỏ yêu cầu của trẻ.");
+        }
+
+        // Kiểm tra xem khóa học đã có trong giỏ hàng của phụ huynh chưa
         if (shoppingCartRepository.existsByParentIdAndChildIdAndCourseCourseId(parentId, childId, courseId)) {
-            throw new RuntimeException("Khóa học đã có trong giỏ hàng");
+            throw new RuntimeException("Khóa học đã có trong giỏ hàng.");
         }
 
         // Tạo mới item trong giỏ hàng

@@ -262,14 +262,17 @@ public class PaymentServiceImpl implements PaymentService {
                      if (completedOrder.getOrderItems() != null) {
                          System.out.println("Creating course enrollments for order items");
                          for (OrderItem item : completedOrder.getOrderItems()) {
-                             CourseEnrollment enrollment = new CourseEnrollment();
-                             enrollment.setCourse(item.getCourse());
-                             enrollment.setChild(item.getChild());
-                             enrollment.setParent(completedOrder.getParent());
-                             // enrollment.setEnrolledAt được set trong PrePersist
-                             courseEnrollmentRepository.save(enrollment);
-                             System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
-                                              " and child: " + item.getChild().getId());
+                             // Kiểm tra xem học sinh đã được đăng ký khóa học này chưa
+                             if (!courseEnrollmentRepository.existsByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId())) {
+                                 CourseEnrollment enrollment = new CourseEnrollment();
+                                 enrollment.setCourse(item.getCourse());
+                                 enrollment.setChild(item.getChild());
+                                 enrollment.setParent(completedOrder.getParent());
+                                 // enrollment.setEnrolledAt được set trong PrePersist
+                                 courseEnrollmentRepository.save(enrollment);
+                                 System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
+                                                  " and child: " + item.getChild().getId());
+                             }
                          }
                      }
                 }
@@ -352,14 +355,17 @@ public class PaymentServiceImpl implements PaymentService {
                     System.out.println("Creating course enrollments for order items...");
                     for (OrderItem item : order.getOrderItems()) {
                         System.out.println("Processing order item for course: " + item.getCourse().getTitle() + " (ID: " + item.getCourse().getCourseId() + ") and child: " + item.getChild().getUsername() + " (ID: " + item.getChild().getId() + ")");
-                        CourseEnrollment enrollment = new CourseEnrollment();
-                        enrollment.setCourse(item.getCourse());
-                        enrollment.setChild(item.getChild());
-                        enrollment.setParent(order.getParent());
-                        // enrollment.setEnrolledAt được set trong PrePersist
-                        courseEnrollmentRepository.save(enrollment);
-                        System.out.println("Created enrollment for course ID: " + item.getCourse().getCourseId() + 
-                                         " and child ID: " + item.getChild().getId() + ", Enrollment ID: " + enrollment.getEnrollmentId());
+                        // Kiểm tra xem học sinh đã được đăng ký khóa học này chưa
+                        if (!courseEnrollmentRepository.existsByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId())) {
+                            CourseEnrollment enrollment = new CourseEnrollment();
+                            enrollment.setCourse(item.getCourse());
+                            enrollment.setChild(item.getChild());
+                            enrollment.setParent(order.getParent());
+                            // enrollment.setEnrolledAt được set trong PrePersist
+                            courseEnrollmentRepository.save(enrollment);
+                            System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
+                                           " and child: " + item.getChild().getId());
+                        }
                     }
                     System.out.println("Finished creating course enrollments.");
                 }
@@ -367,6 +373,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             Payment savedPayment = paymentRepository.save(payment);
             System.out.println("Payment status saved to database.");
+            System.out.println("Payment return handled successfully for orderCode: " + orderCode);
             return savedPayment;
 
         } catch (Exception e) {
