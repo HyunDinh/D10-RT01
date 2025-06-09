@@ -19,10 +19,16 @@ public class TeacherService {
     }
 
     public List<User> getAllTeachers() {
-        return userRepository.findByRole("TEACHER");
+        return userRepository.findByRole(UserRole.TEACHER.toString());
     }
 
     public Optional<User> findTeacherById(Long id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id)
+            .filter(user -> UserRole.TEACHER.toString().equalsIgnoreCase(user.getRole()));
+    }
+
+    public Optional<User> findTeacherByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .filter(user -> UserRole.TEACHER.toString().equalsIgnoreCase(user.getRole()));
     }
 }

@@ -23,7 +23,7 @@ export default function AddCoursePage() {
 
     const fetchAgeGroups = async () => {
         try {
-            const response = await axios.get('/api/teachers/age-groups');
+            const response = await axios.get('/api/teacher/age-groups');
             setAgeGroups(response.data);
         } catch (error) {
             console.error('Error fetching age groups:', error);
@@ -48,10 +48,10 @@ export default function AddCoursePage() {
         e.preventDefault();
         if (!validate()) return;
         try {
-            await axios.post(`/api/teachers/${userId}/courses/add`, course);
+            await axios.post(`/api/teacher/course/add`, course);
             // toast.success("Course added successfully!");
             setTimeout(() => {
-                navigate(`/hocho/teachers/${userId}/courses`);
+                navigate(`/hocho/teacher/course`);
             }, 1500); // Delay to let the toast display
         } catch (error) {
             console.error(error);

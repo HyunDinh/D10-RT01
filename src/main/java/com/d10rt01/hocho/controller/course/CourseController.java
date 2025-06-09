@@ -3,23 +3,41 @@ package com.d10rt01.hocho.controller.course;
 
 import com.d10rt01.hocho.model.Course;
 import com.d10rt01.hocho.repository.CourseRepository;
+import com.d10rt01.hocho.service.CourseService;
+import com.d10rt01.hocho.service.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/courses")
 public class CourseController {
-
+    private final TeacherService teacherService;
+    private final CourseService courseService;
     private final CourseRepository courseRepository;
 
-    public CourseController(CourseRepository courseRepository) {
+    @Autowired
+    public CourseController(TeacherService teacherService,
+                            CourseService courseService,
+                            CourseRepository courseRepository) {
+        this.teacherService = teacherService;
+        this.courseService = courseService;
         this.courseRepository = courseRepository;
     }
+
+    // Retrieves all courses for the authenticated teacher
+//    @GetMapping
+//    public ResponseEntity<List<Course>> getCourses(Principal principal) {
+//        Long teacherId = teacherService.findTeacherIdByUsername(principal.getName());
+//        List<Course> courses = courseService.getCourseByTeacherId(teacherId);
+//        return ResponseEntity.ok(courses);
+//    }
 
     @GetMapping("/by-age")
     public ResponseEntity<List<Course>> getCoursesByUserAge(@RequestParam int age) {

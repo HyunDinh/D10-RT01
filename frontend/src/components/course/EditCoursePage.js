@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 // import { toast, ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
 export default function EditCoursePage() {
     const [ageGroups, setAgeGroups] = useState([]);
-    const { userId, courseId } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
     const [course, setCourse] = useState({
         title: '',
         description: '',
@@ -15,28 +15,28 @@ export default function EditCoursePage() {
         price: ''
     });
     const [errors, setErrors] = useState({});
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchCourse();
-        fetchAgeGroups();
-    }, [userId, courseId]);
-
-    const fetchCourse = async () => {
-        try {
-            const response = await axios.get(`/api/teachers/${userId}/courses/${courseId}/edit`);
-            setCourse(response.data);
-        } catch (error) {
-            console.error(error);
-            // toast.error("Failed to fetch course data.");
+        if (!location.state?.course) {
+            navigate('/hocho/teacher/course');
+            return;
         }
-    };
+        setCourse(location.state.course);
+        fetchAgeGroups();
+    }, [location.state, navigate]);
 
     const fetchAgeGroups = async () => {
         try {
-            const response = await axios.get('/api/teachers/age-groups');
+            const response = await axios.get('/api/teacher/age-groups', {
+                withCredentials: true
+            });
             setAgeGroups(response.data);
         } catch (error) {
             console.error('Error fetching age groups:', error);
+            if (error.response?.status === 401) {
+                navigate('/hocho/login');
+            }
         }
     };
 
@@ -58,16 +58,30 @@ export default function EditCoursePage() {
         e.preventDefault();
         if (!validate()) return;
         try {
-            await axios.put(`/api/teachers/${userId}/courses/${courseId}/edit`, course);
+            await axios.put(`/api/teacher/courses/${course.courseId}`, course, {
+                withCredentials: true
+            });
             // toast.success("Course updated successfully!");
             setTimeout(() => {
-                navigate(`/hocho/teachers/${userId}/courses`);
+                navigate('/hocho/teacher/course');
             }, 1500); // Delay to let the toast display
         } catch (error) {
             console.error(error);
-            // toast.error("Failed to update course.");
+            if (error.response?.status === 401) {
+                navigate('/hocho/login');
+            } else {
+                setError('Failed to update course.');
+            }
         }
     };
+
+    if (error) {
+        return (
+            <div className="container mt-5">
+                <div className="alert alert-danger">{error}</div>
+            </div>
+        );
+    }
 
     return (
         <div className="container mt-5">
@@ -117,7 +131,6 @@ export default function EditCoursePage() {
                                         onChange={handleChange}
                                         required
                                     >
-                                        <option value="">Select age group</option>
                                         {ageGroups.map((group) => (
                                             <option key={group} value={group}>{group}</option>
                                         ))}

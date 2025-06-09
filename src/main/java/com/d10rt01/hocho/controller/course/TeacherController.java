@@ -4,8 +4,11 @@ import com.d10rt01.hocho.model.Course;
 import com.d10rt01.hocho.model.User;
 import com.d10rt01.hocho.service.CourseService;
 import com.d10rt01.hocho.service.TeacherService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -13,9 +16,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/teachers")
+@RequestMapping("/api/teacher")
 @CrossOrigin(origins = "http://localhost:3000")
 public class TeacherController {
+    private static final Logger logger = LoggerFactory.getLogger(TeacherController.class);
     private final TeacherService teacherService;
     private final CourseService courseService;
 
@@ -25,10 +29,23 @@ public class TeacherController {
         this.courseService = courseService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAllTeachers() {
-        List<User> teachers = teacherService.getAllTeachers();
-        return ResponseEntity.ok(teachers);
+    @GetMapping("/courses")
+    public ResponseEntity<List<Course>> getCourses(Authentication authentication) {
+        if (authentication == null) {
+            logger.error("Authentication is null");
+            return ResponseEntity.status(401).build();
+        }
+        String username = authentication.getName();
+        
+        Optional<User> teacherOpt = teacherService.findTeacherByUsername(username);
+        if (teacherOpt.isEmpty()) {
+            logger.error("Teacher not found for username: {}. Authentication details: {}", 
+                username, authentication.getDetails());
+            return ResponseEntity.status(403).build();
+        }
+        User teacher = teacherOpt.get();
+        List<Course> courses = courseService.getCourseByTeacherId(teacher.getId());
+        return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/age-groups")
@@ -41,58 +58,67 @@ public class TeacherController {
         ));
     }
 
-    @GetMapping("/{id}/courses")
-    public ResponseEntity<List<Course>> getCoursesByTeacherId(@PathVariable Long id) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
+    @PostMapping("/course/add")
+    public ResponseEntity<Course> addCourse(@RequestBody Course course, Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
         }
-        Optional<User> teacher = teacherService.findTeacherById(id);
-        List<Course> courses = courseService.getCourseByTeacherId(id);
-        return ResponseEntity.ok(courses);
+        
+        String username = authentication.getName();
+        User teacher = teacherService.findTeacherByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            
+        course.setTeacher(teacher);
+        Course savedCourse = courseService.addCourseByTeacherId(teacher.getId(), course);
+        return ResponseEntity.ok(savedCourse);
     }
 
-    @PostMapping("/{id}/courses/add")
-    public ResponseEntity<Void> addCourseToTeacher(@PathVariable Long id, @RequestBody Course course) {
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
+    @GetMapping("/courses/{courseId}")
+    public ResponseEntity<Course> getCourse(@PathVariable Long courseId, Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
         }
-        Optional<User> teacher = teacherService.findTeacherById(id);
-        courseService.addCourseByTeacherId(id, course);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{id}/courses/{courseId}/edit")
-    public ResponseEntity<Course> getCourseForEdit(@PathVariable Long id, @PathVariable Long courseId) {
-        if (id == null || courseId == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        Optional<User> teacher = teacherService.findTeacherById(id);
-        Course course = courseService.getCourseByTeacherId(id).stream()
+        
+        String username = authentication.getName();
+        User teacher = teacherService.findTeacherByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            
+        Course course = courseService.getCourseByTeacherId(teacher.getId()).stream()
                 .filter(c -> c.getCourseId().equals(courseId))
                 .findFirst()
                 .orElse(null);
+                
         if (course == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(course);
     }
 
-    @PutMapping("/{id}/courses/{courseId}/edit")
-    public ResponseEntity<Void> editCourse(@PathVariable Long id, @PathVariable Long courseId, @RequestBody Course course) {
-        if (id == null || courseId == null) {
-            return ResponseEntity.badRequest().build();
+    @PutMapping("/courses/{courseId}")
+    public ResponseEntity<Course> updateCourse(@PathVariable Long courseId, @RequestBody Course course, Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
         }
-        Optional<User> teacher = teacherService.findTeacherById(id);
-        courseService.editCourse(courseId, course);
-        return ResponseEntity.ok().build();
+        
+        String username = authentication.getName();
+        User teacher = teacherService.findTeacherByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            
+        course.setTeacher(teacher);
+        Course updatedCourse = courseService.editCourse(courseId, course);
+        return ResponseEntity.ok(updatedCourse);
     }
 
-    @DeleteMapping("/{id}/courses/{courseId}")
-    public ResponseEntity<Void> deleteCourse(@PathVariable Long id, @PathVariable Long courseId) {
-        if (id == null || courseId == null) {
-            return ResponseEntity.badRequest().build();
+    @DeleteMapping("/course/{courseId}")
+    public ResponseEntity<Void> deleteCourse(@PathVariable Long courseId, Authentication authentication) {
+        if (authentication == null) {
+            return ResponseEntity.status(401).build();
         }
-        Optional<User> teacher = teacherService.findTeacherById(id);
+        
+        String username = authentication.getName();
+        User teacher = teacherService.findTeacherByUsername(username)
+            .orElseThrow(() -> new RuntimeException("Teacher not found"));
+            
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok().build();
     }

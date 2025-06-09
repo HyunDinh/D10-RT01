@@ -28,7 +28,7 @@ public class CourseService {
     }
 
     @Transactional
-    public void addCourseByTeacherId(Long teacherId, Course course) {
+    public Course addCourseByTeacherId(Long teacherId, Course course) {
         if (course == null || teacherId == null || teacherId <= 0) {
             throw new IllegalArgumentException("Course and teacher ID must not be null");
         }
@@ -36,25 +36,28 @@ public class CourseService {
             .orElseThrow(() -> new IllegalArgumentException("Teacher not found with ID: " + teacherId));
 
         course.setTeacher(teacher);
-        courseRepository.save(course);
+        return courseRepository.save(course);
     }
 
     @Transactional
-    public void editCourse(long id, Course course) {
+    public Course editCourse(long id, Course course) {
         if (course != null && courseRepository.existsById(id)) {
-            Course existingCourse = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
+            Course existingCourse = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
             existingCourse.setTitle(course.getTitle());
             existingCourse.setDescription(course.getDescription());
             existingCourse.setAgeGroup(course.getAgeGroup());
             existingCourse.setPrice(course.getPrice());
-            existingCourse.setTeacher(course.getTeacher());
-            courseRepository.save(existingCourse);
+            return courseRepository.save(existingCourse);
         }
+        throw new RuntimeException("Course not found");
     }
 
     public void deleteCourse(long id) {
         if (courseRepository.existsById(id)) {
             courseRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Course not found");
         }
     }
 }
