@@ -23,12 +23,6 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-//    @GetMapping("/course")
-//    public String censorCourse(Model model) {
-//        List<Course> list = courseService.getAllCourse();
-//        model.addAttribute("coursesList", list);
-//        return "admin/censor-course";
-//    }
 
     @PostMapping("/{id}/approve")
     public ResponseEntity<?> approveCourse(@PathVariable Long id) {
