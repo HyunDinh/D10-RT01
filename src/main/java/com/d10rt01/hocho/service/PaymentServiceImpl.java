@@ -152,7 +152,7 @@ public class PaymentServiceImpl implements PaymentService {
                     .amount(totalAmount)
                     .description(description != null && description.length() > 25 ? description.substring(0, 25) : description)
                     .returnUrl(baseUrl + "/hocho/handle-payos-return/" + payosOrderCode)
-                    .cancelUrl(baseUrl + "/payment/cancel")
+                    .cancelUrl(baseUrl + "/hocho/parent/cart?orderCode=" + payosOrderCode)
                     .items(payosItems)
                     .build();
 
@@ -167,7 +167,7 @@ public class PaymentServiceImpl implements PaymentService {
             // orderRepository.save(order);
 
             // 8. Đánh dấu các ShoppingCart items là đã xử lý (ví dụ: xóa hoặc thay đổi trạng thái)
-            shoppingCartRepository.deleteAll(payableCartItems);
+            // shoppingCartRepository.deleteAll(payableCartItems);
 
             return payment; // Trả về Payment chứa PayOS URL
 
@@ -192,23 +192,50 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public Payment cancelPayment(Long orderCode) {
+        System.out.println("Starting cancelPayment for orderCode: " + orderCode);
         Payment payment = paymentRepository.findByOrderCode(orderCode);
         if (payment == null) {
+            System.out.println("Payment not found for orderCode: " + orderCode);
             throw new RuntimeException("Payment not found");
         }
 
         try {
+            System.out.println("Current payment status: " + payment.getStatus());
             payOS.cancelPaymentLink(orderCode, null);
             payment.setStatus(PaymentStatus.CANCELLED);
+            System.out.println("Updated payment status to: " + payment.getStatus());
 
             // Cập nhật trạng thái Order liên quan nếu có
             if (payment.getOrder() != null) {
-                 payment.getOrder().setStatus(OrderStatus.CANCELLED);
-                 orderRepository.save(payment.getOrder());
+                Order order = payment.getOrder();
+                System.out.println("Current order status: " + order.getStatus());
+                order.setStatus(OrderStatus.CANCELLED);
+                orderRepository.save(order);
+                System.out.println("Updated order status to: " + order.getStatus());
+
+                // Tạo và cập nhật Transaction với trạng thái FAILED
+                String failedTransactionId = payment.getOrderCode() + "_CANCELLED";
+                if (!transactionRepository.existsByPayosTransactionId(failedTransactionId)) {
+                    try {
+                        Transaction transaction = new Transaction();
+                        transaction.setOrder(order);
+                        transaction.setStatus(TransactionStatus.FAILED);
+                        transaction.setTransactionDate(LocalDateTime.now());
+                        transaction.setAmount(order.getTotalAmount());
+                        transaction.setPayosTransactionId(failedTransactionId);
+                        transactionRepository.save(transaction);
+                    } catch (Exception e) {
+                        System.out.println("Transaction with payosTransactionId " + failedTransactionId + " already exists.");
+                    }
+                }
             }
 
-            return paymentRepository.save(payment);
+            Payment savedPayment = paymentRepository.save(payment);
+            System.out.println("Final payment status after save: " + savedPayment.getStatus());
+            return savedPayment;
         } catch (Exception e) {
+            System.out.println("Error in cancelPayment: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("Failed to cancel payment: " + e.getMessage());
         }
     }
@@ -236,66 +263,80 @@ public class PaymentServiceImpl implements PaymentService {
         switch (status.toUpperCase()) {
             case "PAID":
                 payment.setStatus(PaymentStatus.COMPLETED);
+                // Cập nhật trạng thái Order liên quan
+                if (payment.getOrder() != null) {
+                    payment.getOrder().setStatus(OrderStatus.COMPLETED);
+                    orderRepository.save(payment.getOrder());
+                    Order completedOrder = payment.getOrder();
+                    // Tạo Transaction cho toàn bộ Order
+                    Transaction transaction = new Transaction();
+                    transaction.setOrder(completedOrder);
+                    transaction.setStatus(TransactionStatus.COMPLETED);
+                    transaction.setTransactionDate(LocalDateTime.now());
+                    transactionRepository.save(transaction);
+                    // Xóa các mục trong giỏ hàng liên quan đến order này
+                    if (completedOrder.getOrderItems() != null) {
+                        for (OrderItem item : completedOrder.getOrderItems()) {
+                            shoppingCartRepository.deleteByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId());
+                        }
+                    }
+                }
+                break;
+
+            case "CANCELLED":
+            case "EXPIRED":
+                payment.setStatus(PaymentStatus.CANCELLED);
 
                 // Cập nhật trạng thái Order liên quan
                 if (payment.getOrder() != null) {
-                     payment.getOrder().setStatus(OrderStatus.COMPLETED);
-                     orderRepository.save(payment.getOrder());
+                    Order order = payment.getOrder();
+                    order.setStatus(OrderStatus.CANCELLED);
+                    orderRepository.save(order);
 
-                     // Lấy Order liên quan
-                     Order completedOrder = payment.getOrder();
-
-                     // Tạo Transaction cho toàn bộ Order
-                     Transaction transaction = new Transaction();
-                     transaction.setOrder(completedOrder); // Liên kết với Order
-                     // Cần lấy payosTransactionId chính xác từ dữ liệu webhook
-                     // Tạm thời vẫn dùng orderCode, nhưng cần kiểm tra cách PayOS trả về transaction ID thực tế
-                     transaction.setPayosTransactionId(String.valueOf(payment.getOrderCode()));
-                     transaction.setAmount(completedOrder.getTotalAmount()); // Tổng tiền của Order
-                     transaction.setStatus(TransactionStatus.COMPLETED);
-                     transaction.setTransactionDate(LocalDateTime.now());
-                     transactionRepository.save(transaction);
-                     System.out.println("Transaction created with ID: " + transaction.getTransactionId() + 
-                                      " for Order: " + completedOrder.getOrderId());
-
-                     // Tạo CourseEnrollment cho từng OrderItem
-                     if (completedOrder.getOrderItems() != null) {
-                         System.out.println("Creating course enrollments for order items");
-                         for (OrderItem item : completedOrder.getOrderItems()) {
-                             // Kiểm tra xem học sinh đã được đăng ký khóa học này chưa
-                             if (!courseEnrollmentRepository.existsByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId())) {
-                                 CourseEnrollment enrollment = new CourseEnrollment();
-                                 enrollment.setCourse(item.getCourse());
-                                 enrollment.setChild(item.getChild());
-                                 enrollment.setParent(completedOrder.getParent());
-                                 // enrollment.setEnrolledAt được set trong PrePersist
-                                 courseEnrollmentRepository.save(enrollment);
-                                 System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
-                                                  " and child: " + item.getChild().getId());
-                             }
-                         }
-                     }
-                }
-
-                break;
-            case "CANCELLED":
-                payment.setStatus(PaymentStatus.CANCELLED);
-                 // Cập nhật trạng thái Order liên quan
-                if (payment.getOrder() != null) {
-                     payment.getOrder().setStatus(OrderStatus.CANCELLED);
-                     orderRepository.save(payment.getOrder());
+                    // Tạo Transaction với trạng thái FAILED
+                    String failedTransactionId = payment.getOrderCode() + "_CANCELLED";
+                    if (!transactionRepository.existsByPayosTransactionId(failedTransactionId)) {
+                        try {
+                            Transaction transaction = new Transaction();
+                            transaction.setOrder(order);
+                            transaction.setStatus(TransactionStatus.FAILED);
+                            transaction.setTransactionDate(LocalDateTime.now());
+                            transaction.setAmount(order.getTotalAmount());
+                            transaction.setPayosTransactionId(failedTransactionId);
+                            transactionRepository.save(transaction);
+                        } catch (Exception e) {
+                            System.out.println("Transaction with payosTransactionId " + failedTransactionId + " already exists.");
+                        }
+                    }
                 }
                 break;
+
             case "FAILED":
                 payment.setStatus(PaymentStatus.FAILED);
-                 // Cập nhật trạng thái Order liên quan
+
+                // Cập nhật trạng thái Order liên quan
                 if (payment.getOrder() != null) {
-                     payment.getOrder().setStatus(OrderStatus.FAILED);
-                     orderRepository.save(payment.getOrder());
+                    Order order = payment.getOrder();
+                    order.setStatus(OrderStatus.CANCELLED);
+                    orderRepository.save(order);
+
+                    // Tạo Transaction với trạng thái FAILED
+                    String failedTransactionId = payment.getOrderCode() + "_CANCELLED";
+                    if (!transactionRepository.existsByPayosTransactionId(failedTransactionId)) {
+                        try {
+                            Transaction transaction = new Transaction();
+                            transaction.setOrder(order);
+                            transaction.setStatus(TransactionStatus.FAILED);
+                            transaction.setTransactionDate(LocalDateTime.now());
+                            transaction.setAmount(order.getTotalAmount());
+                            transaction.setPayosTransactionId(failedTransactionId);
+                            transactionRepository.save(transaction);
+                        } catch (Exception e) {
+                            System.out.println("Transaction with payosTransactionId " + failedTransactionId + " already exists.");
+                        }
+                    }
                 }
                 break;
-            default:
-                throw new RuntimeException("Invalid payment status received from webhook: " + status);
         }
 
         paymentRepository.save(payment);
@@ -368,6 +409,10 @@ public class PaymentServiceImpl implements PaymentService {
                         }
                     }
                     System.out.println("Finished creating course enrollments.");
+                    // Xóa các mục trong giỏ hàng liên quan đến order này
+                    for (OrderItem item : order.getOrderItems()) {
+                        shoppingCartRepository.deleteByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId());
+                    }
                 }
             }
 

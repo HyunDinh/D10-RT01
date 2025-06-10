@@ -36,7 +36,11 @@ export const paymentService = {
 
     cancelPayment: async (orderCode) => {
         try {
-            const response = await axios.put(`${API_URL}/${orderCode}/cancel`);
+            const response = await axios.put(
+                `${API_URL}/${orderCode}/cancel`,
+                {}, // body rỗng
+                { withCredentials: true } // thêm dòng này!
+            );
             return response.data;
         } catch (error) {
             throw error.response?.data || 'Lỗi khi hủy thanh toán';

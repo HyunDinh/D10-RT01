@@ -17,4 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT t FROM Transaction t JOIN FETCH t.order o JOIN FETCH o.orderItems WHERE o.parent.id = :userId")
     List<Transaction> findByOrder_Parent_IdWithOrderItems(@Param("userId") Long userId);
+
+    boolean existsByPayosTransactionId(String payosTransactionId);
 } 

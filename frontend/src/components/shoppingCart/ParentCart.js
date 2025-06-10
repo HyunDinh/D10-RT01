@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { paymentService } from '../payment/paymentService';
 import './Cart.css';
 
@@ -15,10 +15,22 @@ const ParentCart = () => {
     const [calculatedTotalAmount, setCalculatedTotalAmount] = useState(0);
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         fetchCart();
-    }, []);
+        const params = new URLSearchParams(location.search);
+        const orderCode = params.get('orderCode');
+        if (orderCode) {
+            if (window.lastCancelledOrderCode !== orderCode) {
+                window.lastCancelledOrderCode = orderCode;
+                paymentService.cancelPayment(orderCode)
+                    .catch(err => {
+                        console.error('Lỗi khi hủy thanh toán:', err);
+                    });
+            }
+        }
+    }, [location.search]);
 
     const fetchCart = async () => {
         try {

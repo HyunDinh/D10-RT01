@@ -48,7 +48,6 @@ public class Payment {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        status = PaymentStatus.PENDING;
     }
 
     @PreUpdate
