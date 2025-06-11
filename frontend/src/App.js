@@ -28,6 +28,8 @@ import AddLessonPage from "./components/course/AddLessonPage";
 import LessonContentPage from "./components/course/LessonContentPage";
 import AddLessonContentPage from "./components/course/AddLessonContentPage";
 import EditLessonPage from "./components/course/EditLessonPage";
+import LessonContentPlayer from './components/course/LessonContentPlayer';
+import EditLessonContentPage from './components/course/EditLessonContentPage';
 
 function App() {
   return (
@@ -71,6 +73,10 @@ function App() {
             {/* Payment Routes - Tương ứng với API của project thanh toán */}
             <Route path="/hocho/payment/history" element={<PaymentHistoryPage />} /> {/* Hiển thị lịch sử thanh toán */}
             <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn />} />
+
+            {/* Lesson Content Routes */}
+            <Route path="/lesson-content/edit/:contentId" element={<EditLessonContentPage />} />
+            <Route path="/lesson-content/:contentId" element={<LessonContentPlayer />} />
           </Routes>
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </div>

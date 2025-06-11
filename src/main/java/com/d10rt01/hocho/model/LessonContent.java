@@ -18,12 +18,15 @@ public class LessonContent {
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;
 
+    @Column(name = "title", nullable = false)
+    private String title;
+
     @Column(name = "content_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private ContentType contentType;
 
-    @Column(name = "content_url", nullable = false)
-    private String contentUrl;
+    @Column(name = "content_data", columnDefinition = "VARBINARY(MAX)")
+    private byte[] contentData;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -32,10 +35,4 @@ public class LessonContent {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-}
-
-enum ContentType {
-    VIDEO,
-    PDF,
-    INTERACTIVE
 } 

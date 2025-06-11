@@ -7,7 +7,9 @@ import com.d10rt01.hocho.service.lesson.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -63,16 +65,18 @@ public class LessonController {
     @PostMapping("/{lessonId}/contents/add")
     public ResponseEntity<LessonContent> addLessonContent(
             @PathVariable Long lessonId,
-            @RequestBody LessonContent content) {
-        LessonContent savedContent = lessonContentService.addContent(lessonId, content);
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("title") String title) throws IOException {
+        LessonContent savedContent = lessonContentService.addContent(lessonId, file, title);
         return ResponseEntity.ok(savedContent);
     }
 
     @PutMapping("/contents/{contentId}")
     public ResponseEntity<LessonContent> updateLessonContent(
             @PathVariable Long contentId,
-            @RequestBody LessonContent content) {
-        LessonContent updatedContent = lessonContentService.updateContent(contentId, content);
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("title") String title) throws IOException {
+        LessonContent updatedContent = lessonContentService.updateContent(contentId, file, title);
         return ResponseEntity.ok(updatedContent);
     }
 
