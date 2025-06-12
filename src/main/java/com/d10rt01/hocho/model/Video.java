@@ -24,8 +24,8 @@ public class Video {
     @Enumerated(EnumType.STRING)
     private AgeGroup ageGroup;
 
-    @Column(name = "video_url")
-    private String videoUrl;
+    @Column(name = "content_data", columnDefinition = "VARBINARY(MAX)")
+    private byte[] contentData;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

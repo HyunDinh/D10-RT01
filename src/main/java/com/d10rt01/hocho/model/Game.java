@@ -53,10 +53,4 @@ public class Game {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
-
-enum ContentStatus {
-    PENDING,
-    APPROVED,
-    REJECTED
 } 
