@@ -1,0 +1,1 @@
+### đăng nhập bằng google với yêu cầu như sau : không cho phép đăng kí bằng google, chỉ có thể đăng nhập bằng google ( trả về user nếu đã liên kết gmail và trả về trang login với thông báo lỗi là chưa liên kết tài khoản nếu không tìm thấy trong database ), output tương tự như đăng nhập thủ công (trả về trang welcome)
