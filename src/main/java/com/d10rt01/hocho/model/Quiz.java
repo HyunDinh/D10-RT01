@@ -2,34 +2,44 @@ package com.d10rt01.hocho.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.ToString;
 
-@Data
 @Entity
 @Table(name = "quizzes")
+@Data
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "quizId")
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "quiz_id")
     private Long quizId;
 
     @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id", referencedColumnName = "course_id", nullable = false)
+    @ToString.Exclude
     private Course course;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "question_type", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
-    @Column(name = "content")
-    private String content;
+    @Column(name = "time_limit", nullable = false)
+    private Integer timeLimit; // Thời gian làm bài (phút)
 
-    @Column(name = "correct_answer")
-    private String correctAnswer;
+    @Column(name = "total_points", nullable = false)
+    private Integer totalPoints;
+
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @ToString.Exclude
+    private List<QuizQuestion> questions = new ArrayList<>();
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -38,9 +48,16 @@ public class Quiz {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
-}
 
-enum QuestionType {
-    MULTIPLE_CHOICE,
-    INTERACTIVE
+    // Helper method to add a question and set the bidirectional relationship
+    public void addQuestion(QuizQuestion question) {
+        questions.add(question);
+        question.setQuiz(this);
+    }
+
+    // Helper method to remove a question and break the bidirectional relationship
+    public void removeQuestion(QuizQuestion question) {
+        questions.remove(question);
+        question.setQuiz(null);
+    }
 } 

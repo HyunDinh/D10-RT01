@@ -14,7 +14,9 @@ public class Configs {
     // ------------------------------- QUESTION & ANSWER IMAGE CONFIG ------------------------------
     public static final String ABSOLUTE_PATH_QUESTION_UPLOAD_DIR = "D:/res/static/question/";
     public static final String ABSOLUTE_PATH_ANSWER_UPLOAD_DIR = "D:/res/static/answer/";
+    public static final String ABSOLUTE_PATH_QUIZ_UPLOAD_DIR = "D:/res/static/quiz/";
     public static final long MAX_QUESTION_ANSWER_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+    public static final long MAX_QUIZ_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
     // ------------------------------- LESSON CONTENT CONFIG ------------------------------
     public static final String ABSOLUTE_PATH_LESSON_CONTENT_UPLOAD_DIR = "D:/res/static/lesson-content/";
