@@ -1,27 +1,24 @@
 package d10_rt01.hocho.tests;
 
-import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.repository.UserRepository;
 import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.testExtension.TestTerminalUI;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.time.Instant;
 import java.util.*;
 
 @SpringBootTest
 public class DatabaseTest {
 
-    private final DataSource dataSource;
-    private final UserService userService;
+    @Autowired
+    private DataSource dataSource;
 
-    public DatabaseTest(DataSource dataSource, UserService userService) {
-        this.dataSource = dataSource;
-        this.userService = userService;
-    }
-
+    @Test
     public void testDatabaseInformation() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             if (connection != null && !connection.isClosed()) {

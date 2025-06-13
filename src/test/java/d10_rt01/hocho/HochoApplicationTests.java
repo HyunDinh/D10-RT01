@@ -1,7 +1,6 @@
 package d10_rt01.hocho;
 
 import d10_rt01.hocho.repository.UserRepository;
-import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.tests.DatabaseTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,24 +14,26 @@ import java.time.Instant;
 @SpringBootTest
 class HochoApplicationTests {
 
-    @Autowired
-    private DataSource dataSource;
+    private static final boolean CLEAR_DATABASE = true;
 
-    @Autowired
-    private UserService userService;
 
+    // VARIABLES
     @Autowired
     private UserRepository userRepository;
 
+    // SET UP
     @BeforeEach
     public void setUp() {
-        // Xóa tất cả user để tránh xung đột
-        userRepository.deleteAll();
+        if (CLEAR_DATABASE){
+            userRepository.deleteAll();
+        }
     }
 
+
+    // TESTS
     @Test
     void databaseConnection() throws SQLException {
-        new DatabaseTest(dataSource,userService).testDatabaseInformation();
+        new DatabaseTest().testDatabaseInformation();
     }
 
 
