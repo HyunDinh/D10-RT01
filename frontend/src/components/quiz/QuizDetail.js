@@ -11,9 +11,13 @@ const QuizDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     fetchQuiz();
+    axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true })
+      .then(res => setUserId(res.data.id))
+      .catch(() => setUserId(''));
   }, [id]);
 
   useEffect(() => {
@@ -68,7 +72,7 @@ const QuizDetail = () => {
     setSubmitting(true);
     try {
       const submission = {
-        childId: localStorage.getItem('userId'), // Lấy userId từ localStorage
+        childId: userId,
         answers: Object.entries(answers).map(([questionId, selectedOptionId]) => ({
           questionId,
           selectedOptionId

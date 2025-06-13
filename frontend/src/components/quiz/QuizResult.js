@@ -8,22 +8,37 @@ const QuizResult = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    fetchResult();
-  }, [id]);
+    const fetchUserId = async () => {
+      try {
+        const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
+        setUserId(profileResponse.data.id);
+      } catch (err) {
+        console.error('Error fetching user profile in QuizResult:', err);
+        setError('Không thể lấy thông tin người dùng. Vui lòng đăng nhập.');
+        setLoading(false);
+      }
+    };
+    fetchUserId();
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchResult();
+    }
+  }, [id, userId]);
 
   const fetchResult = async () => {
-    try {
-      const childId = localStorage.getItem('userId'); // Lấy childId từ localStorage
-      
-      if (!childId) {
-        setError('Không tìm thấy ID học sinh. Vui lòng đăng nhập.');
-        setLoading(false);
-        return;
-      }
+    if (!userId) {
+      setError('Không tìm thấy ID học sinh. Vui lòng đăng nhập.');
+      setLoading(false);
+      return;
+    }
 
-      const res = await axios.get(`http://localhost:8080/api/quizzes/${id}/child/${childId}/result`, {
+    try {
+      const res = await axios.get(`http://localhost:8080/api/quizzes/${id}/child/${userId}/result`, {
         withCredentials: true
       });
       setResult(res.data);
