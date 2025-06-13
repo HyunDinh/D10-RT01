@@ -1,0 +1,68 @@
+.payment-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.payment-form {
+    padding: 20px;
+}
+
+.payment-form h2 {
+    margin-bottom: 24px;
+    color: #1890ff;
+}
+
+.payment-history-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.payment-history {
+    padding: 20px;
+}
+
+.payment-history h2 {
+    margin-bottom: 24px;
+    color: #1890ff;
+}
+
+.payment-history .ant-table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-history .ant-table-thead > tr > th {
+    background: #fafafa;
+    font-weight: 600;
+}
+
+.payment-history .ant-tag {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.payment-history .ant-space {
+    gap: 8px !important;
+}
+
+.payment-history .ant-btn {
+    border-radius: 4px;
+}
+
+.payment-form .ant-form-item-label > label {
+    font-weight: 500;
+}
+
+.payment-form .ant-input-number {
+    width: 100%;
+}
+
+.payment-form .ant-btn-primary {
+    height: 40px;
+    font-size: 16px;
+    border-radius: 4px;
+} 
