@@ -1,5 +1,6 @@
 package d10_rt01.hocho.tests;
 
+import d10_rt01.hocho.repository.ParentChildMappingRepository;
 import d10_rt01.hocho.repository.UserRepository;
 import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.testExtension.TestTerminalUI;
@@ -15,8 +16,27 @@ import java.util.*;
 @SpringBootTest
 public class DatabaseTest {
 
+    private static final boolean CLEAR_DATABASE = true;
+
+
+    // VARIABLES
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ParentChildMappingRepository parentChildMappingRepository;
+
     @Autowired
     private DataSource dataSource;
+
+    // SET UP
+    @BeforeEach
+    public void setUp() {
+        if (CLEAR_DATABASE){
+            parentChildMappingRepository.deleteAll();
+            userRepository.deleteAll();
+        }
+    }
 
     @Test
     public void testDatabaseInformation() throws SQLException {

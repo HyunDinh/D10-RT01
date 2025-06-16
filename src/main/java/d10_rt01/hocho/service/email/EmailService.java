@@ -46,6 +46,30 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendChildRegistrationConfirmationEmail(String to, String childUsername, String token) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setSubject("Xác nhận đăng ký tài khoản cho học sinh trên Hocho");
+
+        String registrationTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy"));
+        String verificationUrl = frontendUrl + "/hocho/verify-child?token=" + token;
+        String emailContent = "<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px;\">"
+                + "<h1 style=\"color: #2c3e50; text-align: center;\">Xác nhận tài khoản học sinh</h1>"
+                + "<p style=\"font-size: 16px;\">Tài khoản học sinh với tên đăng nhập <strong>" + childUsername + "</strong> đã được đăng ký trên hệ thống Hocho vào lúc <strong>" + registrationTime + "</strong>.</p>"
+                + "<p style=\"font-size: 16px;\">Vui lòng nhấn vào nút bên dưới để xác nhận rằng đây là tài khoản của con bạn:</p>"
+                + "<div style=\"text-align: center; margin: 25px 0;\">"
+                + "<a href=\"" + verificationUrl + "\" style=\"background-color: #4CAF50; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px; font-weight: bold;\">Xác nhận tài khoản học sinh</a>"
+                + "</div>"
+                + "<p style=\"font-size: 14px; color: #7f8c8d;\">Nếu bạn không nhận ra tài khoản này, vui lòng bỏ qua email hoặc liên hệ hỗ trợ.</p>"
+                + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;\">"
+                + "<p style=\"font-size: 12px; color: #7f8c8d; text-align: center;\">© 2023 Hocho. All rights reserved.</p>"
+                + "</div>";
+
+        helper.setText(emailContent, true);
+        mailSender.send(message);
+    }
+
     public void sendTestEmail(String to) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);

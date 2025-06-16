@@ -12,4 +12,4 @@ public interface ParentChildMappingRepository extends JpaRepository<ParentChildM
 
     //Kiểm tra phụ huynh và trẻ em có khớp với nhau không
     boolean existsByParentIdAndChildId(Long parentId, Long childId);
-} 
+}

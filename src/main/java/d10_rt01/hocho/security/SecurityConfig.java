@@ -43,7 +43,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/register", "/api/auth/verify", "/api/auth/login", "/api/auth/logout").permitAll()
+                        .requestMatchers("/api/auth/register",
+                                "/api/auth/verify",
+                                "/api/auth/verify-child",
+                                "/api/auth/login",
+                                "/api/auth/logout").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Cho phép tất cả yêu cầu OPTIONS
                         .requestMatchers("/api/auth/user").authenticated()
                         .requestMatchers("/error").permitAll()

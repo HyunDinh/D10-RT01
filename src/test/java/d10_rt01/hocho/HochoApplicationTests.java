@@ -14,21 +14,6 @@ import java.time.Instant;
 @SpringBootTest
 class HochoApplicationTests {
 
-    private static final boolean CLEAR_DATABASE = true;
-
-
-    // VARIABLES
-    @Autowired
-    private UserRepository userRepository;
-
-    // SET UP
-    @BeforeEach
-    public void setUp() {
-        if (CLEAR_DATABASE){
-            userRepository.deleteAll();
-        }
-    }
-
 
     // TESTS
     @Test

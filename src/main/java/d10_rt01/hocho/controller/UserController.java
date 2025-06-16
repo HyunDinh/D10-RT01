@@ -49,14 +49,24 @@ public class UserController {
             return ResponseEntity.badRequest().body("Mật khẩu không khớp.");
         }
 
-        User user = userService.registerUser(
-                request.getUsername(),
-                request.getPassword(),
-                request.getEmail(),
-                request.getParentEmail(),
-                request.getRole()
-        );
-        return ResponseEntity.ok("Đăng ký thành công. Vui lòng kiểm tra email để xác nhận nếu bạn là parent.");
+        try {
+            User user = userService.registerUser(
+                    request.getUsername(),
+                    request.getPassword(),
+                    request.getEmail(),
+                    request.getParentEmail(),
+                    request.getRole()
+            );
+            String successMessage = user.getRole().equals("parent") ?
+                    "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản." :
+                    "Đăng ký thành công.";
+            return ResponseEntity.ok(successMessage);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Location", "http://localhost:3000/hocho/login?error=" +
+                            URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8))
+                    .body(null);
+        }
     }
 
     @GetMapping("/verify")
@@ -68,7 +78,19 @@ public class UserController {
         return ResponseEntity.badRequest().body("Token không hợp lệ hoặc đã được xác nhận.");
     }
 
+    @GetMapping("/verify-child")
+    public ResponseEntity<?> verifyChild(@RequestParam String token) {
+        boolean verified = userService.verifyUser(token);
+        if (verified) {
+            return ResponseEntity.ok("Xác nhận tài khoản học sinh thành công. Tài khoản đã được kích hoạt.");
+        }
+        return ResponseEntity.badRequest().body("Token không hợp lệ hoặc tài khoản đã được xác nhận.");
+    }
+
+
     // ------------------------------------ LOGIN ------------------------------------
+
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
         try {
