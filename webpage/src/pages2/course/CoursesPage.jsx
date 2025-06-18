@@ -16,9 +16,11 @@ export default function CoursesPage() {
   const fetchCourses = async () => {
     try {
       const result = await axios.get('/api/teacher/courses', {
-        withCredentials: true
+        withCredentials: true,
       });
-      const mappedCourses = result.data.map(course => ({
+      // Kiểm tra xem result.data có phải là mảng không
+      const coursesData = Array.isArray(result.data) ? result.data : [];
+      const mappedCourses = coursesData.map(course => ({
         ...course,
         ageGroup: course.age_group || course.ageGroup,
       }));

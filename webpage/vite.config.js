@@ -7,6 +7,13 @@ export default defineConfig({
   server: {
     port: 3000,  // 👈 Đổi port tại đây
     strictPort: true,
-    open: true   // Tự động mở trình duyệt
+    open: true,   // Tự động mở trình duyệt
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   }
 });
