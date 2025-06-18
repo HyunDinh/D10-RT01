@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -24,9 +23,8 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public List<Course> getCourseByTeacherId(Long teacherId) {
-        List<Course> courses = courseRepository.findCoursesByTeacherId(teacherId);
-        return courses != null ? courses : Collections.emptyList();
+    public List<Course> getCourseByTeacherId(long teacherId) {
+        return courseRepository.findCoursesByTeacherId(teacherId);
     }
 
     @Transactional

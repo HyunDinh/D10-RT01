@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,13 +40,12 @@ public class TeacherController {
         Optional<User> teacherOpt = teacherService.findTeacherByUsername(username);
         if (teacherOpt.isEmpty()) {
             logger.error("Teacher not found for username: {}. Authentication details: {}",
-                    username, authentication.getDetails());
+                username, authentication.getDetails());
             return ResponseEntity.status(403).build();
         }
         User teacher = teacherOpt.get();
         List<Course> courses = courseService.getCourseByTeacherId(teacher.getId());
-        // Đảm bảo luôn trả về mảng, kể cả khi không có khóa học
-        return ResponseEntity.ok(courses != null ? courses : Collections.emptyList());
+        return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/age-groups")
