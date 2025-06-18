@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../styles/Header.module.css';
 
@@ -15,16 +15,20 @@ function Header() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
+                const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
                 setUser(profileResponse.data);
                 setIsLoggedIn(true);
 
-                const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', {withCredentials: true});
-                setRole(roleResponse.data.role);
+                const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', { withCredentials: true });
+                const userRole = roleResponse.data?.role || localStorage.getItem('userRole') || null;
+                setRole(userRole);
+                localStorage.setItem('userRole', userRole); // Lưu role vào localStorage
+                console.log('User role:', userRole); // Debug role
             } catch (err) {
                 setIsLoggedIn(false);
+                setRole(null);
                 console.error('Error checking login status:', err);
-                if (err.response && err.response.status === 401) {
+                if (err.response?.status === 401) {
                     navigate('/hocho/login');
                 }
             }
@@ -36,20 +40,21 @@ function Header() {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 50);
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const handleLogout = () => {
-        axios.post('http://localhost:8080/logout', {}, {withCredentials: true, maxRedirects: 0})
+        axios
+            .post('http://localhost:8080/api/auth/logout', {}, { withCredentials: true, maxRedirects: 0 })
             .then(() => {
                 setIsLoggedIn(false);
                 setRole(null);
                 setUser({});
+                localStorage.removeItem('userRole'); // Xóa role khỏi localStorage
                 navigate('/hocho/home');
             })
-            .catch(err => {
+            .catch((err) => {
                 console.error('Error logging out:', err);
                 navigate('/hocho/home');
             });
@@ -63,39 +68,39 @@ function Header() {
         return `${baseUrl}/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
-    const refreshProfile = () => {
-        setRefreshKey(prevKey => prevKey + 1);
-    };
-
     const toggleMobileMenu = () => {
         setIsMobileMenuActive(!isMobileMenuActive);
     };
 
     const renderMenu = () => {
-        if (!role || !isLoggedIn) return null;
+        if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            'ROLE_admin': [
-                {path: '/hocho/clients', name: 'Quản lý tài khoản'},
-                {path: '/hocho/teacher', name: 'Quản lý khóa học'},
-                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
-                {path: '/hocho/video', name: 'Quản lý video'},
-                {path: '/hocho/questions', name: 'Forum'},
+            ROLE_ADMIN: [
+                { path: '/hocho/clients', name: 'Quản lý tài khoản' },
+                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
+                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
+                { path: '/hocho/video', name: 'Quản lý video' },
+                { path: '/hocho/questions', name: 'Forum' },
             ],
-            'ROLE_teacher': [
-                {path: '/hocho/teacher', name: 'Quản lý khóa học'},
-                {path: '/hocho/dashboard', name: 'Giải trí & Nội dung'},
-                {path: '/hocho/questions', name: 'Forum'},
+            ROLE_TEACHER: [
+                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
+                { path: '/hocho/dashboard', name: 'Giải trí & Nội dung' },
+                { path: '/hocho/questions', name: 'Forum' },
             ],
-            'ROLE_parent': [
-                {path: '/hocho/parent', name: 'Thông tin Phụ huynh'},
-                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
-                {path: '/hocho/questions', name: 'Forum'},
+            ROLE_PARENT: [
+                { path: '/hocho/parent', name: 'Thông tin Phụ huynh' },
+                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
+                { path: '/hocho/questions', name: 'Forum' },
             ],
-            'ROLE_child': [
-                {path: '/hocho/questions', name: 'Forum'},
-            ],
+            ROLE_CHILD: [{ path: '/hocho/questions', name: 'Forum' }],
         };
+
+        // Kiểm tra nếu menuItems[role] không tồn tại
+        if (!menuItems[role]) {
+            console.warn(`Role không hợp lệ: ${role}`);
+            return <ul className={styles.navAdmin}><li>Không có menu cho vai trò này</li></ul>;
+        }
 
         return (
             <ul className={styles.navAdmin}>
@@ -118,7 +123,7 @@ function Header() {
                         <img
                             src="/headerTopShape.png"
                             alt="Header Top Shape"
-                            style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
                     </div>
                     <div className={styles.headerTopContent}>
@@ -137,18 +142,10 @@ function Header() {
                             </ul>
                             <div className={styles.socialIcon}>
                                 <span>Follow Us On:</span>
-                                <a href="/">
-                                    <i className="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="/">
-                                    <i className="fab fa-twitter"></i>
-                                </a>
-                                <a href="/">
-                                    <i className="fa-brands fa-linkedin-in"></i>
-                                </a>
-                                <a href="/">
-                                    <i className="fa-brands fa-youtube"></i>
-                                </a>
+                                <a href="/"><i className="fab fa-facebook-f"></i></a>
+                                <a href="/"><i className="fab fa-twitter"></i></a>
+                                <a href="/"><i className="fa-brands fa-linkedin-in"></i></a>
+                                <a href="/"><i className="fa-brands fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>
@@ -161,7 +158,7 @@ function Header() {
                         <div className={styles.headerMain}>
                             <div className={styles.headerLeft}>
                                 <a href="/hocho/home">
-                                    <img alt="Logo" width="100" height="100" src="/logo.png"/>
+                                    <img alt="Logo" width="100" height="100" src="/logo.png" />
                                 </a>
                             </div>
                             <div className={styles.headerRight}>
@@ -179,9 +176,7 @@ function Header() {
                                         <li className={`${styles.hasDropdown} ${styles.active} ${styles.menuThumb}`}>
                                             <a href="/hocho/home">Home</a>
                                         </li>
-                                        <li>
-                                            <a href="/about">About Us</a>
-                                        </li>
+                                        <li><a href="/about">About Us</a></li>
                                         <li className={styles.hasDropdown}>
                                             <a href="/news">
                                                 Courses <i className="fas fa-angle-down"></i>
@@ -192,15 +187,9 @@ function Header() {
                                                         Subject <i className="fas fa-angle-down"></i>
                                                     </a>
                                                     <ul className={styles.submenu}>
-                                                        <li>
-                                                            <a href="/event">Event Grid</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/event-carousel">Event Carousel</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/event-details">Event Details</a>
-                                                        </li>
+                                                        <li><a href="/event">Event Grid</a></li>
+                                                        <li><a href="/event-carousel">Event Carousel</a></li>
+                                                        <li><a href="/event-details">Event Details</a></li>
                                                     </ul>
                                                 </li>
                                                 <li className={styles.hasDropdown}>
@@ -208,15 +197,9 @@ function Header() {
                                                         Teacher <i className="fas fa-angle-down"></i>
                                                     </a>
                                                     <ul className={styles.submenu}>
-                                                        <li>
-                                                            <a href="/team">Our Teacher</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/team-carousel">Teacher Carousel</a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/team-details">Teacher Details</a>
-                                                        </li>
+                                                        <li><a href="/team">Our Teacher</a></li>
+                                                        <li><a href="/team-carousel">Teacher Carousel</a></li>
+                                                        <li><a href="/team-details">Teacher Details</a></li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -226,25 +209,17 @@ function Header() {
                                                 Entertainment <i className="fas fa-angle-down"></i>
                                             </a>
                                             <ul className={styles.submenu}>
-                                                <li>
-                                                    <a href="/hocho/video">Video</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Games</a>
-                                                </li>
+                                                <li><a href="/hocho/video">Video</a></li>
+                                                <li><a href="#">Games</a></li>
                                             </ul>
                                         </li>
-                                        <li>
-                                            <a href="/contact">Contact Us</a>
-                                        </li>
+                                        <li><a href="/contact">Contact Us</a></li>
                                         {renderMenu()}
                                     </ul>
                                 </nav>
-
                                 <button className={`${styles.searchTrigger} ${styles.searchIcon}`}>
                                     <i className="fas fa-search"></i>
                                 </button>
-
                                 {!isLoggedIn ? (
                                     <div className={styles.headerButton}>
                                         <a className={styles.themeBtn} href="/hocho/login">
@@ -265,12 +240,8 @@ function Header() {
                                                 }}
                                             />
                                             <ul className={styles.profileDropdown}>
-                                                <li>
-                                                    <a href="/hocho/profile">Profile</a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">Cart</a>
-                                                </li>
+                                                <li><a href="/hocho/profile">Profile</a></li>
+                                                <li><a href="#">Cart</a></li>
                                                 <li>
                                                     <a className={styles.logoutLink} onClick={handleLogout}>
                                                         Logout

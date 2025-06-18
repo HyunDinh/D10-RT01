@@ -1,0 +1,12 @@
+/* Scoped styles for the Home component */
+.root {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Source Sans 3', sans-serif;
+    background-color: #f4f5fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
