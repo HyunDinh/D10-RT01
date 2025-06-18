@@ -51,7 +51,7 @@ public class UserRegistrationTest {
                 .andExpect(content().string("Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản."));
 
         // Verify user in database
-        User user = userRepository.findByUsername("admin");
+        User user = userRepository.findByUsername("admin").orElse(null);
         assertNotNull(user, "Parent user should be created");
         assertEquals("admin", user.getUsername());
         assertEquals("parent", user.getRole());
@@ -100,7 +100,7 @@ public class UserRegistrationTest {
                 .andExpect(content().string("Đăng ký tài khoản học sinh thành công. Vui lòng chờ phụ huynh xác nhận qua email."));
 
         // Verify child user in database
-        User child = userRepository.findByUsername("child");
+        User child = userRepository.findByUsername("child").orElse(null);
         assertNotNull(child, "Child user should be created");
         assertEquals("child", child.getUsername());
         assertEquals("child", child.getRole());

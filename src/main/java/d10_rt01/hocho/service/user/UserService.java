@@ -166,7 +166,7 @@ public class UserService {
 
     public User findByUsername(String username) {
         logger.info("Tìm kiếm user với username: {}", username);
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
         if (user != null) {
             logger.info("Tìm thấy user: username={}, role={}, verified={}", user.getUsername(), user.getRole(), user.getVerified());
         } else {
@@ -226,7 +226,7 @@ public class UserService {
     // PROFILE
 
     public User updateUserProfile(String username, String fullName, String dateOfBirth, String phoneNumber) {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).get();
 
         if (fullName != null) {
             user.setFullName(fullName);

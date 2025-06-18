@@ -1,4 +1,4 @@
-package d10_rt01.hocho.controller;
+package d10_rt01.hocho.controller.auth;
 
 import d10_rt01.hocho.config.DebugModeConfig;
 import d10_rt01.hocho.config.HochoConfig;
@@ -25,27 +25,19 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-public class UserController {
+public class AuthController {
 
-    public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(UserController.class), DebugModeConfig.CONTROLLER_LAYER);
+    public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(AuthController.class), DebugModeConfig.CONTROLLER_LAYER);
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
     }
@@ -242,86 +234,5 @@ public class UserController {
         return ResponseEntity.ok("Đăng xuất thành công.");
     }
 
-
-    // ------------------------------------ PROFILE ------------------------------------
-
-    @PutMapping("/profile")
-    public ResponseEntity<?> updateProfile(Authentication authentication, @RequestBody Map<String, String> request) {
-        String username = authentication.getName();
-        String fullName = request.get("fullName");
-        String dateOfBirth = request.get("dateOfBirth");
-        String phoneNumber = request.get("phoneNumber");
-
-        try {
-            User updatedUser = userService.updateUserProfile(username, fullName, dateOfBirth, phoneNumber);
-            UserResponse userResponse = getUserResponse(updatedUser);
-            return ResponseEntity.ok(userResponse);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PutMapping("/profile/password")
-    public ResponseEntity<?> updatePassword(Authentication authentication, @RequestBody Map<String, String> request) {
-        String username = authentication.getName();
-        String oldPassword = request.get("oldPassword");
-        String newPassword = request.get("newPassword");
-        String confirmPassword = request.get("confirmPassword");
-
-        if (oldPassword == null || oldPassword.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Mật khẩu cũ không được để trống.");
-        }
-        if (newPassword == null || newPassword.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Mật khẩu mới không được để trống.");
-        }
-        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Xác nhận mật khẩu không được để trống.");
-        }
-        if (!newPassword.equals(confirmPassword)) {
-            return ResponseEntity.badRequest().body("Mật khẩu mới và xác nhận mật khẩu không khớp.");
-        }
-
-        try {
-            User updatedUser = userService.updateUserPassword(username, oldPassword, newPassword);
-            return ResponseEntity.ok("Cập nhật mật khẩu thành công.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @PostMapping("/profile/upload")
-    public ResponseEntity<?> uploadProfilePicture(Authentication authentication, @RequestParam("file") MultipartFile file) {
-        String username = authentication.getName();
-        try {
-            User updatedUser = userService.updateProfilePicture(username, file);
-            UserResponse userResponse = getUserResponse(updatedUser);
-            return ResponseEntity.ok(userResponse);
-        } catch (IOException e) {
-            logger.error("Error uploading profile picture: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi khi tải lên ảnh đại diện.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    @GetMapping("/profile/{filename}")
-    public ResponseEntity<Resource> getProfileImage(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + filename);
-        Resource resource = new FileSystemResource(filePath);
-
-        if (!resource.exists()) {
-            filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + "default.png");
-            resource = new FileSystemResource(filePath);
-        }
-
-        MediaType mediaType = filename.toLowerCase().endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
-                .header(HttpHeaders.PRAGMA, "no-cache")
-                .header(HttpHeaders.EXPIRES, "0")
-                .contentType(mediaType)
-                .body(resource);
-    }
 }
 

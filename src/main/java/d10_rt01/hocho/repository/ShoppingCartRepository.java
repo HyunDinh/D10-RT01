@@ -14,4 +14,6 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long
 
     //Kiểm tra khóa học đã tồn tại trong giỏ hàng chưa (đã khớp với ChildId -- CourseId chưa)
     boolean existsByParentIdAndChildIdAndCourseCourseId(Long parentId, Long childId, Long courseId);
+
+    void deleteByChildIdAndCourseCourseId(Long childId, Long courseId);
 }

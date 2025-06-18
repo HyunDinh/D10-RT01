@@ -16,6 +16,8 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @lombok.ToString.Exclude
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Order order;
 
     @ManyToOne
@@ -28,4 +30,7 @@ public class OrderItem {
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 } 

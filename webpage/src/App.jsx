@@ -5,10 +5,59 @@ import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
 
 import Auth from './pages2/Auth';
-import Home from './pages2/Home.jsx';
+import Home from './pages2/Home';
 import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
+
+// tutor routs
+import TutorProfile from './pages2/tutor/TutorProfile';
+import TutorForm from './pages2/tutor/TutorForm';
+import AdminTutorList from './pages2/tutor/AdminTutorList';
+import PublicTutorList from './pages2/tutor/PublicTutorList';
+
+// shopping cart routes
+import ChildCart from './pages2/shoppingCart/ChildCart';
+import ParentCart from './pages2/shoppingCart/ParentCart';
+
+// question and answer routes
+import QuestionForm from './pages2/question/QuestionForm';
+import QuestionList from './pages2/question/QuestionList';
+import QuestionEdit from './pages2/question/QuestionEdit';
+import AnswerForm from './pages2/question/AnswerForm';
+
+// payment routes
+import PaymentHistoryPage from './pages2/payment/PaymentHistoryPage';
+import HandlePayosReturn from './pages2/payment/HandlePayosReturn';
+
+// course routes
+import CoursesPage from "./pages2/course/CoursesPage";
+import AddCoursePage from "./pages2/course/AddCoursePage";
+import EditCoursePage from "./pages2/course/EditCoursePage";
+import LessonPage from "./pages2/course/LessonPage";
+import AddLessonPage from "./pages2/course/AddLessonPage";
+import LessonContentPage from "./pages2/course/LessonContentPage";
+import AddLessonContentPage from "./pages2/course/AddLessonContentPage";
+import EditLessonPage from "./pages2/course/EditLessonPage";
+import LessonContentPlayer from './pages2/course/LessonContentPlayer';
+import EditLessonContentPage from './pages2/course/EditLessonContentPage';
+
+// video routes
+import VideoPage from './pages2/video/VideoPage';
+import TeacherVideoListPage from './pages2/video/TeacherVideoListPage';
+import AddVideoPage from './pages2/video/AddVideoPage';
+import EditVideoPage from './pages2/video/EditVideoPage';
+import VideoApprovalPage from './pages2/video/VideoApprovalPage';
+import VideoPlayer from './pages2/video/VideoPlayer';
+
+// quiz routes
+import QuizList from './pages2/quiz/QuizList';
+import QuizDetail from './pages2/quiz/QuizDetail';
+import QuizResult from './pages2/quiz/QuizResult';
+import QuizEdit from './pages2/quiz/QuizEdit';
+import QuizForm from './pages2/quiz/QuizForm';
+import QuizReview from './pages2/quiz/QuizReview';
+import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
 
 
 const App = () => {
@@ -18,9 +67,9 @@ const App = () => {
                 // new
                 <Route path="hocho/login" element={<Auth />} />
                 <Route path="hocho/home" element={<Home />} />
-                <Route path="/hocho/forgot-password" element={<ForgotPassword />} />
-                <Route path="/hocho/reset-password" element={<ResetPassword />} />
-                <Route path="/hocho/profile" element={<Profile />} />
+                <Route path="hocho/forgot-password" element={<ForgotPassword />} />
+                <Route path="hocho/reset-password" element={<ResetPassword />} />
+                <Route path="hocho/profile" element={<Profile />} />
 
                 // old
                 <Route path="hocho/verify" element={<Verify />} />
@@ -28,6 +77,59 @@ const App = () => {
                 <Route path="hocho/welcome" element={<Welcome />} />
                 <Route path="hocho/dashboard" element={<Dashboard />} />
                 <Route path="hocho/" element={<Auth />} />
+
+                {/* Tutor Routes */}
+                <Route path="hocho/tutors/admin" element={<AdminTutorList/>}/>             {/* Trang quản lý thông tin gia sư */}
+                <Route path="hocho/tutors" element={<PublicTutorList/>}/>                  {/* Trang thông tin gia sư */}
+                <Route path="hocho/tutors/profile/:userId" element={<TutorProfile/>}/>     {/* Trang xem chi tiết thông tin gia sư */}
+                <Route path="hocho/tutors/form" element={<TutorForm/>}/>                   {/* Trang đăng ký form thông tin gia sư */}
+                <Route path="hocho/tutors/form/:userId" element={<TutorForm/>}/>           {/* Trang chỉnh sửa thông tin gia sư */}
+
+                {/* Shooping Cart Routes */}
+                <Route path="/hocho/child/cart" element={<ChildCart/>}/> {/* Trang giỏ hàng của trẻ em */}
+                <Route path="/hocho/parent/cart" element={<ParentCart/>}/> {/* Trang giỏ hàng của phụ huynh */}
+
+                {/* Question and Answer Routes */}
+                <Route path="/hocho/questions/new" element={<QuestionForm/>}/> {/* Trang tạo câu hỏi dành cho trẻ em */}
+                <Route path="/hocho/questions" element={<QuestionList/>}/> {/* Trang diễn đàn câu hỏi */}
+                <Route path="/hocho/questions/:id/edit" element={<QuestionEdit/>}/> {/* Trang chỉnh sửa câu hỏi  */}
+                <Route path="/hocho/questions/:id/answer" element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
+
+
+                {/* Course Routes */}
+                <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
+                <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
+                <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
+
+                {/* Payment Routes - Tương ứng với API của project thanh toán */}
+                <Route path="/hocho/payment/history" element={<PaymentHistoryPage/>}/> {/* Hiển thị lịch sử thanh toán */}
+                <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn/>}/>
+
+                {/* Lesson Routes */}
+                <Route path="/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
+                <Route path="/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson" element={<LessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<EditLessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add" element={<AddLessonContentPage/>}/>
+
+                {/* Video Routes */}
+                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em */}
+                <Route path="/hocho/teacher/video" element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên */}
+                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới */}
+                <Route path="/hocho/teacher/video/edit/:videoId" element={<EditVideoPage/>}/> {/* Trang chỉnh sửa video */}
+                <Route path="/hocho/admin/video/approval" element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin */}
+                <Route path="/video/:videoId" element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video) */}
+
+                {/* Quiz Routes */}
+                <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
+                <Route path="/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
+                <Route path="/quizzes/:id" element={<QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
+                <Route path="/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
+                <Route path="/quizzes/:id/edit" element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
+                <Route path="/quizzes/:id/result" element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
+                <Route path="/quizzes/:id/review" element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
             </Routes>
         </Router>
     );

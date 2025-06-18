@@ -16,26 +16,25 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long transactionId;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
+    @OneToOne
+    @JoinColumn(name = "order_id", unique = true)
+    private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id", nullable = false)
-    private User parent;
+    @Column(name = "payos_transaction_id", nullable = false, unique = true)
+    private String payosTransactionId;
 
     @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
-
-    @Column(name = "transaction_date")
-    private LocalDateTime transactionDate;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
+    @Column(name = "transaction_date")
+    private LocalDateTime transactionDate;
+
     @PrePersist
     protected void onCreate() {
         transactionDate = LocalDateTime.now();
     }
-}
+} 
