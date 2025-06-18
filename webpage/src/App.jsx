@@ -8,6 +8,7 @@ import Auth from './pages2/Auth';
 import Home from './pages2/Home.jsx';
 import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
+import Profile from './pages2/Profile';
 
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="hocho/home" element={<Home />} />
                 <Route path="/hocho/forgot-password" element={<ForgotPassword />} />
                 <Route path="/hocho/reset-password" element={<ResetPassword />} />
+                <Route path="/hocho/profile" element={<Profile />} />
 
                 // old
                 <Route path="hocho/verify" element={<Verify />} />

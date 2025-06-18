@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import '../styles/Home.css';
 
 function Home() {
     const [data, setData] = useState({});

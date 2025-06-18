@@ -1,50 +1,46 @@
-/* Footer styling */
+/* Scoped styles for the Footer component */
 .footer {
     background-color: #f4eee5;
-    margin: 0 -20px;
+    margin: 0 100px;
     bottom: 0;
     font-family: Arial, sans-serif;
     position: relative;
 }
 
-/* Container for content */
 .container {
     padding: 70px 0 40px 0;
 }
 
-/* Contact info section */
-.footer-contact-info {
+.footerContactInfo {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
 }
 
-/* Individual contact items */
-.contact-info-items {
+.contactInfoItems {
     display: flex;
     align-items: center;
     flex: 1;
-    min-width: 250px; /* Ensure items don't get too small */
+    min-width: 250px;
     padding: 20px;
     transition: transform 0.3s ease;
-    border-bottom: 1px solid rgba(56, 84, 105, .2);
+    border-bottom: 1px solid rgba(56, 84, 105, 0.2);
 }
 
-.contact-info-items:hover {
-    transform: translateY(-5px); /* Subtle hover effect */
+.contactInfoItems:hover {
+    transform: translateY(-5px);
 }
 
-/* Icon styling */
 .icon {
     margin-right: 15px;
     position: relative;
-    width: 50px; /* Adjust size as needed */
-    height: 50px; /* Adjust size as needed */
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
+    overflow: hidden;
 }
 
 .icon::before {
@@ -61,7 +57,7 @@
     background-size: cover;
     border-radius: 50%;
     animation: cir36 10s linear infinite;
-    z-index: 1; /* Place behind the SVG */
+    z-index: 1;
 }
 
 .icon svg {
@@ -80,10 +76,9 @@
     }
 }
 
-/* Content styling */
 .content p {
     font-size: 16px;
-    color: #385469; /* Lighter color for secondary text */
+    color: #385469;
     margin-bottom: 5px;
 }
 
@@ -100,24 +95,21 @@
 }
 
 .content h3 a:hover {
-    color: #F39F5F; /* Match SVG fill color on hover */
+    color: #F39F5F;
 }
 
 .footerTop img {
-    height: 118px;
-    width: 1920px;
     margin-top: -220px;
     object-fit: cover;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
-    .footer-contact-info {
+    .footerContactInfo {
         flex-direction: column;
         align-items: center;
     }
 
-    .contact-info-items {
+    .contactInfoItems {
         width: 100%;
         justify-content: center;
         text-align: center;
@@ -144,40 +136,35 @@
     }
 }
 
-/* Footer Grid */
-.footer-grid {
+.footerGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
 }
 
-/* Footer Widget */
-.footer-widget {
+.footerWidget {
     color: #385469;
 }
 
-/* Widget Header */
-.widget-header {
+.widgetHeader {
     margin-bottom: 20px;
     border-image: linear-gradient(90deg, #f39f5f 4.85%, rgba(201, 203, 223, 0) 96.39%);
     border-bottom: 2px solid transparent;
     border-image-slice: 2;
 }
 
-.widget-header img {
+.widgetHeader img {
     max-width: 100%;
     height: auto;
 }
 
-.widget-header h3 {
+.widgetHeader h3 {
     font-size: 22px;
     font-weight: 600;
     color: #385469;
-
 }
 
-/* Widget Content */
-.widget-content p {
+.widgetContent p {
     font-size: 16px;
     line-height: 1.6;
     font-weight: 500;
@@ -185,13 +172,12 @@
     margin-bottom: 20px;
 }
 
-/* Social Links */
-.social-links {
+.socialLinks {
     display: flex;
     gap: 12px;
 }
 
-.social-links a {
+.socialLinks a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -199,33 +185,32 @@
     height: 36px;
     color: #385469;
     text-decoration: none;
-    transition: all .4s ease-in-out;
+    transition: all 0.4s ease-in-out;
     text-align: center;
     background-color: transparent;
-    border: 1px solid rgba(56, 84, 105, .2);
+    border: 1px solid rgba(56, 84, 105, 0.2);
 }
 
-.social-links a:hover {
+.socialLinks a:hover {
     background-color: #0056b3;
 }
 
-.social-links i {
+.socialLinks i {
     font-size: 16px;
 }
 
-/* Link List */
-.link-list {
+.linkList {
     list-style: none;
     padding-left: 0;
     font-size: 16px;
     font-weight: 500;
 }
 
-.link-list li {
+.linkList li {
     margin-bottom: 10px;
 }
 
-.link-list a {
+.linkList a {
     display: flex;
     align-items: center;
     color: #385469;
@@ -235,18 +220,17 @@
     transition: color 0.3s ease;
 }
 
-.link-list a i {
+.linkList a i {
     margin-right: 8px;
     font-size: 14px;
     color: #385469;
 }
 
-.link-list a:hover {
+.linkList a:hover {
     color: #007bff;
 }
 
-/* Recent Posts */
-.recent-posts {
+.recentPosts {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -265,51 +249,48 @@
     border-radius: 6px;
 }
 
-.post-content {
-    flex: 1;
+.postContent {
 }
 
-.post-date {
+.postDate {
     display: block;
     font-size: 16px;
     color: #f39f5f;
     margin-bottom: 5px;
 }
 
-.post-date i {
+.postDate i {
     margin-right: 5px;
 }
 
-.post-content h6 {
+.postContent h6 {
     font-size: 16px;
     font-weight: 700;
     line-height: 1.4;
     margin: 0;
 }
 
-.post-content a {
+.postContent a {
     color: #385469;
     text-decoration: none;
 }
 
-.post-content a:hover {
+.postContent a:hover {
     color: #007bff;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
-    .footer-grid {
+    .footerGrid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 600px) {
-    .footer-grid {
+    .footerGrid {
         grid-template-columns: 1fr;
     }
 }
 
-/* AOS Animations */
 [data-aos] {
     transition: all 0.8s ease-in-out;
 }
@@ -321,18 +302,18 @@
     margin-left: -150px;
 }
 
-.footer-top {
+.footerTop {
     position: absolute;
-    top: 29%;
-    left: 3%;
-    animation: rounded 5s linear infinite
+    top: 52%;
+    left: -7%;
+    animation: rounded 5s linear infinite;
 }
 
 .zebra {
     position: absolute;
     top: 20%;
-    right: 0;
-    animation: rounded 5s linear infinite
+    right: -9%;
+    animation: rounded 5s linear infinite;
 }
 
 @keyframes rounded {
@@ -340,15 +321,15 @@
         transform: rotate(0deg);
     }
     25% {
-        transform: rotate(10deg); /* Sway to the right */
+        transform: rotate(10deg);
     }
     50% {
-        transform: rotate(0deg); /* Back to center */
+        transform: rotate(0deg);
     }
     75% {
-        transform: rotate(-10deg); /* Sway to the left */
+        transform: rotate(-10deg);
     }
     100% {
-        transform: rotate(0deg); /* Back to center */
+        transform: rotate(0deg);
     }
 }

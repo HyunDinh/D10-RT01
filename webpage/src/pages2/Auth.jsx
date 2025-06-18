@@ -16,6 +16,12 @@ const Auth = () => {
     const [isRegistering, setIsRegistering] = useState(false);
 
     useEffect(() => {
+        setMessage('');
+        setError('');
+        setLogoutMessage('');
+    }, [isRegistering]);
+
+    useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const oauthError = searchParams.get('oauthError');
         const loginError = searchParams.get('error');
@@ -357,6 +363,7 @@ const Auth = () => {
                         <div className={styles.formHeader}>
                             <h4>Welcome to Hocho! 👋🏻</h4>
                             {error && <div className={`${styles.alert} ${styles.alertDanger}`}>{error}</div>}
+                            {message && <div className={`${styles.alert} ${styles.alertDanger}`}>{message}</div>}
                             {logoutMessage && (
                                 <div className={`${styles.alert} ${styles.alertSuccess}`}>{logoutMessage}</div>
                             )}
