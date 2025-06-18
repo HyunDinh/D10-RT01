@@ -21,6 +21,7 @@ public class UserService {
 
     public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(UserService.class), DebugModeConfig.SERVICE_LAYER);
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final long RESET_TOKEN_EXPIRY_MINUTES = 60;
 
     private final ParentChildMappingRepository parentChildMappingRepository;
     private final UserRepository userRepository;
@@ -34,7 +35,7 @@ public class UserService {
         this.emailService = emailService;
     }
 
-    public User registerUser(String username, String password, String email, String parentEmail, String role) throws MessagingException {
+    public User registerUser(String username, String password, String email, String parentEmail, String role, String phoneNumber) throws MessagingException {
         logger.info("Bắt đầu đăng ký user: username={}, role={}", username, role);
 
         // Kiểm tra định dạng email
@@ -73,6 +74,7 @@ public class UserService {
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setEmail(role.equals("child") ? null : email); // Không lưu email cho child
         user.setRole(role);
+        user.setPhoneNumber(phoneNumber);
         user.setIsActive(false);
         user.setVerified(false);
         user.setCreatedAt(Instant.now());
@@ -151,5 +153,52 @@ public class UserService {
             logger.warn("Không tìm thấy user với username: {}", username);
         }
         return user;
+    }
+
+    // Gửi yêu cầu đặt lại mật khẩu
+    public void requestPasswordReset(String email) throws MessagingException {
+        logger.info("Bắt đầu xử lý yêu cầu đặt lại mật khẩu cho email: {}", email);
+
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            logger.warn("Không tìm thấy người dùng với email: {}", email);
+            throw new IllegalArgumentException("Email không tồn tại trong hệ thống.");
+        }
+
+        // Kiểm tra vai trò: không cho phép child
+        if (user.getRole().equals("child")) {
+            logger.warn("Yêu cầu đặt lại mật khẩu bị từ chối cho tài khoản học sinh: {}", email);
+            throw new IllegalArgumentException("Tài khoản học sinh không được phép đặt lại mật khẩu.");
+        }
+
+        // Tạo token đặt lại mật khẩu
+        String token = UUID.randomUUID().toString();
+        user.setResetPasswordToken(token);
+        user.setResetPasswordExpiry(Instant.now().plusSeconds(RESET_TOKEN_EXPIRY_MINUTES * 60));
+        userRepository.save(user);
+        logger.info("Đã lưu token đặt lại mật khẩu cho user: {}", user.getUsername());
+
+        // Gửi email đặt lại mật khẩu
+        emailService.sendPasswordResetEmail(email, user.getUsername(), token);
+        logger.info("Đã gửi email đặt lại mật khẩu tới: {}", email);
+    }
+
+    // Đặt lại mật khẩu
+    public boolean resetPassword(String token, String newPassword) {
+        logger.info("Xác nhận đặt lại mật khẩu với token: {}", token);
+
+        User user = userRepository.findByResetPasswordToken(token);
+        if (user != null && user.getResetPasswordExpiry() != null && user.getResetPasswordExpiry().isAfter(Instant.now())) {
+            user.setPasswordHash(passwordEncoder.encode(newPassword));
+            user.setResetPasswordToken(null);
+            user.setResetPasswordExpiry(null);
+            user.setUpdatedAt(Instant.now());
+            userRepository.save(user);
+            logger.info("Đặt lại mật khẩu thành công cho user: {}", user.getUsername());
+            return true;
+        }
+
+        logger.warn("Đặt lại mật khẩu thất bại, token không hợp lệ hoặc đã hết hạn: {}", token);
+        return false;
     }
 }

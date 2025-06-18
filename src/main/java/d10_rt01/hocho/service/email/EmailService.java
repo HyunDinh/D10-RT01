@@ -70,6 +70,30 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendPasswordResetEmail(String to, String username, String token) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setSubject("Đặt lại mật khẩu tài khoản Hocho");
+
+        String resetTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy"));
+        String resetUrl = frontendUrl + "/hocho/reset-password?token=" + token;
+        String emailContent = "<div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 4px;\">"
+                + "<h1 style=\"color: #2c3e50; text-align: center;\">Đặt lại mật khẩu</h1>"
+                + "<p style=\"font-size: 16px;\">Yêu cầu đặt lại mật khẩu cho tài khoản <strong>" + username + "</strong> đã được thực hiện vào lúc <strong>" + resetTime + "</strong>.</p>"
+                + "<p style=\"font-size: 16px;\">Vui lòng nhấn vào nút bên dưới để đặt lại mật khẩu của bạn:</p>"
+                + "<div style=\"text-align: center; margin: 25px 0;\">"
+                + "<a href=\"" + resetUrl + "\" style=\"background-color: #4CAF50; color: white; padding: 12px 24px; text-align: center; text-decoration: none; display: inline-block; border-radius: 4px; font-weight: bold;\">Đặt lại mật khẩu</a>"
+                + "</div>"
+                + "<p style=\"font-size: 14px; color: #7f8c8d;\">Liên kết này sẽ hết hạn sau 1 giờ. Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.</p>"
+                + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 20px 0;\">"
+                + "<p style=\"font-size: 12px; color: #7f8c8d; text-align: center;\">© 2023 Hocho. All rights reserved.</p>"
+                + "</div>";
+
+        helper.setText(emailContent, true);
+        mailSender.send(message);
+    }
+
     public void sendTestEmail(String to) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);

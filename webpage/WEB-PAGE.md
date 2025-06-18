@@ -20,3 +20,17 @@
 ## — KILL PORT
 
 ### `npx kill-port 3000`
+
+## — FONT
+
+```bash
+
+npm install @fortawesome/fontawesome-svg-core
+npm install @fortawesome/free-solid-svg-icons
+npm install @fortawesome/free-regular-svg-icons
+npm install @fortawesome/free-brands-svg-icons
+npm install @fortawesome/react-fontawesome
+
+```
+
+### `npm install swiper`

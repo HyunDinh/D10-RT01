@@ -248,6 +248,8 @@ const Auth = () => {
                         </div>
                     </form>
                 ) : (
+
+
                     <form onSubmit={handleRegisterSubmit} className="auth-form">
                         <div className="auth-form-group">
                             <label className="auth-label">Tên đăng nhập</label>

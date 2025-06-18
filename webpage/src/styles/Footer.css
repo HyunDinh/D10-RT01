@@ -1,0 +1,354 @@
+/* Footer styling */
+.footer {
+    background-color: #f4eee5;
+    margin: 0 -20px;
+    bottom: 0;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Container for content */
+.container {
+    padding: 70px 0 40px 0;
+}
+
+/* Contact info section */
+.footer-contact-info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Individual contact items */
+.contact-info-items {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 250px; /* Ensure items don't get too small */
+    padding: 20px;
+    transition: transform 0.3s ease;
+    border-bottom: 1px solid rgba(56, 84, 105, .2);
+}
+
+.contact-info-items:hover {
+    transform: translateY(-5px); /* Subtle hover effect */
+}
+
+/* Icon styling */
+.icon {
+    margin-right: 15px;
+    position: relative;
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Ensure the pseudo-element doesn't overflow */
+}
+
+.icon::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    content: "";
+    background-repeat: no-repeat;
+    border: 2px solid #F39F5F;
+    background-size: cover;
+    border-radius: 50%;
+    animation: cir36 10s linear infinite;
+    z-index: 1; /* Place behind the SVG */
+}
+
+.icon svg {
+    position: relative;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+}
+
+@keyframes cir36 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Content styling */
+.content p {
+    font-size: 16px;
+    color: #385469; /* Lighter color for secondary text */
+    margin-bottom: 5px;
+}
+
+.content h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #385469;
+}
+
+.content h3 a {
+    color: #385469;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.content h3 a:hover {
+    color: #F39F5F; /* Match SVG fill color on hover */
+}
+
+.footerTop img {
+    height: 118px;
+    width: 1920px;
+    margin-top: -220px;
+    object-fit: cover;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .footer-contact-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-info-items {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .icon {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content p {
+        font-size: 12px;
+    }
+
+    .content h3 {
+        font-size: 16px;
+    }
+
+    .icon svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Footer Grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+}
+
+/* Footer Widget */
+.footer-widget {
+    color: #385469;
+}
+
+/* Widget Header */
+.widget-header {
+    margin-bottom: 20px;
+    border-image: linear-gradient(90deg, #f39f5f 4.85%, rgba(201, 203, 223, 0) 96.39%);
+    border-bottom: 2px solid transparent;
+    border-image-slice: 2;
+}
+
+.widget-header img {
+    max-width: 100%;
+    height: auto;
+}
+
+.widget-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #385469;
+
+}
+
+/* Widget Content */
+.widget-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Social Links */
+.social-links {
+    display: flex;
+    gap: 12px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: #385469;
+    text-decoration: none;
+    transition: all .4s ease-in-out;
+    text-align: center;
+    background-color: transparent;
+    border: 1px solid rgba(56, 84, 105, .2);
+}
+
+.social-links a:hover {
+    background-color: #0056b3;
+}
+
+.social-links i {
+    font-size: 16px;
+}
+
+/* Link List */
+.link-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.link-list li {
+    margin-bottom: 10px;
+}
+
+.link-list a {
+    display: flex;
+    align-items: center;
+    color: #385469;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link-list a i {
+    margin-right: 8px;
+    font-size: 14px;
+    color: #385469;
+}
+
+.link-list a:hover {
+    color: #007bff;
+}
+
+/* Recent Posts */
+.recent-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.post img {
+    width: 78px;
+    height: 79px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.post-content {
+    flex: 1;
+}
+
+.post-date {
+    display: block;
+    font-size: 16px;
+    color: #f39f5f;
+    margin-bottom: 5px;
+}
+
+.post-date i {
+    margin-right: 5px;
+}
+
+.post-content h6 {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.post-content a {
+    color: #385469;
+    text-decoration: none;
+}
+
+.post-content a:hover {
+    color: #007bff;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* AOS Animations */
+[data-aos] {
+    transition: all 0.8s ease-in-out;
+}
+
+.bottomFooter img {
+    object-fit: cover;
+    margin-top: 20px;
+    margin-bottom: -100px;
+    margin-left: -150px;
+}
+
+.footer-top {
+    position: absolute;
+    top: 29%;
+    left: 3%;
+    animation: rounded 5s linear infinite
+}
+
+.zebra {
+    position: absolute;
+    top: 20%;
+    right: 0;
+    animation: rounded 5s linear infinite
+}
+
+@keyframes rounded {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(10deg); /* Sway to the right */
+    }
+    50% {
+        transform: rotate(0deg); /* Back to center */
+    }
+    75% {
+        transform: rotate(-10deg); /* Sway to the left */
+    }
+    100% {
+        transform: rotate(0deg); /* Back to center */
+    }
+}

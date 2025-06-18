@@ -25,6 +25,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -55,7 +56,8 @@ public class UserController {
                     request.getPassword(),
                     request.getEmail(),
                     request.getParentEmail(),
-                    request.getRole()
+                    request.getRole(),
+                    request.getPhoneNumber()
             );
             String successMessage = user.getRole().equals("parent") ?
                     "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản." :
@@ -100,6 +102,11 @@ public class UserController {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+            // Spring Security tự động xử lý rememberMe dựa trên tham số rememberMe
+            if (request.isRememberMe()) {
+                logger.info("Remember Me enabled for username: {}", request.getUsername());
+            }
 
             return ResponseEntity.ok().build(); // Trả về 200 OK
         } catch (Exception e) {
@@ -160,7 +167,7 @@ public class UserController {
                 session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
                 logger.info("Google login successful for email: {} - Username founded : {}", email, user.getUsername());
                 return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "http://localhost:3000/hocho/welcome")
+                        .header("Location", "http://localhost:3000/hocho/home")
                         .body(null);
             } else {
                 logger.error("Email not found in database: {}", email);
@@ -175,6 +182,42 @@ public class UserController {
                 .header("Location", "http://localhost:3000/hocho/login?oauthError=" +
                         java.net.URLEncoder.encode("Đăng nhập Google thất bại", StandardCharsets.UTF_8))
                 .body(null);
+    }
+
+    // Yêu cầu đặt lại mật khẩu
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.badRequest().body("Email là bắt buộc.");
+        }
+
+        try {
+            userService.requestPasswordReset(email);
+            return ResponseEntity.ok("Liên kết đặt lại mật khẩu đã được gửi đến email của bạn.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (MessagingException e) {
+            logger.error("Lỗi gửi email đặt lại mật khẩu: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Lỗi gửi email. Vui lòng thử lại sau.");
+        }
+    }
+
+    // Đặt lại mật khẩu
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String token = request.get("token");
+        String newPassword = request.get("newPassword");
+
+        if (token == null || newPassword == null || token.isEmpty() || newPassword.isEmpty()) {
+            return ResponseEntity.badRequest().body("Token và mật khẩu mới là bắt buộc.");
+        }
+
+        boolean success = userService.resetPassword(token, newPassword);
+        if (success) {
+            return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công.");
+        }
+        return ResponseEntity.badRequest().body("Token không hợp lệ hoặc đã hết hạn.");
     }
 
 

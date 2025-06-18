@@ -1,0 +1,435 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f5fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    border-radius: 8px;
+    position: relative;
+    margin: 16px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 56px;
+    }
+}
+
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    text-decoration: none;
+}
+
+.formContainer {
+    padding: 32px;
+    width: 100%;
+    max-width: 560px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: relative;
+    margin: 16px;
+}
+
+@media (min-width: 768px) {
+    .formContainer {
+        padding: 56px;
+    }
+}
+
+.formHeader h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.formHeader p {
+    font-size: 14px;
+    color: #666;
+    margin-top: 4px;
+    padding-bottom: 16px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.inputContainer {
+    position: relative;
+    width: 100%;
+    border-radius: 50%;
+}
+
+.inputContainer select {
+    width: 100%;
+    padding: 10px 10px 10px 12px;
+    font-size: 16px;
+    color: #333;
+    outline: none;
+    background: none;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.inputContainer .customArrow {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #333;
+    pointer-events: none;
+    z-index: 1;
+    transition: transform 0.5s ease;
+}
+
+.inputContainer select:focus ~ .customArrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.inputContainer select:focus,
+.inputContainer select:valid {
+    border-color: #3f51b5;
+    border-radius: 10px;
+}
+
+.inputContainer select:focus + label,
+.inputContainer select:valid + label {
+    top: 8px;
+    font-size: 12px;
+    color: #3f51b5;
+}
+
+.inputContainer select:focus ~ .notch::after,
+.inputContainer select:valid ~ .notch::after {
+    border-color: #3f51b5;
+}
+
+.inputContainer input {
+    width: 100%;
+    padding: 10px 10px 10px 12px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    background: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+}
+
+.inputContainer input:focus {
+    border-color: #3f51b5;
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+}
+
+.inputContainer label {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 14px;
+    color: #666;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    padding: 0 4px;
+    background-color: #fff;
+    transform-origin: top left;
+}
+
+.inputContainer input:focus + label,
+.inputContainer input:valid + label {
+    top: -8px;
+    font-size: 12px;
+    color: #3f51b5;
+}
+
+.passwordContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.togglePassword {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.formOptions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.checkbox {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.checkbox input {
+    margin-right: 8px;
+}
+
+.forgotPassword {
+    font-size: 14px;
+    color: #3f51b5;
+    text-decoration: none;
+}
+
+.forgotPassword:hover {
+    text-decoration: underline;
+}
+
+.submitBtn {
+    background-color: #8c57ff;
+    color: #fafafa;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.submitBtn:hover {
+    background-color: #303f9f;
+}
+
+.registerLink {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+}
+
+.registerLink a {
+    color: #8c57ff;
+    text-decoration: none;
+}
+
+.registerLink a:hover {
+    text-decoration: underline;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 16px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.divider span {
+    padding: 0 12px;
+    font-size: 14px;
+    color: #666;
+}
+
+.socialButtons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.socialBtn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.socialBtn.facebook {
+    background-color: #4267b2;
+}
+
+.socialBtn.twitter {
+    background-color: #1da1f2;
+}
+
+.socialBtn.github {
+    background-color: #272727;
+}
+
+.socialBtn.google {
+    background-color: #db4437;
+}
+
+.socialBtn:hover {
+    opacity: 0.9;
+}
+
+.alert {
+    width: 100%;
+    margin: 0 0 20px 0;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid transparent;
+    box-sizing: border-box;
+}
+
+.alertSuccess {
+    background-color: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.alertDanger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+
+.alert:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.alert:before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.alertSuccess:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23155724"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>');
+}
+
+.alertDanger:before {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23721c24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>');
+}
+
+.alert {
+    padding-left: 60px;
+}
+
+@media (max-width: 768px) {
+    .alert {
+        padding: 12px 15px 12px 50px;
+        font-size: 14px;
+    }
+
+    .alert:before {
+        width: 20px;
+        height: 20px;
+        left: 15px;
+    }
+}
+
+.backLink {
+    text-align: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 16px;
+}
+
+.linkFlex {
+    display: flex;
+    align-items: center;
+    color: #3f51b5;
+    text-decoration: none;
+}
+
+.linkFlex:hover {
+    text-decoration: underline;
+}
+
+/* Các kiểu hiện có cho submitBtn (giả định) */
+.submitBtn {
+    background-color: #007bff; /* Màu xanh mặc định */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover {
+    background-color: #0056b3; /* Màu xanh đậm khi hover */
+    transform: translateY(-2px);
+}
+
+/* Kiểu cho submitBtn khi bị vô hiệu hóa */
+.submitBtn:disabled {
+    background-color: #cccccc; /* Màu xám nhạt */
+    color: #666666; /* Màu chữ xám */
+    opacity: 0.7; /* Làm mờ nhẹ */
+    cursor: not-allowed; /* Con trỏ không cho phép */
+    transform: none; /* Hủy hiệu ứng transform */
+    animation: none; /* Hủy các animation khác nếu có */
+}
+
+/* Hiệu ứng rung nhẹ khi hover nút vô hiệu hóa */
+.submitBtn:disabled:hover {
+    animation: shake 0.3s ease-in-out;
+}
+
+/* Keyframes cho hiệu ứng rung */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+}

@@ -55,6 +55,12 @@ public class User {
     @Column(name = "verification_token", length = 255)
     private String verificationToken;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
+    @Column(name = "reset_password_expiry")
+    private Instant resetPasswordExpiry;
+
     @ColumnDefault("getdate()")
     @Column(name = "created_at")
     private Instant createdAt;

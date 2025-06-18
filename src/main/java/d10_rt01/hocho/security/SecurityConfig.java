@@ -1,7 +1,5 @@
 package d10_rt01.hocho.security;
 
-import d10_rt01.hocho.model.User;
-import d10_rt01.hocho.service.user.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,15 +16,23 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final DataSource dataSource; // Inject DataSource để kết nối SQL Server
 
-    // authenticationManager: manage the authentication process with username and password (called in the user controller)
+    public SecurityConfig(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // AuthenticationManager: manage the authentication process with username and password
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, UserDetailsService userDetailsService, PasswordConfig passwordConfig) throws Exception {
         AuthenticationManagerBuilder auth = http.getSharedObject(AuthenticationManagerBuilder.class);
@@ -38,7 +44,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    SessionRegistry sessionRegistry,
                                                    CorsConfig corsConfig,
-                                                   GoogleAuthConfig googleAuthConfig) throws Exception {
+                                                   GoogleAuthConfig googleAuthConfig,
+                                                   UserDetailsService userDetailsService) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -47,8 +54,10 @@ public class SecurityConfig {
                                 "/api/auth/verify",
                                 "/api/auth/verify-child",
                                 "/api/auth/login",
-                                "/api/auth/logout").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Cho phép tất cả yêu cầu OPTIONS
+                                "/api/auth/logout",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/auth/user").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
@@ -65,12 +74,29 @@ public class SecurityConfig {
                                     java.net.URLEncoder.encode(errorMessage, StandardCharsets.UTF_8));
                         })
                 )
+                .rememberMe(remember -> remember
+                        .key("uniqueAndSecretKey") // Khóa bí mật để mã hóa token
+                        .tokenValiditySeconds(604800) // 7 ngày
+                        .rememberMeParameter("rememberMe") // Tham số trong request
+                        .rememberMeCookieName("remember-me") // Tên cookie
+                        .tokenRepository(persistentTokenRepository()) // Repository cho bảng persistent_logins
+                        .userDetailsService(userDetailsService)
+                        .useSecureCookie(true) // Chỉ gửi cookie qua HTTPS trong production
+                )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                         .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)
                         .maximumSessions(1)
                         .sessionRegistry(sessionRegistry)
                         .expiredUrl("/hocho/login?expired")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .deleteCookies("JSESSIONID", "remember-me") // Xóa cookie khi logout
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpStatus.OK.value());
+                            response.getWriter().write("Đăng xuất thành công.");
+                        })
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
@@ -83,7 +109,15 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // others
+    // Bean cho PersistentTokenRepository
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+        return tokenRepository;
+    }
+
+    // Others
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
