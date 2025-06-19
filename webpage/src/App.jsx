@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Verify from './pages/Verify';
 import VerifyChild from './pages/VerifyChild';
 import Welcome from './pages/Welcome';
@@ -61,29 +61,33 @@ import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
 
 
 const App = () => {
-    return (
-        <Router>
+    return (<Router>
+            <link href="https://cdn..net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
             <Routes>
+                <Route path="" element={<Home/>}/>
+
                 // new
-                <Route path="hocho/login" element={<Auth />} />
-                <Route path="hocho/home" element={<Home />} />
-                <Route path="hocho/forgot-password" element={<ForgotPassword />} />
-                <Route path="hocho/reset-password" element={<ResetPassword />} />
-                <Route path="hocho/profile" element={<Profile />} />
+                <Route path="hocho/login" element={<Auth/>}/>
+                <Route path="hocho/home" element={<Home/>}/>
+                <Route path="hocho/forgot-password" element={<ForgotPassword/>}/>
+                <Route path="hocho/reset-password" element={<ResetPassword/>}/>
+                <Route path="hocho/profile" element={<Profile/>}/>
 
                 // old
-                <Route path="hocho/verify" element={<Verify />} />
-                <Route path="hocho/verify-child" element={<VerifyChild />} />
-                <Route path="hocho/welcome" element={<Welcome />} />
-                <Route path="hocho/dashboard" element={<Dashboard />} />
-                <Route path="hocho/" element={<Auth />} />
+                <Route path="hocho/verify" element={<Verify/>}/>
+                <Route path="hocho/verify-child" element={<VerifyChild/>}/>
+                <Route path="hocho/welcome" element={<Welcome/>}/>
+                <Route path="hocho/dashboard" element={<Dashboard/>}/>
+                <Route path="hocho/" element={<Auth/>}/>
 
                 {/* Tutor Routes */}
-                <Route path="hocho/tutors/admin" element={<AdminTutorList/>}/>             {/* Trang quản lý thông tin gia sư */}
-                <Route path="hocho/tutors" element={<PublicTutorList/>}/>                  {/* Trang thông tin gia sư */}
-                <Route path="hocho/tutors/profile/:userId" element={<TutorProfile/>}/>     {/* Trang xem chi tiết thông tin gia sư */}
-                <Route path="hocho/tutors/form" element={<TutorForm/>}/>                   {/* Trang đăng ký form thông tin gia sư */}
-                <Route path="hocho/tutors/form/:userId" element={<TutorForm/>}/>           {/* Trang chỉnh sửa thông tin gia sư */}
+                <Route path="hocho/tutors/admin" element={<AdminTutorList/>}/> {/* Trang quản lý thông tin gia sư */}
+                <Route path="hocho/tutors" element={<PublicTutorList/>}/> {/* Trang thông tin gia sư */}
+                <Route path="hocho/tutors/profile/:userId"
+                       element={<TutorProfile/>}/> {/* Trang xem chi tiết thông tin gia sư */}
+                <Route path="hocho/tutors/form" element={<TutorForm/>}/> {/* Trang đăng ký form thông tin gia sư */}
+                <Route path="hocho/tutors/form/:userId"
+                       element={<TutorForm/>}/> {/* Trang chỉnh sửa thông tin gia sư */}
 
                 {/* Shooping Cart Routes */}
                 <Route path="/hocho/child/cart" element={<ChildCart/>}/> {/* Trang giỏ hàng của trẻ em */}
@@ -93,8 +97,8 @@ const App = () => {
                 <Route path="/hocho/questions/new" element={<QuestionForm/>}/> {/* Trang tạo câu hỏi dành cho trẻ em */}
                 <Route path="/hocho/questions" element={<QuestionList/>}/> {/* Trang diễn đàn câu hỏi */}
                 <Route path="/hocho/questions/:id/edit" element={<QuestionEdit/>}/> {/* Trang chỉnh sửa câu hỏi  */}
-                <Route path="/hocho/questions/:id/answer" element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
-
+                <Route path="/hocho/questions/:id/answer"
+                       element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
 
                 {/* Course Routes */}
                 <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
@@ -102,7 +106,8 @@ const App = () => {
                 <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
 
                 {/* Payment Routes - Tương ứng với API của project thanh toán */}
-                <Route path="/hocho/payment/history" element={<PaymentHistoryPage/>}/> {/* Hiển thị lịch sử thanh toán */}
+                <Route path="/hocho/payment/history"
+                       element={<PaymentHistoryPage/>}/> {/* Hiển thị lịch sử thanh toán */}
                 <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn/>}/>
 
                 {/* Lesson Routes */}
@@ -112,27 +117,36 @@ const App = () => {
                 <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<EditLessonPage/>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add" element={<AddLessonContentPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add"
+                       element={<AddLessonContentPage/>}/>
 
                 {/* Video Routes */}
                 <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em */}
-                <Route path="/hocho/teacher/video" element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên */}
+                <Route path="/hocho/teacher/video"
+                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên */}
                 <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới */}
-                <Route path="/hocho/teacher/video/edit/:videoId" element={<EditVideoPage/>}/> {/* Trang chỉnh sửa video */}
-                <Route path="/hocho/admin/video/approval" element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin */}
-                <Route path="/video/:videoId" element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video) */}
+                <Route path="/hocho/teacher/video/edit/:videoId"
+                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa video */}
+                <Route path="/hocho/admin/video/approval"
+                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin */}
+                <Route path="/hocho/video/:videoId"
+                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video) */}
 
                 {/* Quiz Routes */}
                 <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
                 <Route path="/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
-                <Route path="/quizzes/:id" element={<QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
+                <Route path="/quizzes/:id" element={
+                    <QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
                 <Route path="/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
-                <Route path="/quizzes/:id/edit" element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
-                <Route path="/quizzes/:id/result" element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
-                <Route path="/quizzes/:id/review" element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
+                <Route path="/quizzes/:id/edit"
+                       element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
+                <Route path="/quizzes/:id/result"
+                       element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
+                <Route path="/quizzes/:id/review"
+                       element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
             </Routes>
-        </Router>
-    );
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        </Router>);
 };
 
 export default App;

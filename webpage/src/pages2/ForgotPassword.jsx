@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import styles from '../styles/Auth.module.css';
 
 function ForgotPassword() {
@@ -12,11 +12,9 @@ function ForgotPassword() {
         setMessage('Sending ...');
         try {
             const response = await fetch('http://localhost:8080/api/auth/forgot-password', {
-                method: 'POST',
-                headers: {
+                method: 'POST', headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email }),
+                }, body: JSON.stringify({email}),
             });
 
             if (response.ok) {
@@ -31,44 +29,46 @@ function ForgotPassword() {
         }
     };
 
-    return (
-        <div className={styles.body}>
-            <div className={styles.formContainer}>
-                <div className={styles.formHeader}>
-                    <h4>Forgot Password 🔒</h4>
-                    <p>Enter your email and we will send instructions to reset your password</p>
-                    {message && (
-                            <div className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
-                            {message}
-                        </div>
-                    )}
-                </div>
-                <form onSubmit={handleSubmit} noValidate autoComplete="off" className={styles.form}>
-                    <div className={styles.formGroup}>
-                        <div className={styles.inputContainer}>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                            <label htmlFor="email">Email</label>
-                            <span className={styles.notch}></span>
-                        </div>
+    return (<>
+            <a href='/hocho/home'>
+                <img src='/Logo1.png' alt='Logo' width={80} height={80} className={styles.logo}/>
+            </a>
+            <div className={styles.body}>
+                <div className={styles.formContainer}>
+                    <div className={styles.formHeader}>
+                        <h4>Forgot Password 🔒</h4>
+                        <p>Enter your email and we will send instructions to reset your password</p>
+                        {message && (<div
+                                className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
+                                {message}
+                            </div>)}
                     </div>
-                    <button type="submit" className={styles.submitBtn}>Send reset link</button>
-                    <p className={styles.backLink}>
-                        <a href="/hocho/login" className={styles.linkFlex}>
-                            <i className="ri-arrow-left-s-line"></i>
-                            <span>Return to Login</span>
-                        </a>
-                    </p>
-                </form>
+                    <form onSubmit={handleSubmit} noValidate autoComplete="off" className={styles.form}>
+                        <div className={styles.formGroup}>
+                            <div className={styles.inputContainer}>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="email">Email</label>
+                                <span className={styles.notch}></span>
+                            </div>
+                        </div>
+                        <button type="submit" className={styles.submitBtn}>Send reset link</button>
+                        <p className={styles.backLink}>
+                            <a href="/hocho/login" className={styles.linkFlex}>
+                                <i className="ri-arrow-left-s-line"></i>
+                                <span>Return to Login</span>
+                            </a>
+                        </p>
+                    </form>
+                </div>
             </div>
-        </div>
-    );
+        </>);
 }
 
 export default ForgotPassword;

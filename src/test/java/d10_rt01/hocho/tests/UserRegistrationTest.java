@@ -37,12 +37,11 @@ public class UserRegistrationTest {
     void testRegisterParent_Success() throws Exception {
         // Prepare request data
         RegisterRequest request = new RegisterRequest();
-        request.setUsername("admin");
+        request.setUsername("eser");
         request.setPassword("123");
         request.setRetypePassword("123");
-        request.setEmail("chonphuoc123@gmail.com");
+        request.setEmail("chontem12@gmail.com");
         request.setRole("admin");
-
         // Perform POST request
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -12,8 +12,10 @@ body {
 
 .body {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .container {
@@ -48,6 +50,7 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     position: relative;
+    align-items: center;
     margin: 16px;
 }
 

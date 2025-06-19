@@ -40,7 +40,9 @@
     font-size: 60px;
     font-weight: 500;
     color: #eff5f6;
+    margin-bottom: 20px;
 }
+
 
 .breadcrumbItems {
     display: flex;
@@ -55,6 +57,12 @@
 .breadcrumbItems li a {
     color: #fafafa;
     text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
 }
 
 .gridContainer {
@@ -90,11 +98,11 @@
     object-fit: cover;
 }
 
-.userInfo i {
+.userInfo .verifyIcon {
     position: absolute;
     top: 120px;
-    right: 150px;
-    font-size: 24px;
+    left: 120px;
+    font-size: 28px;
     cursor: pointer;
     color: #1890ff;
 }
@@ -156,7 +164,7 @@
     transform: scale(1.05);
 }
 
-.uploadBox i {
+.uploadBox .IconUpload {
     font-size: 24px;
     margin-bottom: 10px;
     font-weight: 500;
@@ -164,7 +172,7 @@
     transition: color 0.3s ease;
 }
 
-.uploadBox:hover i {
+.uploadBox:hover .IconUpload {
     color: var(--primary-color);
 }
 

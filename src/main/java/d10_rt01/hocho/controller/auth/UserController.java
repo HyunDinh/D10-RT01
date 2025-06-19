@@ -4,21 +4,21 @@ import d10_rt01.hocho.config.HochoConfig;
 import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/hocho")
@@ -48,11 +48,24 @@ public class UserController {
     }
 
     @PutMapping("/profile")
-    public ResponseEntity<User> updateProfile(Authentication authentication, @RequestBody User updatedUser) {
+    public ResponseEntity<User> updateProfile(Authentication authentication, @RequestBody Map<String, String> request) {
         String username = authentication.getName();
-        User updated = new User();
-        // TODO : ...
-        return ResponseEntity.ok(updated);
+        String fullName = request.get("fullName");
+        String dateOfBirth = request.get("dateOfBirth");
+
+        // Optional: Validate input
+        if (fullName == null && dateOfBirth == null) {
+            throw new IllegalArgumentException("At least one field (fullName or dateOfBirth) must be provided.");
+        }
+        try {
+            // Call UserService to update profile
+            User updated = userService.updateUserProfile(username, fullName, dateOfBirth, null); // phoneNumber is null as it's not sent from frontend
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            throw e; // Will be caught by global exception handler
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update profile: " + e.getMessage());
+        }
     }
 
     @PutMapping("/profile/password")
@@ -99,10 +112,7 @@ public class UserController {
     @GetMapping("/role")
     public Map<String, String> getRole(Authentication authentication) {
         Map<String, String> response = new HashMap<>();
-        String role = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse("");
+        String role = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElse("");
         response.put("role", role);
         return response;
     }
@@ -119,12 +129,7 @@ public class UserController {
 
         MediaType mediaType = filename.toLowerCase().endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
-                .header(HttpHeaders.PRAGMA, "no-cache")
-                .header(HttpHeaders.EXPIRES, "0")
-                .contentType(mediaType)
-                .body(resource);
+        return ResponseEntity.ok().header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate").header(HttpHeaders.PRAGMA, "no-cache").header(HttpHeaders.EXPIRES, "0").contentType(mediaType).body(resource);
     }
 
 }
