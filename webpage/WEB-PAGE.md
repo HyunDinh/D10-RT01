@@ -4,7 +4,6 @@
 
 ### `npm run dev`
 
-
 ## — CREATE THE REACT PROJECT
 
 ### `npm create vite@latest webpage --template react .`

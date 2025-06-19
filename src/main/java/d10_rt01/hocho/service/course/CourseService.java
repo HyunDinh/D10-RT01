@@ -2,6 +2,7 @@ package d10_rt01.hocho.service.course;
 
 import d10_rt01.hocho.model.Course;
 import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.model.enums.CourseStatus;
 import d10_rt01.hocho.repository.CourseRepository;
 import d10_rt01.hocho.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -60,4 +61,24 @@ public class CourseService {
             throw new RuntimeException("Course not found");
         }
     }
+    public List<Course> getAllPendingCourse() { // moi them boi LTDat
+        CourseStatus status = CourseStatus.PENDING;
+        List<Course> courseList = courseRepository.findByStatus(status);
+        return courseList;
+    }
+
+    @Transactional
+    public void rejectCourse(Long courseId) { // moi them boi LTDat
+        Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
+        course.setStatus(CourseStatus.REJECTED);
+        courseRepository.save(course);
+    }
+
+    @Transactional
+    public void approveCourse(Long courseId) { // moi them boi LTDat
+        Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
+        course.setStatus(CourseStatus.APPROVED);
+        courseRepository.save(course);
+    }
 }
+
