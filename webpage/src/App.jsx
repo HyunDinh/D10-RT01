@@ -10,7 +10,7 @@ import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
 
-// tutor routs
+// tutor routes
 import TutorProfile from './pages2/tutor/TutorProfile';
 import TutorForm from './pages2/tutor/TutorForm';
 import AdminTutorList from './pages2/tutor/AdminTutorList';
@@ -58,6 +58,8 @@ import QuizEdit from './pages2/quiz/QuizEdit';
 import QuizForm from './pages2/quiz/QuizForm';
 import QuizReview from './pages2/quiz/QuizReview';
 import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
+import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage.jsx";
+import PublicCoursePage from "./pages2/course/PublicCoursePage.jsx";
 
 
 const App = () => {
@@ -101,6 +103,7 @@ const App = () => {
                        element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
 
                 {/* Course Routes */}
+                <Route path="/hocho/course" element={<PublicCoursePage/>}/>
                 <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
                 <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
                 <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
@@ -144,6 +147,11 @@ const App = () => {
                        element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
                 <Route path="/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
+
+                {/* Time Restriction Routes */}
+                <Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>
+
+                {/* Admin Routes */}
             </Routes>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </Router>);
