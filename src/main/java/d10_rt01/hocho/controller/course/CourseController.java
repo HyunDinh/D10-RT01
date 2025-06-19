@@ -27,13 +27,12 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
-    // Retrieves all courses for the authenticated teacher
-//    @GetMapping
-//    public ResponseEntity<List<Course>> getCourses(Principal principal) {
-//        Long teacherId = teacherService.findTeacherIdByUsername(principal.getName());
-//        List<Course> courses = courseService.getCourseByTeacherId(teacherId);
-//        return ResponseEntity.ok(courses);
-//    }
+    // Retrieves all courses publicly
+    @GetMapping
+    public ResponseEntity<List<Course>> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        return ResponseEntity.ok(courses);
+    }
 
     @GetMapping("/by-age")
     public ResponseEntity<List<Course>> getCoursesByUserAge(@RequestParam int age) {
