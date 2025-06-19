@@ -1,5 +1,5 @@
 package d10_rt01.hocho.model;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import d10_rt01.hocho.model.enums.AgeGroup;
 import d10_rt01.hocho.model.enums.CourseStatus;
 import jakarta.persistence.*;
@@ -27,6 +27,7 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;
 
+    @JsonProperty("age_group")
     @Column(name = "age_group", nullable = false)
     @Enumerated(EnumType.STRING)
     private AgeGroup ageGroup;

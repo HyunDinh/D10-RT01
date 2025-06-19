@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom'; // Thêm useLocation
 import axios from 'axios';
 import styles from '../styles/Header.module.css';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faAngleDown, faArrowRightLong, faBars, faMapMarkerAlt, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
@@ -15,6 +15,7 @@ function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation(); // Lấy đường dẫn hiện tại
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -26,19 +27,20 @@ function Header() {
                 const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', {withCredentials: true});
                 const userRole = roleResponse.data?.role || localStorage.getItem('userRole') || null;
                 setRole(userRole);
-                localStorage.setItem('userRole', userRole); // Lưu role vào localStorage
-                console.log('User role:', userRole); // Debug role
+                localStorage.setItem('userRole', userRole);
+                console.log('User role:', userRole);
             } catch (err) {
                 setIsLoggedIn(false);
                 setRole(null);
                 console.error('Error checking login status:', err);
-                if (err.response?.status === 401) {
+                // Chỉ chuyển hướng nếu không ở trang công khai
+                if (err.response?.status === 401 && location.pathname !== '/hocho/home') {
                     navigate('/hocho/login');
                 }
             }
         };
         fetchUserData();
-    }, [navigate, refreshKey]);
+    }, [navigate, refreshKey, location.pathname]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -55,7 +57,7 @@ function Header() {
                 setIsLoggedIn(false);
                 setRole(null);
                 setUser({});
-                localStorage.removeItem('userRole'); // Xóa role khỏi localStorage
+                localStorage.removeItem('userRole');
                 navigate('/hocho/home');
             })
             .catch((err) => {
@@ -63,13 +65,12 @@ function Header() {
                 navigate('/hocho/home');
             });
     };
-
     const getAvatarUrl = () => {
         const baseUrl = 'http://localhost:8080';
         if (!isLoggedIn || !user.avatarUrl || user.avatarUrl === 'none') {
-            return `${baseUrl}/profile/default.png?t=${new Date().getTime()}`;
+            return `${baseUrl}/api/hocho/profile/default.png?t=${new Date().getTime()}`;
         }
-        return `${baseUrl}/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
+        return `${baseUrl}/api/hocho/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
     const toggleMobileMenu = () => {
@@ -94,7 +95,6 @@ function Header() {
             ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}],
         };
 
-        // Kiểm tra nếu menuItems[role] không tồn tại
         if (!menuItems[role]) {
             console.warn(`Role không hợp lệ: ${role}`);
             return <ul className={styles.navAdmin}>
@@ -137,18 +137,10 @@ function Header() {
                         </ul>
                         <div className={styles.socialIcon}>
                             <span>Follow Us On:</span>
-                            <a href="/">
-                                <FontAwesomeIcon icon={faFacebookF} className={styles.socialIconLink}/>
-                            </a>
-                            <a href="/">
-                                <FontAwesomeIcon icon={faTwitter} className={styles.socialIconLink}/>
-                            </a>
-                            <a href="/">
-                                <FontAwesomeIcon icon={faLinkedinIn} className={styles.socialIconLink}/>
-                            </a>
-                            <a href="/">
-                                <FontAwesomeIcon icon={faYoutube} className={styles.socialIconLink}/>
-                            </a>
+                            <a href="/"><FontAwesomeIcon icon={faFacebookF} className={styles.socialIconLink}/></a>
+                            <a href="/"><FontAwesomeIcon icon={faTwitter} className={styles.socialIconLink}/></a>
+                            <a href="/"><FontAwesomeIcon icon={faLinkedinIn} className={styles.socialIconLink}/></a>
+                            <a href="/"><FontAwesomeIcon icon={faYoutube} className={styles.socialIconLink}/></a>
                         </div>
                     </div>
                 </div>
@@ -159,45 +151,35 @@ function Header() {
             <div className={styles.containerFluid}>
                 <div className={styles.headerMain}>
                     <div className={styles.headerLeft}>
-                        <a href="/hocho/home">
-                            <img alt="Logo" width="100" height="100" src="/logo.png"/>
-                        </a>
+                        <a href="/hocho/home"><img alt="Logo" width="100" height="100" src="/logo.png"/></a>
                     </div>
                     <div className={styles.headerRight}>
-                        <button
-                            className={`${styles.sidebarToggle} ${styles.dXlNone}`}
-                            onClick={toggleMobileMenu}
-                        >
+                        <button className={`${styles.sidebarToggle} ${styles.dXlNone}`} onClick={toggleMobileMenu}>
                             <FontAwesomeIcon icon={faBars}/>
                         </button>
-                        <nav
-                            id="mobile-menu"
-                            className={`${styles.mainMenu} ${isMobileMenuActive ? styles.active : ''} ${styles.dXlBlock}`}
-                        >
+                        <nav id="mobile-menu"
+                             className={`${styles.mainMenu} ${isMobileMenuActive ? styles.active : ''} ${styles.dXlBlock}`}>
                             <ul>
-                                <li className={`${styles.hasDropdown} ${styles.active} `}>
+                                <li className={`${styles.hasDropdown} ${styles.active}`}>
                                     <a href="/hocho/home">Home</a>
                                 </li>
                                 <li><a href="/about">About Us</a></li>
                                 <li className={styles.hasDropdown}>
-                                    <a href="/news">
-                                        Courses <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
-                                    </a>
+                                    <a href="/news">Courses <FontAwesomeIcon icon={faAngleDown}
+                                                                             className={styles.mainMenuIcon}/></a>
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
-                                            <a href="/event-details">
-                                                Subject <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
-                                            </a>
+                                            <a href="/hocho/teacher/course">Subject <FontAwesomeIcon icon={faAngleDown}
+                                                                                              className={styles.mainMenuIcon}/></a>
                                             <ul className={styles.submenu}>
-                                                <li><a href="/event">Event Grid</a></li>
+                                                <li><a href="/hocho/teacher/course">Course</a></li>
                                                 <li><a href="/event-carousel">Event Carousel</a></li>
                                                 <li><a href="/event-details">Event Details</a></li>
                                             </ul>
                                         </li>
                                         <li className={styles.hasDropdown}>
-                                            <a href="/team-details">
-                                                Teacher <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
-                                            </a>
+                                            <a href="/team-details">Teacher <FontAwesomeIcon icon={faAngleDown}
+                                                                                             className={styles.mainMenuIcon}/></a>
                                             <ul className={styles.submenu}>
                                                 <li><a href="/team">Our Teacher</a></li>
                                                 <li><a href="/team-carousel">Teacher Carousel</a></li>
@@ -207,9 +189,8 @@ function Header() {
                                     </ul>
                                 </li>
                                 <li className={styles.hasDropdown}>
-                                    <a href="/news">
-                                        Entertainment <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
-                                    </a>
+                                    <a href="/news">Entertainment <FontAwesomeIcon icon={faAngleDown}
+                                                                                   className={styles.mainMenuIcon}/></a>
                                     <ul className={styles.submenu}>
                                         <li><a href="/hocho/video">Video</a></li>
                                         <li><a href="#">Games</a></li>
@@ -224,9 +205,7 @@ function Header() {
                         </button>
                         {!isLoggedIn ? (<div className={styles.headerButton}>
                             <a className={styles.themeBtn} href="/hocho/login">
-                    <span>
-                      Login <FontAwesomeIcon icon={faArrowRightLong}/>
-                    </span>
+                                <span>Login <FontAwesomeIcon icon={faArrowRightLong}/></span>
                             </a>
                         </div>) : (<div className={styles.userProfile}>
                             <div className={styles.avatarContainer}>
@@ -241,11 +220,7 @@ function Header() {
                                 <ul className={styles.profileDropdown}>
                                     <li><a href="/hocho/profile">Profile</a></li>
                                     <li><a href="#">Cart</a></li>
-                                    <li>
-                                        <a className={styles.logoutLink} onClick={handleLogout}>
-                                            Logout
-                                        </a>
-                                    </li>
+                                    <li><a className={styles.logoutLink} onClick={handleLogout}>Logout</a></li>
                                 </ul>
                             </div>
                         </div>)}

@@ -2,6 +2,7 @@ package d10_rt01.hocho.tests;
 
 import d10_rt01.hocho.repository.ParentChildMappingRepository;
 import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.repository.VideoRepository;
 import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.testExtension.TestTerminalUI;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,10 +19,12 @@ public class DatabaseTest {
 
     private static final boolean CLEAR_DATABASE = true;
 
-
     // VARIABLES
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private VideoRepository videoRepository;
 
     @Autowired
     private ParentChildMappingRepository parentChildMappingRepository;
@@ -33,6 +36,7 @@ public class DatabaseTest {
     @BeforeEach
     public void setUp() {
         if (CLEAR_DATABASE){
+            videoRepository.deleteAll();
             parentChildMappingRepository.deleteAll();
             userRepository.deleteAll();
         }
