@@ -158,7 +158,7 @@ function Profile() {
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>About Us</li>
+                    <li>Profile</li>
                 </ul>
             </div>
         </section>
