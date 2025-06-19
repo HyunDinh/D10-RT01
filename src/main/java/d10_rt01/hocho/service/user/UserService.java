@@ -60,7 +60,7 @@ public class UserService {
         }
 
         // Kiểm tra username tồn tại
-        if (userRepository.findByUsername(username) != null) {
+        if (userRepository.findByUsername(username).isPresent()) {
             logger.error("Tài khoản đã tồn tại: username={}", username);
             throw new IllegalArgumentException("Tài khoản đã tồn tại.");
         }
@@ -114,6 +114,7 @@ public class UserService {
                 } else {
                     savedUser.setVerified(true);
                     savedUser.setIsActive(true);
+                    userRepository.save(user);
                 }
             } else if (role.equals("parent")) {
                 // Gửi email xác nhận cho parent
@@ -123,6 +124,7 @@ public class UserService {
                 } else {
                     savedUser.setVerified(true);
                     savedUser.setIsActive(true);
+                    userRepository.save(user);
                 }
             } else {
                 // Cho teacher: không cần email xác nhận, kích hoạt ngay

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styles from '../styles/Profile.module.css';
 import Header from '../components/Header';
 
@@ -25,7 +25,7 @@ function Profile() {
 
     const fetchProfileData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
+            const response = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
             setUser(response.data);
             setEditedFullName(response.data.fullName || '');
             setEditedDateOfBirth(response.data.dateOfBirth ? response.data.dateOfBirth.split('T')[0] : '');
@@ -47,8 +47,8 @@ function Profile() {
         axios
             .put(
                 'http://localhost:8080/api/hocho/profile',
-                { fullName: editedFullName, dateOfBirth: editedDateOfBirth },
-                { withCredentials: true }
+                {fullName: editedFullName, dateOfBirth: editedDateOfBirth},
+                {withCredentials: true}
             )
             .then((response) => {
                 setUser(response.data);
@@ -90,8 +90,8 @@ function Profile() {
         axios
             .put(
                 'http://localhost:8080/api/hocho/profile/password',
-                { oldPassword, newPassword, confirmPassword },
-                { withCredentials: true }
+                {oldPassword, newPassword, confirmPassword},
+                {withCredentials: true}
             )
             .then(() => {
                 setShowPasswordModal(false);
@@ -116,7 +116,7 @@ function Profile() {
             try {
                 const response = await axios.post('http://localhost:8080/api/hocho/profile/upload', formData, {
                     withCredentials: true,
-                    headers: { 'Content-Type': 'multipart/form-data' },
+                    headers: {'Content-Type': 'multipart/form-data'},
                 });
                 console.log('Upload response:', response.data);
                 setRefreshKey((prevKey) => prevKey + 1);
@@ -144,11 +144,12 @@ function Profile() {
 
     return (
         <>
-            <Header />
-            <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
+            <Header/>
+            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
                     <p>My Profile</p>
-                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
+                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+                        data-aos-delay="500">
                         <li>
                             <a href="/hocho/home">Home</a>
                         </li>
@@ -183,7 +184,7 @@ function Profile() {
                             <input
                                 type="file"
                                 ref={fileInputRef}
-                                style={{ display: 'none' }}
+                                style={{display: 'none'}}
                                 accept="image/png,image/jpeg,image/jpg"
                                 onChange={handleFileChange}
                             />
@@ -234,7 +235,7 @@ function Profile() {
                   <textarea
                       id="description"
                       name="description"
-                      placeholder="Enter your description"
+                      placeholder=""
                       disabled={!isEditing}
                       required
                   />
@@ -397,10 +398,10 @@ function Profile() {
                                     />
                                 </div>
                             </div>
-                            <div className={styles.formRow} style={{ justifyContent: 'flex-end' }}>
+                            <div className={styles.formRow} style={{justifyContent: 'flex-end'}}>
                                 <button
                                     className={styles.buttonSave}
-                                    style={{ width: '15%', padding: '10px 20px' }}
+                                    style={{width: '15%', padding: '10px 20px'}}
                                     onClick={isEditing ? handleSave : handleEdit}
                                 >
                                     Save all
