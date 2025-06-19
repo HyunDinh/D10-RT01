@@ -7,10 +7,7 @@ import d10_rt01.hocho.service.course.CourseService;
 import d10_rt01.hocho.service.course.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -56,5 +53,24 @@ public class CourseController {
         } else {
             return "AGE_13_15";
         }
+    }
+
+    @PostMapping("/{id}/approve") // moi them boi LTD
+    public ResponseEntity<?> approveCourse(@PathVariable Long id) {
+        courseService.approveCourse(id);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PostMapping("/{id}/reject") // moi them boi LTD
+    public ResponseEntity<?> rejectCourse(@PathVariable Long id) {
+        courseService.rejectCourse(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/pending") // moi them boi LTD
+    public ResponseEntity<List<Course>>getPendingCourse() {
+        System.out.println(courseService.getAllPendingCourse().get(0).getAgeGroup() + "-----------------------------");
+        return ResponseEntity.ok(courseService.getAllPendingCourse());
     }
 }

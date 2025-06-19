@@ -1,6 +1,8 @@
 package d10_rt01.hocho.repository;
 
 import d10_rt01.hocho.model.Course;
+import d10_rt01.hocho.model.enums.AgeGroup;
+import d10_rt01.hocho.model.enums.CourseStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,4 +16,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     List<Course> findCoursesByTeacherId(Long teacherId);
 
     List<Course> findByAgeGroup(String ageGroup);
+
+    List<Course> findByStatus(CourseStatus status);
 } 

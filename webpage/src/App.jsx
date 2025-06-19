@@ -58,8 +58,6 @@ import QuizEdit from './pages2/quiz/QuizEdit';
 import QuizForm from './pages2/quiz/QuizForm';
 import QuizReview from './pages2/quiz/QuizReview';
 import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
-import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage.jsx";
-import PublicCoursePage from "./pages2/course/PublicCoursePage.jsx";
 
 
 const App = () => {
@@ -107,6 +105,7 @@ const App = () => {
                 <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
                 <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
                 <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
+                <Route path="/hocho/admin/course/approval"  element={<CourseApproval />} /> {/* Trang admin approve khoá học  */}
 
                 {/* Payment Routes - Tương ứng với API của project thanh toán */}
                 <Route path="/hocho/payment/history"
@@ -148,10 +147,6 @@ const App = () => {
                 <Route path="/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
 
-                {/* Time Restriction Routes */}
-                <Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>
-
-                {/* Admin Routes */}
             </Routes>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </Router>);
