@@ -5,8 +5,10 @@
     box-sizing: border-box;
     font-family: 'Source Sans 3', sans-serif;
     background-color: #f4f5fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
 }
+body{
+    background-color: #f4f5fa;
+    width: 100%;
+}
+

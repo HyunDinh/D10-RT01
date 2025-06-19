@@ -1,14 +1,16 @@
 /* Scoped styles for the Footer component */
 .footer {
     background-color: #f4eee5;
-    margin: 0 100px;
-    bottom: 0;
     font-family: Arial, sans-serif;
     position: relative;
 }
 
 .container {
-    padding: 70px 0 40px 0;
+    padding: 60px 100px;
+}
+
+.containerfluid {
+    padding: 60px 0;
 }
 
 .footerContactInfo {
@@ -185,6 +187,7 @@
     height: 36px;
     color: #385469;
     text-decoration: none;
+    border-radius: 50%;
     transition: all 0.4s ease-in-out;
     text-align: center;
     background-color: transparent;
@@ -192,10 +195,11 @@
 }
 
 .socialLinks a:hover {
-    background-color: #0056b3;
+    background-color: #f39f5f;
+    color: #fafafa;
 }
 
-.socialLinks i {
+.socialLinks .socialLinksIcon {
     font-size: 16px;
 }
 
@@ -304,15 +308,15 @@
 
 .footerTop {
     position: absolute;
-    top: 52%;
-    left: -7%;
+    top: 56%;
+    left: 1%;
     animation: rounded 5s linear infinite;
 }
 
 .zebra {
     position: absolute;
-    top: 20%;
-    right: -9%;
+    top: 35%;
+    right: 0;
     animation: rounded 5s linear infinite;
 }
 

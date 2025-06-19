@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import styles from '../styles/Header.module.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faAngleDown, faArrowRightLong, faBars, faMapMarkerAlt, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
+import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
 
 function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,11 +19,11 @@ function Header() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
+                const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
                 setUser(profileResponse.data);
                 setIsLoggedIn(true);
 
-                const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', { withCredentials: true });
+                const roleResponse = await axios.get('http://localhost:8080/api/hocho/role', {withCredentials: true});
                 const userRole = roleResponse.data?.role || localStorage.getItem('userRole') || null;
                 setRole(userRole);
                 localStorage.setItem('userRole', userRole); // Lưu role vào localStorage
@@ -46,7 +50,7 @@ function Header() {
 
     const handleLogout = () => {
         axios
-            .post('http://localhost:8080/api/auth/logout', {}, { withCredentials: true, maxRedirects: 0 })
+            .post('http://localhost:8080/api/auth/logout', {}, {withCredentials: true, maxRedirects: 0})
             .then(() => {
                 setIsLoggedIn(false);
                 setRole(null);
@@ -76,188 +80,180 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [
-                { path: '/hocho/clients', name: 'Quản lý tài khoản' },
-                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
-                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
-                { path: '/hocho/video', name: 'Quản lý video' },
-                { path: '/hocho/questions', name: 'Forum' },
-            ],
-            ROLE_TEACHER: [
-                { path: '/hocho/teacher', name: 'Quản lý khóa học' },
-                { path: '/hocho/dashboard', name: 'Giải trí & Nội dung' },
-                { path: '/hocho/questions', name: 'Forum' },
-            ],
-            ROLE_PARENT: [
-                { path: '/hocho/parent', name: 'Thông tin Phụ huynh' },
-                { path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch' },
-                { path: '/hocho/questions', name: 'Forum' },
-            ],
-            ROLE_CHILD: [{ path: '/hocho/questions', name: 'Forum' }],
+            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'}, {
+                path: '/hocho/teacher', name: 'Quản lý khóa học'
+            }, {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'}, {
+                path: '/hocho/video', name: 'Quản lý video'
+            }, {path: '/hocho/questions', name: 'Forum'},],
+            ROLE_TEACHER: [{path: '/hocho/teacher', name: 'Quản lý khóa học'}, {
+                path: '/hocho/dashboard', name: 'Giải trí & Nội dung'
+            }, {path: '/hocho/questions', name: 'Forum'},],
+            ROLE_PARENT: [{path: '/hocho/parent', name: 'Thông tin Phụ huynh'}, {
+                path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'
+            }, {path: '/hocho/questions', name: 'Forum'},],
+            ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}],
         };
 
         // Kiểm tra nếu menuItems[role] không tồn tại
         if (!menuItems[role]) {
             console.warn(`Role không hợp lệ: ${role}`);
-            return <ul className={styles.navAdmin}><li>Không có menu cho vai trò này</li></ul>;
+            return <ul className={styles.navAdmin}>
+                <li>Không có menu cho vai trò này</li>
+            </ul>;
         }
 
-        return (
-            <ul className={styles.navAdmin}>
-                {menuItems[role].map((item, index) => (
-                    <li className={styles.navItem} key={index}>
-                        <Link className={styles.navLink} to={item.path}>
-                            {item.name}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        );
+        return (<ul className={styles.navAdmin}>
+            {menuItems[role].map((item, index) => (<li className={styles.navItem} key={index}>
+                <Link className={styles.navLink} to={item.path}>
+                    {item.name}
+                </Link>
+            </li>))}
+        </ul>);
     };
 
-    return (
-        <>
-            <nav className={styles.navbar}>
-                <div className={styles.headerTop}>
-                    <div className={styles.headerTopBanner}>
-                        <img
-                            src="/headerTopShape.png"
-                            alt="Header Top Shape"
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
-                    </div>
-                    <div className={styles.headerTopContent}>
-                        <div className={styles.headerTopWrapper}>
-                            <ul className={styles.contactList}>
-                                <li>
-                                    <i className="fas fa-map-marker-alt"></i>
-                                    FPT University FUDA
-                                </li>
-                                <li>
-                                    <i className="far fa-envelope"></i>
-                                    <a className={styles.link} href="mailto:hocho@gmail.com">
-                                        hocho@gmail.com
-                                    </a>
-                                </li>
-                            </ul>
-                            <div className={styles.socialIcon}>
-                                <span>Follow Us On:</span>
-                                <a href="/"><i className="fab fa-facebook-f"></i></a>
-                                <a href="/"><i className="fab fa-twitter"></i></a>
-                                <a href="/"><i className="fa-brands fa-linkedin-in"></i></a>
-                                <a href="/"><i className="fa-brands fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
+    return (<>
+        <nav>
+            <div className={styles.headerTop}>
+                <div className={styles.headerTopBanner}>
+                    <img
+                        src="/headerTopShape.png"
+                        alt="Header Top Shape"
+                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                    />
                 </div>
-            </nav>
-
-            <header id="header-sticky" className={`${styles.header1} ${isScrolled ? styles.scrolled : ''}`}>
-                <div className={styles.containerFluid}>
-                    <div className={styles.megaMenuWrapper}>
-                        <div className={styles.headerMain}>
-                            <div className={styles.headerLeft}>
-                                <a href="/hocho/home">
-                                    <img alt="Logo" width="100" height="100" src="/logo.png" />
+                <div className={styles.headerTopContent}>
+                    <div className={styles.headerTopWrapper}>
+                        <ul className={styles.contactList}>
+                            <li>
+                                <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.contactListicon}/>
+                                FPT University FUDA
+                            </li>
+                            <li>
+                                <FontAwesomeIcon icon={faEnvelope} className={styles.contactListicon}/>
+                                <a className={styles.link} href="mailto:hocho@gmail.com">
+                                    hocho@gmail.com
                                 </a>
-                            </div>
-                            <div className={styles.headerRight}>
-                                <button
-                                    className={`${styles.sidebarToggle} ${styles.dXlNone}`}
-                                    onClick={toggleMobileMenu}
-                                >
-                                    <i className="fas fa-bars"></i>
-                                </button>
-                                <nav
-                                    id="mobile-menu"
-                                    className={`${styles.mainMenu} ${isMobileMenuActive ? styles.active : ''} ${styles.dXlBlock}`}
-                                >
-                                    <ul>
-                                        <li className={`${styles.hasDropdown} ${styles.active} ${styles.menuThumb}`}>
-                                            <a href="/hocho/home">Home</a>
-                                        </li>
-                                        <li><a href="/about">About Us</a></li>
-                                        <li className={styles.hasDropdown}>
-                                            <a href="/news">
-                                                Courses <i className="fas fa-angle-down"></i>
-                                            </a>
-                                            <ul className={styles.submenu}>
-                                                <li className={styles.hasDropdown}>
-                                                    <a href="/event-details">
-                                                        Subject <i className="fas fa-angle-down"></i>
-                                                    </a>
-                                                    <ul className={styles.submenu}>
-                                                        <li><a href="/event">Event Grid</a></li>
-                                                        <li><a href="/event-carousel">Event Carousel</a></li>
-                                                        <li><a href="/event-details">Event Details</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li className={styles.hasDropdown}>
-                                                    <a href="/team-details">
-                                                        Teacher <i className="fas fa-angle-down"></i>
-                                                    </a>
-                                                    <ul className={styles.submenu}>
-                                                        <li><a href="/team">Our Teacher</a></li>
-                                                        <li><a href="/team-carousel">Teacher Carousel</a></li>
-                                                        <li><a href="/team-details">Teacher Details</a></li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li className={styles.hasDropdown}>
-                                            <a href="/news">
-                                                Entertainment <i className="fas fa-angle-down"></i>
-                                            </a>
-                                            <ul className={styles.submenu}>
-                                                <li><a href="/hocho/video">Video</a></li>
-                                                <li><a href="#">Games</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/contact">Contact Us</a></li>
-                                        {renderMenu()}
-                                    </ul>
-                                </nav>
-                                <button className={`${styles.searchTrigger} ${styles.searchIcon}`}>
-                                    <i className="fas fa-search"></i>
-                                </button>
-                                {!isLoggedIn ? (
-                                    <div className={styles.headerButton}>
-                                        <a className={styles.themeBtn} href="/hocho/login">
-                                            <span>
-                                                Login <i className="fa-solid fa-arrow-right-long"></i>
-                                            </span>
-                                        </a>
-                                    </div>
-                                ) : (
-                                    <div className={styles.userProfile}>
-                                        <div className={styles.avatarContainer}>
-                                            <img
-                                                src={getAvatarUrl()}
-                                                alt="User Avatar"
-                                                className={styles.userAvatar}
-                                                onError={(e) => {
-                                                    e.target.src = `http://localhost:8080/profile/default.png?t=${new Date().getTime()}`;
-                                                }}
-                                            />
-                                            <ul className={styles.profileDropdown}>
-                                                <li><a href="/hocho/profile">Profile</a></li>
-                                                <li><a href="#">Cart</a></li>
-                                                <li>
-                                                    <a className={styles.logoutLink} onClick={handleLogout}>
-                                                        Logout
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
+                            </li>
+                        </ul>
+                        <div className={styles.socialIcon}>
+                            <span>Follow Us On:</span>
+                            <a href="/">
+                                <FontAwesomeIcon icon={faFacebookF} className={styles.socialIconLink}/>
+                            </a>
+                            <a href="/">
+                                <FontAwesomeIcon icon={faTwitter} className={styles.socialIconLink}/>
+                            </a>
+                            <a href="/">
+                                <FontAwesomeIcon icon={faLinkedinIn} className={styles.socialIconLink}/>
+                            </a>
+                            <a href="/">
+                                <FontAwesomeIcon icon={faYoutube} className={styles.socialIconLink}/>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </header>
-        </>
-    );
+            </div>
+        </nav>
+
+        <header id="header-sticky" className={`${styles.header1} ${isScrolled ? styles.scrolled : ''}`}>
+            <div className={styles.containerFluid}>
+                <div className={styles.headerMain}>
+                    <div className={styles.headerLeft}>
+                        <a href="/hocho/home">
+                            <img alt="Logo" width="100" height="100" src="/logo.png"/>
+                        </a>
+                    </div>
+                    <div className={styles.headerRight}>
+                        <button
+                            className={`${styles.sidebarToggle} ${styles.dXlNone}`}
+                            onClick={toggleMobileMenu}
+                        >
+                            <FontAwesomeIcon icon={faBars}/>
+                        </button>
+                        <nav
+                            id="mobile-menu"
+                            className={`${styles.mainMenu} ${isMobileMenuActive ? styles.active : ''} ${styles.dXlBlock}`}
+                        >
+                            <ul>
+                                <li className={`${styles.hasDropdown} ${styles.active} `}>
+                                    <a href="/hocho/home">Home</a>
+                                </li>
+                                <li><a href="/about">About Us</a></li>
+                                <li className={styles.hasDropdown}>
+                                    <a href="/news">
+                                        Courses <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
+                                    </a>
+                                    <ul className={styles.submenu}>
+                                        <li className={styles.hasDropdown}>
+                                            <a href="/event-details">
+                                                Subject <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
+                                            </a>
+                                            <ul className={styles.submenu}>
+                                                <li><a href="/event">Event Grid</a></li>
+                                                <li><a href="/event-carousel">Event Carousel</a></li>
+                                                <li><a href="/event-details">Event Details</a></li>
+                                            </ul>
+                                        </li>
+                                        <li className={styles.hasDropdown}>
+                                            <a href="/team-details">
+                                                Teacher <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
+                                            </a>
+                                            <ul className={styles.submenu}>
+                                                <li><a href="/team">Our Teacher</a></li>
+                                                <li><a href="/team-carousel">Teacher Carousel</a></li>
+                                                <li><a href="/team-details">Teacher Details</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li className={styles.hasDropdown}>
+                                    <a href="/news">
+                                        Entertainment <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon}/>
+                                    </a>
+                                    <ul className={styles.submenu}>
+                                        <li><a href="/hocho/video">Video</a></li>
+                                        <li><a href="#">Games</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="/contact">Contact Us</a></li>
+                                {renderMenu()}
+                            </ul>
+                        </nav>
+                        <button className={`${styles.searchTrigger} ${styles.searchIcon}`}>
+                            <FontAwesomeIcon icon={faSearch}/>
+                        </button>
+                        {!isLoggedIn ? (<div className={styles.headerButton}>
+                            <a className={styles.themeBtn} href="/hocho/login">
+                    <span>
+                      Login <FontAwesomeIcon icon={faArrowRightLong}/>
+                    </span>
+                            </a>
+                        </div>) : (<div className={styles.userProfile}>
+                            <div className={styles.avatarContainer}>
+                                <img
+                                    src={getAvatarUrl()}
+                                    alt="User Avatar"
+                                    className={styles.userAvatar}
+                                    onError={(e) => {
+                                        e.target.src = `http://localhost:8080/profile/default.png?t=${new Date().getTime()}`;
+                                    }}
+                                />
+                                <ul className={styles.profileDropdown}>
+                                    <li><a href="/hocho/profile">Profile</a></li>
+                                    <li><a href="#">Cart</a></li>
+                                    <li>
+                                        <a className={styles.logoutLink} onClick={handleLogout}>
+                                            Logout
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>)}
+                    </div>
+                </div>
+            </div>
+        </header>
+    </>);
 }
 
 export default Header;

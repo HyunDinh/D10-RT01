@@ -40,8 +40,8 @@ public class UserRegistrationTest {
         request.setUsername("admin");
         request.setPassword("123");
         request.setRetypePassword("123");
-        request.setEmail("dinhhung1112005@gmail.com");
-        request.setRole("parent");
+        request.setEmail("chonphuoc123@gmail.com");
+        request.setRole("admin");
 
         // Perform POST request
         mockMvc.perform(post("/api/auth/register")
@@ -66,14 +66,14 @@ public class UserRegistrationTest {
     @Test
     void testRegisterChild_Success() throws Exception {
         // Ensure parent exists
-        User parent = userRepository.findByEmail("dinhhung1112005@gmail.com");
+        User parent = userRepository.findByEmail("chonphuoc123@gmail.com");
         if (parent == null || !parent.getRole().equals("parent")) {
             // Create parent if not exists (mimic real-world scenario)
             RegisterRequest parentRequest = new RegisterRequest();
             parentRequest.setUsername("admin");
             parentRequest.setPassword("123");
             parentRequest.setRetypePassword("123");
-            parentRequest.setEmail("dinhhung1112005@gmail.com");
+            parentRequest.setEmail("chonphuoc123@gmail.com");
             parentRequest.setRole("parent");
 
             mockMvc.perform(post("/api/auth/register")
@@ -88,8 +88,8 @@ public class UserRegistrationTest {
         request.setUsername("child");
         request.setPassword("123");
         request.setRetypePassword("123");
-        request.setEmail("dinhhung1112005@gmail.com"); // Same as parent email
-        request.setParentEmail("dinhhung1112005@gmail.com");
+        request.setEmail("chonphuoc123@gmail.com"); // Same as parent email
+        request.setParentEmail("chonphuoc123@gmail.com");
         request.setRole("child");
 
         // Perform POST request
@@ -112,7 +112,7 @@ public class UserRegistrationTest {
         // Verify parent-child mapping
         ParentChildMapping mapping = parentChildMappingRepository.findByChildId(child.getId());
         assertNotNull(mapping, "Parent-child mapping should exist");
-        assertEquals("dinhhung1112005@gmail.com", mapping.getParent().getEmail());
+        assertEquals("chonphuoc123@gmail.com", mapping.getParent().getEmail());
         assertEquals(child.getId(), mapping.getChild().getId());
 
         // Note: Check email inbox (dinhhung1112005@gmail.com) manually to verify child confirmation email was sent

@@ -7,10 +7,13 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f5fa;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .container {
@@ -218,22 +221,6 @@ body {
     text-decoration: underline;
 }
 
-.submitBtn {
-    background-color: #8c57ff;
-    color: #fafafa;
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    margin-bottom: 16px;
-}
-
-.submitBtn:hover {
-    background-color: #303f9f;
-}
-
 .registerLink {
     text-align: center;
     font-size: 14px;
@@ -398,19 +385,21 @@ body {
 
 /* Các kiểu hiện có cho submitBtn (giả định) */
 .submitBtn {
-    background-color: #007bff; /* Màu xanh mặc định */
-    color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    background-color: #8c57ff;
+    color: #fafafa;
+    width: 100%;
+    margin-bottom: 16px;
 }
 
 .submitBtn:hover {
-    background-color: #0056b3; /* Màu xanh đậm khi hover */
     transform: translateY(-2px);
+    background-color: #303f9f;
 }
 
 /* Kiểu cho submitBtn khi bị vô hiệu hóa */
@@ -430,7 +419,13 @@ body {
 
 /* Keyframes cho hiệu ứng rung */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-2px); }
-    75% { transform: translateX(2px); }
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-2px);
+    }
+    75% {
+        transform: translateX(2px);
+    }
 }

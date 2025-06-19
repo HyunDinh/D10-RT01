@@ -184,7 +184,7 @@ function Profile() {
                                 type="file"
                                 ref={fileInputRef}
                                 style={{ display: 'none' }}
-                                accept="image/png,image/jpeg"
+                                accept="image/png,image/jpeg,image/jpg"
                                 onChange={handleFileChange}
                             />
                         </button>

@@ -7,7 +7,6 @@
 }
 
 .headerTop {
-    margin: -30px;
     background-color: #f4eee5;
     z-index: 1000;
 }
@@ -38,7 +37,7 @@
     font-weight: 500;
 }
 
-.contactList li i {
+.contactList li .contactListicon {
     margin-right: 5px;
 }
 
@@ -65,22 +64,24 @@
     font-weight: 500;
 }
 
-.socialIcon a i {
+.socialIcon a .socialIconLink {
     color: #385469;
-}
-
-.socialIcon a i:hover {
-    color: #fd7e14;
     transition: all 0.3s ease-in-out;
 }
+
+.socialIcon a:hover .socialIconLink {
+    color: #fd7e14;
+}
+
 .containerFluid {
     width: 100%;
+    margin-top: -20px;
 }
+
 
 .header1 {
     position: sticky;
     top: 0;
-    margin: 0 -20px;
     z-index: 999;
     padding: 0 0 15px 0;
     background-color: #f4eee5;
@@ -101,7 +102,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0 30px;
+    margin: 0 60px;
 }
 
 .headerLeft {
@@ -178,13 +179,13 @@
     white-space: nowrap;
 }
 
-.mainMenu li a i {
+.mainMenu li a .mainMenuIcon {
     margin-left: 5px;
     font-size: 12px;
     transition: transform 0.3s ease;
 }
 
-.mainMenu li:hover > a i {
+.mainMenu li:hover > a .mainMenuIcon {
     transform: rotate(180deg);
 }
 

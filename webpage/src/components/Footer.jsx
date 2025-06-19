@@ -1,22 +1,41 @@
 import React from 'react';
 import styles from '../styles/Footer.module.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFacebookF, faGithub, faGoogle, faTwitter} from "@fortawesome/free-brands-svg-icons";
 
 function Footer() {
-    return (
-        <footer className={styles.footer}>
+    return (<footer className={styles.footer}>
+        <div className={styles.containerfluid}>
             <div className={styles.footerTop}>
-                <img src="/frameFooter.png" alt="footer-bg" width={150} height={150} />
+                <img src="/frameFooter.png" alt="footer-bg" width={150} height={150}/>
             </div>
             <div className={styles.zebra}>
-                <img src="/zebra.webp" alt="footer-bg" width={100} height={150} />
+                <img src="/zebra.webp" alt="footer-bg" width={100} height={150}/>
             </div>
             <div className={styles.container}>
                 <div className={styles.footerContactInfo}>
-                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
+                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800"
+                         data-aos-delay="300">
                         <div className={styles.icon}>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M23.7891 1.81641H16.7578C13.3658 1.81641 10.6055 4.5767 10.6055 7.96875C10.6055 11.063 12.9015 13.631 15.8789 14.0585V16.7578C15.8788 16.9317 15.9303 17.1016 16.0268 17.2462C16.1234 17.3907 16.2607 17.5033 16.4214 17.5697C16.7456 17.705 17.1258 17.6325 17.3793 17.3792L20.6374 14.1211H23.7891C27.1811 14.1211 30 11.3608 30 7.96875C30 4.5767 27.1811 1.81641 23.7891 1.81641ZM16.7578 8.84754C16.2723 8.84754 15.8789 8.45402 15.8789 7.96863C15.8789 7.48324 16.2723 7.08973 16.7578 7.08973C17.2432 7.08973 17.6367 7.48324 17.6367 7.96863C17.6367 8.45402 17.2432 8.84754 16.7578 8.84754ZM20.2734 8.84754C19.7879 8.84754 19.3945 8.45402 19.3945 7.96863C19.3945 7.48324 19.7879 7.08973 20.2734 7.08973C20.7588 7.08973 21.1523 7.48324 21.1523 7.96863C21.1523 8.45402 20.7588 8.84754 20.2734 8.84754ZM23.7891 8.84754C23.3036 8.84754 22.9102 8.45402 22.9102 7.96863C22.9102 7.48324 23.3036 7.08973 23.7891 7.08973C24.2745 7.08973 24.668 7.48324 24.668 7.96863C24.668 8.45402 24.2745 8.84754 23.7891 8.84754Z"
+                                    d="M23.7891
+                                    1.81641H16.7578C13.3658
+                                     1.81641 10.6055 4.5767
+                                      10.6055 7.96875C10.6055
+                                       11.063 12.9015 13.631
+                                       15.8789 14.0585V16.
+                                       7578C15.8788 16.9317
+                                       15.9303 17.1016 16.0268
+                                       17.2462C16.1234 17.3907 16.2607
+                                       17.5033 16.4214 17.5697C16.7456
+                                        17.705 17.1258 17.6325 17.3793
+                                         17.3792L20.6374 14.1211H23.7891C27.1811
+                                          14.1211 30 11.3608 30 7.96875C30 4.5767
+                                           27.1811 1.81641 23.7891 1.81641ZM16.7578
+                                           8.84754C16.2723 8.84754 15.8789 8.45402
+                                           15.8789 7.96863C15.8789 7.48324 16.2723 7.08973 16.7578 7.08973C17.2432 7.08973 17.6367 7.48324 17.6367 7.96863C17.6367 8.45402 17.2432 8.84754 16.7578 8.84754ZM20.2734 8.84754C19.7879 8.84754 19.3945 8.45402 19.3945 7.96863C19.3945 7.48324 19.7879 7.08973 20.2734 7.08973C20.7588 7.08973 21.1523 7.48324 21.1523 7.96863C21.1523 8.45402 20.7588 8.84754 20.2734 8.84754ZM23.7891 8.84754C23.3036 8.84754 22.9102 8.45402 22.9102 7.96863C22.9102 7.48324 23.3036 7.08973 23.7891 7.08973C24.2745 7.08973 24.668 7.48324 24.668 7.96863C24.668 8.45402 24.2745 8.84754 23.7891 8.84754Z"
                                     fill="#F39F5F"
                                 />
                                 <path
@@ -30,9 +49,11 @@ function Footer() {
                             <h3><a href="tel:+2085550112">+208-555-0112</a></h3>
                         </div>
                     </div>
-                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800"
+                         data-aos-delay="500">
                         <div className={styles.icon}>
-                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M12.6493 10.8272C12.8019 10.914 12.9755 10.9569 13.1509 10.9509C13.3307 10.9344 13.5048 10.8798 13.6618 10.7906L24.9212 4.22062C24.6765 3.79416 24.324 3.43955 23.8989 3.19239C23.4739 2.94523 22.9913 2.81422 22.4996 2.8125H3.74965C3.25782 2.81406 2.77505 2.94499 2.34983 3.19216C1.92461 3.43932 1.57191 3.79402 1.32715 4.22062L12.6493 10.8272Z"
                                     fill="#F39F5F"
@@ -52,9 +73,11 @@ function Footer() {
                             <h3><a href="mailto:kidsa@gmail.com">kidsa@gmail.com</a></h3>
                         </div>
                     </div>
-                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800" data-aos-delay="700">
+                    <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800"
+                         data-aos-delay="700">
                         <div className={styles.icon}>
-                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     fillRule="evenodd"
                                     clipRule="evenodd"
@@ -76,78 +99,88 @@ function Footer() {
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div className={styles.container}>
-                <div className={styles.footerGrid}>
-                    <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
-                        <div className={styles.widgetHeader}>
-                            <a href="/">
-                                <img src="/logo.png" alt="Logo" width="100" height="50" loading="lazy" style={{ borderRadius: '50%' }} />
-                            </a>
-                        </div>
-                        <div className={styles.widgetContent}>
-                            <p>Phasellus ultricies aliquam volutpat ullamcorper laoreet neque, a lacinia curabitur lacinia mollis.</p>
-                            <div className={styles.socialLinks}>
-                                <a href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
-                                <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
-                                <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-                                <a href="#" aria-label="YouTube"><i className="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
+        <div className={styles.container}>
+            <div className={styles.footerGrid}>
+                <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800"
+                     data-aos-delay="300">
+                    <div className={styles.widgetHeader}>
+                        <a href="/">
+                            <img src="/logo.png" alt="Logo" width="100" height="50" loading="lazy"
+                                 style={{borderRadius: '50%'}}/>
+                        </a>
                     </div>
-
-                    <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
-                        <div className={styles.widgetHeader}>
-                            <h3>Quick Links</h3>
-                        </div>
-                        <ul className={styles.linkList}>
-                            <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Our Services</a></li>
-                            <li><a href="/news-details"><i className="fas fa-chevron-right"></i> Our Blogs</a></li>
-                            <li><a href="/faq"><i className="fas fa-chevron-right"></i> FAQ'S</a></li>
-                            <li><a href="/contact"><i className="fas fa-chevron-right"></i> Contact Us</a></li>
-                        </ul>
-                    </div>
-
-                    <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
-                        <div className={styles.widgetHeader}>
-                            <h3>Categories</h3>
-                        </div>
-                        <ul className={styles.linkList}>
-                            <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Music Learning</a></li>
-                            <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Sports, Games</a></li>
-                            <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Science Class</a></li>
-                            <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Drawing</a></li>
-                        </ul>
-                    </div>
-
-                    <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800" data-aos-delay="700">
-                        <div className={styles.widgetHeader}>
-                            <h3>Recent Posts</h3>
-                        </div>
-                        <div className={styles.recentPosts}>
-                            <article className={styles.post}>
-                                <img src="/pp1.webp" alt="Post 1" width="78" height="79" loading="lazy" />
-                                <div className={styles.postContent}>
-                                    <span className={styles.postDate}><i className="fas fa-calendar-days"></i> 20 Feb, 2024</span>
-                                    <h6><a href="/news-details">That jerk from Finance really threw me</a></h6>
-                                </div>
-                            </article>
-                            <article className={styles.post}>
-                                <img src="/pp2.webp" alt="Post 2" width="78" height="79" loading="lazy" />
-                                <div className={styles.postContent}>
-                                    <span className={styles.postDate}><i className="fas fa-calendar-days"></i> 15 Dec, 2024</span>
-                                    <h6><a href="/news-details">From without content style without</a></h6>
-                                </div>
-                            </article>
+                    <div className={styles.widgetContent}>
+                        <p>Phasellus ultricies aliquam volutpat ullamcorper laoreet neque, a lacinia curabitur
+                            lacinia mollis.</p>
+                        <div className={styles.socialLinks}>
+                            <a href="#" aria-label="Facebook"> <FontAwesomeIcon icon={faFacebookF} bounce className={styles.socialLinksIcon}/></a>
+                            <a href="#" aria-label="Twitter"> <FontAwesomeIcon icon={faTwitter} bounce/></a>
+                            <a href="#" aria-label="LinkedIn"> <FontAwesomeIcon icon={faGithub} bounce/></a>
+                            <a href="#" aria-label="YouTube"> <FontAwesomeIcon icon={faGoogle} bounce/></a>
                         </div>
                     </div>
                 </div>
-                <div className={styles.bottomFooter}>
-                    <img src="/footerBottom.png" alt="Footer Bottom" loading="lazy" />
+
+                <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800"
+                     data-aos-delay="500">
+                    <div className={styles.widgetHeader}>
+                        <h3>Quick Links</h3>
+                    </div>
+                    <ul className={styles.linkList}>
+                        <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Our Services</a>
+                        </li>
+                        <li><a href="/news-details"><i className="fas fa-chevron-right"></i> Our Blogs</a></li>
+                        <li><a href="/faq"><i className="fas fa-chevron-right"></i> FAQ'S</a></li>
+                        <li><a href="/contact"><i className="fas fa-chevron-right"></i> Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800"
+                     data-aos-delay="500">
+                    <div className={styles.widgetHeader}>
+                        <h3>Categories</h3>
+                    </div>
+                    <ul className={styles.linkList}>
+                        <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Music Learning</a>
+                        </li>
+                        <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Sports, Games</a>
+                        </li>
+                        <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Science Class</a>
+                        </li>
+                        <li><a href="/program-details"><i className="fas fa-chevron-right"></i> Drawing</a></li>
+                    </ul>
+                </div>
+
+                <div className={styles.footerWidget} data-aos="fade-up" data-aos-duration="800"
+                     data-aos-delay="700">
+                    <div className={styles.widgetHeader}>
+                        <h3>Recent Posts</h3>
+                    </div>
+                    <div className={styles.recentPosts}>
+                        <article className={styles.post}>
+                            <img src="/pp1.webp" alt="Post 1" width="78" height="79" loading="lazy"/>
+                            <div className={styles.postContent}>
+                                <span className={styles.postDate}><i className="fas fa-calendar-days"></i> 20 Feb, 2024</span>
+                                <h6><a href="/news-details">That jerk from Finance really threw me</a></h6>
+                            </div>
+                        </article>
+                        <article className={styles.post}>
+                            <img src="/pp2.webp" alt="Post 2" width="78" height="79" loading="lazy"/>
+                            <div className={styles.postContent}>
+                                <span className={styles.postDate}><i className="fas fa-calendar-days"></i> 15 Dec, 2024</span>
+                                <h6><a href="/news-details">From without content style without</a></h6>
+                            </div>
+                        </article>
+                    </div>
                 </div>
             </div>
-        </footer>
-    );
+            <div className={styles.bottomFooter}>
+                <img src="/footerBottom.png" alt="Footer Bottom" loading="lazy"/>
+            </div>
+        </div>
+    </footer>);
 }
 
 export default Footer;

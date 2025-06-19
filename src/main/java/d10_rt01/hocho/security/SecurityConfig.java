@@ -64,7 +64,6 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/hocho/login")
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(googleAuthConfig.oidcUserService()))
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("http://localhost:8080/api/auth/oauth2/success");
