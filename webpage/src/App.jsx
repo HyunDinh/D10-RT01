@@ -158,8 +158,6 @@ const App = () => {
                        element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
                 <Route path="/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
-
-            
                 {/* Time Restriction Routes */}
                 <Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>
 
@@ -169,7 +167,6 @@ const App = () => {
                 <Route path="/hocho/games/dino" element={<PlayDino />} />
                 <Route path="/hocho/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/admin/games/storage" element={<GameApproval />} />
-
             </Routes>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </Router>);

@@ -1,0 +1,143 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 600px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.closeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+.closeButton:hover {
+    color: #333;
+}
+
+.modalTitle {
+    color: #f39f5f; /* Match --primary-color from Profile.module.css */
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.formCard {
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 8px;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #385469; /* Match --text-color */
+}
+
+.formLabelIcon {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.formIcon {
+    font-size: 16px;
+}
+
+.formTextarea,
+.formSelect,
+.formInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.formTextarea:focus,
+.formSelect:focus,
+.formInput:focus {
+    border-color: #f39f5f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(243, 159, 95, 0.2);
+}
+
+.alertDanger {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.alertSuccess {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.btnPrimary {
+    background: #f39f5f;
+    color: #fff;
+}
+
+.btnPrimary:hover {
+    background: #e08e54;
+}
+
+.btnPrimary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.btnIcon {
+    margin-left: 5px;
+}

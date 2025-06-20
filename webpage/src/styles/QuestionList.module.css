@@ -81,7 +81,8 @@
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem; /* Space for icon, if used */
+    gap: 0.5rem; /* Space for icon, if used */
+
     transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
     animation: fadeIn 0.5s ease-out forwards; /* Load animation */
 }
