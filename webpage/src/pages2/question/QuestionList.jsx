@@ -18,10 +18,12 @@ const QuestionList = () => {
     const navigate = useNavigate();
     const [showQuestionForm, setShowQuestionForm] = useState(false);
 
+
     useEffect(() => {
         fetchQuestions();
         fetchCurrentUser();
         fetchProfileData();
+
     }, []);
 
     useEffect(() => {
@@ -50,6 +52,7 @@ const QuestionList = () => {
                 navigate('/hocho/login');
             }
         }
+
     };
 
     const fetchQuestions = async () => {
@@ -104,6 +107,7 @@ const QuestionList = () => {
         }
         return `${baseUrl}/api/hocho/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
     };
+
 
     return (<>
         <Header/>

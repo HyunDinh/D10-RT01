@@ -83,6 +83,7 @@ export default function VideoPage() {
                     hoverable
                     onClick={() => handleCardClick(video.videoId)} // Card click approximates title click
                 >
+                    <a href={`/hocho/video/${video.videoId}`}>Watch video</a>
                     {video.contentData ? (<ReactPlayer
                         url={URL.createObjectURL(new Blob([base64ToArrayBuffer(video.contentData)], {type: 'video/mp4'}))}
                         controls
