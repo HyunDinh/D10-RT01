@@ -205,6 +205,9 @@
 }
 
 .answerItem {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     background: #f8f9fa; /* Match bg-light */
     border: 1px solid #dee2e6;
     border-radius: 8px;
@@ -219,10 +222,10 @@
 }
 
 .answerUser {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     color: var(--text-color);
-    margin-bottom: 0.25rem; /* Match mb-1 */
+    margin-bottom: 0.4rem; /* Match mb-1 */
 }
 
 .answerContent {
@@ -245,6 +248,8 @@
 }
 
 .answerTimestamp {
+    display: flex;
+    gap: 0.5rem;
     font-size: 0.9em;
     color: var(--text-secondary);
 }
@@ -284,7 +289,7 @@
 
 .btnSuccess {
     background: #28a745;
-    color: #fff;
+    color: #fafafa;
 }
 
 .btnSuccess:hover {

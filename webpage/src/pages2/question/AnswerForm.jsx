@@ -4,7 +4,7 @@ import {useParams} from 'react-router-dom';
 import styles from "../../styles/AnswerForm.module.css";
 import Header from "../../components/Header.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {faChevronRight,faClock} from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmDialog from "../../components/DeleteConfirmDialog.jsx";
 
 
@@ -114,7 +114,7 @@ const AnswerForm = () => {
         setDeletingId(answerToDelete);
         try {
             await axios.delete(`http://localhost:8080/api/questions/${id}/answers/${answerToDelete}`, {
-                data: { userId },
+                data: {userId},
                 withCredentials: true,
             });
             setAnswers(answers.filter((a) => a.answerId !== answerToDelete)); // Update state client-side
@@ -206,69 +206,71 @@ const AnswerForm = () => {
                     {answers.length === 0 && <div className={styles.noAnswers}>Chưa có câu trả lời nào.</div>}
                     {answers.map((a) => {
                         const isOwner = userId && a.user && userId === a.user.id;
-                        return (<div key={a.answerId} className={styles.answerItem}>
-                            <div className={styles.answerUser}>
-                                <b>{a.user?.fullName || 'Ẩn danh'}:</b>
-                            </div>
-                            {editingAnswerId === a.answerId ? (<>
+                        return (
+                            <div key={a.answerId} className={styles.answerItem}>
+                                <div className={styles.answerUser}>
+                                    <b>{a.user?.fullName || 'Ẩn danh'}:</b>
+                                </div>
+                                {editingAnswerId === a.answerId ? (<>
                     <textarea
                         className={styles.formControl}
                         value={editContent}
                         onChange={(e) => setEditContent(e.target.value)}
                         rows={3}
                     />
-                                <input
-                                    type="file"
-                                    className={styles.formControl}
-                                    accept="image/*"
-                                    onChange={(e) => setEditImageFile(e.target.files[0])}
-                                />
-                                <div className={styles.buttonGroup}>
-                                    <button
-                                        className={`${styles.btn} ${styles.btnSuccess} ${styles.btnSm}`}
-                                        onClick={() => handleEditSave(a.answerId)}
-                                        disabled={editLoading}
-                                    >
-                                        {editLoading ? 'Đang lưu...' : 'Lưu'}
-                                    </button>
-                                    <button
-                                        className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
-                                        onClick={handleEditCancel}
-                                        disabled={editLoading}
-                                    >
-                                        Hủy
-                                    </button>
-                                </div>
-                            </>) : (<>
-                                <div className={styles.answerContent}>{a.content}</div>
-                                {a.imageUrl && (<img
-                                    src={`http://localhost:8080${a.imageUrl}`}
-                                    alt="Ảnh trả lời"
-                                    className={styles.answerImage}
-                                />)}
-                            </>)}
-                            <div className={styles.answerFooter}>
-                                <div className={styles.answerTimestamp}>
-                                    {a.createdAt ? new Date(a.createdAt).toLocaleString() : ''}
-                                </div>
-                                {isOwner && editingAnswerId !== a.answerId && (
+                                    <input
+                                        type="file"
+                                        className={styles.formControl}
+                                        accept="image/*"
+                                        onChange={(e) => setEditImageFile(e.target.files[0])}
+                                    />
                                     <div className={styles.buttonGroup}>
                                         <button
-                                            className={`${styles.btn} ${styles.btnOutlineWarning} ${styles.btnSm}`}
-                                            onClick={() => handleEditClick(a)}
+                                            className={`${styles.btn} ${styles.btnSuccess} ${styles.btnSm}`}
+                                            onClick={() => handleEditSave(a.answerId)}
+                                            disabled={editLoading}
                                         >
-                                            Sửa
+                                            {editLoading ? 'Đang lưu...' : 'Lưu'}
                                         </button>
                                         <button
-                                            className={`${styles.btn} ${styles.btnOutlineDanger} ${styles.btnSm}`}
-                                            onClick={() => handleDelete(a.answerId)}
-                                            disabled={deletingId === a.answerId}
+                                            className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
+                                            onClick={handleEditCancel}
+                                            disabled={editLoading}
                                         >
-                                            {deletingId === a.answerId ? 'Đang xóa...' : 'Xóa'}
+                                            Hủy
                                         </button>
-                                    </div>)}
-                            </div>
-                        </div>);
+                                    </div>
+                                </>) : (<>
+                                    <div className={styles.answerContent}>{a.content}</div>
+                                    {a.imageUrl && (<img
+                                        src={`http://localhost:8080${a.imageUrl}`}
+                                        alt="Ảnh trả lời"
+                                        className={styles.answerImage}
+                                    />)}
+                                </>)}
+                                <div className={styles.answerFooter}>
+                                    <div className={styles.answerTimestamp}>
+                                        <FontAwesomeIcon icon={faClock}/>
+                                        {a.createdAt ? new Date(a.createdAt).toLocaleString() : ''}
+                                    </div>
+                                    {isOwner && editingAnswerId !== a.answerId && (
+                                        <div className={styles.buttonGroup}>
+                                            <button
+                                                className={`${styles.btn} ${styles.btnOutlineWarning} ${styles.btnSm}`}
+                                                onClick={() => handleEditClick(a)}
+                                            >
+                                                Sửa
+                                            </button>
+                                            <button
+                                                className={`${styles.btn} ${styles.btnOutlineDanger} ${styles.btnSm}`}
+                                                onClick={() => handleDelete(a.answerId)}
+                                                disabled={deletingId === a.answerId}
+                                            >
+                                                {deletingId === a.answerId ? 'Đang xóa...' : 'Xóa'}
+                                            </button>
+                                        </div>)}
+                                </div>
+                            </div>);
                     })}
                     <DeleteConfirmDialog sh={showDeleteDialog}
                                          onConfirm={confirmDelete}
