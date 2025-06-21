@@ -3,12 +3,12 @@ import Verify from './pages/Verify';
 import VerifyChild from './pages/VerifyChild';
 import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
-
 import Auth from './pages2/Auth';
 import Home from './pages2/Home';
 import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
+
 
 // tutor routes
 import TutorProfile from './pages2/tutor/TutorProfile';
@@ -60,7 +60,7 @@ import QuizReview from './pages2/quiz/QuizReview';
 import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
 
 // Time Restriction Routes
-import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage";
+// import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage";
 import PublicCoursePage from "./pages2/course/PublicCoursePage";
 
 // Game Routes
@@ -159,7 +159,7 @@ const App = () => {
                 <Route path="/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
                 {/* Time Restriction Routes */}
-                <Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>
+                {/*<Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>*/}
 
                 {/* Admin Routes */}
                 

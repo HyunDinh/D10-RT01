@@ -31,5 +31,5 @@ npm install @fortawesome/free-brands-svg-icons
 npm install @fortawesome/react-fontawesome
 
 ```
-
+### `npm install @fontsource/inter`
 ### `npm install swiper`

@@ -1,0 +1,238 @@
+:root {
+    --primary-color: #f39f5f; /* From Profile.module.css */
+    --text-color: #385469;
+    --text-secondary: #666;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.heading {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #f39f5f; /* Mimics text-primary */
+    text-align: center;
+    margin-bottom: 2rem; /* Replaces mb-4 */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 40px auto; /* Match mt-5 */
+    padding: 0 15px;
+}
+
+.heading {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 1.5rem; /* Match mb-4 */
+}
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Match QuestionList.module.css */
+    padding: 1.5rem; /* Match p-4 */
+    max-width: 600px;
+    margin: 0 auto;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.formGroup {
+    margin-bottom: 1rem; /* Match mb-3 */
+}
+
+.formLabel {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.formControl {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.formControl:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(243, 159, 95, 0.2);
+    outline: none;
+}
+
+.formControl[type="file"] {
+    padding: 8px;
+}
+
+.formSelect {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.formSelect:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(243, 159, 95, 0.2);
+    outline: none;
+}
+
+.alertDanger {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.alertSuccess {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btnPrimary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.btnPrimary:hover {
+    background: #e08e54; /* Darker shade of --primary-color */
+}
+
+.btnPrimary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Animation for form submission */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btnPrimary:not(:disabled):active {
+    animation: pulse 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .card {
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .heading {
+        font-size: 24px;
+    }
+
+    .formLabel,
+    .formControl,
+    .formSelect {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heading {
+        font-size: 20px;
+    }
+
+    .formLabel,
+    .formControl,
+    .formSelect {
+        font-size: 13px;
+    }
+
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
