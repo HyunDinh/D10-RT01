@@ -69,12 +69,13 @@ const QuestionList = () => {
         setQuestions((prev) => [newQuestion, ...prev]);
     };
 
-    const getAvatarUrl = () => {
+    // Thêm hàm mới để lấy avatar của người hỏi
+    const getQuestionUserAvatarUrl = (q) => {
         const baseUrl = 'http://localhost:8080';
-        if (!user.avatarUrl || user.avatarUrl === 'none') {
+        if (!q.user?.avatarUrl || q.user.avatarUrl === 'none') {
             return `${baseUrl}/api/hocho/profile/default.png?t=${new Date().getTime()}`;
         }
-        return `${baseUrl}/api/hocho/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
+        return `${baseUrl}/api/hocho/profile/${q.user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
     const handleDelete = (questionId) => {
@@ -140,7 +141,7 @@ const QuestionList = () => {
                                 <div className={styles.card}>
                                     <div className={styles.cardBody}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                                            <img src={getAvatarUrl()} alt="User Avatar" className={styles.userAvatar} />
+                                            <img src={getQuestionUserAvatarUrl(q)} alt="User Avatar" className={styles.userAvatar} />
                                             <div className={styles.cardContent}>
                                                 <h5 className={styles.cardTitle}>{q.content}</h5>
                                                 <p className={styles.cardText}>

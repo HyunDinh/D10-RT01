@@ -128,13 +128,7 @@ const QuizResult = () => {
             </div>
           ))}
 
-          <div className="d-flex justify-content-between mt-4">
-            <button 
-              className="btn btn-secondary" 
-              onClick={() => navigate('/quizzes')}
-            >
-              Quay lại danh sách
-            </button>
+          <div className="d-flex justify-content-end mt-4">
             <button 
               className="btn btn-primary" 
               onClick={() => navigate(`/quizzes/${id}/do`)}

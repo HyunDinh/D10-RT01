@@ -5,23 +5,26 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class TransactionDto {
     private Long transactionId;
     private String payosTransactionId;
-    private Long orderCode; // Thêm trường orderCode
+    private Long orderId;
     private BigDecimal amount;
     private TransactionStatus status;
     private LocalDateTime transactionDate;
+    private List<OrderItemDto> items;
 
     // Constructor để dễ dàng map từ entity Transaction
-    public TransactionDto(Long transactionId, String payosTransactionId, Long orderCode, BigDecimal amount, TransactionStatus status, LocalDateTime transactionDate) {
+    public TransactionDto(Long transactionId, String payosTransactionId, Long orderId, BigDecimal amount, TransactionStatus status, LocalDateTime transactionDate, List<OrderItemDto> items) {
         this.transactionId = transactionId;
         this.payosTransactionId = payosTransactionId;
-        this.orderCode = orderCode;
+        this.orderId = orderId;
         this.amount = amount;
         this.status = status;
         this.transactionDate = transactionDate;
+        this.items = items;
     }
 } 

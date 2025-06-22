@@ -7,27 +7,31 @@ import './Payment.css';
 const PaymentHistoryPage = () => {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
-    const [errorMessage, setErrorMessage] = useState(null); // Thêm state cho lỗi
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const storedUserId = localStorage.getItem('userId'); // Đọc trực tiếp key 'userId'
-        if (!storedUserId) { // Kiểm tra nếu không có storedUserId
-            setErrorMessage('Vui lòng đăng nhập để xem lịch sử thanh toán');
+        const userRole = localStorage.getItem('userRole');
+        if (userRole) {
+            setIsLoggedIn(true);
+        } else {
             navigate('/hocho/login');
-            return;
         }
-        setUserId(storedUserId); // Set userId với giá trị đọc được
     }, [navigate]);
 
-    if (!userId && !errorMessage) { // Chỉ return null nếu không có userId và không có lỗi cần hiển thị
-        return null;
-    }
-
     return (
-        <div className="payment-history-page"> {/* Thay thế Card antd bằng div */}
-            {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Hiển thị lỗi */}
-            <h2>Lịch sử thanh toán</h2> {/* Thêm tiêu đề thủ công */}
-            {userId && <PaymentHistory userId={userId} />} {/* Chỉ render PaymentHistory khi có userId */}
+        <div className="container mt-5">
+            <div className="card shadow-sm">
+                <div className="card-header bg-primary text-white">
+                    <h2 className="mb-0">Lịch sử Giao dịch</h2>
+                </div>
+                <div className="card-body">
+                    {isLoggedIn ? (
+                        <PaymentHistory />
+                    ) : (
+                        <div className="alert alert-warning">Vui lòng đăng nhập để xem lịch sử.</div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 };

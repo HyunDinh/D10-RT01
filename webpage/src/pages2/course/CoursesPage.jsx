@@ -116,6 +116,13 @@ export default function CoursesPage() {
                                       className="btn btn-dark btn-sm me-2">
                                     View Lessons
                                 </Link>
+                                {/* Nút View Quiz */}
+                                <Link
+                                    to={`/quizzes?courseId=${course.courseId}`}
+                                    className="btn btn-primary btn-sm me-2"
+                                >
+                                    View Quiz
+                                </Link>
                                 <Link
                                     to="/hocho/teacher/course/edit"
                                     state={{course}}

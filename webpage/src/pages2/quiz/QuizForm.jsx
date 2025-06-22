@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const QuizForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const courseIdFromUrl = queryParams.get('courseId');
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -28,10 +31,19 @@ const QuizForm = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    if (courseIdFromUrl && courses.length > 0) {
+      setForm(f => ({ ...f, courseId: courseIdFromUrl }));
+      const found = courses.find(c => String(c.courseId) === String(courseIdFromUrl));
+      setSelectedCourse(found);
+    }
+  }, [courseIdFromUrl, courses]);
 
   const fetchCourses = async () => {
     try {
@@ -134,7 +146,7 @@ const QuizForm = () => {
         courseId: ''
       });
       setQuestions([]);
-      navigate('/quizzes');
+      navigate(`/quizzes?courseId=${form.courseId}`);
     } catch (err) {
       setError('Không thể tạo quiz');
     }
@@ -155,14 +167,18 @@ const QuizForm = () => {
         </div>
         <div className="mb-3">
           <label className="form-label">Khóa học</label>
-          <select className="form-select" name="courseId" value={form.courseId} onChange={handleChange} required>
-            <option value="">Chọn khóa học</option>
-            {courses.map(course => (
-              <option key={course.courseId} value={course.courseId}>
-                {course.title}
-              </option>
-            ))}
-          </select>
+          {courseIdFromUrl && selectedCourse ? (
+            <div className="form-control-plaintext fw-bold">{selectedCourse.title}</div>
+          ) : (
+            <select className="form-select" name="courseId" value={form.courseId} onChange={handleChange} required>
+              <option value="">Chọn khóa học</option>
+              {courses.map(course => (
+                <option key={course.courseId} value={course.courseId}>
+                  {course.title}
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <div className="row mb-3">
           <div className="col">

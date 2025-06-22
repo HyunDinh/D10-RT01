@@ -18,6 +18,7 @@ import vn.payos.PayOS;
 import vn.payos.type.CheckoutResponseData;
 import vn.payos.type.ItemData;
 import vn.payos.type.PaymentData;
+import d10_rt01.hocho.dto.transaction.OrderItemDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -143,7 +144,7 @@ public class PaymentServiceImpl implements PaymentService {
                     .amount(totalAmount)
                     .description(description != null && description.length() > 25 ? description.substring(0, 25) : description)
                     .returnUrl(baseUrl + "/hocho/handle-payos-return/" + payosOrderCode)
-                    .cancelUrl(baseUrl + "/payment/cancel")
+                    .cancelUrl(baseUrl + "/hocho/parent/cart?orderCode=" + payosOrderCode)
                     .items(payosItems)
                     .build();
 
@@ -156,9 +157,6 @@ public class PaymentServiceImpl implements PaymentService {
             // Có thể cập nhật Order với Payment link nếu cần
             // order.setPayment(payment);
             // orderRepository.save(order);
-
-            // 8. Đánh dấu các ShoppingCart items là đã xử lý (ví dụ: xóa hoặc thay đổi trạng thái)
-            shoppingCartRepository.deleteAll(payableCartItems);
 
             return payment; // Trả về Payment chứa PayOS URL
 
@@ -192,7 +190,6 @@ public class PaymentServiceImpl implements PaymentService {
             payOS.cancelPaymentLink(orderCode, null);
             payment.setStatus(PaymentStatus.CANCELLED);
 
-            // Cập nhật trạng thái Order liên quan nếu có
             if (payment.getOrder() != null) {
                  payment.getOrder().setStatus(OrderStatus.CANCELLED);
                  orderRepository.save(payment.getOrder());
@@ -220,7 +217,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         // Kiểm tra xem Payment này đã được xử lý chưa
         if (payment.getStatus() == PaymentStatus.COMPLETED || payment.getStatus() == PaymentStatus.CANCELLED || payment.getStatus() == PaymentStatus.FAILED) {
-             // Đã xử lý trước đó, bỏ qua
              return;
         }
 
@@ -246,12 +242,9 @@ public class PaymentServiceImpl implements PaymentService {
                      transaction.setStatus(TransactionStatus.COMPLETED);
                      transaction.setTransactionDate(LocalDateTime.now());
                      transactionRepository.save(transaction);
-                     System.out.println("Transaction created with ID: " + transaction.getTransactionId() + 
-                                      " for Order: " + completedOrder.getOrderId());
 
                      // Tạo CourseEnrollment cho từng OrderItem
                      if (completedOrder.getOrderItems() != null) {
-                         System.out.println("Creating course enrollments for order items");
                          for (OrderItem item : completedOrder.getOrderItems()) {
                              // Kiểm tra xem học sinh đã được đăng ký khóa học này chưa
                              if (!courseEnrollmentRepository.existsByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId())) {
@@ -259,10 +252,7 @@ public class PaymentServiceImpl implements PaymentService {
                                  enrollment.setCourse(item.getCourse());
                                  enrollment.setChild(item.getChild());
                                  enrollment.setParent(completedOrder.getParent());
-                                 // enrollment.setEnrolledAt được set trong PrePersist
                                  courseEnrollmentRepository.save(enrollment);
-                                 System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
-                                                  " and child: " + item.getChild().getId());
                              }
                          }
                      }
@@ -295,81 +285,69 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public Payment handlePaymentReturn(Long orderCode) {
-        System.out.println("Entering handlePaymentReturn for orderCode: " + orderCode);
         Payment payment = paymentRepository.findByOrderCode(orderCode);
         if (payment == null) {
-            System.out.println("Payment not found for order code: " + orderCode);
             throw new RuntimeException("Payment not found for order code: " + orderCode);
         }
 
-        System.out.println("Found payment with status: " + payment.getStatus());
-        // Kiểm tra xem Payment này đã được xử lý chưa
         if (payment.getStatus() == PaymentStatus.COMPLETED || 
             payment.getStatus() == PaymentStatus.CANCELLED || 
             payment.getStatus() == PaymentStatus.FAILED) {
-            System.out.println("Payment already processed. Status: " + payment.getStatus());
             return payment;
         }
 
         try {
-            System.out.println("Processing payment return...");
-            // Gọi API của PayOS để kiểm tra trạng thái thanh toán
-            // Giả sử thanh toán thành công khi người dùng quay lại
-            // Trong thực tế, bạn nên gọi API của PayOS để kiểm tra trạng thái thực tế
             payment.setStatus(PaymentStatus.COMPLETED);
-            System.out.println("Set payment status to COMPLETED.");
 
             // Cập nhật trạng thái Order
             if (payment.getOrder() != null) {
-                System.out.println("Updating order status...");
                 Order order = payment.getOrder();
                 order.setStatus(OrderStatus.COMPLETED);
                 order = orderRepository.save(order);
-                System.out.println("Order status updated to COMPLETED. Order ID: " + order.getOrderId());
 
                 // Tạo Transaction cho toàn bộ Order
-                System.out.println("Creating transaction...");
                 Transaction transaction = new Transaction();
-                transaction.setOrder(order); // Liên kết với Order
-                // Cần lấy payosTransactionId chính xác từ dữ liệu trả về của PayOS
-                // Tạm thời vẫn dùng orderCode, nhưng cần kiểm tra cách PayOS trả về transaction ID thực tế
+                transaction.setOrder(order);
                 transaction.setPayosTransactionId(String.valueOf(payment.getOrderCode())); 
-                transaction.setAmount(order.getTotalAmount()); // Tổng tiền của Order
+                transaction.setAmount(order.getTotalAmount());
                 transaction.setStatus(TransactionStatus.COMPLETED);
                 transaction.setTransactionDate(LocalDateTime.now());
                 transactionRepository.save(transaction);
-                System.out.println("Transaction created with ID: " + transaction.getTransactionId() + 
-                                 " for Order: " + order.getOrderId() + ", PayOS Transaction ID: " + transaction.getPayosTransactionId());
 
                 // Tạo CourseEnrollment cho từng OrderItem
                 if (order.getOrderItems() != null) {
-                    System.out.println("Creating course enrollments for order items...");
                     for (OrderItem item : order.getOrderItems()) {
-                        System.out.println("Processing order item for course: " + item.getCourse().getTitle() + " (ID: " + item.getCourse().getCourseId() + ") and child: " + item.getChild().getUsername() + " (ID: " + item.getChild().getId() + ")");
-                        // Kiểm tra xem học sinh đã được đăng ký khóa học này chưa
                         if (!courseEnrollmentRepository.existsByChildIdAndCourseCourseId(item.getChild().getId(), item.getCourse().getCourseId())) {
                             CourseEnrollment enrollment = new CourseEnrollment();
                             enrollment.setCourse(item.getCourse());
                             enrollment.setChild(item.getChild());
                             enrollment.setParent(order.getParent());
-                            // enrollment.setEnrolledAt được set trong PrePersist
                             courseEnrollmentRepository.save(enrollment);
-                            System.out.println("Created enrollment for course: " + item.getCourse().getCourseId() + 
-                                           " and child: " + item.getChild().getId());
                         }
                     }
-                    System.out.println("Finished creating course enrollments.");
+                }
+
+                // XÓA GIỎ HÀNG SAU KHI THANH TOÁN THÀNH CÔNG
+                if (order.getOrderItems() != null && !order.getOrderItems().isEmpty()) {
+                    List<Long> courseIds = order.getOrderItems().stream()
+                            .map(item -> item.getCourse().getCourseId())
+                            .collect(Collectors.toList());
+                    Long parentId = order.getParent().getId();
+                    
+                    List<ShoppingCart> itemsToDelete = shoppingCartRepository.findByParentId(parentId).stream()
+                            .filter(item -> courseIds.contains(item.getCourse().getCourseId()))
+                            .collect(Collectors.toList());
+                    
+                    if (!itemsToDelete.isEmpty()) {
+                        shoppingCartRepository.deleteAll(itemsToDelete);
+                    }
                 }
             }
 
-            Payment savedPayment = paymentRepository.save(payment);
-            System.out.println("Payment status saved to database.");
-            System.out.println("Payment return handled successfully for orderCode: " + orderCode);
-            return savedPayment;
+            return paymentRepository.save(payment);
 
         } catch (Exception e) {
-            System.err.println("Exception during handlePaymentReturn for orderCode " + orderCode + ": " + e.getMessage());
-            e.printStackTrace(); // In stack trace để debug chi tiết hơn
+            e.printStackTrace();
             throw new RuntimeException("Failed to process payment return: " + e.getMessage());
         }
     }
@@ -386,13 +364,25 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private TransactionDto convertToDto(Transaction transaction) {
+        List<OrderItemDto> itemDtos = new ArrayList<>();
+        if (transaction.getOrder() != null && transaction.getOrder().getOrderItems() != null) {
+            itemDtos = transaction.getOrder().getOrderItems().stream()
+                    .map(item -> new OrderItemDto(
+                            item.getCourse().getTitle(),
+                            item.getPrice(),
+                            item.getChild().getFullName()
+                    ))
+                    .collect(Collectors.toList());
+        }
+
         return new TransactionDto(
                 transaction.getTransactionId(),
                 transaction.getPayosTransactionId(),
                 transaction.getOrder() != null ? transaction.getOrder().getOrderId() : null,
                 transaction.getAmount(),
                 transaction.getStatus(),
-                transaction.getTransactionDate()
+                transaction.getTransactionDate(),
+                itemDtos
         );
     }
 
@@ -406,4 +396,4 @@ public class PaymentServiceImpl implements PaymentService {
     //             .orElseThrow(() -> new RuntimeException("Order not found"));
     // }
 
-} 
+}
