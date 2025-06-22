@@ -81,14 +81,16 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'}, {
-                path: '/hocho/teacher', name: 'Quản lý khóa học'
-            }, {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'}, {
-                path: '/hocho/video', name: 'Quản lý video'
-            }, {path: '/hocho/questions', name: 'Forum'},],
+            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'},
+                {path: '/hocho/teacher', name: 'Quản lý khóa học'},
+                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
+                {path: '/hocho/admin/video/approval', name: 'Approval Video'},
+                {path: '/hocho/questions', name: 'Forum'},
+            ],
             ROLE_TEACHER: [{path: '/hocho/teacher', name: 'Quản lý khóa học'}, {
-                path: '/hocho/dashboard', name: 'Giải trí & Nội dung'
-            }, {path: '/hocho/questions', name: 'Forum'},],
+                path: '/hocho/questions',
+                name: 'Forum'
+            }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
             ROLE_PARENT: [{path: '/hocho/parent', name: 'Thông tin Phụ huynh'}, {
                 path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'
             }, {path: '/hocho/questions', name: 'Forum'},],
@@ -170,7 +172,7 @@ function Header() {
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
                                             <a href="/hocho/teacher/course">Subject <FontAwesomeIcon icon={faAngleDown}
-                                                                                              className={styles.mainMenuIcon}/></a>
+                                                                                                     className={styles.mainMenuIcon}/></a>
                                             <ul className={styles.submenu}>
                                                 <li><a href="/hocho/teacher/course">Course</a></li>
                                                 <li><a href="/event-carousel">Event Carousel</a></li>

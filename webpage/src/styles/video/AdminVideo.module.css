@@ -1,0 +1,275 @@
+:root {
+    --primary-color: #f39f5f;
+    --text-color: #385469;
+    --text-secondary: #666;
+    --background-light: #f8f9fa;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.videoApprovalContainer {
+    padding: 24px;
+    background: var(--background-light);
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+.videoApprovalTitle {
+    color: var(--primary-color)!important;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.videoApprovalList {
+    margin-top: 16px;
+}
+
+.videoApprovalCard {
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.videoApprovalCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.videoApprovalCard :global(.ant-card-head-title) {
+    color: var(--text-color);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.videoApprovalCardInfo {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+.videoApprovalApproveButton {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    transition: background 0.3s ease, transform 0.3s ease !important;
+}
+
+.videoApprovalApproveButton:hover,
+.videoApprovalApproveButton:focus {
+    background: #e08e4f !important;
+    border-color: #e08e4f !important;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.videoApprovalRejectButton {
+    border-radius: 8px !important;
+    transition: transform 0.3s ease !important;
+}
+
+.videoApprovalRejectButton:hover,
+.videoApprovalRejectButton:focus {
+    transform: scale(1.05);
+    outline: none;
+}
+
+.videoApprovalViewButton {
+    background: transparent !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    border-radius: 8px !important;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease !important;
+}
+
+.videoApprovalViewButton:hover,
+.videoApprovalViewButton:focus {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.videoApprovalError {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 600px;
+    margin: 24px auto;
+    font-size: 16px;
+}
+
+.videoApprovalModal :global(.ant-modal-content) {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.videoApprovalModal :global(.ant-modal-header) {
+    border-bottom: none !important;
+    padding: 16px 24px !important;
+}
+
+.videoApprovalModal :global(.ant-modal-title) {
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+}
+
+.videoApprovalModal :global(.ant-modal-footer) {
+    padding: 16px 24px !important;
+}
+
+.videoApprovalModal :global(.ant-btn-primary) {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    border-radius: 8px !important;
+}
+
+.videoApprovalModal :global(.ant-btn-primary:hover),
+.videoApprovalModal :global(.ant-btn-primary:focus) {
+    background: #e08e4f !important;
+    border-color: #e08e4f !important;
+}
+
+.videoApprovalModal :global(.ant-btn-default) {
+    border-color: var(--text-secondary) !important;
+    color: var(--text-secondary) !important;
+    border-radius: 8px !important;
+}
+
+.videoApprovalModal :global(.ant-btn-default:hover),
+.videoApprovalModal :global(.ant-btn-default:focus) {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.videoApprovalModalDescription {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.videoApprovalModalText {
+    font-size: 16px;
+    color: var(--text-color);
+    margin: 16px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .videoApprovalContainer {
+        padding: 16px;
+    }
+
+    .videoApprovalTitle {
+        font-size: 24px;
+    }
+
+    .videoApprovalList :global(.ant-list-grid .ant-col) {
+        flex: 0 0 50% !important; /* 2 columns */
+        max-width: 50% !important;
+    }
+
+    .videoApprovalCardInfo {
+        font-size: 13px;
+    }
+
+    .videoApprovalApproveButton,
+    .videoApprovalRejectButton,
+    .videoApprovalViewButton {
+        font-size: 13px !important;
+        padding: 6px 12px !important;
+    }
+
+    .videoApprovalModal :global(.ant-modal-title) {
+        font-size: 18px !important;
+    }
+
+    .videoApprovalModalText {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .videoApprovalContainer {
+        padding: 12px;
+    }
+
+    .videoApprovalTitle {
+        font-size: 20px;
+    }
+
+    .videoApprovalList :global(.ant-list-grid .ant-col) {
+        flex: 0 0 100% !important; /* 1 column */
+        max-width: 100% !important;
+    }
+
+    .videoApprovalApproveButton,
+    .videoApprovalRejectButton,
+    .videoApprovalViewButton {
+        font-size: 12px !important;
+        padding: 6px 8px !important;
+    }
+
+    .videoApprovalModal :global(.ant-modal-title) {
+        font-size: 16px !important;
+    }
+
+    .videoApprovalModalText {
+        font-size: 13px;
+    }
+}

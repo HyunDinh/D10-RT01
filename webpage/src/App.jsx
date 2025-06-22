@@ -78,14 +78,14 @@ const App = () => {
             <Routes>
                 <Route path="" element={<Home/>}/>
 
-                // new
+                {/*// new*/}
                 <Route path="hocho/login" element={<Auth/>}/>
                 <Route path="hocho/home" element={<Home/>}/>
                 <Route path="hocho/forgot-password" element={<ForgotPassword/>}/>
                 <Route path="hocho/reset-password" element={<ResetPassword/>}/>
                 <Route path="hocho/profile" element={<Profile/>}/>
 
-                // old
+                {/*// old*/}
                 <Route path="hocho/verify" element={<Verify/>}/>
                 <Route path="hocho/verify-child" element={<VerifyChild/>}/>
                 <Route path="hocho/welcome" element={<Welcome/>}/>
@@ -135,16 +135,16 @@ const App = () => {
                        element={<AddLessonContentPage/>}/>
 
                 {/* Video Routes */}
-                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em */}
+                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em done */}
                 <Route path="/hocho/teacher/video"
-                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên */}
-                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới */}
+                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên done*/}
+                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới done*/}
                 <Route path="/hocho/teacher/video/edit/:videoId"
-                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa video */}
+                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa videodone */}
                 <Route path="/hocho/admin/video/approval"
-                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin */}
+                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin done */}
                 <Route path="/hocho/video/:videoId"
-                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video) */}
+                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video)done */}
 
                 {/* Quiz Routes */}
                 <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}

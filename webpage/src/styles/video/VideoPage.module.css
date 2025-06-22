@@ -1,0 +1,330 @@
+:root {
+    --primary-color: #f39f5f; /* App theme color */
+    --text-color: #385469;
+    --text-secondary: #666;
+    --background-light: #f8f9fa;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.videoPageContainer {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 24px;
+    background: var(--background-light);
+    position: relative;
+}
+
+.videoPagePlayerWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio (9/16 = 0.5625) */
+    height: auto;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Subtle YouTube-like shadow */
+    transition: box-shadow 0.3s ease;
+}
+
+.videoPagePlayerWrapper:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Glow on hover */
+}
+
+.videoPagePlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+/* Override ReactPlayer controls to mimic YouTube */
+:global(.react-player__controls) {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) !important;
+    transition: opacity 0.3s ease !important;
+}
+
+:global(.react-player__progress) {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+:global(.react-player__progress__filled) {
+    background: #ff0000 !important; /* YouTube’s red progress bar */
+}
+
+:global(.react-player__play-pause:hover),
+:global(.react-player__volume:hover),
+:global(.react-player__fullscreen:hover) {
+    color: #fafafa !important;
+    transform: scale(1.1) !important;
+}
+
+.videoPageHeader {
+    text-align: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.videoPageFilterWrapper {
+    position: absolute;
+    top: 7%;
+    right: 2%;
+
+}
+
+.videoPageTitle {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 40px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.videoPageFilter {
+    width: 160px;
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.videoPageFilter:hover,
+.videoPageFilter:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(243, 159, 95, 0.3);
+    outline: none;
+}
+
+.videoPageFilter option {
+    color: var(--text-color);
+}
+
+.videoPageList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.videoPageCard {
+    border-radius: 12px;
+    padding: 10px 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.videoPageCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.videoPageCardHeader {
+    background: linear-gradient(135deg, #fff, #f9f9f9);
+    border-bottom: 1px solid #e8e8e8;
+    padding: 12px 16px;
+}
+
+.videoPageCardTitle {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 6px;
+}
+
+.videoPageNoVideo {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin: 16px 0;
+    font-weight: 500;
+}
+
+.videoPageUploadedBy {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+    font-style: italic;
+}
+
+.bottomVideo {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.videoPageLoading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.videoPageLoading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-color);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .videoPageContainer {
+        padding: 16px;
+    }
+
+    .videoPageTitle {
+        font-size: 28px;
+    }
+
+    .videoPageFilter {
+        width: 140px;
+    }
+
+    .videoPageList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .videoPageCardTitle {
+        font-size: 16px;
+    }
+
+    .videoPageCardBody {
+        padding: 12px;
+    }
+
+    .videoPagePlayerWrapper {
+        margin-bottom: 8px;
+    }
+
+    .videoPageNoVideo {
+        font-size: 13px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .videoPageContainer {
+        padding: 12px;
+    }
+
+    .videoPageHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .videoPageTitle {
+        font-size: 24px;
+    }
+
+    .videoPageFilter {
+        width: 100%;
+    }
+
+    .videoPageList {
+        grid-template-columns: 1fr;
+    }
+
+    .videoPageCardTitle {
+        font-size: 14px;
+    }
+
+    .videoPageUploadedBy,
+    .videoPageNoVideo {
+        font-size: 12px;
+    }
+
+    .videoPageCardBody {
+        padding: 0 8px 8px;
+    }
+
+    .videoPageNoVideo {
+        font-size: 12px;
+        padding: 8px;
+    }
+}

@@ -1,0 +1,406 @@
+:root {
+    --primary-color: #f39f5f;
+    --text-color: #385469;
+    --text-secondary: #666;
+    --background-light: #f8f9fa;
+}
+
+.videoDetailContainer {
+    max-width: 100%;
+    margin: 30px auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.videoDetailMain {
+    flex: 1;
+    max-width: 1000px;
+}
+
+.videoDetailTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.videoDetailPlayerWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.videoDetailPlayerWrapper:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.videoDetailPlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+:global(.react-player__controls) {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent) !important;
+    transition: opacity 0.3s ease !important;
+}
+
+:global(.react-player__progress) {
+    background: rgba(255, 255, 255, 0.3) !important;
+}
+
+:global(.react-player__progress__filled) {
+    background: #ff0000 !important; /* YouTube red */
+}
+
+:global(.react-player__play-pause:hover),
+:global(.react-player__volume:hover),
+:global(.react-player__fullscreen:hover) {
+    color: #fff !important;
+    transform: scale(1.1) !important;
+}
+
+.videoDetailPlayerPlaceholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    z-index: 10;
+}
+
+.videoDetailPlaceholderThumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.7;
+    border-radius: 8px;
+}
+
+.videoDetailPlaceholderNoThumbnail {
+    font-size: 16px;
+    color: var(--text-secondary);
+    text-align: center;
+    background: #f1f1f1;
+    padding: 16px;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.videoDetailSpinner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-color);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.videoDetailUploadedBy {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 8px 0 16px;
+    font-style: italic;
+}
+
+.videoDetailNoVideo {
+    font-size: 16px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 16px;
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.videoDetailComments {
+    margin-top: 24px;
+}
+
+.videoDetailCommentsTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 16px;
+}
+
+.videoDetailCommentForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.videoDetailCommentInput {
+    width: 100%;
+    padding: 12px;
+    min-height: 100px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-color);
+    resize: vertical;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.videoDetailCommentInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(243, 159, 95, 0.3);
+    outline: none;
+}
+
+.videoDetailCommentButton {
+    align-self: flex-end;
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.videoDetailCommentButton:hover,
+.videoDetailCommentButton:focus {
+    background: #e08e4f;
+    outline: none;
+}
+
+.videoDetailCommentList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.videoDetailCommentItem {
+    padding: 12px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.videoDetailCommentAuthor {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 4px;
+}
+
+.videoDetailCommentContent {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 4px;
+}
+
+.videoDetailCommentDate {
+    font-size: 12px;
+    color: #999;
+    margin: 0;
+}
+
+.videoDetailNoComments {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 12px;
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.videoDetailSuggested {
+    width: 300px;
+}
+
+.videoDetailSuggestedTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 16px;
+}
+
+.videoDetailSuggestedList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.videoDetailSuggestedItem {
+    margin-bottom: 12px;
+}
+
+.videoDetailSuggestedCard {
+    display: flex;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.videoDetailSuggestedCard:hover,
+.videoDetailSuggestedCard:focus {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    outline: none;
+}
+
+.videoDetailSuggestedThumbnail {
+    width: 120px;
+    height: 67.5px; /* 16:9 aspect ratio */
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.videoDetailSuggestedCardTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.videoDetailSuggestedUploadedBy {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 4px 0 0;
+}
+
+.videoDetailError {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 600px;
+    margin: 24px auto;
+    font-size: 16px;
+}
+
+.videoDetailLoading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.videoDetailLoading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-color);
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .videoDetailContainer {
+        flex-direction: column;
+    }
+
+    .videoDetailMain {
+        max-width: 100%;
+    }
+
+    .videoDetailSuggested {
+        width: 100%;
+    }
+
+    .videoDetailSuggestedCard {
+        flex-direction: column;
+    }
+
+    .videoDetailSuggestedThumbnail {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+    }
+}
+
+@media (max-width: 768px) {
+    .videoDetailContainer {
+        padding: 16px;
+    }
+
+    .videoDetailTitle {
+        font-size: 24px;
+    }
+
+    .videoDetailCommentsTitle,
+    .videoDetailSuggestedTitle {
+        font-size: 18px;
+    }
+
+    .videoDetailCommentInput {
+        font-size: 13px;
+    }
+
+    .videoDetailCommentButton {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .videoDetailContainer {
+        padding: 12px;
+    }
+
+    .videoDetailTitle {
+        font-size: 20px;
+    }
+
+    .videoDetailUploadedBy,
+    .videoDetailNoVideo,
+    .videoDetailNoComments {
+        font-size: 13px;
+    }
+
+    .videoDetailCommentAuthor,
+    .videoDetailCommentContent {
+        font-size: 13px;
+    }
+
+    .videoDetailCommentDate {
+        font-size: 11px;
+    }
+
+    .videoDetailSuggestedCardTitle {
+        font-size: 13px;
+    }
+
+    .videoDetailSuggestedUploadedBy {
+        font-size: 11px;
+    }
+}
