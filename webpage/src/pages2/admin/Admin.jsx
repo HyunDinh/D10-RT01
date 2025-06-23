@@ -1,0 +1,515 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import styles from '../../styles/Admin.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus, faTimes, faCheck, faBan, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+
+const Admin = () => {
+    const navigate = useNavigate();
+    const [users, setUsers] = useState([]);
+    const [pendingTeachers, setPendingTeachers] = useState([]);
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [currentUser, setCurrentUser] = useState({
+        id: null,
+        username: '',
+        password: '',
+        email: '',
+        parentEmail: '',
+        role: 'child',
+        phoneNumber: '',
+        fullName: '',
+        dateOfBirth: '',
+        isActive: true,
+        verified: false
+    });
+
+    useEffect(() => {
+        const role = localStorage.getItem('userRole');
+        if (role !== 'ROLE_ADMIN') {
+            navigate('/hocho/login');
+            return;
+        }
+
+        fetchUsers();
+        fetchPendingTeachers();
+    }, [navigate]);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/admin/users', {
+                withCredentials: true
+            });
+            setUsers(response.data);
+        } catch (err) {
+            setError('Lỗi khi tải danh sách người dùng: ' + (err.response?.data || err.message));
+        }
+    };
+
+    const fetchPendingTeachers = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/admin/pending-teachers', {
+                withCredentials: true
+            });
+            setPendingTeachers(response.data);
+        } catch (err) {
+            setError('Lỗi khi tải danh sách giáo viên chờ duyệt: ' + (err.response?.data || err.message));
+        }
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setCurrentUser({
+            ...currentUser,
+            [name]: type === 'checkbox' ? checked : value
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setMessage('');
+        setError('');
+
+        try {
+            if (isEditing) {
+                const response = await axios.put(`http://localhost:8080/api/admin/users/${currentUser.id}`, {
+                    username: currentUser.username,
+                    email: currentUser.email,
+                    phoneNumber: currentUser.phoneNumber,
+                    fullName: currentUser.fullName,
+                    dateOfBirth: currentUser.dateOfBirth,
+                    role: currentUser.role,
+                    isActive: currentUser.isActive.toString(),
+                    verified: currentUser.verified.toString()
+                }, { withCredentials: true });
+                setMessage('Cập nhật người dùng thành công!');
+                setUsers(users.map(user => user.id === currentUser.id ? response.data : user));
+            } else {
+                const payload = {
+                    username: currentUser.username,
+                    password: currentUser.password,
+                    role: currentUser.role,
+                    phoneNumber: currentUser.phoneNumber,
+                    fullName: currentUser.fullName,
+                    dateOfBirth: currentUser.dateOfBirth
+                };
+                if (currentUser.role === 'child') {
+                    payload.parentEmail = currentUser.parentEmail;
+                } else {
+                    payload.email = currentUser.email;
+                }
+                const response = await axios.post('http://localhost:8080/api/admin/users', payload, {
+                    withCredentials: true
+                });
+                setMessage(response.data || 'Thêm người dùng thành công!');
+                fetchUsers();
+            }
+            setShowModal(false);
+            setCurrentUser({
+                id: null,
+                username: '',
+                password: '',
+                email: '',
+                parentEmail: '',
+                role: 'child',
+                phoneNumber: '',
+                fullName: '',
+                dateOfBirth: '',
+                isActive: true,
+                verified: false
+            });
+        } catch (err) {
+            setError(err.response?.data || 'Lỗi khi lưu người dùng.');
+        }
+    };
+
+    const handleEdit = (user) => {
+        setCurrentUser({
+            id: user.id,
+            username: user.username,
+            password: '',
+            email: user.email || '',
+            parentEmail: '',
+            role: user.role,
+            phoneNumber: user.phoneNumber || '',
+            fullName: user.fullName || '',
+            dateOfBirth: user.dateOfBirth || '',
+            isActive: user.isActive,
+            verified: user.verified
+        });
+        setIsEditing(true);
+        setShowModal(true);
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+            try {
+                const response = await axios.delete(`http://localhost:8080/api/admin/users/${id}`, {
+                    withCredentials: true
+                });
+                setMessage(response.data || 'Xóa người dùng thành công!');
+                setUsers(users.filter(user => user.id !== id));
+            } catch (err) {
+                setError(err.response?.data || 'Lỗi khi xóa người dùng.');
+            }
+        }
+    };
+
+    const handleApproveTeacher = async (id) => {
+        try {
+            const response = await axios.post(`http://localhost:8080/api/admin/approve-teacher/${id}`, {}, {
+                withCredentials: true
+            });
+            setMessage(response.data || 'Duyệt giáo viên thành công!');
+            fetchPendingTeachers();
+        } catch (err) {
+            setError(err.response?.data || 'Lỗi khi duyệt giáo viên.');
+        }
+    };
+
+    const handleRejectTeacher = async (id) => {
+        if (window.confirm('Bạn có chắc muốn từ chối giáo viên này?')) {
+            try {
+                const response = await axios.post(`http://localhost:8080/api/admin/reject-teacher/${id}`, {}, {
+                    withCredentials: true
+                });
+                setMessage(response.data || 'Từ chối giáo viên thành công!');
+                fetchPendingTeachers();
+            } catch (err) {
+                setError(err.response?.data || 'Lỗi khi từ chối giáo viên.');
+            }
+        }
+    };
+
+    const handleViewTeacherInfo = (email) => {
+        const sanitizedEmail = email.replace(/[^a-zA-Z0-9.-]/g, '_');
+        window.open(`http://localhost:8080/api/hocho/teacher-verification/${sanitizedEmail}.png`, '_blank');
+    };
+
+    const openAddModal = () => {
+        setIsEditing(false);
+        setCurrentUser({
+            id: null,
+            username: '',
+            password: '',
+            email: '',
+            parentEmail: '',
+            role: 'child',
+            phoneNumber: '',
+            fullName: '',
+            dateOfBirth: '',
+            isActive: true,
+            verified: false
+        });
+        setShowModal(true);
+    };
+
+    return (
+        <div className="flex flex-col min-h-screen bg-[#f4eee5] font-sans">
+            <Header />
+            <main className="flex-grow container mx-auto my-8 px-4">
+                <h1 className="text-4xl font-bold text-[#385469] mb-6">Quản lý người dùng</h1>
+                {message && <div className="bg-green-100 text-green-800 p-4 rounded mb-4">{message}</div>}
+                {error && <div className="bg-red-100 text-red-800 p-4 rounded mb-4">{error}</div>}
+                <button
+                    onClick={openAddModal}
+                    className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition mb-6"
+                >
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" /> Thêm người dùng
+                </button>
+                <div className={styles.tableContainer}>
+                    <table className={styles.userTable}>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Họ tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Vai trò</th>
+                            <th>Trạng thái</th>
+                            <th>Xác minh</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.username}</td>
+                                <td>{user.email || '-'}</td>
+                                <td>{user.phoneNumber || '-'}</td>
+                                <td>{user.fullName || '-'}</td>
+                                <td>{user.dateOfBirth || '-'}</td>
+                                <td>{user.role}</td>
+                                <td>{user.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                <td>{user.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                <td>
+                                    <button
+                                        onClick={() => handleEdit(user)}
+                                        className="text-[#385469] hover:text-[#f39f5f] mr-2"
+                                    >
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(user.id)}
+                                        className="text-[#dc3545] hover:text-[#b02a37]"
+                                    >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 className="text-3xl font-bold text-[#385469] my-8">Duyệt tài khoản giáo viên</h2>
+                <div className={styles.tableContainer}>
+                    <table className={styles.userTable}>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Thông tin</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {pendingTeachers.length === 0 ? (
+                            <tr>
+                                <td colSpan="6" className="text-center py-4">Không có giáo viên chờ duyệt.</td>
+                            </tr>
+                        ) : (
+                            pendingTeachers.map(teacher => (
+                                <tr key={teacher.id}>
+                                    <td>{teacher.id}</td>
+                                    <td>{teacher.username}</td>
+                                    <td>{teacher.email}</td>
+                                    <td>{teacher.phoneNumber || '-'}</td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleViewTeacherInfo(teacher.email)}
+                                            className="text-[#385469] hover:text-[#f39f5f] flex items-center"
+                                        >
+                                            <FontAwesomeIcon icon={faInfoCircle} className="mr-1" /> Xem thông tin
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button
+                                            onClick={() => handleApproveTeacher(teacher.id)}
+                                            className="text-green-600 hover:text-green-800 mr-2"
+                                        >
+                                            <FontAwesomeIcon icon={faCheck} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleRejectTeacher(teacher.id)}
+                                            className="text-red-600 hover:text-red-800"
+                                        >
+                                            <FontAwesomeIcon icon={faBan} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {showModal && (
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modalContent}>
+                            <div className="flex justify-between items-center mb-4">
+                                <h2 className="text-2xl font-bold text-[#385469]">
+                                    {isEditing ? 'Cập nhật người dùng' : 'Thêm người dùng'}
+                                </h2>
+                                <button onClick={() => setShowModal(false)} className="text-[#385469] hover:text-[#f39f5f]">
+                                    <FontAwesomeIcon icon={faTimes} size="lg" />
+                                </button>
+                            </div>
+                            <form onSubmit={handleSubmit}>
+                                <div className={styles.formGroup}>
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            className={styles.input}
+                                            value={currentUser.username}
+                                            onChange={handleInputChange}
+                                            required
+                                            placeholder=" "
+                                        />
+                                        <label className={styles.label}>Tên đăng nhập</label>
+                                        <span className={styles.notch}></span>
+                                    </div>
+                                </div>
+                                {!isEditing && (
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="password"
+                                                name="password"
+                                                className={styles.input}
+                                                value={currentUser.password}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Mật khẩu</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                )}
+                                {currentUser.role !== 'child' && (
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                className={styles.input}
+                                                value={currentUser.email}
+                                                onChange={handleInputChange}
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Email</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                )}
+                                {!isEditing && currentUser.role === 'child' && (
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="email"
+                                                name="parentEmail"
+                                                className={styles.input}
+                                                value={currentUser.parentEmail}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Email phụ huynh</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                )}
+                                <div className={styles.formGroup}>
+                                    <div className={styles.inputContainer}>
+                                        <select
+                                            name="role"
+                                            className={styles.input}
+                                            value={currentUser.role}
+                                            onChange={handleInputChange}
+                                            required
+                                        >
+                                            <option value="child">Học sinh</option>
+                                            <option value="parent">Phụ huynh</option>
+                                            <option value="teacher">Giáo viên</option>
+                                            <option value="admin">Quản trị viên</option>
+                                        </select>
+                                        <label className={styles.label}>Vai trò</label>
+                                        <span className={styles.notch}></span>
+                                    </div>
+                                </div>
+                                {(currentUser.role === 'parent' || currentUser.role === 'teacher' || currentUser.role === 'admin') && (
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="text"
+                                                name="phoneNumber"
+                                                className={styles.input}
+                                                value={currentUser.phoneNumber}
+                                                onChange={handleInputChange}
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Số điện thoại</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                )}
+                                <div className={styles.formGroup}>
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="text"
+                                            name="fullName"
+                                            className={styles.input}
+                                            value={currentUser.fullName}
+                                            onChange={handleInputChange}
+                                            placeholder=" "
+                                        />
+                                        <label className={styles.label}>Họ tên</label>
+                                        <span className={styles.notch}></span>
+                                    </div>
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="date"
+                                            name="dateOfBirth"
+                                            className={styles.input}
+                                            value={currentUser.dateOfBirth}
+                                            onChange={handleInputChange}
+                                            placeholder=" "
+                                        />
+                                        <label className={styles.label}>Ngày sinh</label>
+                                        <span className={styles.notch}></span>
+                                    </div>
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            name="isActive"
+                                            className="mr-2"
+                                            checked={currentUser.isActive}
+                                            onChange={handleInputChange}
+                                        />
+                                        <span className="text-[#385469]">Hoạt động</span>
+                                    </label>
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            name="verified"
+                                            className="mr-2"
+                                            checked={currentUser.verified}
+                                            onChange={handleInputChange}
+                                        />
+                                        <span className="text-[#385469]">Đã xác minh</span>
+                                    </label>
+                                </div>
+                                <div className="flex justify-end mt-6">
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowModal(false)}
+                                        className="bg-[#385469] text-white px-4 py-2 rounded hover:bg-[#2a3f4e] transition mr-2"
+                                    >
+                                        Đóng
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition"
+                                    >
+                                        {isEditing ? 'Cập nhật' : 'Thêm'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </main>
+            <Footer />
+        </div>
+    );
+};
+
+export default Admin;
