@@ -1,5 +1,6 @@
 package d10_rt01.hocho.controller.courseEnrollment;
 
+
 import d10_rt01.hocho.model.CourseEnrollment;
 import d10_rt01.hocho.repository.CourseEnrollmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package d10_rt01.hocho.controller.payment;
 
-
 import d10_rt01.hocho.dto.payment.request.PaymentRequest;
 import d10_rt01.hocho.dto.payment.response.PaymentResponse;
 import d10_rt01.hocho.dto.transaction.TransactionDto;
@@ -10,12 +9,14 @@ import d10_rt01.hocho.service.payment.PaymentService;
 import d10_rt01.hocho.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 
 @RestController
 @RequestMapping("/api/payments")
@@ -40,7 +41,7 @@ public class PaymentController {
             }
 
             Payment payment = paymentService.createPayment(userId, cartItemIds, description);
-            
+
             return ResponseEntity.ok(new PaymentResponse(payment.getPaymentUrl()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,6 +105,7 @@ public class PaymentController {
             Payment payment = paymentService.handlePaymentReturn(orderCode);
             return ResponseEntity.ok(payment);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Lỗi khi xử lý thanh toán: " + e.getMessage());
         }
     }
@@ -119,7 +121,7 @@ public class PaymentController {
             String username = authentication.getName();
 
             User user = userService.findByUsername(username);
-            
+
             Long userId = user.getId();
 
             List<TransactionDto> transactions = paymentService.getTransactionsByUserId(userId);

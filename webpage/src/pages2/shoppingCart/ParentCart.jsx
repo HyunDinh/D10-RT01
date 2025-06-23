@@ -42,25 +42,19 @@ const ParentCart = () => {
             const response = await axios.get(`http://localhost:8080/api/parent-cart/${parentId}`, {
                 withCredentials: true
             });
-            const fetchedCartItems = response.data; // Lưu dữ liệu nhận được vào biến tạm
-            setCartItems(fetchedCartItems); // Cập nhật state cartItems
-            console.log("Cart Items Data:", fetchedCartItems); // Log dữ liệu thô
+            const fetchedCartItems = response.data;
+            setCartItems(fetchedCartItems);
 
-            // Tính toán và cập nhật state payableItems và totalAmount ngay sau khi nhận dữ liệu
             const payableItemsAfterFetch = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'ADDED_DIRECTLY'));
             const totalAmountAfterFetch = payableItemsAfterFetch.reduce((sum, item) => sum + (item.course.price || 0), 0);
             
-            setCalculatedPayableItems(payableItemsAfterFetch); // Cập nhật state đã tính toán
-            setCalculatedTotalAmount(totalAmountAfterFetch); // Cập nhật state đã tính toán
-
-            console.log("Payable Items (after fetch and state update):", payableItemsAfterFetch);
-            console.log("Total Amount (after fetch and state update):", totalAmountAfterFetch);
+            setCalculatedPayableItems(payableItemsAfterFetch);
+            setCalculatedTotalAmount(totalAmountAfterFetch);
 
             setLoading(false);
         } catch (err) {
             setError('Không thể tải giỏ hàng');
             setLoading(false);
-            console.error("Fetch Cart Error:", err);
         }
     };
 
@@ -131,19 +125,10 @@ const ParentCart = () => {
              const userId = userResponse.data.id;
 
             const description = "Thanh toán các khóa học đã chọn";
-            // Lấy danh sách cartItemIds từ các mục có thể thanh toán
             const cartItemIds = calculatedPayableItems.map(item => item.cartId);
 
-            console.log("Cart Item IDs to send:", cartItemIds); // Log trước khi gửi
-
-            // Gọi service backend với userId, danh sách cartItemIds và description
             const payment = await paymentService.createPayment(userId, cartItemIds, description);
 
-            console.log("Payment object received:", payment); // Log đối tượng paym
-            console.log("Type of payment.paymentUrl:", typeof payment.paymentUrl);
-            console.log("Value of payment.paymentUrl:", payment.paymentUrl); // Log
-
-            // Parse the JSON string if payment is a string
             let paymentObject = payment;
             if (typeof payment === 'string') {
               try {
@@ -155,7 +140,6 @@ const ParentCart = () => {
               }
             }
 
-            // Kiểm tra rõ ràng hơn: payment là đối tượng, paymentUrl là chuỗi và kl
             if (paymentObject && typeof paymentObject.paymentUrl === 'string' && paymentObject.paymentUrl) {
               window.location.href = paymentObject.paymentUrl;
             } else {

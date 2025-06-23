@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const courseId = queryParams.get('courseId');
 
   useEffect(() => {
     fetchQuizzes(); 
-  }, []);
+    // eslint-disable-next-line
+  }, [courseId]);
 
   const fetchQuizzes = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/quizzes', {
+      let url = 'http://localhost:8080/api/quizzes';
+      if (courseId) {
+        url = `http://localhost:8080/api/quizzes/course/${courseId}`;
+      }
+      const res = await axios.get(url, {
         withCredentials: true
       });
       if (Array.isArray(res.data)) {
@@ -30,6 +38,17 @@ const QuizList = () => {
     }
   };
 
+  if (!courseId) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-danger text-center">
+          Bạn phải chọn một khóa học để xem hoặc tạo quiz.<br />
+          Vui lòng quay lại trang khóa học.
+        </div>
+      </div>
+    );
+  }
+
   if (loading) return <div className="alert alert-info text-center">Đang tải...</div>;
   if (error) return <div className="alert alert-danger text-center">{error}</div>;
 
@@ -37,7 +56,7 @@ const QuizList = () => {
     <div className="container mt-5">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="text-primary">Danh sách Quiz</h2>
-        <Link to="/quizzes/create" className="btn btn-primary">
+        <Link to={`/quizzes/create?courseId=${courseId}`} className="btn btn-primary">
           Tạo Quiz mới
         </Link>
       </div>
