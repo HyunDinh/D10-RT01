@@ -49,6 +49,7 @@ import AddVideoPage from './pages2/video/AddVideoPage';
 import EditVideoPage from './pages2/video/EditVideoPage';
 import VideoApprovalPage from './pages2/video/VideoApprovalPage';
 import VideoPlayer from './pages2/video/VideoPlayer';
+import TeacherVideoDetail from './pages2/video/TeacherVideoDetail';
 
 // quiz routes
 import QuizList from './pages2/quiz/QuizList';
@@ -145,6 +146,7 @@ const App = () => {
                        element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin done */}
                 <Route path="/hocho/video/:videoId"
                        element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video)done */}
+                <Route path="/hocho/teacher/video/:videoId" element={<TeacherVideoDetail/>}/> {/* Trang chi tiết video cho giáo viên */}
 
                 {/* Quiz Routes */}
                 <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}

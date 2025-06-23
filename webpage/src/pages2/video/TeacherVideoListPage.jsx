@@ -126,7 +126,7 @@ export default function TeacherVideoListPage() {
                                                     aria-label="Delete video"/>,
                                     <Button
                                         key="view"
-                                        onClick={() => navigate(`/video/${video.videoId}`)}
+                                        onClick={() => navigate(`/hocho/teacher/video/${video.videoId}`)}
                                         className={styles.myVideosViewButton}
                                         aria-label={`View video ${video.title}`}
                                     >

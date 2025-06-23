@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import styles from '../../styles/quiz/QuizDetail.module.css';
 
 const QuizDetail = () => {
   const { id } = useParams();
@@ -90,8 +91,8 @@ const QuizDetail = () => {
     }
   };
 
-  if (loading) return <div className="alert alert-info text-center">Đang tải...</div>;
-  if (error) return <div className="alert alert-danger text-center">{error}</div>;
+  if (loading) return <div className={styles.quizDetailAlert}>Đang tải...</div>;
+  if (error) return <div className={styles.quizDetailAlert}>{error}</div>;
   if (!quiz) return null;
 
   const formatTime = (seconds) => {
@@ -101,74 +102,63 @@ const QuizDetail = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <div className="card shadow">
-        <div className="card-header bg-primary text-white">
-          <div className="d-flex justify-content-between align-items-center">
-            <h4 className="mb-0">{quiz.title}</h4>
-            <div className="h4 mb-0">
-              Thời gian: {formatTime(timeLeft)}
-            </div>
-          </div>
+    <div className={styles.quizDetailContainer}>
+      <div className={styles.quizDetailHeader}>
+        <div className={styles.quizDetailTitle}>{quiz.title}</div>
+        <div className={styles.quizDetailHeaderActions}>
+          <div style={{fontWeight: 600, fontSize: '1.1rem'}}>Thời gian: {formatTime(timeLeft)}</div>
         </div>
-        <div className="card-body">
-          <p className="card-text">{quiz.description}</p>
-          <div className="mb-4">
-            <small className="text-muted">
-              Tổng điểm: {quiz.totalPoints} điểm | Số câu hỏi: {quiz.questions.length} câu
-            </small>
-          </div>
+      </div>
+      <div className={styles.quizDetailBody}>
+        <div className={styles.quizDetailInfoText}>{quiz.description}</div>
+        <div className={styles.quizDetailInfoText} style={{marginBottom: 18}}>
+          Tổng điểm: {quiz.totalPoints} điểm | Số câu hỏi: {quiz.questions.length} câu
+        </div>
 
-          {quiz.questions.map((question, index) => (
-            <div key={question.questionId} className="card mb-4">
-              <div className="card-body">
-                <h5 className="card-title">
-                  Câu {index + 1}: {question.questionText}
-                </h5>
-                {question.questionImageUrl && (
-                  <img 
-                    src={`http://localhost:8080${question.questionImageUrl}`} 
-                    alt="Ảnh minh họa" 
-                    className="img-fluid rounded mb-3" 
-                    style={{maxHeight: 200}} 
+        {quiz.questions.map((question, index) => (
+          <div key={question.questionId} className={styles.quizDetailQuestionCard}>
+            <div className={styles.quizDetailQuestionTitle}>
+              Câu {index + 1}: {question.questionText}
+            </div>
+            {question.questionImageUrl && (
+              <img 
+                src={`http://localhost:8080${question.questionImageUrl}`} 
+                alt="Ảnh minh họa" 
+                className={styles.quizDetailQuestionImage}
+              />
+            )}
+            <div>
+              {question.options.map(option => (
+                <label key={option.optionId} className={styles.quizDetailOption} style={{display: 'block', cursor: 'pointer'}}>
+                  <input
+                    type="radio"
+                    style={{marginRight: 8}}
+                    name={`question-${question.questionId}`}
+                    value={option.optionKey}
+                    checked={answers[question.questionId] === option.optionKey}
+                    onChange={() => handleAnswerChange(question.questionId, option.optionKey)}
                   />
-                )}
-                <div className="ms-3">
-                  {question.options.map(option => (
-                    <div key={option.optionId} className="form-check mb-2">
-                      <input
-                        type="radio"
-                        className="form-check-input"
-                        name={`question-${question.questionId}`}
-                        value={option.optionKey}
-                        checked={answers[question.questionId] === option.optionKey}
-                        onChange={() => handleAnswerChange(question.questionId, option.optionKey)}
-                      />
-                      <label className="form-check-label">
-                        {option.optionKey}. {option.optionText}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-muted mt-2">
-                  Điểm: {question.points} điểm
-                </div>
-              </div>
+                  {option.optionKey}. {option.optionText}
+                </label>
+              ))}
             </div>
-          ))}
-
-          <div className="d-flex justify-content-between align-items-center mt-4">
-            <div className="text-muted">
-              Đã trả lời: {Object.keys(answers).length}/{quiz.questions.length} câu
+            <div className={styles.quizDetailBadge}>
+              Điểm: {question.points} điểm
             </div>
-            <button 
-              className="btn btn-primary" 
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
-              {submitting ? 'Đang nộp bài...' : 'Nộp bài'}
-            </button>
           </div>
+        ))}
+
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24}}>
+          <div className={styles.quizDetailInfoText}>
+            Đã trả lời: {Object.keys(answers).length}/{quiz.questions.length} câu
+          </div>
+          <button 
+            className={styles.quizDetailBtn} 
+            onClick={handleSubmit}
+            disabled={submitting}
+          >
+            {submitting ? 'Đang nộp bài...' : 'Nộp bài'}
+          </button>
         </div>
       </div>
     </div>
