@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from 'react';
 
-function PlayDino() {
+function PlayDinoRun() {
     const [score, setScore] = useState(null);
 
     useEffect(() => {
@@ -51,4 +51,4 @@ function PlayDino() {
     );
 }
 
-export default PlayDino;
+export default PlayDinoRun;
