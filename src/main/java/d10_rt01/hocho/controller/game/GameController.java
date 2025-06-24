@@ -40,6 +40,11 @@ public class GameController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/approved")
+    public ResponseEntity<List<Game>> getApprovedGames(Model model) {
+        return ResponseEntity.ok(gameService.findApprovedGames());
+    }
+
 
 
 

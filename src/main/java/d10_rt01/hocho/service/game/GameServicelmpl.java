@@ -31,6 +31,11 @@ public class GameServicelmpl implements GameService {
     }
 
     @Override
+    public List<Game> findApprovedGames() {
+        return gameRepository.findByStatus(ContentStatus.APPROVED);
+    }
+
+    @Override
     public Game findById(Long gameId) {
         return gameRepository.findById(gameId).get();
     }
