@@ -1,6 +1,8 @@
 package d10_rt01.hocho.controller.admin;
 
+import d10_rt01.hocho.model.ParentChildMapping;
 import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.repository.ParentChildMappingRepository;
 import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.utils.CustomLogger;
 import jakarta.mail.MessagingException;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,6 +27,9 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ParentChildMappingRepository parentChildMappingRepository;
+
     // Get all users
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -31,6 +37,26 @@ public class AdminController {
         List<User> users = userService.getAllUsers();
         logger.info("Retrieved {} users", users.size());
         return ResponseEntity.ok(users);
+    }
+
+    // Get number of children for a parent
+    @GetMapping("/users/{username}/children/count")
+    public ResponseEntity<Integer> getNumberOfChildren(@PathVariable String username) {
+        logger.info("Fetching number of children for username: {}", username);
+        int count = userService.getNumberOfChild(username);
+        return ResponseEntity.ok(count);
+    }
+
+    // Get children by parent email
+    @GetMapping("/users/{parentEmail}/children")
+    public ResponseEntity<List<User>> getChildrenByParentEmail(@PathVariable String parentEmail) {
+        logger.info("Fetching children for parent email: {}", parentEmail);
+        List<ParentChildMapping> mappings = parentChildMappingRepository.findByParentEmail(parentEmail);
+        List<User> children = mappings.stream()
+                .map(ParentChildMapping::getChild)
+                .collect(Collectors.toList());
+        logger.info("Retrieved {} children for parent email: {}", children.size(), parentEmail);
+        return ResponseEntity.ok(children);
     }
 
     // Create a new user
