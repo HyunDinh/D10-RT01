@@ -125,8 +125,8 @@ const App = () => {
                 <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn/>}/>
 
                 {/* Lesson Routes */}
-                <Route path="/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
-                <Route path="/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
+                <Route path="/hocho/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
+                <Route path="/hocho/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson" element={<LessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>}/>
@@ -147,16 +147,16 @@ const App = () => {
                        element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video)done */}
 
                 {/* Quiz Routes */}
-                <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
-                <Route path="/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
-                <Route path="/quizzes/:id" element={
+                <Route path="/hocho/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/:id" element={
                     <QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
-                <Route path="/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
-                <Route path="/quizzes/:id/edit"
+                <Route path="/hocho/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
+                <Route path="/hocho/quizzes/:id/edit"
                        element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
-                <Route path="/quizzes/:id/result"
+                <Route path="/hocho/quizzes/:id/result"
                        element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
-                <Route path="/quizzes/:id/review"
+                <Route path="/hocho/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
                 {/* Time Restriction Routes */}
                 {/*<Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>*/}

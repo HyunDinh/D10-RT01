@@ -82,14 +82,13 @@ function Header() {
 
         const menuItems = {
             ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'},
-                {path: '/hocho/teacher', name: 'Quản lý khóa học'},
+                {path: '/hocho/admin/course/approval', name: 'Course Manager'},
                 {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
                 {path: '/hocho/admin/video/approval', name: 'Approval Video'},
                 {path: '/hocho/questions', name: 'Forum'},
             ],
-            ROLE_TEACHER: [{path: '/hocho/teacher', name: 'Quản lý khóa học'}, {
-                path: '/hocho/questions',
-                name: 'Forum'
+            ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
+                path: '/hocho/questions', name: 'Forum'
             }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
             ROLE_PARENT: [{path: '/hocho/parent', name: 'Thông tin Phụ huynh'}, {
                 path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'
@@ -167,12 +166,13 @@ function Header() {
                                 </li>
                                 <li><a href="/about">About Us</a></li>
                                 <li className={styles.hasDropdown}>
-                                    <a href="/news">Courses <FontAwesomeIcon icon={faAngleDown}
-                                                                             className={styles.mainMenuIcon}/></a>
+                                    <a href="#">Courses <FontAwesomeIcon icon={faAngleDown}
+                                                                         className={styles.mainMenuIcon}/></a>
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
-                                            <a href="/hocho/teacher/course">Subject <FontAwesomeIcon icon={faAngleDown}
-                                                                                                     className={styles.mainMenuIcon}/></a>
+                                            <a href="/hocho/course">Subject
+                                                <FontAwesomeIcon icon={faAngleDown}
+                                                                 className={styles.mainMenuIcon}/></a>
                                             <ul className={styles.submenu}>
                                                 <li><a href="/hocho/teacher/course">Course</a></li>
                                                 <li><a href="/event-carousel">Event Carousel</a></li>

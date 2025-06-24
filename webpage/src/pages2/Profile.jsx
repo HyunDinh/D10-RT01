@@ -5,8 +5,7 @@ import styles from '../styles/Profile.module.css';
 import Header from '../components/Header';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleCheck} from '@fortawesome/free-regular-svg-icons';
-import { faImage, faUser } from '@fortawesome/free-regular-svg-icons';
+import {faCircleCheck, faImage, faUser} from '@fortawesome/free-regular-svg-icons';
 
 function Profile() {
     const [user, setUser] = useState({});
@@ -163,41 +162,45 @@ function Profile() {
             </div>
         </section>
         <div className={styles.accountHub}>
-            <div className={styles.gridContainer}>
-                <div className={styles.gridItems}>
-                    <div className={styles.userPreview}>
-                        <div className={styles.userInfo}>
-                            <img
-                                src={getAvatarUrl()}
-                                alt="User Avatar"
-                                className={styles.avatarImg}
-                                onError={(e) => {
-                                    e.target.src = `http://localhost:8080/profile/default.png?t=${new Date().getTime()}`;
-                                }}
-                            />
-                            {user.isActive &&
-                                <FontAwesomeIcon icon={faCircleCheck} bounce className={styles.verifyIcon}/>}
-                        </div>
-                        <span>{user.isActive ? '' : 'This account not verify'}</span>
+            <div className={styles.gridItems}>
+                <div className={styles.userPreview}>
+                    <div className={styles.background}>
+                        <img src="/avaBack.jpg" alt="Background" className={styles.backgroundImg} />
                     </div>
-                    <button className={styles.uploadBox} onClick={() => fileInputRef.current.click()}>
-                        <FontAwesomeIcon icon={faUser} className={styles.IconUpload}/>
-                        <p>Change Avatar</p>
-                        <p>110x110px size minimum</p>
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            style={{display: 'none'}}
-                            accept="image/png,image/jpeg,image/jpg"
-                            onChange={handleFileChange}
+                    <div className={styles.userInfo}>
+                        <img
+                            src={getAvatarUrl()}
+                            alt="User Avatar"
+                            className={styles.avatarImg}
+                            onError={(e) => {
+                                e.target.src = `http://localhost:8080/profile/default.png?t=${new Date().getTime()}`;
+                            }}
                         />
-                    </button>
-                    <button className={styles.uploadBox}>
-                        <FontAwesomeIcon icon={faImage} className={styles.IconUpload}/>
-                        <p>Change Cover</p>
-                        <p>1184x300px size minimum</p>
-                    </button>
+                        {user.isActive && (
+                            <FontAwesomeIcon icon={faCircleCheck} bounce className={styles.verifyIcon}/>
+                        )}
+                    </div>
+                    <span>{user.isActive ? '' : 'This account not verify'}</span>
                 </div>
+                <button className={styles.uploadBox} onClick={() => fileInputRef.current.click()}>
+                    <FontAwesomeIcon icon={faUser} className={styles.IconUpload}/>
+                    <p>Change Avatar</p>
+                    <p>110x110px size minimum</p>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{display: 'none'}}
+                        accept="image/png,image/jpeg,image/jpg"
+                        onChange={handleFileChange}
+                    />
+                </button>
+                <button className={styles.uploadBox}>
+                    <FontAwesomeIcon icon={faImage} className={styles.IconUpload}/>
+                    <p>Change Cover</p>
+                    <p>1184x300px size minimum</p>
+                </button>
+            </div>
+            <div className={styles.gridContainer}>
                 <div className={styles.widgetBox}>
                     <div className={styles.profileHeader}>
                         <p className={styles.widgetTitle}>About Your Profile</p>
