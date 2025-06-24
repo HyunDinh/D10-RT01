@@ -3,7 +3,6 @@ package d10_rt01.hocho.service.user;
 import d10_rt01.hocho.config.DebugModeConfig;
 import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.utils.CustomLogger;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

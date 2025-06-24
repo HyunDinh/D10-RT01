@@ -18,4 +18,5 @@ public interface ParentChildMappingRepository extends JpaRepository<ParentChildM
 
     // Lấy danh sách các con của phụ huynh
     List<ParentChildMapping> findByParentId(Long parentId);
+    void deleteByChildId(Long childId);
 }

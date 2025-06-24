@@ -92,6 +92,7 @@ body {
     position: relative;
     width: 100%;
     border-radius: 50%;
+    max-width: 400px;
 }
 
 .inputContainer select {
@@ -168,7 +169,7 @@ body {
     pointer-events: none;
     transition: all 0.3s ease;
     padding: 0 4px;
-    background-color: #fff;
+    background-color: #fafafa;
     transform-origin: top left;
 }
 
@@ -177,6 +178,37 @@ body {
     top: -8px;
     font-size: 12px;
     color: #3f51b5;
+}
+
+/* Style cho input file */
+.inputContainer input[type="file"] {
+    width: 100%;
+    color: #495057;
+    cursor: pointer;
+    padding: 10px 10px 10px 12px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    text-overflow: ellipsis;
+}
+
+/* Ẩn giao diện mặc định của input file và sử dụng label tùy chỉnh */
+.inputContainer input[type="file"]::-webkit-file-upload-button {
+    display: none;
+}
+
+.inputContainer input[type="file"]::file-selector-button {
+    display: none;
+}
+
+/* Khi input được focus hoặc hover */
+.inputContainer input[type="file"]:focus,
+.inputContainer input[type="file"]:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
 }
 
 .passwordContainer {

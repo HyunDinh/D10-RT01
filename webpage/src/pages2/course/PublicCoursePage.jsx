@@ -96,6 +96,19 @@ const CoursesList = () => {
                 );
                 alert('Đã thêm khóa học vào giỏ hàng!');
                 navigate('/hocho/child/cart');
+            } else if (user.role === "parent" ) {
+                if (!childId) {
+                    alert('Vui lòng chọn một đứa trẻ để thêm khóa học!');
+                    setLoadingStates((prev) => ({ ...prev, [courseId]: false }));
+                    return;
+                }
+                await axios.post(
+                    `http://localhost:8080/api/parent-cart/${user.id}/add-course/${childId}/${courseId}`,
+                    {},
+                    { withCredentials: true }
+                );
+                alert('Đã thêm khóa học vào giỏ hàng!');
+                navigate('/parent-cart');
             }
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';

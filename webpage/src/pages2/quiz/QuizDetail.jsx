@@ -84,7 +84,7 @@ const QuizDetail = () => {
         withCredentials: true
       });
 
-      navigate(`/quizzes/${id}/result`);
+      navigate(`/hocho/quizzes/${id}/result`);
     } catch (err) {
       setError('Không thể nộp bài');
       setSubmitting(false);
