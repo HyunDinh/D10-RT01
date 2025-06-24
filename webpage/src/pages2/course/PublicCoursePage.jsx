@@ -83,7 +83,7 @@ const CoursesList = () => {
         setLoadingStates((prev) => ({ ...prev, [courseId]: true }));
 
         try {
-            if (user.role === 'CHILD') {
+            if (user.role === 'child') {
                 await axios.post(
                     `http://localhost:8080/api/child-cart/${user.id}/add/${courseId}`,
                     {},
@@ -91,7 +91,7 @@ const CoursesList = () => {
                 );
                 alert('Đã thêm khóa học vào giỏ hàng!');
                 navigate('/hocho/child/cart');
-            } else if (user.role === 'PARENT') {
+            } else if (user.role === "parent" ) {
                 if (!childId) {
                     alert('Vui lòng chọn một đứa trẻ để thêm khóa học!');
                     setLoadingStates((prev) => ({ ...prev, [courseId]: false }));

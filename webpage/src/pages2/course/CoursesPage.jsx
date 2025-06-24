@@ -118,7 +118,7 @@ export default function CoursesPage() {
                                 </Link>
                                 {/* Nút View Quiz */}
                                 <Link
-                                    to={`/quizzes?courseId=${course.courseId}`}
+                                    to={`/hocho/quizzes?courseId=${course.courseId}`}
                                     className="btn btn-primary btn-sm me-2"
                                 >
                                     View Quiz
