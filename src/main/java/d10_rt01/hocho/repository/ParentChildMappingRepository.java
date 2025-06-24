@@ -2,6 +2,7 @@ package d10_rt01.hocho.repository;
 
 import d10_rt01.hocho.model.ParentChildMapping;
 import d10_rt01.hocho.model.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,8 @@ public interface ParentChildMappingRepository extends JpaRepository<ParentChildM
     //Kiểm tra phụ huynh và trẻ em có khớp với nhau không
     boolean existsByParentIdAndChildId(Long parentId, Long childId);
 
+    // Lấy danh sách các con của phụ huynh
+    List<ParentChildMapping> findByParentId(Long parentId);
     void deleteByChildId(Long childId);
 
     @Query("SELECT COUNT(pcm) FROM ParentChildMapping pcm WHERE pcm.parent = :parent")

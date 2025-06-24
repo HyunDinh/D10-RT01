@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import styles from '../../styles/course/CoursePublic.module.css';
 // import {toast} from "react-toastify";
 
 export default function CoursesPage() {
@@ -68,8 +69,8 @@ export default function CoursesPage() {
 
     return (
 
-        <div className="container mt-5">
-            <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className={styles.courseListContainer + " container mt-5"}>
+            <div className={styles.courseHeader + " d-flex justify-content-between align-items-center mb-4"}>
                 <h1>Course List</h1>
                 <div>
                     <Link to="/hocho/teacher/course/add" className="btn btn-success me-2">
@@ -82,7 +83,7 @@ export default function CoursesPage() {
             </div>
 
             {/* Dropdown for filtering courses by age group */}
-            <div className="mb-3">
+            <div className={styles.courseFilter + " mb-3"}>
                 <select
                     className="form-select"
                     value={filter}
@@ -93,7 +94,7 @@ export default function CoursesPage() {
                 </select>
             </div>
             <div className="table-responsive">
-                <table className="table table-striped">
+                <table className={styles.courseTable + " table table-striped"}>
                     <thead className="table-dark">
                     <tr>
                         <th>Title</th>
@@ -118,7 +119,7 @@ export default function CoursesPage() {
                                 </Link>
                                 {/* Nút View Quiz */}
                                 <Link
-                                    to={`/quizzes?courseId=${course.courseId}`}
+                                    to={`/hocho/quizzes?courseId=${course.courseId}`}
                                     className="btn btn-primary btn-sm me-2"
                                 >
                                     View Quiz

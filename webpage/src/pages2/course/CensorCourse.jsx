@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import styles from '../../styles/course/CoursePublic.module.css';
 
 const CourseApproval = () => {
     const [courses, setCourses] = useState([]);
@@ -74,7 +75,7 @@ const CourseApproval = () => {
                 </div>
             </nav>
 
-            <div className="container mt-5">
+            <div className={"container mt-5 " + styles.courseListContainer}>
                 <h2 className="mb-4 text-center">Pending Course Approvals</h2>
 
                 {courses.length === 0 ? (
@@ -82,7 +83,7 @@ const CourseApproval = () => {
                         No courses pending approval.
                     </div>
                 ) : (
-                    <table className="table table-bordered table-hover">
+                    <table className={styles.courseApprovalTable + " table table-bordered table-hover"}>
                         <thead className="table-light">
                             <tr>
                                 <th>Course ID</th>
@@ -108,10 +109,7 @@ const CourseApproval = () => {
                                         <td>{course.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                         <td>{new Date(course.createdAt).toLocaleString()}</td>
                                         <td>
-                                            <span className={
-                                                course.status === 'APPROVED' ? 'text-success' :
-                                                    course.status === 'REJECTED' ? 'text-danger' : 'text-warning'
-                                            }>
+                                            <span className={styles.courseApprovalStatus + ' ' + (course.status === 'APPROVED' ? styles.approved : course.status === 'REJECTED' ? styles.rejected : styles.pending)}>
                                                 {course.status}
                                             </span>
                                         </td>
@@ -129,14 +127,14 @@ const CourseApproval = () => {
                                         </td>
                                         <td>
                                             <button
-                                                className="btn btn-success btn-sm me-1"
+                                                className={styles.courseApprovalBtn + ' ' + styles.accept + " btn btn-success btn-sm me-1"}
                                                 onClick={() => handleApprove(course.courseId)}
                                                 disabled={course.status !== 'PENDING'}
                                             >
                                                 ✅ Accept
                                             </button>
                                             <button
-                                                className="btn btn-danger btn-sm"
+                                                className={styles.courseApprovalBtn + ' ' + styles.reject + " btn btn-danger btn-sm"}
                                                 onClick={() => handleReject(course.courseId)}
                                                 disabled={course.status !== 'PENDING'}
                                             >

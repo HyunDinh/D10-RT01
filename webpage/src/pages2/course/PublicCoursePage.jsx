@@ -22,6 +22,8 @@ const CoursesList = () => {
         level: '',
         search: '',
     });
+    const [showChildModal, setShowChildModal] = useState(false);
+    const [pendingCourseId, setPendingCourseId] = useState(null);
 
     useEffect(() => {
         const initializeData = async () => {
@@ -31,12 +33,14 @@ const CoursesList = () => {
                     withCredentials: true,
                 });
                 setUser(userResponse.data);
+                console.log('USER:', userResponse.data);
 
-                if (userResponse.data.role === 'PARENT') {
+                if (userResponse.data.role && userResponse.data.role.toLowerCase() === 'parent') {
                     const childrenResponse = await axios.get('http://localhost:8080/api/hocho/children', {
                         withCredentials: true,
                     });
                     setChildren(childrenResponse.data);
+                    console.log('CHILDREN:', childrenResponse.data);
                     if (childrenResponse.data.length > 0) {
                         setChildId(childrenResponse.data[0].id);
                     }
@@ -73,25 +77,26 @@ const CoursesList = () => {
     };
 
     const handleAddToCart = async (courseId) => {
+        if (user.role && user.role.toLowerCase() === 'parent') {
+            setPendingCourseId(courseId);
+            setShowChildModal(true);
+            return;
+        }
         if (!user) {
             alert('Vui lòng đăng nhập để thêm vào giỏ hàng!');
             navigate('/hocho/login?redirect=course-list');
             return;
         }
-
-        // Bật trạng thái loading cho khóa học cụ thể
-        setLoadingStates((prev) => ({ ...prev, [courseId]: true }));
-
         try {
-            if (user.role === 'CHILD') {
-                await axios.post(
-                    `http://localhost:8080/api/child-cart/${user.id}/add/${courseId}`,
+            if (user.role && user.role.toLowerCase() === 'child') {
+                const res = await axios.post(
+                    `/api/child-cart/${user.id}/add/${courseId}`,
                     {},
                     { withCredentials: true }
                 );
                 alert('Đã thêm khóa học vào giỏ hàng!');
                 navigate('/hocho/child/cart');
-            } else if (user.role === 'PARENT') {
+            } else if (user.role === "parent" ) {
                 if (!childId) {
                     alert('Vui lòng chọn một đứa trẻ để thêm khóa học!');
                     setLoadingStates((prev) => ({ ...prev, [courseId]: false }));
@@ -107,11 +112,8 @@ const CoursesList = () => {
             }
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';
-            toast.error(errorMessage);
-            console.error('Failed to add to cart:', error);
-        } finally {
-            // Tắt trạng thái loading
-            setLoadingStates((prev) => ({ ...prev, [courseId]: false }));
+            alert(errorMessage);
+            console.error('Failed to add to cart:', error, error.response);
         }
     };
 
@@ -139,7 +141,7 @@ const CoursesList = () => {
     };
 
     const handleChildChange = (e) => {
-        setChildId(e.target.value);
+        setChildId(Number(e.target.value));
     };
 
     return (
@@ -245,7 +247,7 @@ const CoursesList = () => {
               </span>
                         </div>
                     </div>
-                    {user && user.role === 'PARENT' && children.length > 0 && (
+                    {user && user.role && user.role.toLowerCase() === 'parent' && children.length > 0 && (
                         <div className={styles.filterGroup}>
                             <label>Chọn trẻ em</label>
                             <div className={styles.filterWrapper}>
@@ -257,7 +259,7 @@ const CoursesList = () => {
                                     <option value="">Chọn trẻ em</option>
                                     {children.map((child) => (
                                         <option key={child.id} value={child.id}>
-                                            {child.fullName}
+                                            {child.fullName || child.username}
                                         </option>
                                     ))}
                                 </select>
@@ -276,11 +278,11 @@ const CoursesList = () => {
                 </aside>
                 <div className={styles.courseSection}>
                     <div className={styles.courseGrid}>
-                        {currentCourses.map((course) => (
-                            <div key={course.id} className={styles.courseCard}>
+                        {currentCourses.map((course, idx) => (
+                            <div key={course.courseId || idx} className={styles.courseCard}>
                                 <div className={styles.cardImage}>
                                     <img
-                                        src={course.image || '/avaBack.jpg'}
+                                        // src={course.image || '/avaBack.jpg'}
                                         alt={course.title}
                                         className={styles.courseImg}
                                         onError={(e) => (e.target.src = '/images/default-course.jpg')}
@@ -303,19 +305,10 @@ const CoursesList = () => {
                                         </button>
                                         <button
                                             className={`${styles.detailsBtn} ${styles.addToCartBtn}`}
-                                            onClick={() => handleAddToCart(course.id)}
-                                            disabled={loadingStates[course.id]}
+                                            onClick={() => { handleAddToCart(course.courseId); }}
                                             style={{ marginLeft: '10px' }}
                                         >
-                                            {loadingStates[course.id] ? (
-                                                <>
-                                                    <FontAwesomeIcon icon={faSpinner} spin /> Đang thêm...
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <FontAwesomeIcon icon={faCartPlus} /> Thêm vào giỏ
-                                                </>
-                                            )}
+                                            <FontAwesomeIcon icon={faCartPlus} /> Thêm vào giỏ
                                         </button>
                                     </div>
                                 </div>
@@ -337,6 +330,69 @@ const CoursesList = () => {
                     </nav>
                 </div>
             </div>
+            {/* Modal chọn trẻ em cho phụ huynh */}
+            {showChildModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                    <div style={{ background: '#fff', padding: 32, borderRadius: 8, minWidth: 320 }}>
+                        <h4>Chọn trẻ em để thêm khóa học</h4>
+                        <select
+                            id="child-select"
+                            value={childId || ''}
+                            onChange={handleChildChange}
+                            style={{ width: '100%', padding: 8, margin: '16px 0' }}
+                        >
+                            <option value="">Chọn trẻ em</option>
+                            {children.map((child) => (
+                                <option key={child.id} value={child.id}>
+                                    {child.fullName || child.username}
+                                </option>
+                            ))}
+                        </select>
+                        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                            <button
+                                className={styles.detailsBtn}
+                                onClick={() => {
+                                    setShowChildModal(false);
+                                    // Lấy childId trực tiếp từ DOM để chắc chắn là giá trị mới nhất
+                                    const selectedChildId = Number(document.getElementById('child-select').value);
+                                    if (pendingCourseId && selectedChildId) {
+                                        axios.post(
+                                            `/api/parent-cart/${user.id}/add-course/${selectedChildId}/${pendingCourseId}`,
+                                            {},
+                                            { withCredentials: true }
+                                        ).then(() => {
+                                            alert('Đã thêm khóa học vào giỏ hàng!');
+                                            navigate('/hocho/parent/cart');
+                                        }).catch(error => {
+                                            let errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';
+                                            if (errorMessage.includes('đã được đăng ký')) {
+                                                errorMessage = 'Trẻ đã tham gia khóa học này!';
+                                            }
+                                            alert(errorMessage);
+                                        }).finally(() => {
+                                            setPendingCourseId(null);
+                                        });
+                                    } else {
+                                        alert('Vui lòng chọn trẻ em!');
+                                        setPendingCourseId(null);
+                                    }
+                                }}
+                                disabled={!childId}
+                            >
+                                Xác nhận
+                            </button>
+                            <button
+                                className={styles.detailsBtn}
+                                onClick={() => { setShowChildModal(false); setPendingCourseId(null); }}
+                            >
+                                Hủy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

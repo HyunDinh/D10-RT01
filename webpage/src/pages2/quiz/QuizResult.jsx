@@ -133,7 +133,7 @@ const QuizResult = () => {
         <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: 32}}>
           <button 
             className={styles.quizDetailBtn}
-            onClick={() => navigate(`/quizzes/${id}/do`)}
+            onClick={() => navigate(`/hocho/quizzes/${id}/do`)}
           >
             Làm lại bài
           </button>
