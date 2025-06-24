@@ -4,6 +4,7 @@ import d10_rt01.hocho.config.DebugModeConfig;
 import d10_rt01.hocho.config.HochoConfig;
 import d10_rt01.hocho.model.ParentChildMapping;
 import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.model.enums.UserRole;
 import d10_rt01.hocho.repository.ParentChildMappingRepository;
 import d10_rt01.hocho.repository.UserRepository;
 import d10_rt01.hocho.service.email.EmailService;
@@ -564,5 +565,14 @@ public class UserService {
 
     public void deleteById(Long id){
         userRepository.deleteById(id);
+    }
+
+    public int getNumberOfChild(String username){
+        User user = findByUsername(username);
+        if (user.getRole().equalsIgnoreCase(UserRole.PARENT.name())) {
+            return parentChildMappingRepository.getNumberOfChild(user);
+        } else {
+            return 0;
+        }
     }
 }
