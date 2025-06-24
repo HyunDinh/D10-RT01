@@ -1,4 +1,4 @@
-import styles from "../styles/QuestionList.module.css";
+import styles from "../styles/AnswerQuestion/QuestionList.module.css";
 import React from "react";
 
 const DeleteConfirmDialog = ({sh,onConfirm, onCancel}) => {

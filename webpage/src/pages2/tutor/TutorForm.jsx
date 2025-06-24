@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import styles from '../../styles/tutor/Tutor.module.css';
 
 const SUBJECTS = [
   'Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'
@@ -79,35 +80,25 @@ const TutorForm = () => {
     };
 
     return (
-        <div className="container tutor-form mt-5">
-            <h2 className="text-primary mb-4 text-center">{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo thông tin gia sư'}</h2>
-            <form className="card mx-auto p-4 shadow" style={{maxWidth: 600}} onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Chuyên môn</label>
-                    <select className="form-select" name="specialization" value={form.specialization} onChange={handleChange} required>
-                        <option value="">-- Chọn môn chuyên môn --</option>
-                        {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Kinh nghiệm (năm)</label>
-                    <input type="number" className="form-control" name="experience" value={form.experience} onChange={handleChange} required min="0" />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Học vấn</label>
-                    <input type="text" className="form-control" name="education" value={form.education} onChange={handleChange} required />
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Giới thiệu</label>
-                    <textarea className="form-control" name="introduction" value={form.introduction} onChange={handleChange} required rows={3} />
-                </div>
+        <div className={styles.tutorContainer}>
+            <h2 className={styles.tutorTitle}>{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo thông tin gia sư'}</h2>
+            <form className={styles.tutorForm} onSubmit={handleSubmit}>
+                <label>Chuyên môn</label>
+                <select name="specialization" value={form.specialization} onChange={handleChange} required>
+                    <option value="">-- Chọn môn chuyên môn --</option>
+                    {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+                <label>Kinh nghiệm (năm)</label>
+                <input type="number" name="experience" value={form.experience} onChange={handleChange} required min="0" />
+                <label>Học vấn</label>
+                <input type="text" name="education" value={form.education} onChange={handleChange} required />
+                <label>Giới thiệu</label>
+                <textarea name="introduction" value={form.introduction} onChange={handleChange} required rows={3} />
                 {error && <div className="alert alert-danger text-center">{error}</div>}
                 {success && <div className="alert alert-success text-center">{success}</div>}
-                <div className="d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary" disabled={loading || (!userId && !currentUserId)}>
-                        {loading ? 'Đang lưu...' : (userId ? 'Cập nhật' : 'Lưu thông tin')}
-                    </button>
-                </div>
+                <button type="submit" className={styles.tutorBtn} disabled={loading || (!userId && !currentUserId)}>
+                    {loading ? 'Đang lưu...' : (userId ? 'Cập nhật' : 'Lưu thông tin')}
+                </button>
             </form>
         </div>
     );

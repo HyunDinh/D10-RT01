@@ -1,0 +1,121 @@
+.tutorContainer {
+  max-width: 900px;
+  margin: 40px auto 0 auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+
+.tutorTitle {
+  color: #f39f5f;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 32px;
+  letter-spacing: 1px;
+}
+
+.tutorCard {
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.tutorCard:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  transform: translateY(-3px) scale(1.01);
+}
+
+.tutorCardTitle {
+  color: #385469;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.tutorCardText {
+  color: #666;
+  font-size: 1.08rem;
+  margin-bottom: 7px;
+}
+
+.tutorBadge {
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  margin-left: 8px;
+}
+.tutorBadge.approved { background: #4caf50; color: #fff; }
+.tutorBadge.rejected { background: #e53935; color: #fff; }
+.tutorBadge.pending { background: #ffb300; color: #333; }
+
+.tutorBtnGroup {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+.tutorBtn {
+  background: #f39f5f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.tutorBtn:hover {
+  background: #ff7f2a;
+  transform: scale(1.04);
+}
+
+.tutorForm {
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.tutorForm label {
+  font-weight: 600;
+  color: #385469;
+  margin-bottom: 6px;
+}
+.tutorForm input, .tutorForm select, .tutorForm textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #e0e0e0;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  background: #fff;
+  color: #385469;
+  transition: border 0.2s;
+}
+.tutorForm input:focus, .tutorForm select:focus, .tutorForm textarea:focus {
+  border: 1.5px solid #f39f5f;
+  outline: none;
+}
+.tutorForm .tutorBtn {
+  width: 100%;
+  margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .tutorContainer {
+    padding: 8px;
+  }
+  .tutorForm {
+    padding: 16px 5px;
+  }
+  .tutorCard {
+    padding: 16px 8px;
+  }
+} 

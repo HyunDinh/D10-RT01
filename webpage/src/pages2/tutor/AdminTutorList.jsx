@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/tutor/Tutor.module.css';
 
 const AdminTutorList = () => {
     const [tutors, setTutors] = useState([]);
@@ -63,50 +64,48 @@ const AdminTutorList = () => {
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
 
     return (
-        <div className="container tutor-list mt-5">
-            <h2 className="text-primary mb-4 text-center">Quản lý gia sư (Admin)</h2>
+        <div className={styles.tutorContainer}>
+            <h2 className={styles.tutorTitle}>Quản lý gia sư (Admin)</h2>
             <div className="row g-4">
                 {tutors.map(tutor => (
                     <div key={tutor.tutorId} className="col-md-6">
-                        <div className="card shadow-sm h-100">
-                            <div className="card-body">
-                                <h5 className="card-title">{tutor.user.fullName}</h5>
-                                <p className="card-text"><b>Email:</b> {tutor.user.email}</p>
-                                <p className="card-text"><b>Số điện thoại:</b> {tutor.user.phoneNumber}</p>
-                                <p className="card-text"><b>Chuyên môn:</b> {tutor.specialization}</p>
-                                <p className="card-text"><b>Kinh nghiệm:</b> {tutor.experience} năm</p>
-                                <p className="card-text"><b>Học vấn:</b> {tutor.education}</p>
-                                <p className="card-text"><b>Giới thiệu:</b> {tutor.introduction}</p>
-                                <p className="card-text">
-                                    <b>Trạng thái:</b> {tutor.status === 'APPROVED' ? (
-                                        <span className="badge bg-success">Đã duyệt</span>
-                                    ) : tutor.status === 'REJECTED' ? (
-                                        <span className="badge bg-danger">Từ chối</span>
-                                    ) : (
-                                        <span className="badge bg-warning text-dark">Chờ duyệt</span>
-                                    )}
-                                </p>
-                                <div className="d-flex gap-2 flex-wrap mt-2">
-                                    <button
-                                        className="btn btn-outline-info btn-sm"
-                                        onClick={() => navigate(`/hocho/tutors/profile/${tutor.user.id}`)}
-                                    >
-                                        <i className="bi bi-eye"></i> Xem chi tiết
+                        <div className={styles.tutorCard}>
+                            <h5 className={styles.tutorCardTitle}>{tutor.user.fullName}</h5>
+                            <p className={styles.tutorCardText}><b>Email:</b> {tutor.user.email}</p>
+                            <p className={styles.tutorCardText}><b>Số điện thoại:</b> {tutor.user.phoneNumber}</p>
+                            <p className={styles.tutorCardText}><b>Chuyên môn:</b> {tutor.specialization}</p>
+                            <p className={styles.tutorCardText}><b>Kinh nghiệm:</b> {tutor.experience} năm</p>
+                            <p className={styles.tutorCardText}><b>Học vấn:</b> {tutor.education}</p>
+                            <p className={styles.tutorCardText}><b>Giới thiệu:</b> {tutor.introduction}</p>
+                            <p className={styles.tutorCardText}>
+                                <b>Trạng thái:</b> {tutor.status === 'APPROVED' ? (
+                                    <span className={`${styles.tutorBadge} ${styles.approved}`}>Đã duyệt</span>
+                                ) : tutor.status === 'REJECTED' ? (
+                                    <span className={`${styles.tutorBadge} ${styles.rejected}`}>Từ chối</span>
+                                ) : (
+                                    <span className={`${styles.tutorBadge} ${styles.pending}`}>Chờ duyệt</span>
+                                )}
+                            </p>
+                            <div className={styles.tutorBtnGroup}>
+                                <button
+                                    className={styles.tutorBtn}
+                                    onClick={() => navigate(`/hocho/tutors/profile/${tutor.user.id}`)}
+                                >
+                                    Xem chi tiết
+                                </button>
+                                {tutor.status !== 'APPROVED' && (
+                                    <button className={styles.tutorBtn} style={{background:'#4caf50'}} onClick={() => handleApprove(tutor.tutorId)}>
+                                        Duyệt
                                     </button>
-                                    {tutor.status !== 'APPROVED' && (
-                                        <button className="btn btn-outline-success btn-sm" onClick={() => handleApprove(tutor.tutorId)}>
-                                            <i className="bi bi-check-circle"></i> Duyệt
-                                        </button>
-                                    )}
-                                    {tutor.status !== 'REJECTED' && (
-                                        <button className="btn btn-outline-danger btn-sm" onClick={() => handleReject(tutor.tutorId)}>
-                                            <i className="bi bi-x-circle"></i> Từ chối
-                                        </button>
-                                    )}
-                                    <button className="btn btn-outline-secondary btn-sm" onClick={() => handleDelete(tutor.user.id)}>
-                                        <i className="bi bi-trash"></i> Xóa
+                                )}
+                                {tutor.status !== 'REJECTED' && (
+                                    <button className={styles.tutorBtn} style={{background:'#e53935'}} onClick={() => handleReject(tutor.tutorId)}>
+                                        Từ chối
                                     </button>
-                                </div>
+                                )}
+                                <button className={styles.tutorBtn} style={{background:'#888'}} onClick={() => handleDelete(tutor.user.id)}>
+                                    Xóa
+                                </button>
                             </div>
                         </div>
                     </div>
