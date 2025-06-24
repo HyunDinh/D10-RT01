@@ -3,12 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Source Sans 3', sans-serif;
+    font-family: Inter, sans-serif;
     background-color: #f4f5fa;
     min-height: 100vh;
 }
 body{
     background-color: #f4f5fa;
-    width: 100%;
 }
 

@@ -1,0 +1,360 @@
+:root {
+    --primary-color: #f39f5f; /* From Profile.module.css */
+    --text-color: #385469;
+    --text-secondary: #666;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.heading {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #f39f5f; /* Mimics text-primary */
+    text-align: center;
+    margin-bottom: 2rem; /* Replaces mb-4 */
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto; /* Match mt-5 */
+    padding: 0 15px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Match Profile.module.css */
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.cardBody {
+    padding: 20px 40px;
+}
+
+.cardTitle {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1rem; /* Match mb-3 */
+}
+
+.cardText {
+    font-size: 16px;
+    color: var(--text-secondary);
+    margin-bottom: 0.3rem; /* Match mb-1 */
+}
+
+.cardText b {
+    color: var(--text-color);
+}
+
+.line{
+    border-bottom: 2px solid var(--text-secondary);
+    margin: 1rem -41px 2rem;
+}
+.questionImage {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem; /* Match mb-3 */
+}
+
+.form {
+    margin-bottom: 1.5rem; /* Match mb-4 */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.formLabel {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.formControl {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    max-width: 100%;
+    min-height: 60px;
+}
+
+.formControl:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(243, 159, 95, 0.2);
+    outline: none;
+}
+
+.formControl[type="file"] {
+    padding: 8px;
+}
+
+.alertDanger {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.alertSuccess {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btnPrimary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.btnPrimary:hover {
+    background: #e08e54;
+}
+
+.btnPrimary:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.answerListTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 1.5rem 0 1rem; /* Match mt-4 mb-3 */
+}
+
+.noAnswers {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.answerItem {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #f8f9fa; /* Match bg-light */
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1rem; /* Match p-3 */
+    margin-bottom: 1rem; /* Match mb-3 */
+    transition: all 0.3s ease-in-out;
+}
+
+.answerItem:hover {
+    background: #f0f1f2;
+    transform: translateY(-2px);
+}
+
+.answerUser {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.4rem; /* Match mb-1 */
+}
+
+.answerContent {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.answerImage {
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 0.5rem; /* Match mb-2 */
+}
+
+.answerFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem; /* Match mt-2 */
+}
+
+.answerTimestamp {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 0.5rem; /* Match gap-2 */
+}
+
+.btnOutlineWarning {
+    border: 1px solid #ffc107;
+    color: #ffc107;
+    background: transparent;
+}
+
+.btnOutlineWarning:hover {
+    background: #ffc107;
+    color: #fafafa;
+}
+
+.btnOutlineDanger {
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    background: transparent;
+}
+
+.btnOutlineDanger:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+.btnOutlineDanger:disabled {
+    border: 1px solid #6c757d;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.btnSuccess {
+    background: #28a745;
+    color: #fafafa;
+}
+
+.btnSuccess:hover {
+    background: #218838;
+}
+
+.btnSuccess:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+}
+
+.btnSecondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btnSecondary:hover {
+    background: #5a6268;
+}
+
+.btnSm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        max-width: 90%;
+    }
+
+    .card {
+        max-width: 100%;
+    }
+
+    .cardBody {
+        padding: 1rem;
+    }
+
+    .cardTitle {
+        font-size: 20px;
+    }
+
+    .answerListTitle {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cardTitle {
+        font-size: 18px;
+    }
+
+    .formLabel,
+    .cardText,
+    .answerContent {
+        font-size: 13px;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .answerImage {
+        max-height: 120px;
+    }
+}

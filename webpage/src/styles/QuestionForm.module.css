@@ -73,6 +73,8 @@
 .formSelect,
 .formInput {
     width: 100%;
+    max-width: 100%;
+    min-height: 40px;
     padding: 10px;
     border: 1px solid #ced4da;
     border-radius: 5px;

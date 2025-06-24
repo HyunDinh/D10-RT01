@@ -1,0 +1,140 @@
+/* QuizForm.module.css - Style hiện đại cho form tạo quiz */
+
+.quizFormContainer {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(45, 108, 223, 0.10);
+}
+
+.quizFormTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d6cdf;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.quizForm {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.quizFormLabel {
+  font-weight: 600;
+  color: #385469;
+  margin-bottom: 6px;
+}
+
+.quizFormInput, .quizFormSelect, .quizFormTextarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e3e9f7;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #222;
+  background: #f8faff;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.quizFormInput:focus, .quizFormSelect:focus, .quizFormTextarea:focus {
+  border: 1.5px solid #2d6cdf;
+  outline: none;
+  box-shadow: 0 0 0 2px #e3e9f7;
+}
+
+.quizFormRow {
+  display: flex;
+  gap: 18px;
+}
+.quizFormCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.quizFormAddBtn, .quizFormSubmitBtn {
+  background: linear-gradient(90deg, #2d6cdf 60%, #4fd1c5 100%);
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(77, 181, 255, 0.08);
+  margin-top: 8px;
+}
+.quizFormAddBtn:hover, .quizFormSubmitBtn:hover {
+  background: linear-gradient(90deg, #1a4fa0 60%, #38b2ac 100%);
+}
+
+.quizFormQuestionList {
+  margin-top: 24px;
+  border-top: 1.5px solid #e3e9f7;
+  padding-top: 18px;
+}
+.quizFormQuestionItem {
+  background: #f8faff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(45, 108, 223, 0.06);
+  padding: 16px 18px;
+  margin-bottom: 14px;
+  position: relative;
+}
+.quizFormQuestionTitle {
+  font-weight: 600;
+  color: #2d6cdf;
+  margin-bottom: 8px;
+}
+.quizFormOption {
+  margin-bottom: 6px;
+  color: #385469;
+}
+.quizFormRemoveBtn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #fff0f0;
+  color: #e53e3e;
+  border: 1px solid #e53e3e;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.quizFormRemoveBtn:hover {
+  background: #e53e3e;
+  color: #fff;
+}
+
+.quizFormError {
+  color: #e53e3e;
+  background: #fff0f0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.quizFormSuccess {
+  color: #38a169;
+  background: #f0fff4;
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .quizFormContainer {
+    padding: 8px;
+  }
+  .quizFormRow {
+    flex-direction: column;
+    gap: 8px;
+  }
+} 

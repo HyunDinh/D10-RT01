@@ -25,7 +25,6 @@
     margin-bottom: 20px;
 }
 
-
 .breadcrumbItems {
     display: flex;
     justify-content: center;
@@ -82,6 +81,7 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem; /* Space for icon, if used */
+
     transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
     animation: fadeIn 0.5s ease-out forwards; /* Load animation */
 }
@@ -126,7 +126,7 @@
     box-shadow: none;
 }
 
-.grid{
+.grid {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -135,7 +135,7 @@
 
 /* Card */
 .card {
-    background: #fff;
+    background: #fafafa;
     border: 1px solid #e0e0e0;
     border-radius: 0.5rem; /* Rounded corners */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Replaces shadow-sm */
@@ -144,6 +144,25 @@
 }
 
 /* Card Body */
+/* Keyframe animation for scale and shadow */
+@keyframes cardHover {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: #fff;
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(243, 159, 95, 0.3); /* Use --primary-color tint */
+        background: #f5f5f5;
+    }
+    100% {
+        transform: scale(1.01);
+        box-shadow: 0 3px 10px rgba(243, 159, 95, 0.2);
+        background: #f5f5f5;
+    }
+}
+
 .cardBody {
     padding: 1.5rem;
     display: flex;
@@ -151,15 +170,20 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.cardBody:hover {
+    animation: cardHover 0.4s ease-in-out forwards; /* Apply animation on hover */
 }
 
 /* Card Title */
 .cardTitle {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 600;
     margin: 0;
     color: #385469;
+    margin-bottom: 10px;
 }
 
 /* Card Text */
@@ -170,13 +194,26 @@
     line-height: 1.5;
 }
 
+.userAvatar {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #f39f5f;
+}
+
 .cardText strong {
     color: #333;
+    font-weight: 500;
+    margin-right: 5px;
 }
 
 /* Button Group */
 .buttonGroup {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 0.5rem; /* Replaces gap-2 */
     margin-top: 0.5rem;
@@ -184,13 +221,16 @@
 
 /* Buttons */
 .btn {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     padding: 0.5rem 1rem;
-    font-size: 0.875rem; /* Matches btn-sm */
-    font-weight: 500;
+    font-size: 14px; /* Matches btn-sm */
+    font-weight: 400;
     text-align: center;
     text-decoration: none;
-    border-radius: 0.25rem;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     background: transparent;
@@ -262,3 +302,63 @@
         padding: 0.4rem 0.8rem;
     }
 }
+
+/* Existing styles (e.g., .cardBody, .buttonAsk, etc.) remain unchanged */
+
+/* Add dialog styles */
+.dialogOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialogContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.dialogTitle {
+    color: #f39f5f; /* Match --primary-color */
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.dialogMessage {
+    font-size: 16px;
+    color: #385469; /* Match --text-color */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dialogButtons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btnSecondary {
+    background: #6c757d;
+    color: #fafafa;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btnSecondary:hover {
+    background: #5a6268;
+}
+

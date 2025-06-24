@@ -4,7 +4,6 @@
 
 ### `npm run dev`
 
-
 ## — CREATE THE REACT PROJECT
 
 ### `npm create vite@latest webpage --template react .`
@@ -32,5 +31,5 @@ npm install @fortawesome/free-brands-svg-icons
 npm install @fortawesome/react-fontawesome
 
 ```
-
+### `npm install @fontsource/inter`
 ### `npm install swiper`

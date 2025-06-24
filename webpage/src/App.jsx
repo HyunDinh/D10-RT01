@@ -3,17 +3,15 @@ import Verify from './pages/Verify';
 import VerifyChild from './pages/VerifyChild';
 import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
-
 import Auth from './pages2/Auth';
 import Home from './pages2/Home';
 import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
 
-// admin routs
+
 import Admin from './pages2/admin/Admin';
 
-// tutor routs
 import TutorProfile from './pages2/tutor/TutorProfile';
 import TutorForm from './pages2/tutor/TutorForm';
 import AdminTutorList from './pages2/tutor/AdminTutorList';
@@ -44,6 +42,7 @@ import AddLessonContentPage from "./pages2/course/AddLessonContentPage";
 import EditLessonPage from "./pages2/course/EditLessonPage";
 import LessonContentPlayer from './pages2/course/LessonContentPlayer';
 import EditLessonContentPage from './pages2/course/EditLessonContentPage';
+import CourseDetailPage from "./pages2/course/CourseDetailPage";
 
 // video routes
 import VideoPage from './pages2/video/VideoPage';
@@ -52,6 +51,7 @@ import AddVideoPage from './pages2/video/AddVideoPage';
 import EditVideoPage from './pages2/video/EditVideoPage';
 import VideoApprovalPage from './pages2/video/VideoApprovalPage';
 import VideoPlayer from './pages2/video/VideoPlayer';
+import TeacherVideoDetail from './pages2/video/TeacherVideoDetail';
 
 // quiz routes
 import QuizList from './pages2/quiz/QuizList';
@@ -62,6 +62,20 @@ import QuizForm from './pages2/quiz/QuizForm';
 import QuizReview from './pages2/quiz/QuizReview';
 import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
 
+// Time Restriction Routes
+// import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage";
+import PublicCoursePage from "./pages2/course/PublicCoursePage";
+
+// Game Routes
+import PlayDino from "./pages2/game/PlayDinoRun";
+import PlayClumsyBird from "./pages2/game/PlayClumsyBird";
+import GamesPage from "./pages2/game/GamesPage.jsx";
+
+// Approval Routes
+import CourseApproval from "./pages2/course/CensorCourse";
+import GameApproval from "./pages2/game/GameApproval";
+import PlayDinoRun from "./pages2/game/PlayDinoRun";
+
 
 const App = () => {
     return (<Router>
@@ -69,16 +83,15 @@ const App = () => {
             <Routes>
                 <Route path="" element={<Home/>}/>
 
-                // new
+                {/*// new*/}
                 <Route path="hocho/login" element={<Auth/>}/>
                 <Route path="hocho/home" element={<Home/>}/>
                 <Route path="hocho/forgot-password" element={<ForgotPassword/>}/>
                 <Route path="hocho/reset-password" element={<ResetPassword/>}/>
                 <Route path="hocho/profile" element={<Profile/>}/>
-
                 <Route path="hocho/admin" element={<Admin/>}/>
 
-                // old
+                  
                 <Route path="hocho/verify" element={<Verify/>}/>
                 <Route path="hocho/verify-child" element={<VerifyChild/>}/>
                 <Route path="hocho/welcome" element={<Welcome/>}/>
@@ -106,9 +119,12 @@ const App = () => {
                        element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
 
                 {/* Course Routes */}
+                <Route path="/hocho/course" element={<PublicCoursePage/>}/>
+                <Route path="/hocho/course-detail/:courseId" element={<CourseDetailPage/>}/>
                 <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
                 <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
                 <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
+                <Route path="/hocho/admin/course/approval"  element={<CourseApproval />} /> {/* Trang admin approve khoá học  */}
 
                 {/* Payment Routes - Tương ứng với API của project thanh toán */}
                 <Route path="/hocho/payment/history"
@@ -116,8 +132,8 @@ const App = () => {
                 <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn/>}/>
 
                 {/* Lesson Routes */}
-                <Route path="/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
-                <Route path="/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
+                <Route path="/hocho/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
+                <Route path="/hocho/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson" element={<LessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>}/>
@@ -126,29 +142,43 @@ const App = () => {
                        element={<AddLessonContentPage/>}/>
 
                 {/* Video Routes */}
-                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em */}
+                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em done */}
                 <Route path="/hocho/teacher/video"
-                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên */}
-                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới */}
+                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên done*/}
+                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới done*/}
                 <Route path="/hocho/teacher/video/edit/:videoId"
-                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa video */}
+                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa videodone */}
                 <Route path="/hocho/admin/video/approval"
-                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin */}
+                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin done */}
                 <Route path="/hocho/video/:videoId"
-                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video) */}
+                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video)done */}
+                <Route path="/hocho/teacher/video/:videoId" element={<TeacherVideoDetail/>}/> {/* Trang chi tiết video cho giáo viên */}
 
                 {/* Quiz Routes */}
-                <Route path="/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
-                <Route path="/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
-                <Route path="/quizzes/:id" element={
+                <Route path="/hocho/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/:id" element={
                     <QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
-                <Route path="/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
-                <Route path="/quizzes/:id/edit"
+                <Route path="/hocho/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
+                <Route path="/hocho/quizzes/:id/edit"
                        element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
-                <Route path="/quizzes/:id/result"
+                <Route path="/hocho/quizzes/:id/result"
                        element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
-                <Route path="/quizzes/:id/review"
+                <Route path="/hocho/quizzes/:id/review"
                        element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
+
+            
+                {/* Time Restriction Routes */}
+                {/*<Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>*/}
+
+                {/* Admin Routes */}
+                
+                {/* Game Routes */}
+                <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
+                <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
+                <Route path="/hocho/admin/games/storage" element={<GameApproval />} />
+                <Route path="/hocho/games" element={<GamesPage />} />
+
             </Routes>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </Router>);

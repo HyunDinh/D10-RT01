@@ -5,9 +5,10 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: Inter, sans-serif;
     background-color: #f4f5fa;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .body {

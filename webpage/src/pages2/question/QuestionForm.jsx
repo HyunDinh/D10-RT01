@@ -1,15 +1,14 @@
-// src/components/QuestionForm.js
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage } from '@fortawesome/free-regular-svg-icons';
-import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import styles from '../../styles/QuestionForm.module.css'; // New CSS module
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {faImage} from '@fortawesome/free-regular-svg-icons'; // Added icons
+import styles from '../../styles/QuestionForm.module.css'; // Adjust path
 
 const SUBJECTS = ['Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'];
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-const QuestionForm = ({ show, onClose, onSubmitRequest }) => {
+const QuestionForm = ({show, onClose, onSubmitRequest}) => {
     const [form, setForm] = useState({
         content: '',
         subject: '',
@@ -21,6 +20,7 @@ const QuestionForm = ({ show, onClose, onSubmitRequest }) => {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const fileInputRef = React.useRef(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -146,7 +146,7 @@ const QuestionForm = ({ show, onClose, onSubmitRequest }) => {
                     </div>
                     <div className={styles.formGroup}>
                         <label className={`${styles.formLabel} ${styles.formLabelIcon}`}>
-                            <FontAwesomeIcon icon={faImage} className={styles.formIcon} /> Ảnh minh họa (tùy chọn)
+                            <FontAwesomeIcon icon={faImage} className={styles.formIcon}/> Ảnh minh họa (tùy chọn)
                         </label>
                         <input
                             type="file"
@@ -164,7 +164,7 @@ const QuestionForm = ({ show, onClose, onSubmitRequest }) => {
                             className={`${styles.btn} ${styles.btnPrimary}`}
                             disabled={loading || !userId}
                         >
-                            Gửi câu hỏi <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon} />
+                            Gửi câu hỏi <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon}/>
                         </button>
                     </div>
                 </form>

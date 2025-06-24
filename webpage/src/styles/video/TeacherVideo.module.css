@@ -1,0 +1,426 @@
+:root {
+    --primary-color: #f39f5f;
+    --text-color: #385469;
+    --text-secondary: #666;
+    --background-light: #f8f9fa;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.myVideosContainer {
+    padding: 24px;
+    background: var(--background-light);
+    max-width: 1200px;
+    margin: 30px auto;
+    border-radius: 10px;
+}
+
+.myVideosHeader {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.myVideosTitle {
+    color: var(--primary-color)!important;
+    font-weight: 700;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.myVideosAddButton {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.3s ease !important;
+}
+
+.myVideosAddButton:hover,
+.myVideosAddButton:focus {
+    background: #e08e4f !important;
+    border-color: #e08e4f !important;
+    transform: scale(1.05);
+    outline: none;
+}
+
+.myVideosList {
+    margin-top: 16px;
+}
+
+.myVideosCard {
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.myVideosCard:hover {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.myVideosCard :global(.ant-card-head-title) {
+    color: var(--text-color);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.myVideosCardStatus,
+.myVideosCardCreated {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+.myVideosViewButton {
+    background: transparent !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    border-radius: 8px !important;
+    transition: background 0.3s ease, color 0.3s ease !important;
+}
+
+.myVideosViewButton:hover,
+.myVideosViewButton:focus {
+    background: var(--primary-color) !important;
+    color: #fff !important;
+    outline: none;
+}
+
+.myVideosCard :global(.ant-card-actions > li > span > .anticon) {
+    color: var(--text-secondary);
+    font-size: 16px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.myVideosCard :global(.ant-card-actions > li > span > .anticon:hover),
+.myVideosCard :global(.ant-card-actions > li > span > .anticon:focus) {
+    color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+/* Modal styles */
+.addVideoModal :global(.ant-modal-content) {
+    border-radius: 12px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+    overflow: hidden;
+}
+
+.addVideoModal :global(.ant-modal-header) {
+    border-bottom: none !important;
+    padding: 16px 24px !important;
+}
+
+.addVideoModal :global(.ant-modal-title) {
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+}
+
+.addVideoModalContent {
+    padding: 24px;
+}
+
+.addVideoForm {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.addVideoInput,
+.addVideoTextArea,
+.addVideoSelect :global(.ant-select-selector) {
+    border-radius: 8px !important;
+    border: 2px solid #e0e0e0 !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+.addVideoTextArea :global(.ant-select-selector){
+    min-height: 50px;
+}
+
+.addVideoInput:focus,
+.addVideoTextArea:focus,
+.addVideoSelect :global(.ant-select-selector):hover,
+.addVideoSelect :global(.ant-select-focused .ant-select-selector) {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 6px rgba(243, 159, 95, 0.3) !important;
+}
+
+.addVideoUpload :global(.ant-upload) {
+    width: 100%;
+}
+
+.addVideoUploadButton {
+    border-radius: 8px !important;
+    border-color: var(--text-secondary) !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.3s ease !important;
+}
+
+.addVideoUploadButton:hover,
+.addVideoUploadButton:focus {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.addVideoButtonGroup {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addVideoSubmitButton {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #fafafa !important;
+    border-radius: 8px !important;
+    transition: background 0.3s ease !important;
+    margin-right: 8px;
+}
+
+.addVideoSubmitButton:hover,
+.addVideoSubmitButton:focus {
+    background: #e08e4f !important;
+    border-color: #e08e4f !important;
+}
+
+.addVideoCancelButton {
+    border-radius: 8px !important;
+    border-color: var(--text-secondary) !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.3s ease !important;
+}
+
+.addVideoCancelButton:hover,
+.addVideoCancelButton:focus {
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .myVideosContainer,
+    .addVideoModalContent {
+        padding: 16px;
+    }
+
+    .myVideosTitle,
+    .addVideoModal :global(.ant-modal-title) {
+        font-size: 18px !important;
+    }
+
+    .myVideosList :global(.ant-list-grid .ant-col) {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+
+    .addVideoForm {
+        max-width: 100%;
+    }
+
+    .addVideoInput,
+    .addVideoTextArea,
+    .addVideoSelect :global(.ant-select-selector),
+    .addVideoUploadButton,
+    .addVideoSubmitButton,
+    .addVideoCancelButton {
+        font-size: 13px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .myVideosContainer,
+    .addVideoModalContent {
+        padding: 12px;
+    }
+
+    .myVideosTitle,
+    .addVideoModal :global(.ant-modal-title) {
+        font-size: 16px !important;
+    }
+
+    .myVideosList :global(.ant-list-grid .ant-col) {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+
+    .myVideosAddButton,
+    .myVideosViewButton,
+    .addVideoSubmitButton,
+    .addVideoCancelButton {
+        font-size: 12px !important;
+        padding: 6px 12px !important;
+    }
+
+    .addVideoButtonGroup {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .addVideoSubmitButton,
+    .addVideoCancelButton {
+        width: 100%;
+    }
+}
+
+/* ==== Teacher Video Detail  */
+.teacherVideoDetailContainer {
+    max-width: 100%;
+    margin: 30px auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.teacherVideoDetailMain {
+    flex: 1;
+    max-width: 1000px;
+}
+
+.teacherVideoDetailTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.teacherVideoDetailPlayerWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.teacherVideoDetailPlayerWrapper:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.teacherVideoDetailPlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.teacherVideoDetailInfo {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    font-size: 16px;
+    color: var(--text-color);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.teacherVideoDetailInfo p {
+    margin: 8px 0;
+}
+
+.teacherVideoDetailBackBtn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+.teacherVideoDetailBackBtn:hover {
+    color: #e08e4f;
+}
+
+@media (max-width: 992px) {
+    .teacherVideoDetailContainer {
+        flex-direction: column;
+        gap: 0;
+        padding: 12px;
+    }
+    .teacherVideoDetailMain {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .teacherVideoDetailContainer {
+        padding: 4px;
+    }
+    .teacherVideoDetailTitle {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacherVideoDetailContainer {
+        padding: 0;
+    }
+    .teacherVideoDetailTitle {
+        font-size: 18px;
+    }
+    .teacherVideoDetailInfo {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
