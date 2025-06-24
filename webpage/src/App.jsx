@@ -40,6 +40,7 @@ import AddLessonContentPage from "./pages2/course/AddLessonContentPage";
 import EditLessonPage from "./pages2/course/EditLessonPage";
 import LessonContentPlayer from './pages2/course/LessonContentPlayer';
 import EditLessonContentPage from './pages2/course/EditLessonContentPage';
+import CourseDetailPage from "./pages2/course/CourseDetailPage";
 
 // video routes
 import VideoPage from './pages2/video/VideoPage';
@@ -116,6 +117,7 @@ const App = () => {
 
                 {/* Course Routes */}
                 <Route path="/hocho/course" element={<PublicCoursePage/>}/>
+                <Route path="/hocho/course-detail/:courseId" element={<CourseDetailPage/>}/>
                 <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
                 <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
                 <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>

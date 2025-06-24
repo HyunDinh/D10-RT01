@@ -297,7 +297,7 @@ const CoursesList = () => {
                                     <div style={{ textAlign: 'end' }}>
                                         <button
                                             className={styles.detailsBtn}
-                                            onClick={() => navigate(`/hocho/lesson-content/${course.id}`)}
+                                            onClick={() => navigate(`/hocho/course-detail/${course.courseId}`)}
                                         >
                                             Details
                                         </button>

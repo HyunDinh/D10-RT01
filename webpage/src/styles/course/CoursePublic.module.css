@@ -340,6 +340,98 @@
     background-color: #c82333;
 }
 
+.courseDetailBox {
+    display: flex;
+    gap: 32px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    padding: 32px;
+    margin-bottom: 32px;
+    align-items: flex-start;
+}
+
+.courseDetailBox .courseImg {
+    width: 320px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.courseInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.courseInfo h2 {
+    color: var(--primary-color);
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+}
+
+.courseInfo p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.lessonQuizSection {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+}
+
+.lessonBox, .quizBox {
+    flex: 1 1 320px;
+    background: #f8fafc;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    padding: 24px 20px;
+    min-width: 320px;
+}
+
+.lessonBox h3, .quizBox h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 16px;
+}
+
+.lessonBox ul, .quizBox ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lessonBox li, .quizBox li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ececec;
+    color: var(--text-color);
+    font-size: 1.05rem;
+    transition: background 0.2s;
+}
+
+.lessonBox li:last-child, .quizBox li:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 900px) {
+    .mainContainer {
+        flex-direction: column;
+        padding: 20px 5px;
+    }
+    .courseDetailBox {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 20px 10px;
+    }
+    .lessonQuizSection {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
 .addToCartBtn {
     background-color: #28a745 !important;
     color: white !important;
