@@ -1,12 +1,12 @@
 package d10_rt01.hocho.config;
 
 public class HochoConfig {
-    public static final boolean EMAIL_SENDER = false;
+    public static final boolean EMAIL_SENDER = true;
     // ------------------------------- PROFILE PICTURE SIZE ------------------------------
 
     // TODO : update static path here and also in application.properties
     public static final String ABSOLUTE_PATH_PROFILE_UPLOAD_DIR = "D:/res/static/profile/";
-
+    public static final String ABSOLUTE_PATH_TEACHER_VERIFICATION_UPLOAD_DIR = "D:/res/static/teacher-verification/";
     // ------------------------------ PROFILE PICTURE PATH -------------------------------
 
     public static final long MAX_PROFILE_PICTURE_SIZE = 10 * 1024 * 1024; // 10MB in bytes

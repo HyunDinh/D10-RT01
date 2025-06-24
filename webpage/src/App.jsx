@@ -9,7 +9,9 @@ import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
 
-// tutor routes
+
+import Admin from './pages2/admin/Admin';
+
 import TutorProfile from './pages2/tutor/TutorProfile';
 import TutorForm from './pages2/tutor/TutorForm';
 import AdminTutorList from './pages2/tutor/AdminTutorList';
@@ -87,8 +89,9 @@ const App = () => {
                 <Route path="hocho/forgot-password" element={<ForgotPassword/>}/>
                 <Route path="hocho/reset-password" element={<ResetPassword/>}/>
                 <Route path="hocho/profile" element={<Profile/>}/>
+                <Route path="hocho/admin" element={<Admin/>}/>
 
-                {/*// old*/}
+                  
                 <Route path="hocho/verify" element={<Verify/>}/>
                 <Route path="hocho/verify-child" element={<VerifyChild/>}/>
                 <Route path="hocho/welcome" element={<Welcome/>}/>

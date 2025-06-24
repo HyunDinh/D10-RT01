@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../styles/Auth.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEyeSlash, faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faEyeSlash, faCaretDown, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { faFacebookF, faTwitter, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const Auth = () => {
@@ -64,22 +64,25 @@ const Auth = () => {
         parentEmail: '',
         role: 'child',
         phoneNumber: '',
-        agree: false
+        agree: false,
+        teacherImage: null
     });
 
     const handleRegisterChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value, type, checked, files } = e.target;
         setRegisterData({
             ...registerData,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value
         });
     };
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
+
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/register', {
+            const formData = new FormData();
+            formData.append('request', new Blob([JSON.stringify({
                 username: registerData.username,
                 password: registerData.password,
                 retypePassword: registerData.retypePassword,
@@ -87,10 +90,21 @@ const Auth = () => {
                 parentEmail: registerData.parentEmail,
                 role: registerData.role,
                 phoneNumber: registerData.phoneNumber
+            })], { type: 'application/json' }));
+            if (registerData.role === 'teacher' && registerData.teacherImage) {
+                formData.append('teacherImage', registerData.teacherImage);
+            }
+
+            const response = await axios.post('http://localhost:8080/api/auth/register', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true,
             });
+
             setMessage(response.data);
             if (registerData.role === 'parent') {
                 setMessage('Registration successful! Please check your email to confirm your email.');
+            } else if (registerData.role === 'teacher') {
+                setMessage('Registration successful! Please wait for admin approval.');
             }
         } catch (error) {
             setMessage(error.response?.data || 'Registration failed. Please try again.');
@@ -305,6 +319,23 @@ const Auth = () => {
                                         />
                                         <label htmlFor="phone">Phone number (09)</label>
                                         <span className={styles.notch}></span>
+                                    </div>
+                                </div>
+                            )}
+                            {registerData.role === 'teacher' && (
+                                <div className={styles.formGroup}>
+                                    <div className={styles.inputContainer}>
+                                        <input
+                                            type="file"
+                                            id="teacherImage"
+                                            name="teacherImage"
+                                            accept="image/png,image/jpeg"
+                                            onChange={handleRegisterChange}
+                                            required
+                                        />
+                                        <label htmlFor="teacherImage">Teacher Verification Image (PNG/JPG)</label>
+                                        <span className={styles.notch}></span>
+                                        <FontAwesomeIcon icon={faUpload} className={styles.customArrow} />
                                     </div>
                                 </div>
                             )}

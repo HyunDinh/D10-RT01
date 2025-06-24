@@ -19,13 +19,15 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.mail.MessagingException;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,10 +46,20 @@ public class AuthController {
 
     // ------------------------------------ REGISTER ------------------------------------
 
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) throws MessagingException {
+    @PostMapping(value = "/register", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> register(
+            @RequestPart("request") RegisterRequest request,
+            @RequestPart(value = "teacherImage", required = false) MultipartFile teacherImage) throws MessagingException, IOException {
+        logger.info("Processing register request for username: {}, role: {}", request.getUsername(), request.getRole());
+
         if (!request.getPassword().equals(request.getRetypePassword())) {
+            logger.warn("Password mismatch for username: {}", request.getUsername());
             return ResponseEntity.badRequest().body("Mật khẩu không khớp.");
+        }
+
+        if (request.getRole().equals("teacher") && (teacherImage == null || teacherImage.isEmpty())) {
+            logger.warn("Teacher image is required for teacher registration: {}", request.getUsername());
+            return ResponseEntity.badRequest().body("Ảnh xác thực giáo viên là bắt buộc.");
         }
 
         try {
@@ -57,13 +69,16 @@ public class AuthController {
                     request.getEmail(),
                     request.getParentEmail(),
                     request.getRole(),
-                    request.getPhoneNumber()
+                    request.getPhoneNumber(),
+                    teacherImage
             );
-            String successMessage = user.getRole().equals("parent") ?
+            String successMessage = user.getRole().equals("parent") || user.getRole().equals("child") ?
                     "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản." :
-                    "Đăng ký thành công.";
+                    "Đăng ký thành công. Vui lòng chờ admin duyệt tài khoản.";
+            logger.info("Registration successful for username: {}", request.getUsername());
             return ResponseEntity.ok(successMessage);
         } catch (IllegalArgumentException e) {
+            logger.error("Registration failed: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .header("Location", "http://localhost:3000/hocho/login?error=" +
                             URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8))
@@ -72,26 +87,28 @@ public class AuthController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<?> verify(@RequestParam String token) {
+    public ResponseEntity<?> verify(@RequestParam String token) throws MessagingException {
         boolean verified = userService.verifyUser(token);
         if (verified) {
+            logger.info("Verification successful for token: {}", token);
             return ResponseEntity.ok("Xác nhận thành công. Bạn có thể đăng nhập.");
         }
+        logger.warn("Verification failed for token: {}", token);
         return ResponseEntity.badRequest().body("Token không hợp lệ hoặc đã được xác nhận.");
     }
 
     @GetMapping("/verify-child")
-    public ResponseEntity<?> verifyChild(@RequestParam String token) {
+    public ResponseEntity<?> verifyChild(@RequestParam String token) throws MessagingException {
         boolean verified = userService.verifyUser(token);
         if (verified) {
+            logger.info("Child verification successful for token: {}", token);
             return ResponseEntity.ok("Xác nhận tài khoản học sinh thành công. Tài khoản đã được kích hoạt.");
         }
+        logger.warn("Child verification failed for token: {}", token);
         return ResponseEntity.badRequest().body("Token không hợp lệ hoặc tài khoản đã được xác nhận.");
     }
 
-
     // ------------------------------------ LOGIN ------------------------------------
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpSession session) {
@@ -103,18 +120,18 @@ public class AuthController {
             securityContext.setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
-            // Spring Security tự động xử lý rememberMe dựa trên tham số rememberMe
             if (request.isRememberMe()) {
                 logger.info("Remember Me enabled for username: {}", request.getUsername());
             }
 
-            return ResponseEntity.ok().build(); // Trả về 200 OK
+            logger.info("Login successful for username: {}", request.getUsername());
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
+            logger.error("Login failed for username: {}", request.getUsername());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Wrong username or password. Please try again.");
         }
     }
-
 
     @GetMapping("/user")
     public ResponseEntity<?> getCurrentUser() {
@@ -128,6 +145,7 @@ public class AuthController {
                 return ResponseEntity.ok(userResponse);
             }
         }
+        logger.warn("No authenticated user found");
         return ResponseEntity.status(401).body("Chưa đăng nhập.");
     }
 
@@ -189,17 +207,21 @@ public class AuthController {
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");
         if (email == null || email.isEmpty()) {
+            logger.warn("Email is required for password reset");
             return ResponseEntity.badRequest().body("Email is required.");
         }
 
         try {
-            if (HochoConfig.EMAIL_SENDER){
+            if (HochoConfig.EMAIL_SENDER) {
                 userService.requestPasswordReset(email);
+                logger.info("Password reset link sent to email: {}", email);
                 return ResponseEntity.ok("A password reset link has been sent to your email.");
             } else {
+                logger.info("Email sending disabled for password reset");
                 return ResponseEntity.ok("Email related features are currently disabled, please contact the developer to use this feature");
             }
         } catch (IllegalArgumentException e) {
+            logger.error("Password reset failed: {}", e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (MessagingException e) {
             logger.error("Lỗi gửi email đặt lại mật khẩu: {}", e.getMessage());
@@ -214,16 +236,18 @@ public class AuthController {
         String newPassword = request.get("newPassword");
 
         if (token == null || newPassword == null || token.isEmpty() || newPassword.isEmpty()) {
+            logger.warn("Token or new password missing");
             return ResponseEntity.badRequest().body("Token và mật khẩu mới là bắt buộc.");
         }
 
         boolean success = userService.resetPassword(token, newPassword);
         if (success) {
+            logger.info("Password reset successful");
             return ResponseEntity.ok("Mật khẩu đã được đặt lại thành công.");
         }
+        logger.warn("Password reset failed for token: {}", token);
         return ResponseEntity.badRequest().body("Token không hợp lệ hoặc đã hết hạn.");
     }
-
 
     // ------------------------------------ LOGOUT ------------------------------------
     @PostMapping("/logout")
@@ -233,6 +257,4 @@ public class AuthController {
         session.invalidate();
         return ResponseEntity.ok("Đăng xuất thành công.");
     }
-
 }
-

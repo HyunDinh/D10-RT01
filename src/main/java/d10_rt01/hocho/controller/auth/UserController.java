@@ -132,4 +132,27 @@ public class UserController {
         return ResponseEntity.ok().header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate").header(HttpHeaders.PRAGMA, "no-cache").header(HttpHeaders.EXPIRES, "0").contentType(mediaType).body(resource);
     }
 
+    @GetMapping("/teacher-verification/{filename:.+}")
+    public ResponseEntity<Resource> getTeacherVerificationImage(@PathVariable String filename) throws IOException {
+        Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_TEACHER_VERIFICATION_UPLOAD_DIR, filename);
+        Resource resource = new FileSystemResource(filePath);
+
+        if (!resource.exists()) {
+            filePath = Paths.get("src/main/resources/static/default.png");
+            resource = new FileSystemResource(filePath);
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
+        MediaType mediaType = filename.toLowerCase().endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                .header(HttpHeaders.PRAGMA, "no-cache")
+                .header(HttpHeaders.EXPIRES, "0")
+                .contentType(mediaType)
+                .body(resource);
+    }
+
 }
