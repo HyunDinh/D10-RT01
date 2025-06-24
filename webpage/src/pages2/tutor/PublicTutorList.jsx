@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Tutor.module.css';
 
 const PublicTutorList = () => {
     const [tutors, setTutors] = useState([]);
@@ -58,46 +59,46 @@ const PublicTutorList = () => {
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
 
     return (
-        <div className="container tutor-list mt-5">
-            <h2 className="text-primary mb-4 text-center">Danh sách gia sư</h2>
+        <div className={styles.tutorContainer}>
+            <h2 className={styles.tutorTitle}>Danh sách gia sư</h2>
             <div className="row g-4">
                 {tutors
                     .filter(tutor => tutor.status === 'APPROVED')
                     .map(tutor => (
                         <div key={tutor.tutorId} className="col-md-6">
-                            <div className="card shadow-sm h-100">
-                                <div className="card-body">
-                                    <h5 className="card-title">{tutor.user.fullName}</h5>
-                                    <p className="card-text"><b>Email:</b> {tutor.user.email}</p>
-                                    <p className="card-text"><b>Số điện thoại:</b> {tutor.user.phoneNumber}</p>
-                                    <p className="card-text"><b>Chuyên môn:</b> {tutor.specialization}</p>
-                                    <p className="card-text"><b>Kinh nghiệm:</b> {tutor.experience} năm</p>
-                                    <p className="card-text"><b>Học vấn:</b> {tutor.education}</p>
-                                    <p className="card-text"><b>Giới thiệu:</b> {tutor.introduction}</p>
-                                    <div className="d-flex gap-2 flex-wrap mt-2">
-                                        <button
-                                            className="btn btn-outline-info btn-sm"
-                                            onClick={() => navigate(`/hocho/tutors/profile/${tutor.user.id}`)}
-                                        >
-                                            <i className="bi bi-eye"></i> Xem chi tiết
-                                        </button>
-                                        {currentUser && tutor.user && currentUser.id === tutor.user.id && (
-                                            <>
-                                                <button
-                                                    className="btn btn-outline-warning btn-sm"
-                                                    onClick={() => handleEdit(tutor.user.id)}
-                                                >
-                                                    <i className="bi bi-pencil"></i> Sửa
-                                                </button>
-                                                <button
-                                                    className="btn btn-outline-danger btn-sm"
-                                                    onClick={() => handleDelete(tutor.user.id)}
-                                                >
-                                                    <i className="bi bi-trash"></i> Xóa
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
+                            <div className={styles.tutorCard}>
+                                <h5 className={styles.tutorCardTitle}>{tutor.user.fullName}</h5>
+                                <p className={styles.tutorCardText}><b>Email:</b> {tutor.user.email}</p>
+                                <p className={styles.tutorCardText}><b>Số điện thoại:</b> {tutor.user.phoneNumber}</p>
+                                <p className={styles.tutorCardText}><b>Chuyên môn:</b> {tutor.specialization}</p>
+                                <p className={styles.tutorCardText}><b>Kinh nghiệm:</b> {tutor.experience} năm</p>
+                                <p className={styles.tutorCardText}><b>Học vấn:</b> {tutor.education}</p>
+                                <p className={styles.tutorCardText}><b>Giới thiệu:</b> {tutor.introduction}</p>
+                                <div className={styles.tutorBtnGroup}>
+                                    <button
+                                        className={styles.tutorBtn}
+                                        onClick={() => navigate(`/hocho/tutors/profile/${tutor.user.id}`)}
+                                    >
+                                        Xem chi tiết
+                                    </button>
+                                    {currentUser && tutor.user && currentUser.id === tutor.user.id && (
+                                        <>
+                                            <button
+                                                className={styles.tutorBtn}
+                                                style={{background:'#ffb300', color:'#333'}}
+                                                onClick={() => handleEdit(tutor.user.id)}
+                                            >
+                                                Sửa
+                                            </button>
+                                            <button
+                                                className={styles.tutorBtn}
+                                                style={{background:'#e53935'}}
+                                                onClick={() => handleDelete(tutor.user.id)}
+                                            >
+                                                Xóa
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         </div>
