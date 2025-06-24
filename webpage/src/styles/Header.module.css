@@ -318,6 +318,16 @@
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
+.searchIcon{
+    font-size: 20px;
+    color: #385469;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+.searchIcon:hover{
+    color: var(--primary-color);
+}
+
 .profileDropdown {
     position: absolute;
     top: 100%;
@@ -347,9 +357,10 @@
 }
 
 .profileDropdown li a {
-    display: block;
+    display: flex;
+    gap: 10px;
     padding: 10px 20px;
-    color: #333;
+    color: var(--text-color);
     font-size: 14px;
     text-decoration: none;
     transition: background 0.2s ease, color 0.2s ease;
@@ -357,7 +368,7 @@
 
 .profileDropdown li a:hover {
     background: #f8f9fa;
-    color: #007bff;
+    color: var(--primary-color);
 }
 
 .profileDropdown li a.logoutLink {
@@ -370,9 +381,6 @@
 }
 
 :root {
-    --primary-color: #f39f5f;
-    --text-color: #385469;
-    --text-secondary: #5c707e;
     --bg-color: #f4eee5;
 }
 
@@ -489,7 +497,7 @@
     left: 312px;
     right: 972px;
     width: calc(100% - 1284px);
-    font: bold 70px 'Quicksand', sans-serif;
+    font: bold 70px 'Inter', sans-serif;
     line-height: 78.4px;
     text-transform: capitalize;
 }
