@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import styles from '../styles/Auth.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEyeSlash, faCaretDown, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { faFacebookF, faTwitter, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCaretDown, faEyeSlash, faUpload} from '@fortawesome/free-solid-svg-icons';
+import {faFacebookF, faGithub, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons';
 
 const Auth = () => {
     const [userRole, setUserRole] = useState(null);
@@ -14,6 +14,10 @@ const Auth = () => {
     const [error, setError] = useState('');
     const [logoutMessage, setLogoutMessage] = useState('');
     const [isRegistering, setIsRegistering] = useState(false);
+    const [formData, setFormData] = useState({
+        teacherImage: null,
+    });
+    const [fileName, setFileName] = useState('');
 
     useEffect(() => {
         setMessage('');
@@ -69,11 +73,22 @@ const Auth = () => {
     });
 
     const handleRegisterChange = (e) => {
-        const { name, value, type, checked, files } = e.target;
+        const {name, value, type, checked, files} = e.target;
         setRegisterData({
             ...registerData,
             [name]: type === 'checkbox' ? checked : type === 'file' ? files[0] : value
         });
+    };
+
+    const handleRegisterFileChange = (e) => {
+        const {name, files} = e.target;
+        if (name === 'teacherImage' && files.length > 0) {
+            setFormData((prev) => ({...prev, [name]: files[0]}));
+            setFileName(files[0].name); // Update displayed file name
+        } else {
+            setFormData((prev) => ({...prev, [name]: null}));
+            setFileName(''); // Reset if no file is selected
+        }
     };
 
     const handleRegisterSubmit = async (e) => {
@@ -90,13 +105,13 @@ const Auth = () => {
                 parentEmail: registerData.parentEmail,
                 role: registerData.role,
                 phoneNumber: registerData.phoneNumber
-            })], { type: 'application/json' }));
+            })], {type: 'application/json'}));
             if (registerData.role === 'teacher' && registerData.teacherImage) {
                 formData.append('teacherImage', registerData.teacherImage);
             }
 
             const response = await axios.post('http://localhost:8080/api/auth/register', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
+                headers: {'Content-Type': 'multipart/form-data'},
                 withCredentials: true,
             });
 
@@ -118,7 +133,7 @@ const Auth = () => {
     });
 
     const handleLoginChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const {name, value, type, checked} = e.target;
         setLoginData({
             ...loginData,
             [name]: type === 'checkbox' ? checked : value
@@ -187,7 +202,7 @@ const Auth = () => {
     return (
         <div className={styles.body}>
             <a href='/hocho/home'>
-                <img src='/Logo1.png' alt='Logo' width={80} height={80} className={styles.logo} />
+                <img src='/Logo1.png' alt='Logo' width={80} height={80} className={styles.logo}/>
             </a>
             <div className={styles.container}>
                 {isRegistering ? (
@@ -196,7 +211,8 @@ const Auth = () => {
                             <h4>Adventure starts here 🚀</h4>
                             <p>Make your app management easy and fun!</p>
                             {message && (
-                                <div className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
+                                <div
+                                    className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
                                     {message}
                                 </div>
                             )}
@@ -263,7 +279,7 @@ const Auth = () => {
                                         className={styles.togglePassword}
                                         onClick={handleTogglePassword}
                                     >
-                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash} />}
+                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
                                     </button>
                                 </div>
                             </div>
@@ -285,7 +301,7 @@ const Auth = () => {
                                         className={styles.togglePassword}
                                         onClick={handleToggleRepeatPassword}
                                     >
-                                        {showRepeatPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash} />}
+                                        {showRepeatPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
                                     </button>
                                 </div>
                             </div>
@@ -302,7 +318,7 @@ const Auth = () => {
                                         <option value="parent">Parent</option>
                                         <option value="teacher">Teacher</option>
                                     </select>
-                                    <FontAwesomeIcon icon={faCaretDown} className={styles.customArrow} />
+                                    <FontAwesomeIcon icon={faCaretDown} className={styles.customArrow}/>
                                     <span className={styles.notch}></span>
                                 </div>
                             </div>
@@ -330,12 +346,15 @@ const Auth = () => {
                                             id="teacherImage"
                                             name="teacherImage"
                                             accept="image/png,image/jpeg"
-                                            onChange={handleRegisterChange}
+                                            onChange={handleRegisterFileChange}
                                             required
                                         />
-                                        <label htmlFor="teacherImage">Teacher Verification Image (PNG/JPG)</label>
+                                        <label htmlFor="teacherImage"
+                                               title={'Teacher Verification Image (PNG/JPG)'}>
+                                            {'Teacher Verification Image (PNG/JPG)'}
+                                        </label>
                                         <span className={styles.notch}></span>
-                                        <FontAwesomeIcon icon={faUpload} className={styles.customArrow} />
+                                        <FontAwesomeIcon icon={faUpload} className={styles.customArrow}/>
                                     </div>
                                 </div>
                             )}
@@ -371,20 +390,20 @@ const Auth = () => {
                             </div>
                             <div className={styles.socialButtons}>
                                 <button type="button" className={`${styles.socialBtn} ${styles.facebook}`}>
-                                    <FontAwesomeIcon icon={faFacebookF} bounce />
+                                    <FontAwesomeIcon icon={faFacebookF} bounce/>
                                 </button>
                                 <button type="button" className={`${styles.socialBtn} ${styles.twitter}`}>
-                                    <FontAwesomeIcon icon={faTwitter} bounce />
+                                    <FontAwesomeIcon icon={faTwitter} bounce/>
                                 </button>
                                 <button type="button" className={`${styles.socialBtn} ${styles.github}`}>
-                                    <FontAwesomeIcon icon={faGithub} bounce />
+                                    <FontAwesomeIcon icon={faGithub} bounce/>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleGoogleLogin}
                                     className={`${styles.socialBtn} ${styles.google}`}
                                 >
-                                    <FontAwesomeIcon icon={faGoogle} bounce />
+                                    <FontAwesomeIcon icon={faGoogle} bounce/>
                                 </button>
                             </div>
                         </form>
@@ -429,7 +448,7 @@ const Auth = () => {
                                         className={styles.togglePassword}
                                         onClick={handleTogglePassword}
                                     >
-                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash} />}
+                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
                                     </button>
                                 </div>
                             </div>
@@ -463,20 +482,20 @@ const Auth = () => {
                             </div>
                             <div className={styles.socialButtons}>
                                 <button type="button" className={`${styles.socialBtn} ${styles.facebook}`}>
-                                    <FontAwesomeIcon icon={faFacebookF} bounce />
+                                    <FontAwesomeIcon icon={faFacebookF} bounce/>
                                 </button>
                                 <button type="button" className={`${styles.socialBtn} ${styles.twitter}`}>
-                                    <FontAwesomeIcon icon={faTwitter} bounce />
+                                    <FontAwesomeIcon icon={faTwitter} bounce/>
                                 </button>
                                 <button type="button" className={`${styles.socialBtn} ${styles.github}`}>
-                                    <FontAwesomeIcon icon={faGithub} bounce />
+                                    <FontAwesomeIcon icon={faGithub} bounce/>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={handleGoogleLogin}
                                     className={`${styles.socialBtn} ${styles.google}`}
                                 >
-                                    <FontAwesomeIcon icon={faGoogle} bounce />
+                                    <FontAwesomeIcon icon={faGoogle} bounce/>
                                 </button>
                             </div>
                         </form>

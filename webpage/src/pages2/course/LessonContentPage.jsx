@@ -80,7 +80,7 @@ export default function LessonContentPage() {
                             actions={[
                                 <EditOutlined key="edit" onClick={() => handleEdit(content.contentId)} />,
                                 <DeleteOutlined key="delete" onClick={() => handleDelete(content.contentId)} />,
-                                <Button key="view" onClick={() => navigate(`/lesson-content/${content.contentId}`)}>
+                                <Button key="view" onClick={() => navigate(`/hocho/lesson-content/${content.contentId}`)}>
                                     View Content
                                 </Button>
                             ]}
