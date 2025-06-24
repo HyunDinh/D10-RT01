@@ -313,3 +313,114 @@
         width: 100%;
     }
 }
+
+/* ==== Teacher Video Detail  */
+.teacherVideoDetailContainer {
+    max-width: 100%;
+    margin: 30px auto;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+}
+
+.teacherVideoDetailMain {
+    flex: 1;
+    max-width: 1000px;
+}
+
+.teacherVideoDetailTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.teacherVideoDetailPlayerWrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.teacherVideoDetailPlayerWrapper:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.teacherVideoDetailPlayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.teacherVideoDetailInfo {
+    background: #f7f7f7;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+    font-size: 16px;
+    color: var(--text-color);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.teacherVideoDetailInfo p {
+    margin: 8px 0;
+}
+
+.teacherVideoDetailBackBtn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+.teacherVideoDetailBackBtn:hover {
+    color: #e08e4f;
+}
+
+@media (max-width: 992px) {
+    .teacherVideoDetailContainer {
+        flex-direction: column;
+        gap: 0;
+        padding: 12px;
+    }
+    .teacherVideoDetailMain {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .teacherVideoDetailContainer {
+        padding: 4px;
+    }
+    .teacherVideoDetailTitle {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .teacherVideoDetailContainer {
+        padding: 0;
+    }
+    .teacherVideoDetailTitle {
+        font-size: 18px;
+    }
+    .teacherVideoDetailInfo {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
