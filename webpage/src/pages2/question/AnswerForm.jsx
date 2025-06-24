@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useParams} from 'react-router-dom';
-import styles from "../../styles/AnswerForm.module.css";
+import styles from "../../styles/AnswerQuestion/AnswerForm.module.css";
 import Header from "../../components/Header.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight,faClock} from "@fortawesome/free-solid-svg-icons";

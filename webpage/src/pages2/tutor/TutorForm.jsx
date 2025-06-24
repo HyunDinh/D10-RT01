@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import styles from '../../styles/Tutor.module.css';
+import styles from '../../styles/tutor/Tutor.module.css';
 
 const SUBJECTS = [
   'Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'

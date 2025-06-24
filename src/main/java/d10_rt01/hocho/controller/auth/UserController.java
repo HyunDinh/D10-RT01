@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -132,6 +133,23 @@ public class UserController {
         return ResponseEntity.ok().header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate").header(HttpHeaders.PRAGMA, "no-cache").header(HttpHeaders.EXPIRES, "0").contentType(mediaType).body(resource);
     }
 
+    @GetMapping("/children")
+    public ResponseEntity<List<Map<String, Object>>> getChildrenOfParent(Authentication authentication) {
+        String username = authentication.getName();
+        User parent = userService.findByUsername(username);
+        List<User> children = userService.getChildrenOfParent(parent.getId());
+        List<Map<String, Object>> result = new java.util.ArrayList<>();
+        for (User child : children) {
+            Map<String, Object> childInfo = new HashMap<>();
+            childInfo.put("id", child.getId());
+            childInfo.put("username", child.getUsername());
+            childInfo.put("fullName", child.getFullName());
+            childInfo.put("dateOfBirth", child.getDateOfBirth());
+            childInfo.put("avatarUrl", child.getAvatarUrl());
+            result.add(childInfo);
+        }
+        return ResponseEntity.ok(result);
+    }
     @GetMapping("/teacher-verification/{filename:.+}")
     public ResponseEntity<Resource> getTeacherVerificationImage(@PathVariable String filename) throws IOException {
         Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_TEACHER_VERIFICATION_UPLOAD_DIR, filename);

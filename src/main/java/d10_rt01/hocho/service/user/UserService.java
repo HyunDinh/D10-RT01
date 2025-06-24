@@ -544,6 +544,16 @@ public class UserService {
         return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
     }
 
+    // Lấy danh sách các con của phụ huynh
+    public List<User> getChildrenOfParent(Long parentId) {
+        List<ParentChildMapping> mappings = parentChildMappingRepository.findByParentId(parentId);
+        List<User> children = new java.util.ArrayList<>();
+        for (ParentChildMapping mapping : mappings) {
+            children.add(mapping.getChild());
+        }
+        return children;
+    }
+  
     // ADMIN
 
     public List<User> getAllUsers() {

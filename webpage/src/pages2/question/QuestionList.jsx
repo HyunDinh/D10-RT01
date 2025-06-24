@@ -5,7 +5,7 @@ import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer';
 import QuestionForm from './QuestionForm.jsx';
 import DeleteConfirmDialog from '../../components/DeleteConfirmDialog.jsx';
-import styles from '../../styles/QuestionList.module.css';
+import styles from '../../styles/AnswerQuestion/QuestionList.module.css';
 import { faChevronRight, faPlus, faUserPen, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
