@@ -1,10 +1,4 @@
 /* Scoped styles for the Profile component */
-:root {
-    --primary-color: #f39f5f;
-    --text-color: #385469;
-    --text-secondary: #666;
-}
-
 .accountHub {
     max-width: 70%;
     margin: 100px auto;

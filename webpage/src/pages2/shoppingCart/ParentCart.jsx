@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { paymentService } from '../payment/paymentService.jsx';
-import './Cart.css';
+import './Cart.module.css';
 
 const ParentCart = () => {
     const [cartItems, setCartItems] = useState([]);

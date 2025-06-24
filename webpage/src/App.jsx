@@ -9,7 +9,6 @@ import ForgotPassword from './pages2/ForgotPassword';
 import ResetPassword from './pages2/ResetPassword';
 import Profile from './pages2/Profile';
 
-
 // tutor routes
 import TutorProfile from './pages2/tutor/TutorProfile';
 import TutorForm from './pages2/tutor/TutorForm';
@@ -68,10 +67,12 @@ import PublicCoursePage from "./pages2/course/PublicCoursePage";
 // Game Routes
 import PlayDino from "./pages2/game/PlayDinoRun";
 import PlayClumsyBird from "./pages2/game/PlayClumsyBird";
+import GamesPage from "./pages2/game/GamesPage.jsx";
 
 // Approval Routes
 import CourseApproval from "./pages2/course/CensorCourse";
 import GameApproval from "./pages2/game/GameApproval";
+import PlayDinoRun from "./pages2/game/PlayDinoRun";
 
 
 const App = () => {
@@ -170,9 +171,10 @@ const App = () => {
                 {/* Admin Routes */}
                 
                 {/* Game Routes */}
-                <Route path="/hocho/games/dino" element={<PlayDino />} />
-                <Route path="/hocho/games/clumsyBird" element={<PlayClumsyBird />} />
+                <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
+                <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/admin/games/storage" element={<GameApproval />} />
+                <Route path="/hocho/games" element={<GamesPage />} />
 
             </Routes>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
