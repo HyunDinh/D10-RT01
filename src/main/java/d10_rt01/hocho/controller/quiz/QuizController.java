@@ -1,14 +1,18 @@
 package d10_rt01.hocho.controller.quiz;
 
 
+import d10_rt01.hocho.config.DebugModeConfig;
 import d10_rt01.hocho.config.HochoConfig;
+import d10_rt01.hocho.controller.auth.AuthController;
 import d10_rt01.hocho.dto.quiz.QuizAnswerDto;
 import d10_rt01.hocho.dto.quiz.QuizSubmissionDto;
 import d10_rt01.hocho.model.Quiz;
 import d10_rt01.hocho.model.QuizQuestion;
 import d10_rt01.hocho.model.QuizResult;
 import d10_rt01.hocho.service.quiz.QuizService;
+import d10_rt01.hocho.utils.CustomLogger;
 import net.coobird.thumbnailator.Thumbnails;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +34,9 @@ import java.util.Map;
 @RequestMapping("/api/quizzes")
 @Transactional
 public class QuizController {
+
+    public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(QuizController.class), DebugModeConfig.CONTROLLER_LAYER);
+
     @Autowired
     private QuizService quizService;
 
@@ -131,6 +138,7 @@ public class QuizController {
     @PostMapping("/upload-image")
     public Map<String, String> uploadQuizImage(@RequestParam("imageFile") MultipartFile imageFile) {
         String imageUrl = null;
+        logger.info(imageFile.getOriginalFilename() + " - " + imageFile.getContentType() + " - " + imageFile.getSize() + " bytes");
         if (imageFile != null && !imageFile.isEmpty()) {
             imageUrl = saveQuizImage(imageFile);
         }
