@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../styles/course/CoursePublic.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload, faImage, faTrash } from '@fortawesome/free-solid-svg-icons';
 // import { toast, ToastContainer } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -13,10 +15,14 @@ export default function EditCoursePage() {
         title: '',
         description: '',
         age_group: '',
-        price: ''
+        price: '',
+        courseImageUrl: ''
     });
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const [uploading, setUploading] = useState(false);
 
     useEffect(() => {
         if (!location.state?.course) {
@@ -24,6 +30,9 @@ export default function EditCoursePage() {
             return;
         }
         setCourse(location.state.course);
+        if (location.state.course.courseImageUrl) {
+            setImagePreview(getCourseImageUrl(location.state.course.courseImageUrl));
+        }
         fetchAgeGroups();
     }, [location.state, navigate]);
 
@@ -45,6 +54,63 @@ export default function EditCoursePage() {
         setCourse({ ...course, [e.target.name]: e.target.value });
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (PNG, JPG, JPEG)');
+                return;
+            }
+            
+            // Validate file size (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('File size must be less than 10MB');
+                return;
+            }
+
+            setImageFile(file);
+            
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const removeImage = () => {
+        setImageFile(null);
+        setImagePreview(null);
+        setCourse({ ...course, courseImageUrl: '' });
+    };
+
+    const uploadImage = async () => {
+        if (!imageFile) return course.courseImageUrl; // Return existing URL if no new file
+        
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('imageFile', imageFile);
+            
+            const response = await axios.post('/api/courses/upload-image', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                withCredentials: true
+            });
+            
+            return response.data.imageUrl;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            alert('Failed to upload image. Please try again.');
+            return null;
+        } finally {
+            setUploading(false);
+        }
+    };
+
     const validate = () => {
         const tempErrors = {};
         if (!course.title) tempErrors.title = 'Required';
@@ -58,8 +124,19 @@ export default function EditCoursePage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
+        
         try {
-            await axios.put(`/api/teacher/courses/${course.courseId}`, course, {
+            // Upload image first if selected
+            let imageUrl = await uploadImage();
+            if (imageUrl === null) return; // Stop if upload failed
+            
+            // Update course with image URL
+            const courseData = {
+                ...course,
+                courseImageUrl: imageUrl
+            };
+            
+            await axios.put(`/api/teacher/courses/${course.courseId}`, courseData, {
                 withCredentials: true
             });
             // toast.success("Course updated successfully!");
@@ -74,6 +151,16 @@ export default function EditCoursePage() {
                 setError('Failed to update course.');
             }
         }
+    };
+
+    const getCourseImageUrl = (courseImageUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!courseImageUrl || courseImageUrl === 'none') {
+            return null;
+        }
+        // Extract filename from courseImageUrl (e.g., "/course/filename.jpg" -> "filename.jpg")
+        const fileName = courseImageUrl.split('/').pop();
+        return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
     };
 
     if (error) {
@@ -101,6 +188,50 @@ export default function EditCoursePage() {
                     />
                     {errors.title && <div className={styles.courseFormError + " text-danger"}>{errors.title}</div>}
                 </div>
+                
+                <div className="mb-3">
+                    <label htmlFor="courseImage" className={styles.courseFormLabel + " form-label"}>
+                        <FontAwesomeIcon icon={faImage} /> Course Image
+                    </label>
+                    <div className="d-flex align-items-center gap-3">
+                        <input
+                            type="file"
+                            className={styles.courseFormInput + " form-control"}
+                            name="courseImage"
+                            id="courseImage"
+                            accept="image/png,image/jpeg,image/jpg"
+                            onChange={handleImageChange}
+                        />
+                        {uploading && <FontAwesomeIcon icon={faUpload} spin />}
+                        {imagePreview && (
+                            <button 
+                                type="button" 
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={removeImage}
+                                title="Remove image"
+                            >
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        )}
+                    </div>
+                    {imagePreview && (
+                        <div className="mt-2">
+                            <img 
+                                src={imagePreview} 
+                                alt="Preview" 
+                                style={{ 
+                                    maxWidth: '200px', 
+                                    maxHeight: '200px', 
+                                    objectFit: 'cover',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '8px'
+                                }} 
+                            />
+                        </div>
+                    )}
+                    <small className="text-muted">Upload PNG, JPG, or JPEG file (max 10MB)</small>
+                </div>
+                
                 <div className="mb-3">
                     <label htmlFor="courseDescription" className={styles.courseFormLabel + " form-label"}>Description</label>
                     <textarea
@@ -145,7 +276,13 @@ export default function EditCoursePage() {
                     />
                     {errors.price && <div className={styles.courseFormError + " text-danger"}>{errors.price}</div>}
                 </div>
-                <button type="submit" className={styles.courseFormBtn + " btn btn-warning w-100"}>Save Changes</button>
+                <button 
+                    type="submit" 
+                    className={styles.courseFormBtn + " btn btn-warning w-100"}
+                    disabled={uploading}
+                >
+                    {uploading ? 'Uploading...' : 'Save Changes'}
+                </button>
                 <button type="button" className={styles.courseFormBtn + ' ' + styles.cancel + " btn btn-secondary w-100 mt-2"} onClick={() => navigate(-1)}>
                     Cancel
                 </button>

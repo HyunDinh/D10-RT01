@@ -44,6 +44,16 @@ const QuizReview = () => {
         }
     };
 
+    const getQuizImageUrl = (questionImageUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!questionImageUrl || questionImageUrl === 'none') {
+            return '/images/default-quiz.jpg';
+        }
+        // Extract filename from questionImageUrl (e.g., "/quiz/filename.jpg" -> "filename.jpg")
+        const fileName = questionImageUrl.split('/').pop();
+        return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
+    };
+
     if (loading) return <div className={styles.quizDetailAlert}>Đang tải...</div>;
     if (error) return <div className={styles.quizDetailAlert}>{error}</div>;
     if (!result) return null;
@@ -91,13 +101,13 @@ const QuizReview = () => {
                         <div className={styles.quizDetailQuestionTitle}>
                             Câu {index + 1}: {answer.question.questionText}
                         </div>
-                        {answer.question.questionImageUrl && (
-                            <img
-                                src={`http://localhost:8080${answer.question.questionImageUrl}`}
-                                alt="Ảnh minh họa"
-                                className={styles.quizDetailQuestionImage}
-                            />
-                        )}
+                        <img
+                            src={getQuizImageUrl(answer.question.questionImageUrl)}
+                            alt="Ảnh minh họa"
+                            className={styles.quizDetailQuestionImage}
+                            onError={e => (e.target.src = '/images/default-quiz.jpg')}
+                            style={{ display: answer.question.questionImageUrl ? 'block' : 'none' }}
+                        />
                         <div>
                             {answer.question.options.map(option => {
                                 let optionClass = styles.quizDetailOption;

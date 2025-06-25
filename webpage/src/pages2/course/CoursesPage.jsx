@@ -63,8 +63,8 @@ export default function CoursesPage() {
 
     if (error) {
         return (<div className="container mt-5">
-                <div className="alert alert-danger">{error}</div>
-            </div>);
+            <div className="alert alert-danger">{error}</div>
+        </div>);
     }
 
     return (
@@ -107,37 +107,37 @@ export default function CoursesPage() {
                     </thead>
                     <tbody>
                     {filteredCourses.map(course => (<tr key={course.courseId}>
-                            <td>{course.title}</td>
-                            <td>{course.ageGroup}</td>
-                            <td>{course.price}</td>
-                            <td>{course.status}</td>
-                            <td>{new Date(course.createdAt).toLocaleString()}</td>
-                            <td>
-                                <Link to={`/hocho/teacher/course/${course.courseId}/lesson`}
-                                      className="btn btn-dark btn-sm me-2">
-                                    View Lessons
-                                </Link>
-                                {/* Nút View Quiz */}
-                                <Link
-                                    to={`/hocho/quizzes?courseId=${course.courseId}`}
-                                    className="btn btn-primary btn-sm me-2"
-                                >
-                                    View Quiz
-                                </Link>
-                                <Link
-                                    to="/hocho/teacher/course/edit"
-                                    state={{course}}
-                                    className="btn btn-warning btn-sm me-2"
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    className="btn btn-danger btn-sm"
-                                    onClick={() => handleDelete(course.courseId)}>
-                                    Delete
-                                </button>
-                            </td>
-                        </tr>))}
+                        <td>{course.title}</td>
+                        <td>{course.ageGroup}</td>
+                        <td>{course.price}</td>
+                        <td>{course.status}</td>
+                        <td>{new Date(course.createdAt).toLocaleString()}</td>
+                        <td>
+                            <Link to={`/hocho/teacher/course/${course.courseId}/lesson`}
+                                  className="btn btn-dark btn-sm me-2">
+                                View Lessons
+                            </Link>
+                            {/* Nút View Quiz */}
+                            <Link
+                                to={`/hocho/quizzes?courseId=${course.courseId}`}
+                                className="btn btn-primary btn-sm me-2"
+                            >
+                                View Quiz
+                            </Link>
+                            <Link
+                                to="/hocho/teacher/course/edit"
+                                state={{course}}
+                                className="btn btn-warning btn-sm me-2"
+                            >
+                                Edit
+                            </Link>
+                            <button
+                                className="btn btn-danger btn-sm"
+                                onClick={() => handleDelete(course.courseId)}>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>))}
                     </tbody>
                 </table>
             </div>

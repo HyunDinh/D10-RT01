@@ -23,6 +23,9 @@ public class Course {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "course_image_url")
+    private String courseImageUrl;
+
     @ManyToOne
     @JoinColumn(name = "teacher_id", nullable = false)
     private User teacher;

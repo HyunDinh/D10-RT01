@@ -81,12 +81,12 @@ const QuizForm = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:8080/api/quizzes/upload-image',
-        formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          withCredentials: true
-        }
+          'http://localhost:8080/api/quizzes/upload-image',
+          formData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true
+          }
       );
       setCurrentQuestion({ ...currentQuestion, questionImageUrl: res.data.imageUrl });
     } catch (err) {
@@ -147,7 +147,7 @@ const QuizForm = () => {
         courseId: ''
       });
       setQuestions([]);
-      navigate(`/quizzes?courseId=${form.courseId}`);
+      navigate(`/hocho/quizzes?courseId=${form.courseId}`);
     } catch (err) {
       setError('Không thể tạo quiz');
     }
@@ -155,90 +155,90 @@ const QuizForm = () => {
   };
 
   return (
-    <div className={styles.quizFormContainer}>
-      <h2 className={styles.quizFormTitle}>Tạo Quiz mới</h2>
-      {error && <div className={styles.quizFormError}>{error}</div>}
-      {success && <div className={styles.quizFormSuccess}>{success}</div>}
-      <form className={styles.quizForm} onSubmit={handleSubmit}>
-        <div>
-          <label className={styles.quizFormLabel}>Tiêu đề</label>
-          <input type="text" className={styles.quizFormInput} name="title" value={form.title} onChange={handleChange} required />
-        </div>
-        <div>
-          <label className={styles.quizFormLabel}>Mô tả</label>
-          <textarea className={styles.quizFormTextarea} name="description" value={form.description} onChange={handleChange} rows={3} />
-        </div>
-        <div>
-          <label className={styles.quizFormLabel}>Khóa học</label>
-          {courseIdFromUrl && selectedCourse ? (
-            <div className={styles.quizFormInput} style={{background: 'none', border: 'none', fontWeight: 600}}>{selectedCourse.title}</div>
-          ) : (
-            <select className={styles.quizFormSelect} name="courseId" value={form.courseId} onChange={handleChange} required>
-              <option value="">Chọn khóa học</option>
-              {courses.map(course => (
-                <option key={course.courseId} value={course.courseId}>
-                  {course.title}
-                </option>
+      <div className={styles.quizFormContainer}>
+        <h2 className={styles.quizFormTitle}>Tạo Quiz mới</h2>
+        {error && <div className={styles.quizFormError}>{error}</div>}
+        {success && <div className={styles.quizFormSuccess}>{success}</div>}
+        <form className={styles.quizForm} onSubmit={handleSubmit}>
+          <div>
+            <label className={styles.quizFormLabel}>Tiêu đề</label>
+            <input type="text" className={styles.quizFormInput} name="title" value={form.title} onChange={handleChange} required />
+          </div>
+          <div>
+            <label className={styles.quizFormLabel}>Mô tả</label>
+            <textarea className={styles.quizFormTextarea} name="description" value={form.description} onChange={handleChange} rows={3} />
+          </div>
+          <div>
+            <label className={styles.quizFormLabel}>Khóa học</label>
+            {courseIdFromUrl && selectedCourse ? (
+                <div className={styles.quizFormInput} style={{background: 'none', border: 'none', fontWeight: 600}}>{selectedCourse.title}</div>
+            ) : (
+                <select className={styles.quizFormSelect} name="courseId" value={form.courseId} onChange={handleChange} required>
+                  <option value="">Chọn khóa học</option>
+                  {courses.map(course => (
+                      <option key={course.courseId} value={course.courseId}>
+                        {course.title}
+                      </option>
+                  ))}
+                </select>
+            )}
+          </div>
+          <div className={styles.quizFormRow}>
+            <div className={styles.quizFormCol}>
+              <label className={styles.quizFormLabel}>Thời gian (phút)</label>
+              <input type="number" className={styles.quizFormInput} name="timeLimit" value={form.timeLimit} onChange={handleChange} min="1" required />
+            </div>
+            <div className={styles.quizFormCol}>
+              <label className={styles.quizFormLabel}>Tổng điểm</label>
+              <input type="number" className={styles.quizFormInput} name="totalPoints" value={form.totalPoints} onChange={handleChange} min="1" required />
+            </div>
+          </div>
+
+          <h4 style={{margin: '24px 0 10px 0', color: '#2d6cdf'}}>Thêm câu hỏi</h4>
+          <div>
+            <label className={styles.quizFormLabel}>Nội dung câu hỏi</label>
+            <textarea className={styles.quizFormTextarea} name="questionText" value={currentQuestion.questionText} onChange={handleQuestionChange} rows={3} />
+          </div>
+          <div>
+            <label className={styles.quizFormLabel}>Ảnh minh họa (tùy chọn)</label>
+            <input type="file" className={styles.quizFormInput} accept="image/*" onChange={handleFileChange} />
+          </div>
+          <div className={styles.quizFormRow}>
+            {currentQuestion.options.map((opt, idx) => (
+                <div className={styles.quizFormCol} key={opt.optionKey}>
+                  <label className={styles.quizFormLabel}>Đáp án {opt.optionKey}</label>
+                  <input type="text" className={styles.quizFormInput} value={opt.optionText} onChange={e => handleOptionChange(idx, e.target.value)} required />
+                </div>
+            ))}
+          </div>
+          <div>
+            <label className={styles.quizFormLabel}>Đáp án đúng</label>
+            <select className={styles.quizFormSelect} name="correctOptionId" value={currentQuestion.correctOptionId} onChange={handleQuestionChange}>
+              {currentQuestion.options.map(opt => (
+                  <option key={opt.optionKey} value={opt.optionKey}>{opt.optionKey}</option>
               ))}
             </select>
-          )}
-        </div>
-        <div className={styles.quizFormRow}>
-          <div className={styles.quizFormCol}>
-            <label className={styles.quizFormLabel}>Thời gian (phút)</label>
-            <input type="number" className={styles.quizFormInput} name="timeLimit" value={form.timeLimit} onChange={handleChange} min="1" required />
           </div>
-          <div className={styles.quizFormCol}>
-            <label className={styles.quizFormLabel}>Tổng điểm</label>
-            <input type="number" className={styles.quizFormInput} name="totalPoints" value={form.totalPoints} onChange={handleChange} min="1" required />
-          </div>
-        </div>
+          <button type="button" className={styles.quizFormAddBtn} onClick={addQuestion} disabled={loading}>Thêm câu hỏi</button>
 
-        <h4 style={{margin: '24px 0 10px 0', color: '#2d6cdf'}}>Thêm câu hỏi</h4>
-        <div>
-          <label className={styles.quizFormLabel}>Nội dung câu hỏi</label>
-          <textarea className={styles.quizFormTextarea} name="questionText" value={currentQuestion.questionText} onChange={handleQuestionChange} rows={3} />
-        </div>
-        <div>
-          <label className={styles.quizFormLabel}>Ảnh minh họa (tùy chọn)</label>
-          <input type="file" className={styles.quizFormInput} accept="image/*" onChange={handleFileChange} />
-        </div>
-        <div className={styles.quizFormRow}>
-          {currentQuestion.options.map((opt, idx) => (
-            <div className={styles.quizFormCol} key={opt.optionKey}>
-              <label className={styles.quizFormLabel}>Đáp án {opt.optionKey}</label>
-              <input type="text" className={styles.quizFormInput} value={opt.optionText} onChange={e => handleOptionChange(idx, e.target.value)} required />
-            </div>
-          ))}
-        </div>
-        <div>
-          <label className={styles.quizFormLabel}>Đáp án đúng</label>
-          <select className={styles.quizFormSelect} name="correctOptionId" value={currentQuestion.correctOptionId} onChange={handleQuestionChange}>
-            {currentQuestion.options.map(opt => (
-              <option key={opt.optionKey} value={opt.optionKey}>{opt.optionKey}</option>
-            ))}
-          </select>
-        </div>
-        <button type="button" className={styles.quizFormAddBtn} onClick={addQuestion} disabled={loading}>Thêm câu hỏi</button>
-
-        <div className={styles.quizFormQuestionList}>
-          {questions.map((q, idx) => (
-            <div className={styles.quizFormQuestionItem} key={idx}>
-              <div className={styles.quizFormQuestionTitle}>Câu {idx + 1}: {q.questionText}</div>
-              {q.questionImageUrl && <img src={q.questionImageUrl} alt="minh họa" style={{maxWidth: '100%', borderRadius: 8, marginBottom: 8}} />}
-              {q.options.map(opt => (
-                <div className={styles.quizFormOption} key={opt.optionKey}>
-                  <b>{opt.optionKey}.</b> {opt.optionText} {q.correctOptionId === opt.optionKey && <span style={{color: '#38a169', fontWeight: 600}}>(Đáp án đúng)</span>}
+          <div className={styles.quizFormQuestionList}>
+            {questions.map((q, idx) => (
+                <div className={styles.quizFormQuestionItem} key={idx}>
+                  <div className={styles.quizFormQuestionTitle}>Câu {idx + 1}: {q.questionText}</div>
+                  {q.questionImageUrl && <img src={q.questionImageUrl} alt="minh họa" style={{maxWidth: '100%', borderRadius: 8, marginBottom: 8}} />}
+                  {q.options.map(opt => (
+                      <div className={styles.quizFormOption} key={opt.optionKey}>
+                        <b>{opt.optionKey}.</b> {opt.optionText} {q.correctOptionId === opt.optionKey && <span style={{color: '#38a169', fontWeight: 600}}>(Đáp án đúng)</span>}
+                      </div>
+                  ))}
+                  <button type="button" className={styles.quizFormRemoveBtn} onClick={() => setQuestions(questions.filter((_, i) => i !== idx))}>Xóa</button>
                 </div>
-              ))}
-              <button type="button" className={styles.quizFormRemoveBtn} onClick={() => setQuestions(questions.filter((_, i) => i !== idx))}>Xóa</button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <button type="submit" className={styles.quizFormSubmitBtn} disabled={loading}>Tạo Quiz</button>
-      </form>
-    </div>
+          <button type="submit" className={styles.quizFormSubmitBtn} disabled={loading}>Tạo Quiz</button>
+        </form>
+      </div>
   );
 };
 

@@ -17,8 +17,8 @@ const QuizDetail = () => {
   useEffect(() => {
     fetchQuiz();
     axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true })
-      .then(res => setUserId(res.data.id))
-      .catch(() => setUserId(''));
+        .then(res => setUserId(res.data.id))
+        .catch(() => setUserId(''));
   }, [id]);
 
   useEffect(() => {
@@ -91,6 +91,16 @@ const QuizDetail = () => {
     }
   };
 
+  const getQuizImageUrl = (questionImageUrl) => {
+    const baseUrl = 'http://localhost:8080';
+    if (!questionImageUrl || questionImageUrl === 'none') {
+      return '/images/default-quiz.jpg';
+    }
+    // Extract filename from questionImageUrl (e.g., "/quiz/filename.jpg" -> "filename.jpg")
+    const fileName = questionImageUrl.split('/').pop();
+    return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
+  };
+
   if (loading) return <div className={styles.quizDetailAlert}>Đang tải...</div>;
   if (error) return <div className={styles.quizDetailAlert}>{error}</div>;
   if (!quiz) return null;
@@ -102,66 +112,66 @@ const QuizDetail = () => {
   };
 
   return (
-    <div className={styles.quizDetailContainer}>
-      <div className={styles.quizDetailHeader}>
-        <div className={styles.quizDetailTitle}>{quiz.title}</div>
-        <div className={styles.quizDetailHeaderActions}>
-          <div style={{fontWeight: 600, fontSize: '1.1rem'}}>Thời gian: {formatTime(timeLeft)}</div>
+      <div className={styles.quizDetailContainer}>
+        <div className={styles.quizDetailHeader}>
+          <div className={styles.quizDetailTitle}>{quiz.title}</div>
+          <div className={styles.quizDetailHeaderActions}>
+            <div style={{fontWeight: 600, fontSize: '1.1rem'}}>Thời gian: {formatTime(timeLeft)}</div>
+          </div>
+        </div>
+        <div className={styles.quizDetailBody}>
+          <div className={styles.quizDetailInfoText}>{quiz.description}</div>
+          <div className={styles.quizDetailInfoText} style={{marginBottom: 18}}>
+            Tổng điểm: {quiz.totalPoints} điểm | Số câu hỏi: {quiz.questions.length} câu
+          </div>
+
+          {quiz.questions.map((question, index) => (
+              <div key={question.questionId} className={styles.quizDetailQuestionCard}>
+                <div className={styles.quizDetailQuestionTitle}>
+                  Câu {index + 1}: {question.questionText}
+                </div>
+                <img
+                    src={getQuizImageUrl(question.questionImageUrl)}
+                    alt="Ảnh minh họa"
+                    className={styles.quizDetailQuestionImage}
+                    onError={e => (e.target.src = '/images/default-quiz.jpg')}
+                    style={{ display: question.questionImageUrl ? 'block' : 'none' }}
+                />
+                <div>
+                  {question.options.map(option => (
+                      <label key={option.optionId} className={styles.quizDetailOption} style={{display: 'block', cursor: 'pointer'}}>
+                        <input
+                            type="radio"
+                            style={{marginRight: 8}}
+                            name={`question-${question.questionId}`}
+                            value={option.optionKey}
+                            checked={answers[question.questionId] === option.optionKey}
+                            onChange={() => handleAnswerChange(question.questionId, option.optionKey)}
+                        />
+                        {option.optionKey}. {option.optionText}
+                      </label>
+                  ))}
+                </div>
+                <div className={styles.quizDetailBadge}>
+                  Điểm: {question.points} điểm
+                </div>
+              </div>
+          ))}
+
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24}}>
+            <div className={styles.quizDetailInfoText}>
+              Đã trả lời: {Object.keys(answers).length}/{quiz.questions.length} câu
+            </div>
+            <button
+                className={styles.quizDetailBtn}
+                onClick={handleSubmit}
+                disabled={submitting}
+            >
+              {submitting ? 'Đang nộp bài...' : 'Nộp bài'}
+            </button>
+          </div>
         </div>
       </div>
-      <div className={styles.quizDetailBody}>
-        <div className={styles.quizDetailInfoText}>{quiz.description}</div>
-        <div className={styles.quizDetailInfoText} style={{marginBottom: 18}}>
-          Tổng điểm: {quiz.totalPoints} điểm | Số câu hỏi: {quiz.questions.length} câu
-        </div>
-
-        {quiz.questions.map((question, index) => (
-          <div key={question.questionId} className={styles.quizDetailQuestionCard}>
-            <div className={styles.quizDetailQuestionTitle}>
-              Câu {index + 1}: {question.questionText}
-            </div>
-            {question.questionImageUrl && (
-              <img 
-                src={`http://localhost:8080${question.questionImageUrl}`} 
-                alt="Ảnh minh họa" 
-                className={styles.quizDetailQuestionImage}
-              />
-            )}
-            <div>
-              {question.options.map(option => (
-                <label key={option.optionId} className={styles.quizDetailOption} style={{display: 'block', cursor: 'pointer'}}>
-                  <input
-                    type="radio"
-                    style={{marginRight: 8}}
-                    name={`question-${question.questionId}`}
-                    value={option.optionKey}
-                    checked={answers[question.questionId] === option.optionKey}
-                    onChange={() => handleAnswerChange(question.questionId, option.optionKey)}
-                  />
-                  {option.optionKey}. {option.optionText}
-                </label>
-              ))}
-            </div>
-            <div className={styles.quizDetailBadge}>
-              Điểm: {question.points} điểm
-            </div>
-          </div>
-        ))}
-
-        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 24}}>
-          <div className={styles.quizDetailInfoText}>
-            Đã trả lời: {Object.keys(answers).length}/{quiz.questions.length} câu
-          </div>
-          <button 
-            className={styles.quizDetailBtn} 
-            onClick={handleSubmit}
-            disabled={submitting}
-          >
-            {submitting ? 'Đang nộp bài...' : 'Nộp bài'}
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };
 

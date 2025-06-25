@@ -1,5 +1,6 @@
 package d10_rt01.hocho.service.course;
 
+import d10_rt01.hocho.dto.CourseDto;
 import d10_rt01.hocho.model.Course;
 import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.model.enums.CourseStatus;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -24,8 +26,20 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
+    public List<CourseDto> getAllCoursesAsDto() {
+        return courseRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     public List<Course> getCourseByTeacherId(long teacherId) {
         return courseRepository.findCoursesByTeacherId(teacherId);
+    }
+
+    public List<CourseDto> getCourseByTeacherIdAsDto(long teacherId) {
+        return courseRepository.findCoursesByTeacherId(teacherId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
@@ -47,6 +61,7 @@ public class CourseService {
                 .orElseThrow(() -> new RuntimeException("Course not found"));
             existingCourse.setTitle(course.getTitle());
             existingCourse.setDescription(course.getDescription());
+            existingCourse.setCourseImageUrl(course.getCourseImageUrl());
             existingCourse.setAgeGroup(course.getAgeGroup());
             existingCourse.setPrice(course.getPrice());
             return courseRepository.save(existingCourse);
@@ -67,6 +82,14 @@ public class CourseService {
         return courseList;
     }
 
+    public List<CourseDto> getAllPendingCourseAsDto() {
+        CourseStatus status = CourseStatus.PENDING;
+        List<Course> courseList = courseRepository.findByStatus(status);
+        return courseList.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void rejectCourse(Long courseId) { // moi them boi LTDat
         Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
@@ -79,6 +102,22 @@ public class CourseService {
         Course course = courseRepository.findById(courseId).orElseThrow(()-> new RuntimeException("Course Not Found"));
         course.setStatus(CourseStatus.APPROVED);
         courseRepository.save(course);
+    }
+
+    private CourseDto convertToDto(Course course) {
+        CourseDto dto = new CourseDto();
+        dto.setCourseId(course.getCourseId());
+        dto.setTitle(course.getTitle());
+        dto.setDescription(course.getDescription());
+        dto.setCourseImageUrl(course.getCourseImageUrl());
+        dto.setTeacherId(course.getTeacher().getId());
+        dto.setTeacherName(course.getTeacher().getFullName());
+        dto.setAgeGroup(course.getAgeGroup());
+        dto.setPrice(course.getPrice());
+        dto.setStatus(course.getStatus());
+        dto.setCreatedAt(course.getCreatedAt());
+        dto.setUpdatedAt(course.getUpdatedAt());
+        return dto;
     }
 }
 

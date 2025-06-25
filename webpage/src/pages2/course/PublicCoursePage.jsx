@@ -25,6 +25,16 @@ const CoursesList = () => {
     const [showChildModal, setShowChildModal] = useState(false);
     const [pendingCourseId, setPendingCourseId] = useState(null);
 
+    const getCourseImageUrl = (courseImageUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!courseImageUrl || courseImageUrl === 'none') {
+            return '/images/default-course.jpg';
+        }
+        // Extract filename from courseImageUrl (e.g., "/course/filename.jpg" -> "filename.jpg")
+        const fileName = courseImageUrl.split('/').pop();
+        return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
+    };
+
     useEffect(() => {
         const initializeData = async () => {
             try {
@@ -282,7 +292,7 @@ const CoursesList = () => {
                             <div key={course.courseId || idx} className={styles.courseCard}>
                                 <div className={styles.cardImage}>
                                     <img
-                                        // src={course.image || '/avaBack.jpg'}
+                                        src={getCourseImageUrl(course.courseImageUrl)}
                                         alt={course.title}
                                         className={styles.courseImg}
                                         onError={(e) => (e.target.src = '/images/default-course.jpg')}

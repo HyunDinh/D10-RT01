@@ -13,7 +13,7 @@ const QuizList = () => {
   const courseId = queryParams.get('courseId');
 
   useEffect(() => {
-    fetchQuizzes(); 
+    fetchQuizzes();
     // eslint-disable-next-line
   }, [courseId]);
 
@@ -42,10 +42,10 @@ const QuizList = () => {
 
   if (!courseId) {
     return (
-      <div className={styles.quizListAlert}>
-        Bạn phải chọn một khóa học để xem hoặc tạo quiz.<br />
-        Vui lòng quay lại trang khóa học.
-      </div>
+        <div className={styles.quizListAlert}>
+          Bạn phải chọn một khóa học để xem hoặc tạo quiz.<br />
+          Vui lòng quay lại trang khóa học.
+        </div>
     );
   }
 
@@ -53,40 +53,40 @@ const QuizList = () => {
   if (error) return <div className={styles.quizListAlert}>{error}</div>;
 
   return (
-    <div className={styles.quizListContainer}>
-      <div className={styles.quizListHeader}>
-        <h2 className={styles.quizListTitle}>Danh sách Quiz</h2>
-        <Link to={`/hocho/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
-          Tạo Quiz mới
-        </Link>
-      </div>
-
-      {quizzes.length === 0 ? (
-        <div className={styles.quizListAlert}>Chưa có quiz nào</div>
-      ) : (
-        <div className={styles.quizListGrid}>
-          {quizzes.map(quiz => (
-            <div key={quiz.quizId} className={styles.quizCard}>
-              <div className={styles.quizCardBody}>
-                <h5 className={styles.quizCardTitle}>{quiz.title}</h5>
-                <p className={styles.quizCardDesc}>{quiz.description}</p>
-                <div className={styles.quizCardInfo}>Thời gian: {quiz.timeLimit} phút</div>
-                <div className={styles.quizCardInfo}>Tổng điểm: {quiz.totalPoints} điểm</div>
-                <div className={styles.quizCardInfo}>Số câu hỏi: {quiz.questions?.length || 0} câu</div>
-              </div>
-              <div className={styles.quizCardFooter}>
-                <Link to={`/hocho/quizzes/${quiz.quizId}`} className={styles.quizCardBtn}>
-                  Chi tiết
-                </Link>
-                <Link to={`/hocho/quizzes/${quiz.quizId}/edit`} className={styles.quizCardBtn}>
-                  Chỉnh sửa
-                </Link>
-              </div>
-            </div>
-          ))}
+      <div className={styles.quizListContainer}>
+        <div className={styles.quizListHeader}>
+          <h2 className={styles.quizListTitle}>Danh sách Quiz</h2>
+          <Link to={`/hocho/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
+            Tạo Quiz mới
+          </Link>
         </div>
-      )}
-    </div>
+
+        {quizzes.length === 0 ? (
+            <div className={styles.quizListAlert}>Chưa có quiz nào</div>
+        ) : (
+            <div className={styles.quizListGrid}>
+              {quizzes.map(quiz => (
+                  <div key={quiz.quizId} className={styles.quizCard}>
+                    <div className={styles.quizCardBody}>
+                      <h5 className={styles.quizCardTitle}>{quiz.title}</h5>
+                      <p className={styles.quizCardDesc}>{quiz.description}</p>
+                      <div className={styles.quizCardInfo}>Thời gian: {quiz.timeLimit} phút</div>
+                      <div className={styles.quizCardInfo}>Tổng điểm: {quiz.totalPoints} điểm</div>
+                      <div className={styles.quizCardInfo}>Số câu hỏi: {quiz.questions?.length || 0} câu</div>
+                    </div>
+                    <div className={styles.quizCardFooter}>
+                      <Link to={`/hocho/quizzes/${quiz.quizId}`} className={styles.quizCardBtn}>
+                        Chi tiết
+                      </Link>
+                      <Link to={`/hocho/quizzes/${quiz.quizId}/edit`} className={styles.quizCardBtn}>
+                        Chỉnh sửa
+                      </Link>
+                    </div>
+                  </div>
+              ))}
+            </div>
+        )}
+      </div>
   );
 };
 

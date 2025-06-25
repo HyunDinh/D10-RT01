@@ -444,3 +444,57 @@
 .addToCartBtn:hover {
     background-color: #218838 !important;
 }
+
+/* Course Image Upload Styles */
+.courseImageUpload {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: border-color 0.3s ease;
+    cursor: pointer;
+}
+
+.courseImageUpload:hover {
+    border-color: #007bff;
+}
+
+.courseImageUpload.dragover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.courseImagePreview {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.courseImageContainer {
+    position: relative;
+    display: inline-block;
+}
+
+.courseImageRemove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.courseImageRemove:hover {
+    background: #c82333;
+}

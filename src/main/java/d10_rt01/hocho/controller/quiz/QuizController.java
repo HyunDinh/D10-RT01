@@ -10,6 +10,8 @@ import d10_rt01.hocho.model.QuizResult;
 import d10_rt01.hocho.service.quiz.QuizService;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -205,5 +207,23 @@ public class QuizController {
         }
 
         return fileBytes;
+    }
+
+    // Serve quiz image
+    @GetMapping("/image/{fileName}")
+    public ResponseEntity<Resource> getQuizImage(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_QUIZ_UPLOAD_DIR, fileName);
+            Resource resource = new org.springframework.core.io.FileSystemResource(filePath.toFile());
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

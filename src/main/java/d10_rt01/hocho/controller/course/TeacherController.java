@@ -2,6 +2,7 @@ package d10_rt01.hocho.controller.course;
 
 import d10_rt01.hocho.model.Course;
 import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.model.enums.CourseStatus;
 import d10_rt01.hocho.service.course.CourseService;
 import d10_rt01.hocho.service.course.TeacherService;
 import org.slf4j.Logger;
@@ -69,6 +70,7 @@ public class TeacherController {
             .orElseThrow(() -> new RuntimeException("Teacher not found"));
             
         course.setTeacher(teacher);
+        course.setStatus(CourseStatus.PENDING); // Set status to PENDING for admin approval
         Course savedCourse = courseService.addCourseByTeacherId(teacher.getId(), course);
         return ResponseEntity.ok(savedCourse);
     }
@@ -105,6 +107,7 @@ public class TeacherController {
             .orElseThrow(() -> new RuntimeException("Teacher not found"));
             
         course.setTeacher(teacher);
+        course.setStatus(CourseStatus.PENDING); // Reset status to PENDING when updated
         Course updatedCourse = courseService.editCourse(courseId, course);
         return ResponseEntity.ok(updatedCourse);
     }

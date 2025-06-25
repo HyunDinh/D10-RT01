@@ -18,6 +18,10 @@ public class HochoConfig {
     public static final long MAX_QUESTION_ANSWER_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
     public static final long MAX_QUIZ_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
+    // ------------------------------- COURSE IMAGE CONFIG ------------------------------
+    public static final String ABSOLUTE_PATH_COURSE_UPLOAD_DIR = "D:/res/static/course/";
+    public static final long MAX_COURSE_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+
     // ------------------------------- LESSON CONTENT CONFIG ------------------------------
     public static final String ABSOLUTE_PATH_LESSON_CONTENT_UPLOAD_DIR = "D:/res/static/lesson-content/";
 }
