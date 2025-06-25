@@ -46,7 +46,7 @@ function Footer() {
                         </div>
                         <div className={styles.content}>
                             <p>Call Us 7/24</p>
-                            <h3><a href="tel:+2085550112">+208-555-0112</a></h3>
+                            <h3><a href="tel:+0918850345">+0918-850-345</a></h3>
                         </div>
                     </div>
                     <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800"
@@ -70,7 +70,7 @@ function Footer() {
                         </div>
                         <div className={styles.content}>
                             <p>Make a Quote</p>
-                            <h3><a href="mailto:kidsa@gmail.com">kidsa@gmail.com</a></h3>
+                            <h3><a href="#">Hocho@gmail.com</a></h3>
                         </div>
                     </div>
                     <div className={styles.contactInfoItems} data-aos="fade-up" data-aos-duration="800"
@@ -94,7 +94,7 @@ function Footer() {
                         </div>
                         <div className={styles.content}>
                             <p>Location</p>
-                            <h3>4517 Washington ave.</h3>
+                            <h3>FPT University Fuda</h3>
                         </div>
                     </div>
                 </div>

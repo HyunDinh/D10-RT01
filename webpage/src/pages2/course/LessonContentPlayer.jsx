@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
-import { Document, Page, pdfjs } from 'react-pdf'
+import {  Document, Page, pdfjs } from 'react-pdf'
 import { Spin, message } from 'antd';
 
 // Cấu hình worker cho react-pdf để sử dụng file cục bộ (với đuôi .mjs)

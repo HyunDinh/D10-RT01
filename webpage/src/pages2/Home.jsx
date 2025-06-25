@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import BannerHeader from "../components/BannerHeader";
 
 
 function Home() {
@@ -23,10 +24,9 @@ function Home() {
     return (
         <>
             <Header />
-            <main>
-                <h1>Chào mừng đến với Hocho</h1>
-                {data.message && <p>{data.message}</p>}
-            </main>
+
+            <BannerHeader/>
+
             <Footer />
         </>
     );
