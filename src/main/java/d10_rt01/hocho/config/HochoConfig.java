@@ -1,7 +1,7 @@
 package d10_rt01.hocho.config;
 
 public class HochoConfig {
-    public static final boolean EMAIL_SENDER = true;
+    public static final boolean EMAIL_SENDER = false;
     // ------------------------------- PROFILE PICTURE SIZE ------------------------------
 
     // TODO : update static path here and also in application.properties

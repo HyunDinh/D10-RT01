@@ -122,7 +122,7 @@ const QuizEdit = () => {
       await axios.put(`http://localhost:8080/api/quizzes/${id}`, quiz, {
         withCredentials: true
       });
-      navigate(`/quizzes/${id}`);
+      navigate(`/hocho/quizzes/${id}`);
     } catch (err) {
       setError('Không thể cập nhật quiz');
       setSaving(false);

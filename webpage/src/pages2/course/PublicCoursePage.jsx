@@ -282,7 +282,7 @@ const CoursesList = () => {
                             <div key={course.courseId || idx} className={styles.courseCard}>
                                 <div className={styles.cardImage}>
                                     <img
-                                        // src={course.image || '/avaBack.jpg'}
+                                        src={course.image || '/avaBack.jpg'}
                                         alt={course.title}
                                         className={styles.courseImg}
                                         onError={(e) => (e.target.src = '/images/default-course.jpg')}

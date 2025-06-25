@@ -147,7 +147,7 @@ const QuizForm = () => {
         courseId: ''
       });
       setQuestions([]);
-      navigate(`/quizzes?courseId=${form.courseId}`);
+      navigate(`/hocho/quizzes?courseId=${form.courseId}`);
     } catch (err) {
       setError('Không thể tạo quiz');
     }
