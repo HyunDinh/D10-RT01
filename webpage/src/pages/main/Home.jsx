@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import BannerHeader from "../components/BannerHeader";
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+import BannerHeader from "../../components/BannerHeader";
 
 
 function Home() {

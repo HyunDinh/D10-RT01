@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
 import styles from '../styles/Profile.module.css';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCircleCheck, faImage, faUser} from '@fortawesome/free-regular-svg-icons';
