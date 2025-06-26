@@ -61,8 +61,11 @@ public class SecurityConfig {
                                 "/api/auth/reset-password")
                         .permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/api/auth/user",
-                                "api/teacher/course").authenticated()
+                        .requestMatchers(
+                                "/api/auth/user",
+                                "/api/time-restriction/**",
+                                "api/teacher/course",
+                                "api/parent-child").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

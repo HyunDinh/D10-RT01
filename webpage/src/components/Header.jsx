@@ -3,7 +3,7 @@ import {Link, useLocation, useNavigate} from 'react-router-dom'; // Thêm useLoc
 import axios from 'axios';
 import styles from '../styles/Header.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faAngleDown, faArrowRightLong, faBars, faMapMarkerAlt, faSearch,faIdBadge,faDoorOpen,faCartShopping} from '@fortawesome/free-solid-svg-icons';
+import {faAngleDown, faArrowRightLong, faBars, faMapMarkerAlt, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
 
@@ -16,7 +16,6 @@ function Header() {
     const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
     const navigate = useNavigate();
     const location = useLocation(); // Lấy đường dẫn hiện tại
-
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -82,16 +81,14 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'},
-                {path: '/hocho/admin/course/approval', name: 'Course Manager'},
-                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
-                {path: '/hocho/admin/games/storage', name: 'Approval Games'},
-                {path: '/hocho/admin/video/approval', name: 'Approval Video'},
-                {path: '/hocho/questions', name: 'Forum'},
-            ],
-            ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
-                path: '/hocho/questions', name: 'Forum'
-            }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
+            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'}, {
+                path: '/hocho/teacher', name: 'Quản lý khóa học'
+            }, {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'}, {
+                path: '/hocho/video', name: 'Quản lý video'
+            }, {path: '/hocho/questions', name: 'Forum'},],
+            ROLE_TEACHER: [{path: '/hocho/teacher', name: 'Quản lý khóa học'}, {
+                path: '/hocho/dashboard', name: 'Giải trí & Nội dung'
+            }, {path: '/hocho/questions', name: 'Forum'},],
             ROLE_PARENT: [{path: '/hocho/parent', name: 'Thông tin Phụ huynh'}, {
                 path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'
             }, {path: '/hocho/questions', name: 'Forum'},],
@@ -168,13 +165,12 @@ function Header() {
                                 </li>
                                 <li><a href="/about">About Us</a></li>
                                 <li className={styles.hasDropdown}>
-                                    <a href="#">Courses <FontAwesomeIcon icon={faAngleDown}
-                                                                         className={styles.mainMenuIcon}/></a>
+                                    <a href="/news">Courses <FontAwesomeIcon icon={faAngleDown}
+                                                                             className={styles.mainMenuIcon}/></a>
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
-                                            <a href="/hocho/course">Subject
-                                                <FontAwesomeIcon icon={faAngleDown}
-                                                                 className={styles.mainMenuIcon}/></a>
+                                            <a href="/hocho/teacher/course">Subject <FontAwesomeIcon icon={faAngleDown}
+                                                                                              className={styles.mainMenuIcon}/></a>
                                             <ul className={styles.submenu}>
                                                 <li><a href="/hocho/teacher/course">Course</a></li>
                                                 <li><a href="/event-carousel">Event Carousel</a></li>
@@ -197,7 +193,7 @@ function Header() {
                                                                                    className={styles.mainMenuIcon}/></a>
                                     <ul className={styles.submenu}>
                                         <li><a href="/hocho/video">Video</a></li>
-                                        <li><a href="/hocho/games">Games</a></li>
+                                        <li><a href="#">Games</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="/contact">Contact Us</a></li>
@@ -206,9 +202,6 @@ function Header() {
                         </nav>
                         <button className={`${styles.searchTrigger} ${styles.searchIcon}`}>
                             <FontAwesomeIcon icon={faSearch}/>
-                        </button>
-                        <button className={`${styles.searchTrigger} ${styles.searchIcon}`}>
-                            <FontAwesomeIcon icon={faCartShopping}/>
                         </button>
                         {!isLoggedIn ? (<div className={styles.headerButton}>
                             <a className={styles.themeBtn} href="/hocho/login">
@@ -225,8 +218,9 @@ function Header() {
                                     }}
                                 />
                                 <ul className={styles.profileDropdown}>
-                                    <li><a href="/hocho/profile"><FontAwesomeIcon icon={faIdBadge}/> Profile</a></li>
-                                    <li><a className={styles.logoutLink} onClick={handleLogout}><FontAwesomeIcon icon={faDoorOpen}/>Logout</a></li>
+                                    <li><a href="/hocho/profile">Profile</a></li>
+                                    <li><a href="#">Cart</a></li>
+                                    <li><a className={styles.logoutLink} onClick={handleLogout}>Logout</a></li>
                                 </ul>
                             </div>
                         </div>)}

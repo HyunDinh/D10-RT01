@@ -119,7 +119,6 @@ public class AuthController {
             SecurityContext securityContext = SecurityContextHolder.getContext();
             securityContext.setAuthentication(authentication);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
-
             if (request.isRememberMe()) {
                 logger.info("Remember Me enabled for username: {}", request.getUsername());
             }
