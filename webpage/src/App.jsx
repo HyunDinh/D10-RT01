@@ -1,145 +1,188 @@
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import Verify from './pages/auth/Verify';
-import VerifyChild from './pages/auth/VerifyChild';
-import Auth from './pages/auth/Auth';
-import Home from './pages/main/Home';
-import ForgotPassword from './pages/auth/ForgotPassword';
-import ResetPassword from './pages/auth/ResetPassword';
-import Profile from './pages/auth/Profile';
-import ProtectedRoute from './components/ProtectedRoute';
-import Admin from './pages/admin/Admin';
-import TutorProfile from './pages/tutor/TutorProfile';
-import TutorForm from './pages/tutor/TutorForm';
-import AdminTutorList from './pages/tutor/AdminTutorList';
-import PublicTutorList from './pages/tutor/PublicTutorList';
-import ChildCart from './pages/shoppingCart/ChildCart';
-import ParentCart from './pages/shoppingCart/ParentCart';
-import QuestionForm from './pages/question/QuestionForm';
-import QuestionList from './pages/question/QuestionList';
-import QuestionEdit from './pages/question/QuestionEdit';
-import AnswerForm from './pages/question/AnswerForm';
-import PaymentHistoryPage from './pages/payment/PaymentHistoryPage';
-import HandlePayosReturn from './pages/payment/HandlePayosReturn';
-import CoursesPage from "./pages/course/CoursesPage";
-import AddCoursePage from "./pages/course/AddCoursePage";
-import EditCoursePage from "./pages/course/EditCoursePage";
-import LessonPage from "./pages/course/LessonPage";
-import AddLessonPage from "./pages/course/AddLessonPage";
-import LessonContentPage from "./pages/course/LessonContentPage";
-import AddLessonContentPage from "./pages/course/AddLessonContentPage";
-import EditLessonPage from "./pages/course/EditLessonPage";
-import LessonContentPlayer from './pages/course/LessonContentPlayer';
-import EditLessonContentPage from './pages/course/EditLessonContentPage';
-import CourseDetailPage from "./pages/course/CourseDetailPage";
-import VideoPage from './pages/video/VideoPage';
-import TeacherVideoListPage from './pages/video/TeacherVideoListPage';
-import AddVideoPage from './pages/video/AddVideoPage';
-import EditVideoPage from './pages/video/EditVideoPage';
-import VideoApprovalPage from './pages/video/VideoApprovalPage';
-import VideoPlayer from './pages/video/VideoPlayer';
-import TeacherVideoDetail from './pages/video/TeacherVideoDetail';
-import QuizList from './pages/quiz/QuizList';
-import QuizDetail from './pages/quiz/QuizDetail';
-import QuizResult from './pages/quiz/QuizResult';
-import QuizEdit from './pages/quiz/QuizEdit';
-import QuizForm from './pages/quiz/QuizForm';
-import QuizReview from './pages/quiz/QuizReview';
-import QuizDetailTeacher from './pages/quiz/QuizDetailTeacher';
-import PublicCoursePage from "./pages/course/PublicCoursePage";
-import PlayClumsyBird from "./pages/game/PlayClumsyBird";
-import GamesPage from "./pages/game/GamesPage.jsx";
-import CourseApproval from "./pages/course/CensorCourse";
-import GameApproval from "./pages/game/GameApproval";
-import PlayDinoRun from "./pages/game/PlayDinoRun";
+import Verify from './pages/Verify';
+import VerifyChild from './pages/VerifyChild';
+import Welcome from './pages/Welcome';
+import Dashboard from './pages/Dashboard';
+import Auth from './pages2/Auth';
+import Home from './pages2/Home';
+import ForgotPassword from './pages2/ForgotPassword';
+import ResetPassword from './pages2/ResetPassword';
+import Profile from './pages2/Profile';
+
+
+import Admin from './pages2/admin/Admin';
+
+import TutorProfile from './pages2/tutor/TutorProfile';
+import TutorForm from './pages2/tutor/TutorForm';
+import AdminTutorList from './pages2/tutor/AdminTutorList';
+import PublicTutorList from './pages2/tutor/PublicTutorList';
+
+// shopping cart routes
+import ChildCart from './pages2/shoppingCart/ChildCart';
+import ParentCart from './pages2/shoppingCart/ParentCart';
+
+// question and answer routes
+import QuestionForm from './pages2/question/QuestionForm';
+import QuestionList from './pages2/question/QuestionList';
+import QuestionEdit from './pages2/question/QuestionEdit';
+import AnswerForm from './pages2/question/AnswerForm';
+
+// payment routes
+import PaymentHistoryPage from './pages2/payment/PaymentHistoryPage';
+import HandlePayosReturn from './pages2/payment/HandlePayosReturn';
+
+// course routes
+import CoursesPage from "./pages2/course/CoursesPage";
+import AddCoursePage from "./pages2/course/AddCoursePage";
+import EditCoursePage from "./pages2/course/EditCoursePage";
+import LessonPage from "./pages2/course/LessonPage";
+import AddLessonPage from "./pages2/course/AddLessonPage";
+import LessonContentPage from "./pages2/course/LessonContentPage";
+import AddLessonContentPage from "./pages2/course/AddLessonContentPage";
+import EditLessonPage from "./pages2/course/EditLessonPage";
+import LessonContentPlayer from './pages2/course/LessonContentPlayer';
+import EditLessonContentPage from './pages2/course/EditLessonContentPage';
+import CourseDetailPage from "./pages2/course/CourseDetailPage";
+import LessonContentStudentPage from './pages2/course/LessonContentStudentPage';
+
+// video routes
+import VideoPage from './pages2/video/VideoPage';
+import TeacherVideoListPage from './pages2/video/TeacherVideoListPage';
+import AddVideoPage from './pages2/video/AddVideoPage';
+import EditVideoPage from './pages2/video/EditVideoPage';
+import VideoApprovalPage from './pages2/video/VideoApprovalPage';
+import VideoPlayer from './pages2/video/VideoPlayer';
+import TeacherVideoDetail from './pages2/video/TeacherVideoDetail';
+
+// quiz routes
+import QuizList from './pages2/quiz/QuizList';
+import QuizDetail from './pages2/quiz/QuizDetail';
+import QuizResult from './pages2/quiz/QuizResult';
+import QuizEdit from './pages2/quiz/QuizEdit';
+import QuizForm from './pages2/quiz/QuizForm';
+import QuizReview from './pages2/quiz/QuizReview';
+import QuizDetailTeacher from './pages2/quiz/QuizDetailTeacher';
+
+// Time Restriction Routes
+// import TimeRestrictionPage from "./pages2/parent/TimeRestrictionPage";
+import PublicCoursePage from "./pages2/course/PublicCoursePage";
+
+// Game Routes
+import PlayDino from "./pages2/game/PlayDinoRun";
+import PlayClumsyBird from "./pages2/game/PlayClumsyBird";
+import GamesPage from "./pages2/game/GamesPage.jsx";
+
+// Approval Routes
+import CourseApproval from "./pages2/course/CensorCourse";
+import GameApproval from "./pages2/game/GameApproval";
+import PlayDinoRun from "./pages2/game/PlayDinoRun";
 
 
 const App = () => {
     return (<Router>
+            <link href="https://cdn..net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
             <Routes>
-
-                // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-                // ************************************** ADMIN ONLY ROUTES **************************************
-
-                <Route path="hocho/admin/accounts" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><Admin /></ProtectedRoute>}/>
-                <Route path="hocho/admin/tutors" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminTutorList /></ProtectedRoute>}/>
-                <Route path="hocho/admin/course/approval" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><CourseApproval /></ProtectedRoute>}/>
-                <Route path="hocho/admin/video/approval" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><VideoApprovalPage /></ProtectedRoute>}/>
-                <Route path="hocho/admin/games/storage" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><GameApproval /></ProtectedRoute>}/>
-
-                // ************************************** TEACHER ONLY ROUTES **************************************
-
-                <Route path="/hocho/teacher/tutors/form" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TutorForm /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/tutors/form/:userId" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TutorForm /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><CoursesPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/add" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><AddCoursePage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/edit" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditCoursePage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/lesson-content/edit/:contentId" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditLessonContentPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><LessonPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><AddLessonPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><LessonContentPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditLessonPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><AddLessonContentPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/video" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TeacherVideoListPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/video/add" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><AddVideoPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/video/edit/:videoId" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditVideoPage /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/video/:videoId" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TeacherVideoDetail /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/quizzes" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizList /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/quizzes/create" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizForm /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/quizzes/:id" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizDetailTeacher /></ProtectedRoute>}/>
-                <Route path="/hocho/teacher/quizzes/:id/edit" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizEdit /></ProtectedRoute>}/>
-
-                // ************************************** PARENT ONLY ROUTES **************************************
-
-                <Route path="/hocho/parent/cart" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentCart /></ProtectedRoute>}/>
-                <Route path="/hocho/payment/history" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><PaymentHistoryPage /></ProtectedRoute>}/>
-
-                // ************************************** CHILD ONLY ROUTES **************************************
-
-                <Route path="/hocho/child/cart" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCart /></ProtectedRoute>}/>
-                <Route path="/hocho/questions/new" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuestionForm /></ProtectedRoute>}/>
-                <Route path="/hocho/questions/:id/edit" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuestionEdit /></ProtectedRoute>}/>
-                <Route path="/hocho/quizzes/:id/do" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizDetail /></ProtectedRoute>}/>
-                <Route path="/hocho/quizzes/:id/result" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizResult /></ProtectedRoute>}/>
-                <Route path="/hocho/quizzes/:id/review" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizReview /></ProtectedRoute>}/>
-                <Route path="/hocho/child/games/dinoRun" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayDinoRun /></ProtectedRoute>}/>
-                <Route path="/hocho/child/games/clumsyBird" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayClumsyBird /></ProtectedRoute>}/>
-
-                // ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-                // ************************************** HOME PAGE ****************************************
                 <Route path="" element={<Home/>}/>
-                <Route path="hocho/home" element={<Home/>}/>
-                // ************************************** AUTH ROUTES **************************************
-                <Route path="hocho/" element={<Auth/>}/>
+
+                {/*// new*/}
                 <Route path="hocho/login" element={<Auth/>}/>
+                <Route path="hocho/home" element={<Home/>}/>
                 <Route path="hocho/forgot-password" element={<ForgotPassword/>}/>
                 <Route path="hocho/reset-password" element={<ResetPassword/>}/>
                 <Route path="hocho/profile" element={<Profile/>}/>
+                <Route path="hocho/admin" element={<Admin/>}/>
+
+                  
                 <Route path="hocho/verify" element={<Verify/>}/>
                 <Route path="hocho/verify-child" element={<VerifyChild/>}/>
-                // ************************************** TUTOR ROUTES *************************************
-                <Route path="hocho/tutors" element={<PublicTutorList/>}/>
-                <Route path="hocho/tutors/profile/:userId" element={<TutorProfile/>}/>
-                // ************************************** SHOPPING CART ROUTES *****************************
-                // ************************************** QUESTION AND ANSWER ROUTES ***********************
-                <Route path="/hocho/questions" element={<QuestionList/>}/>
-                <Route path="/hocho/questions/:id/answer" element={<AnswerForm/>}/>
-                // ************************************** COURSE ROUTES ************************************
+                <Route path="hocho/welcome" element={<Welcome/>}/>
+                <Route path="hocho/dashboard" element={<Dashboard/>}/>
+                <Route path="hocho/" element={<Auth/>}/>
+
+                {/* Tutor Routes */}
+                <Route path="hocho/tutors/admin" element={<AdminTutorList/>}/> {/* Trang quản lý thông tin gia sư */}
+                <Route path="hocho/tutors" element={<PublicTutorList/>}/> {/* Trang thông tin gia sư */}
+                <Route path="hocho/tutors/profile/:userId"
+                       element={<TutorProfile/>}/> {/* Trang xem chi tiết thông tin gia sư */}
+                <Route path="hocho/tutors/form" element={<TutorForm/>}/> {/* Trang đăng ký form thông tin gia sư */}
+                <Route path="hocho/tutors/form/:userId"
+                       element={<TutorForm/>}/> {/* Trang chỉnh sửa thông tin gia sư */}
+
+                {/* Shooping Cart Routes */}
+                <Route path="/hocho/child/cart" element={<ChildCart/>}/> {/* Trang giỏ hàng của trẻ em */}
+                <Route path="/hocho/parent/cart" element={<ParentCart/>}/> {/* Trang giỏ hàng của phụ huynh */}
+
+                {/* Question and Answer Routes */}
+                <Route path="/hocho/questions/new" element={<QuestionForm/>}/> {/* Trang tạo câu hỏi dành cho trẻ em */}
+                <Route path="/hocho/questions" element={<QuestionList/>}/> {/* Trang diễn đàn câu hỏi */}
+                <Route path="/hocho/questions/:id/edit" element={<QuestionEdit/>}/> {/* Trang chỉnh sửa câu hỏi  */}
+                <Route path="/hocho/questions/:id/answer"
+                       element={<AnswerForm/>}/> {/* Trang trả lời câu hỏi và có thể chỉnh sửa  */}
+
+                {/* Course Routes */}
                 <Route path="/hocho/course" element={<PublicCoursePage/>}/>
                 <Route path="/hocho/course-detail/:courseId" element={<CourseDetailPage/>}/>
-                // ************************************** PAYMENT ROUTES ***********************************
+                <Route path="/hocho/teacher/course" element={<CoursesPage/>}/>
+                <Route path="/hocho/teacher/course/add" element={<AddCoursePage/>}/>
+                <Route path="/hocho/teacher/course/edit" element={<EditCoursePage/>}/>
+                <Route path="/hocho/admin/course/approval"  element={<CourseApproval />} /> {/* Trang admin approve khoá học  */}
+
+                {/* Payment Routes - Tương ứng với API của project thanh toán */}
+                <Route path="/hocho/payment/history"
+                       element={<PaymentHistoryPage/>}/> {/* Hiển thị lịch sử thanh toán */}
                 <Route path="/hocho/handle-payos-return/:orderCode" element={<HandlePayosReturn/>}/>
-                // ************************************** LESSON ROUTES ************************************
+
+                {/* Lesson Routes */}
+                <Route path="/hocho/lesson-content/edit/:contentId" element={<EditLessonContentPage/>}/>
                 <Route path="/hocho/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
-                // ************************************** VIDEO ROUTES *************************************
-                <Route path="/hocho/video" element={<VideoPage/>}/>
-                <Route path="/hocho/video/:videoId" element={<VideoPlayer/>}/>
-                // ************************************** QUIZ ROUTES **************************************
-                // ************************************** TIME RESTRICTION ROUTES **************************
-                // ************************************** GAME ROUTES **************************************
+                <Route path="/hocho/teacher/course/:courseId/lesson" element={<LessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/add" element={<AddLessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content" element={<LessonContentPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<EditLessonPage/>}/>
+                <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add"
+                       element={<AddLessonContentPage/>}/>
+                <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage/>}/>
+
+                {/* Video Routes */}
+                <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em done */}
+                <Route path="/hocho/teacher/video"
+                       element={<TeacherVideoListPage/>}/> {/* Trang quản lý video cho giáo viên done*/}
+                <Route path="/hocho/teacher/video/add" element={<AddVideoPage/>}/> {/* Trang thêm video mới done*/}
+                <Route path="/hocho/teacher/video/edit/:videoId"
+                       element={<EditVideoPage/>}/> {/* Trang chỉnh sửa videodone */}
+                <Route path="/hocho/admin/video/approval"
+                       element={<VideoApprovalPage/>}/> {/* Trang duyệt video cho admin done */}
+                <Route path="/hocho/video/:videoId"
+                       element={<VideoPlayer/>}/> {/* Trang xem video (chỉ thấy 1  video)done */}
+                <Route path="/hocho/teacher/video/:videoId" element={<TeacherVideoDetail/>}/> {/* Trang chi tiết video cho giáo viên */}
+
+                {/* Quiz Routes */}
+                <Route path="/hocho/quizzes" element={<QuizList/>}/> {/* Trang hiển thị các quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/create" element={<QuizForm/>}/> {/* Trang tạo quizzes của giáo viên */}
+                <Route path="/hocho/quizzes/:id" element={
+                    <QuizDetailTeacher/>}/> {/* Trang hiển thị thông tin chi tiết của bài quizz dành cho giáo viên */}
+                <Route path="/hocho/quizzes/:id/do" element={<QuizDetail/>}/> {/* Trang làm bài quiz dành cho trẻ em */}
+                <Route path="/hocho/quizzes/:id/edit"
+                       element={<QuizEdit/>}/> {/* Trang chỉnh sửa bài quizz dành cho giáo viên */}
+                <Route path="/hocho/quizzes/:id/result"
+                       element={<QuizResult/>}/> {/* Trang hiển thị kết quả bài quizz dành cho trẻ em */}
+                <Route path="/hocho/quizzes/:id/review"
+                       element={<QuizReview/>}/> {/* Trang xem lại kết quả chi tiết bài quizz dành cho trẻ em */}
+
+            
+                {/* Time Restriction Routes */}
+                {/*<Route path="/hocho/parent/time-restriction" element={<TimeRestrictionPage/>}/>*/}
+
+                {/* Admin Routes */}
+                
+                {/* Game Routes */}
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
                 <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
+                <Route path="/hocho/admin/games/storage" element={<GameApproval />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+
             </Routes>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         </Router>);
 };
 

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import formStyles from '../../styles/quiz/QuizForm.module.css';
 import detailStyles from '../../styles/quiz/QuizDetail.module.css';
+import * as XLSX from 'xlsx';
 
 const QuizEdit = () => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const QuizEdit = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [inputMode, setInputMode] = useState('excel'); // 'excel' hoặc 'manual'
 
   useEffect(() => {
     fetchQuiz();
@@ -139,6 +141,53 @@ const QuizEdit = () => {
     return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
   };
 
+  // Hàm import câu hỏi từ file Excel
+  const handleExcelFile = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const data = new Uint8Array(evt.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      const [header, ...rows] = json;
+      const newQuestions = rows.map((row, idx) => {
+        return {
+          questionText: row[0] || '',
+          points: Number(row[6]) || 10,
+          options: [
+            { optionText: row[1] || '', optionKey: 'A' },
+            { optionText: row[2] || '', optionKey: 'B' },
+            { optionText: row[3] || '', optionKey: 'C' },
+            { optionText: row[4] || '', optionKey: 'D' }
+          ],
+          correctOptionId: row[5] || 'A'
+        };
+      });
+      setQuiz(prev => ({
+        ...prev,
+        questions: [...prev.questions, ...newQuestions]
+      }));
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  // Hàm tải file template Excel
+  const downloadTemplate = () => {
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['Câu hỏi', 'A', 'B', 'C', 'D', 'Đáp án đúng', 'Điểm'],
+      ['2+2=?', '3', '4', '5', '6', 'B', '10'],
+      ['Thủ đô Việt Nam?', 'Hà Nội', 'Sài Gòn', 'Huế', 'Đà Nẵng', 'A', '10']
+    ]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Template');
+    XLSX.writeFile(wb, 'quiz_template.xlsx');
+  };
+
   if (loading) return <div className={detailStyles.quizDetailAlert}>Đang tải...</div>;
   if (error) return <div className={detailStyles.quizDetailAlert}>{error}</div>;
   if (!quiz) return null;
@@ -200,13 +249,6 @@ const QuizEdit = () => {
               <div key={questionIndex} className={detailStyles.quizDetailQuestionCard}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12}}>
                   <div className={detailStyles.quizDetailQuestionTitle}>Câu {questionIndex + 1}</div>
-                  <button
-                      type="button"
-                      className={formStyles.quizFormRemoveBtn}
-                      onClick={() => removeQuestion(questionIndex)}
-                  >
-                    Xóa
-                  </button>
                 </div>
                 <div>
                   <label className={formStyles.quizFormLabel}>Nội dung câu hỏi</label>
@@ -243,7 +285,6 @@ const QuizEdit = () => {
                             className={formStyles.quizFormInput}
                             value={opt.optionText}
                             onChange={e => handleOptionChange(questionIndex, idx, 'optionText', e.target.value)}
-                            required
                         />
                       </div>
                   ))}
@@ -273,7 +314,48 @@ const QuizEdit = () => {
                 </div>
               </div>
           ))}
-          <button type="button" className={formStyles.quizFormAddBtn} onClick={addQuestion}>Thêm câu hỏi</button>
+          {/* Di chuyển lựa chọn thêm câu hỏi xuống cuối */}
+          <div style={{ margin: '24px 0' }}>
+            <div style={{ margin: '16px 0' }}>
+              <label>
+                <input
+                  type="radio"
+                  name="inputMode"
+                  value="excel"
+                  checked={inputMode === 'excel'}
+                  onChange={() => setInputMode('excel')}
+                />
+                Thêm câu hỏi từ file Excel
+              </label>
+              <label style={{ marginLeft: 24 }}>
+                <input
+                  type="radio"
+                  name="inputMode"
+                  value="manual"
+                  checked={inputMode === 'manual'}
+                  onChange={() => setInputMode('manual')}
+                />
+                Thêm câu hỏi trực tiếp trên web
+              </label>
+            </div>
+            {inputMode === 'excel' && (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                  <input
+                    type="file"
+                    accept=".xlsx,.xls"
+                    onChange={handleExcelFile}
+                  />
+                  <button type="button" onClick={downloadTemplate} style={{ padding: '4px 12px', cursor: 'pointer' }}>
+                    Tải file mẫu
+                  </button>
+                </div>
+              </>
+            )}
+            {inputMode === 'manual' && (
+              <button type="button" className={formStyles.quizFormAddBtn} onClick={addQuestion}>Thêm câu hỏi</button>
+            )}
+          </div>
           <button type="submit" className={formStyles.quizFormSubmitBtn} disabled={saving}>Lưu Quiz</button>
         </form>
       </div>
