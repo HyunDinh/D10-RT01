@@ -43,6 +43,7 @@ import EditLessonPage from "./pages2/course/EditLessonPage";
 import LessonContentPlayer from './pages2/course/LessonContentPlayer';
 import EditLessonContentPage from './pages2/course/EditLessonContentPage';
 import CourseDetailPage from "./pages2/course/CourseDetailPage";
+import LessonContentStudentPage from './pages2/course/LessonContentStudentPage';
 
 // video routes
 import VideoPage from './pages2/video/VideoPage';
@@ -140,6 +141,7 @@ const App = () => {
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/edit" element={<EditLessonPage/>}/>
                 <Route path="/hocho/teacher/course/:courseId/lesson/:lessonId/content/add"
                        element={<AddLessonContentPage/>}/>
+                <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage/>}/>
 
                 {/* Video Routes */}
                 <Route path="/hocho/video" element={<VideoPage/>}/> {/* Trang xem video cho trẻ em done */}

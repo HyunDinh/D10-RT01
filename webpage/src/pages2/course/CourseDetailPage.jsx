@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../../components/Header';
 import styles from '../../styles/course/CoursePublic.module.css';
@@ -13,6 +13,7 @@ const CourseDetailPage = () => {
   const [error, setError] = useState(null);
   const [enrolled, setEnrolled] = useState(false);
   const [childId, setChildId] = useState(null);
+  const navigate = useNavigate();
 
   const getCourseImageUrl = (courseImageUrl) => {
     const baseUrl = 'http://localhost:8080';
@@ -100,7 +101,17 @@ const CourseDetailPage = () => {
             {lessons.length === 0 ? <p>Chưa có bài học nào.</p> : (
               <ul>
                 {lessons.map(lesson => (
-                  <li key={lesson.lessonId || lesson.id}>{lesson.title}</li>
+                  <li key={lesson.lessonId || lesson.id} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {lesson.title}
+                    {enrolled && (
+                      <button
+                        style={{ marginLeft: 8 }}
+                        onClick={() => navigate(`/hocho/lesson/${lesson.lessonId || lesson.id}/content-student`)}
+                      >
+                        Xem bài học
+                      </button>
+                    )}
+                  </li>
                 ))}
               </ul>
             )}
