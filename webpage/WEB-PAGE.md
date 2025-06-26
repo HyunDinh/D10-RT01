@@ -10,7 +10,7 @@
 ### `npx kill-port 3000`
 
 ## — DOWNLOAD NECESSARY RESOURCES
-```bash
+```
 npm install
 npm install react react-dom react-router-dom axios
 npm install @react-oauth/google @react-oauth/google
