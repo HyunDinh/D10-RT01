@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import styles from '../styles/Auth.module.css';
+import styles from '../../styles/Auth.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCaretDown, faEyeSlash, faUpload} from '@fortawesome/free-solid-svg-icons';
 import {faFacebookF, faGithub, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons';

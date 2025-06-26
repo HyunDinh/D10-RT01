@@ -28,7 +28,7 @@ const CoursesList = () => {
     const getCourseImageUrl = (courseImageUrl) => {
         const baseUrl = 'http://localhost:8080';
         if (!courseImageUrl || courseImageUrl === 'none') {
-            return '/images/default-course.jpg';
+            return '/avaBack.jpg';
         }
         // Extract filename from courseImageUrl (e.g., "/course/filename.jpg" -> "filename.jpg")
         const fileName = courseImageUrl.split('/').pop();
@@ -118,7 +118,7 @@ const CoursesList = () => {
                     { withCredentials: true }
                 );
                 alert('Đã thêm khóa học vào giỏ hàng!');
-                navigate('/parent-cart');
+                navigate('/hocho/parent/cart');
             }
         } catch (error) {
             const errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';

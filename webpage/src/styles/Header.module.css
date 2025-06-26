@@ -1,9 +1,33 @@
+.sectionContain {
+    background-color: var(--bg-color);
+    position: relative;
+}
+
 .navAdmin {
     display: flex;
     list-style: none;
     margin: 0;
     padding: 0;
     white-space: nowrap;
+    z-index: 1000;
+}
+
+.navAdmin li:hover > .submenu {
+    opacity: 1;
+    transform: translateY(0);
+    display: block;
+}
+
+.navLink {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 16px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+
 }
 
 .headerTop {
@@ -318,13 +342,14 @@
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
 }
 
-.searchIcon{
+.searchIcon {
     font-size: 20px;
     color: #385469;
     cursor: pointer;
     transition: color 0.2s ease-in-out;
 }
-.searchIcon:hover{
+
+.searchIcon:hover {
     color: var(--primary-color);
 }
 

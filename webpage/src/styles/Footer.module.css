@@ -57,7 +57,7 @@
     background-repeat: no-repeat;
     border: 2px solid #F39F5F;
     background-size: cover;
-    border-radius: 50%;
+    border-radius: 20%;
     animation: cir36 10s linear infinite;
     z-index: 1;
 }
