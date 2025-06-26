@@ -46,12 +46,6 @@ const Admin = () => {
     const [childrenData, setChildrenData] = useState({});
 
     useEffect(() => {
-        const role = localStorage.getItem('userRole');
-        if (role !== 'ROLE_ADMIN') {
-            navigate('/hocho/login');
-            return;
-        }
-
         fetchUsers();
         fetchPendingTeachers();
     }, [navigate]);

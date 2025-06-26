@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4eee5;
+    font-family: 'Arial', sans-serif;
+}
+
+.messageBox {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.title {
+    font-size: 2rem;
+    color: #385469;
+    margin-bottom: 1rem;
+}
+
+.message {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 2rem;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    background-color: #f39f5f;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #e88f4f;
+}
+
+.icon {
+    margin-right: 0.5rem;
+}
