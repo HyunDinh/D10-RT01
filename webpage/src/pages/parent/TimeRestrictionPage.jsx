@@ -73,28 +73,30 @@ export default function TimeRestrictionPage() {
                 childrenMap.set(child.childId, child.fullName);
             });
 
-            // Map childId to restriction for quick lookup
+            // Map childId to restriction for quick lookup (dùng key là restriction.child.id)
             const restrictionMap = new Map();
             restrictionsResponse.data.forEach(restriction => {
-                restrictionMap.set(restriction.childId, restriction);
+                restrictionMap.set(String(restriction.child.id), restriction);
             });
 
             // Gộp: Tạo danh sách tất cả các con, nếu có restriction thì lấy, không thì tạo bản ghi mới
             const allRows = childrenResponse.data.map(child => {
-                // Lấy đúng trường id từ backend (id hoặc user_id)
                 const realChildId = child.childId || child.id || child.user_id;
-                const restriction = restrictionMap.get(realChildId);
+                const restriction = restrictionMap.get(String(realChildId));
+                const maxVideoTime = restriction?.maxVideoTime ?? 0;
                 return restriction
-                    ? { ...restriction, childFullName: child.fullName, childId: realChildId }
+                    ? { ...restriction, childFullName: child.fullName, childId: realChildId, maxVideoTime }
                     : {
                         childId: realChildId,
                         childFullName: child.fullName,
                         maxVideoTime: 0,
-                        // Có thể thêm các trường khác nếu cần
                     };
             });
 
             setRestrictions(allRows);
+            // Log dữ liệu sau khi map để debug (chi tiết từng trường)
+            // eslint-disable-next-line
+            console.log('All rows after map:', JSON.stringify(allRows, null, 2));
             setLoading(false);
         } catch (err) {
             console.error('Error fetching restrictions:', err);
@@ -165,8 +167,15 @@ export default function TimeRestrictionPage() {
             dataIndex: 'videoTimeFormatted',
             key: 'maxVideoTime',
             render: (text, record) => {
+                // Log chi tiết giá trị thực tế
+                // eslint-disable-next-line
+                console.log('Record in render:', {
+                  childId: record.childId,
+                  childFullName: record.childFullName,
+                  maxVideoTime: record.maxVideoTime,
+                  max_video_time: record.max_video_time
+                });
                 const realChildId = record.childId;
-                // Determine value to show in input
                 let value = editing[realChildId]?.maxVideoTimeHMS;
                 if (value === undefined) {
                     value = formatSecondsToHMS(record.maxVideoTime);
