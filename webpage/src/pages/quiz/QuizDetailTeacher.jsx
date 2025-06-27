@@ -52,7 +52,7 @@ const QuizDetailTeacher = () => {
       await axios.delete(`http://localhost:8080/api/quizzes/${id}`, {
         withCredentials: true
       });
-      navigate('/hocho/quizzes');
+      navigate(`/hocho/teacher/quizzes?courseId=${courseId}`);
     } catch (err) {
       if (err.response?.status === 409) {
         setError('Không thể xóa quiz này vì đã có học sinh làm bài. Vui lòng xóa kết quả bài làm trước.');
@@ -104,7 +104,7 @@ const QuizDetailTeacher = () => {
           <div className={styles.quizDetailHeaderActions}>
             <button
                 className={styles.quizDetailBtn}
-                onClick={() => navigate(`/hocho/quizzes/${id}/edit`)}
+                onClick={() => navigate(`/hocho/teacher/quizzes/${id}/edit`)}
             >
               Chỉnh sửa
             </button>
@@ -126,7 +126,7 @@ const QuizDetailTeacher = () => {
             </button>
             <button
                 className={styles.quizDetailBtn}
-                onClick={() => navigate(`/hocho/quizzes?courseId=${courseId}`)}
+                onClick={() => navigate(`/hocho/teacher/quizzes?courseId=${courseId}`)}
             >
               Quay lại
             </button>

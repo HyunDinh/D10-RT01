@@ -180,7 +180,7 @@ const QuizForm = () => {
         courseId: ''
       });
       setQuestions([]);
-      navigate(`/hocho/quizzes?courseId=${form.courseId}`);
+      navigate(`/hocho/teacher/quizzes?courseId=${form.courseId}`);
     } catch (err) {
       setError('Không thể tạo quiz');
     }

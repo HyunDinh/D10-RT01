@@ -56,7 +56,7 @@ const QuizList = () => {
       <div className={styles.quizListContainer}>
         <div className={styles.quizListHeader}>
           <h2 className={styles.quizListTitle}>Danh sách Quiz</h2>
-          <Link to={`/hocho/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
+          <Link to={`/hocho/teacher/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
             Tạo Quiz mới
           </Link>
         </div>
@@ -75,10 +75,10 @@ const QuizList = () => {
                       <div className={styles.quizCardInfo}>Số câu hỏi: {quiz.questions?.length || 0} câu</div>
                     </div>
                     <div className={styles.quizCardFooter}>
-                      <Link to={`/hocho/quizzes/${quiz.quizId}`} className={styles.quizCardBtn}>
+                      <Link to={`/hocho/teacher/quizzes/${quiz.quizId}`} className={styles.quizCardBtn}>
                         Chi tiết
                       </Link>
-                      <Link to={`/hocho/quizzes/${quiz.quizId}/edit`} className={styles.quizCardBtn}>
+                      <Link to={`/hocho/teacher/quizzes/${quiz.quizId}/edit`} className={styles.quizCardBtn}>
                         Chỉnh sửa
                       </Link>
                     </div>
