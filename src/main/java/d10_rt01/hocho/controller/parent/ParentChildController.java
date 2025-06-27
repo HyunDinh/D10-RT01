@@ -47,6 +47,8 @@ public class ParentChildController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        System.out.println("************************************************************");
+        logger.info("Returning {} children for parent ID: {}", children.size(), parentId);
         return ResponseEntity.ok(children);
     }
 }

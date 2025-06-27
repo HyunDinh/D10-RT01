@@ -139,7 +139,7 @@ function Profile() {
     const getAvatarUrl = () => {
         const baseUrl = 'http://localhost:8080';
         if (!user.avatarUrl || user.avatarUrl === 'none') {
-            return `${baseUrl}/api/hocho/profile/default.png?t=${new Date().getTime()}`;
+            return `${baseUrl}/api/hocho/profile/avaBack.jpg?t=${new Date().getTime()}`;
         }
         return `${baseUrl}/api/hocho/profile/${user.avatarUrl}?t=${new Date().getTime()}`;
     };
@@ -173,7 +173,7 @@ function Profile() {
                             alt="User Avatar"
                             className={styles.avatarImg}
                             onError={(e) => {
-                                e.target.src = `http://localhost:8080/profile/default.png?t=${new Date().getTime()}`;
+                                e.target.src = `/avaBack.jpg${new Date().getTime()}`;
                             }}
                         />
                         {user.isActive && (
