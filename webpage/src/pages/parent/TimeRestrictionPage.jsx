@@ -73,13 +73,28 @@ export default function TimeRestrictionPage() {
                 childrenMap.set(child.childId, child.fullName);
             });
 
-            // Map through restrictions and add the child's full name based on child id
-            const restrictionsWithNames = restrictionsResponse.data.map(restriction => ({
-                ...restriction,
-                childFullName: childrenMap.get(restriction.childId) || 'Unknown'
-            }));
+            // Map childId to restriction for quick lookup
+            const restrictionMap = new Map();
+            restrictionsResponse.data.forEach(restriction => {
+                restrictionMap.set(restriction.childId, restriction);
+            });
 
-            setRestrictions(restrictionsWithNames);
+            // Gộp: Tạo danh sách tất cả các con, nếu có restriction thì lấy, không thì tạo bản ghi mới
+            const allRows = childrenResponse.data.map(child => {
+                // Lấy đúng trường id từ backend (id hoặc user_id)
+                const realChildId = child.childId || child.id || child.user_id;
+                const restriction = restrictionMap.get(realChildId);
+                return restriction
+                    ? { ...restriction, childFullName: child.fullName, childId: realChildId }
+                    : {
+                        childId: realChildId,
+                        childFullName: child.fullName,
+                        maxVideoTime: 0,
+                        // Có thể thêm các trường khác nếu cần
+                    };
+            });
+
+            setRestrictions(allRows);
             setLoading(false);
         } catch (err) {
             console.error('Error fetching restrictions:', err);
@@ -150,7 +165,7 @@ export default function TimeRestrictionPage() {
             dataIndex: 'videoTimeFormatted',
             key: 'maxVideoTime',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
+                const realChildId = record.childId;
                 // Determine value to show in input
                 let value = editing[realChildId]?.maxVideoTimeHMS;
                 if (value === undefined) {
@@ -179,12 +194,20 @@ export default function TimeRestrictionPage() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
+                const realChildId = record.childId;
+                // Log để debug
+                // eslint-disable-next-line
+                console.log('Render Actions for childId:', realChildId);
                 return (
                     <>
                         <Button
                             type="primary"
-                            onClick={() => saveRestrictions(realChildId)}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Save restriction for childId:', realChildId);
+                                saveRestrictions(realChildId);
+                            }}
                             disabled={!editing[realChildId]}
                             style={{ marginRight: 8 }}
                         >
@@ -192,7 +215,12 @@ export default function TimeRestrictionPage() {
                         </Button>
                         <Button
                             danger
-                            onClick={() => setDeleteModal({ visible: true, childId: realChildId })}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Reset restriction for childId:', realChildId);
+                                setDeleteModal({ visible: true, childId: realChildId });
+                            }}
                         >
                             Reset
                         </Button>
