@@ -93,15 +93,18 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [{path: '/hocho/clients', name: 'Quản lý tài khoản'}, {
-                path: '/hocho/admin/course/approval',
-                name: 'Course Manager'
+            ROLE_ADMIN: [{
+                path: '/hocho/admin/course/approval', name: 'Course Manager'
             }, {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'}, {
-                path: '/hocho/admin/games/storage',
-                name: 'Approval Games'
+                path: '/hocho/admin', name: 'Manager Account'
             }, {path: '/hocho/admin/video/approval', name: 'Approval Video'}, {
-                path: '/hocho/questions',
-                name: 'Forum'
+                path: '/hocho/questions', name: 'Forum'
+            }, {
+                name: 'Approval', dropdown: [{
+                    path: '/hocho/admin/course/approval', name: 'Course Manager'
+                }, {path: '/hocho/admin/course/approval', name: 'CoursesPage'}, {
+                    path: '/hocho/admin/course/approval', name: 'CoursesPage'
+                },],
             },],
             ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
                 path: '/hocho/questions', name: 'Forum'
@@ -119,14 +122,45 @@ function Header() {
             </ul>;
         }
 
-        return (<ul className={styles.navAdmin}>
-            {menuItems[role].map((item, index) => (<li className={styles.navItem} key={index}>
-                <Link className={styles.navLink} to={item.path}>
-                    {item.name}
-                </Link>
-            </li>))}
-        </ul>);
+
+        return (<div className={styles.navAdminWrapper}>
+            <ul className={styles.navAdmin}>
+                {menuItems[role].map((item, index) => (<li
+                    className={item.dropdown ? styles.hasDropdown : styles.navItem}
+                    key={index}
+                >
+                    {item.dropdown ? (<>
+                        <a href="#" className={styles.navLink}>
+                            {item.name}{' '}
+                            <FontAwesomeIcon
+                                icon={faAngleDown}
+                                className={styles.mainMenuIcon}
+                            />
+                        </a>
+                        <ul className={styles.submenu}>
+                            {item.dropdown.map((subItem, subIndex) => (
+                                <li key={subIndex} className={styles.hasDropdown}>
+                                    <a
+                                        href={subItem.path}
+                                        className={styles.navLink}
+                                        onClick={(e) => handleNavClick(e, subItem.path)}
+                                    >
+                                        {subItem.name}
+                                    </a>
+                                </li>))}
+                        </ul>
+                    </>) : (<a
+                        href={item.path}
+                        className={styles.navLink}
+                        onClick={(e) => handleNavClick(e, item.path)}
+                    >
+                        {item.name}
+                    </a>)}
+                </li>))}
+            </ul>
+        </div>);
     };
+
 
     return (
         <div className={styles.bodys}>

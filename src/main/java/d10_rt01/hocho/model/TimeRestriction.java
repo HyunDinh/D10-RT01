@@ -22,8 +22,8 @@ public class TimeRestriction {
     @JoinColumn(name = "parent_id", nullable = false)
     private User parent;
 
-    @Column(name = "max_study_time")
-    private Integer maxStudyTime;
+    @Column(name = "max_video_time")
+    private Integer maxVideoTime;
 
     @Column(name = "max_play_time")
     private Integer maxPlayTime;
