@@ -208,7 +208,7 @@ function Header() {
                 <div className={styles.containerFluid}>
                     <div className={styles.headerMain}>
                         <div className={styles.headerLeft}>
-                            <a href="/hocho/home"><img alt="Logo" width="100" height="100" src="/logo.png" /></a>
+                            <a href="/hocho/home"><img alt="Logo" width="500" height="100" src="/logo.png" /></a>
                         </div>
                         <div className={styles.headerRight}>
                             <button className={`${styles.sidebarToggle} ${styles.dXlNone}`} onClick={toggleMobileMenu}>
