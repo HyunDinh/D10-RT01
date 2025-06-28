@@ -64,6 +64,10 @@ import QuizDetailTeacher from './pages/quiz/QuizDetailTeacher';
 import TimeRestrictionPage from "./pages/parent/TimeRestrictionPage";
 import PublicCoursePage from "./pages/course/PublicCoursePage";
 
+// Learning Progress Routes
+import LearningProgress from "./pages/parent/LearningProgress";
+import ParentLearningMonitor from "./pages/parent/./ParentLearningMonitor.jsx";
+
 // Game Routes
 import PlayDinoRun from "./pages/game/PlayDinoRun";
 import PlayClumsyBird from "./pages/game/PlayClumsyBird";
@@ -118,7 +122,9 @@ const App = () => {
 
                 // ************************************** PARENT ONLY ROUTES **************************************
 
+                <Route path="/hocho/parent/monitor" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentLearningMonitor /></ProtectedRoute>}/>
                 <Route path="/hocho/parent/cart" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentCart /></ProtectedRoute>}/>
+                <Route path="/hocho/parent/learning-progress/:childId" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><LearningProgress /></ProtectedRoute>}/>
                 <Route path="/hocho/payment/history" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><PaymentHistoryPage /></ProtectedRoute>}/>
 
                 // ************************************** CHILD ONLY ROUTES **************************************
