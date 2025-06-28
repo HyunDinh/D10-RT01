@@ -75,6 +75,8 @@ import GamesPage from "./pages/game/GamesPage";
 
 import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
 import LessonContentStudentPage from "./pages/course/LessonContentStudentPage";
+import ChildCoursePage from "./pages/learning/ChildCoursePage.jsx";
+import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
 
@@ -129,6 +131,8 @@ const App = () => {
                 <Route path="/hocho/quizzes/:id/review" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizReview /></ProtectedRoute>}/>
                 <Route path="/hocho/child/games/dinoRun" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayDinoRun /></ProtectedRoute>}/>
                 <Route path="/hocho/child/games/clumsyBird" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayClumsyBird /></ProtectedRoute>}/>
+                <Route path="/hocho/child/course" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage /></ProtectedRoute>}/>
+                <Route path="/hocho/child/course/:courseId/learning" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage /></ProtectedRoute>}/>
                 <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage />} />
 
                 // ************************************** HOME PAGE ****************************************

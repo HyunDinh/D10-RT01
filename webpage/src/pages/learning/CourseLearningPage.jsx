@@ -201,7 +201,7 @@ export default function CourseLearningPage() {
 
 	return (
 		<div className={styles.courseLessonsPageContainer}>
-			<div className={styles.courseLessonsTitle}>{course ? course.title : 'Course'}</div>
+			<div className={styles.courseLessonsTitle}></div>
 			<div className={styles.courseLessonsTabs}>
 		<span
 			className={activeTab === 'lessons' ? styles.activeTab : styles.inactiveTab}
