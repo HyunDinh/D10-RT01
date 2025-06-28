@@ -119,6 +119,7 @@ function Header() {
             ],
             ROLE_CHILD: [
                 {path: '/hocho/questions', name: 'Forum'},
+                {path: '/hocho/child/course', name: 'My Learning'},
             ],
         };
 
