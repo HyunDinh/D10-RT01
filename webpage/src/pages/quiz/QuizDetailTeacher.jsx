@@ -52,7 +52,7 @@ const QuizDetailTeacher = () => {
       await axios.delete(`http://localhost:8080/api/quizzes/${id}`, {
         withCredentials: true
       });
-      navigate('/hocho/teacher/quizzes');
+      navigate(`/hocho/teacher/quizzes?courseId=${courseId}`);
     } catch (err) {
       if (err.response?.status === 409) {
         setError('Không thể xóa quiz này vì đã có học sinh làm bài. Vui lòng xóa kết quả bài làm trước.');

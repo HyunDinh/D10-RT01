@@ -56,7 +56,7 @@ const QuizList = () => {
       <div className={styles.quizListContainer}>
         <div className={styles.quizListHeader}>
           <h2 className={styles.quizListTitle}>Danh sách Quiz</h2>
-          <Link to={`/hocho/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
+          <Link to={`/hocho/teacher/quizzes/create?courseId=${courseId}`} className={styles.quizListCreateBtn}>
             Tạo Quiz mới
           </Link>
         </div>

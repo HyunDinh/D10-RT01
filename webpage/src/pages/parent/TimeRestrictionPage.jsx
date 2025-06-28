@@ -73,13 +73,30 @@ export default function TimeRestrictionPage() {
                 childrenMap.set(child.childId, child.fullName);
             });
 
-            // Map through restrictions and add the child's full name based on child id
-            const restrictionsWithNames = restrictionsResponse.data.map(restriction => ({
-                ...restriction,
-                childFullName: childrenMap.get(restriction.childId) || 'Unknown'
-            }));
+            // Map childId to restriction for quick lookup (dùng key là restriction.child.id)
+            const restrictionMap = new Map();
+            restrictionsResponse.data.forEach(restriction => {
+                restrictionMap.set(String(restriction.child.id), restriction);
+            });
 
-            setRestrictions(restrictionsWithNames);
+            // Gộp: Tạo danh sách tất cả các con, nếu có restriction thì lấy, không thì tạo bản ghi mới
+            const allRows = childrenResponse.data.map(child => {
+                const realChildId = child.childId || child.id || child.user_id;
+                const restriction = restrictionMap.get(String(realChildId));
+                const maxVideoTime = restriction?.maxVideoTime ?? 0;
+                return restriction
+                    ? { ...restriction, childFullName: child.fullName, childId: realChildId, maxVideoTime }
+                    : {
+                        childId: realChildId,
+                        childFullName: child.fullName,
+                        maxVideoTime: 0,
+                    };
+            });
+
+            setRestrictions(allRows);
+            // Log dữ liệu sau khi map để debug (chi tiết từng trường)
+            // eslint-disable-next-line
+            console.log('All rows after map:', JSON.stringify(allRows, null, 2));
             setLoading(false);
         } catch (err) {
             console.error('Error fetching restrictions:', err);
@@ -150,8 +167,15 @@ export default function TimeRestrictionPage() {
             dataIndex: 'videoTimeFormatted',
             key: 'maxVideoTime',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
-                // Determine value to show in input
+                // Log chi tiết giá trị thực tế
+                // eslint-disable-next-line
+                console.log('Record in render:', {
+                  childId: record.childId,
+                  childFullName: record.childFullName,
+                  maxVideoTime: record.maxVideoTime,
+                  max_video_time: record.max_video_time
+                });
+                const realChildId = record.childId;
                 let value = editing[realChildId]?.maxVideoTimeHMS;
                 if (value === undefined) {
                     value = formatSecondsToHMS(record.maxVideoTime);
@@ -179,12 +203,20 @@ export default function TimeRestrictionPage() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
+                const realChildId = record.childId;
+                // Log để debug
+                // eslint-disable-next-line
+                console.log('Render Actions for childId:', realChildId);
                 return (
                     <>
                         <Button
                             type="primary"
-                            onClick={() => saveRestrictions(realChildId)}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Save restriction for childId:', realChildId);
+                                saveRestrictions(realChildId);
+                            }}
                             disabled={!editing[realChildId]}
                             style={{ marginRight: 8 }}
                         >
@@ -192,7 +224,12 @@ export default function TimeRestrictionPage() {
                         </Button>
                         <Button
                             danger
-                            onClick={() => setDeleteModal({ visible: true, childId: realChildId })}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Reset restriction for childId:', realChildId);
+                                setDeleteModal({ visible: true, childId: realChildId });
+                            }}
                         >
                             Reset
                         </Button>
