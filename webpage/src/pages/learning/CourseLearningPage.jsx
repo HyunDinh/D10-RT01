@@ -17,6 +17,7 @@ export default function CourseLearningPage() {
 	const [openLesson, setOpenLesson] = useState(null); // lessonId
 	const [lessonContents, setLessonContents] = useState({}); // lessonId -> [contents]
 	const [selectedContent, setSelectedContent] = useState(null); // content object
+	const [currentLesson, setCurrentLesson] = useState(null); // lesson object hiện tại
 	const [pdfPage, setPdfPage] = useState(1);
 	const [numPages, setNumPages] = useState(null);
 	const [lastLoadedContentId, setLastLoadedContentId] = useState(null);
@@ -36,6 +37,7 @@ export default function CourseLearningPage() {
 	const [pdfLoading, setPdfLoading] = useState(false);
 	const [pdfError, setPdfError] = useState(null);
 	const [pdfKey, setPdfKey] = useState(0); // Key to force re-render
+	const [completingLesson, setCompletingLesson] = useState(false); // Loading state cho nút hoàn thành
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -143,6 +145,13 @@ export default function CourseLearningPage() {
 
 	const handleSelectContent = (content) => {
 		setSelectedContent(content);
+		
+		// Tìm lesson chứa content này
+		const lesson = lessons.find(lesson => 
+			lessonContents[lesson.lessonId]?.some(c => c.contentId === content.contentId)
+		);
+		setCurrentLesson(lesson);
+		
 		if (content.contentType === 'PDF' && content.contentData) {
 			try {
 				setPdfLoading(true);
@@ -161,6 +170,26 @@ export default function CourseLearningPage() {
 		} else {
 			setFileBuffer(null);
 			setPdfError(null);
+		}
+	};
+
+	const handleCompleteLesson = async () => {
+		if (!currentLesson || !childId) {
+			alert('Không thể hoàn thành bài học. Vui lòng thử lại.');
+			return;
+		}
+
+		setCompletingLesson(true);
+		try {
+			await axios.post(`/api/parent/learning-progress/child/${childId}/lesson/${currentLesson.lessonId}/complete`, {}, {
+				withCredentials: true
+			});
+			alert('Chúc mừng! Bạn đã hoàn thành bài học này.');
+		} catch (error) {
+			console.error('Error completing lesson:', error);
+			alert('Có lỗi xảy ra khi hoàn thành bài học. Vui lòng thử lại.');
+		} finally {
+			setCompletingLesson(false);
 		}
 	};
 
@@ -279,6 +308,11 @@ export default function CourseLearningPage() {
 						selectedContent ? (
 							<div className={styles.lessonContentDisplayBox}>
 								<div className={styles.lessonContentTitle}>{selectedContent.title} ({selectedContent.contentType})</div>
+								{currentLesson && (
+									<div style={{ marginBottom: '16px', padding: '8px 12px', background: '#f0f8ff', borderRadius: '6px', border: '1px solid #b3d9ff' }}>
+										<strong>Bài học:</strong> {currentLesson.title}
+									</div>
+								)}
 								{selectedContent.contentType === 'VIDEO' && selectedContent.contentData && (
 									<div style={{ maxWidth: 600 }}>
 										<ReactPlayer
@@ -338,6 +372,43 @@ export default function CourseLearningPage() {
 								)}
 								{selectedContent.contentType !== 'VIDEO' && selectedContent.contentType !== 'PDF' && (
 									<div style={{ color: '#888', fontStyle: 'italic' }}>Unsupported content type</div>
+								)}
+								
+								{/* Nút hoàn thành bài học */}
+								{currentLesson && (
+									<div style={{ marginTop: '24px', textAlign: 'center' }}>
+										<button
+											onClick={handleCompleteLesson}
+											disabled={completingLesson}
+											style={{
+												background: completingLesson ? '#ccc' : '#28a745',
+												color: 'white',
+												border: 'none',
+												borderRadius: '8px',
+												padding: '12px 24px',
+												fontSize: '1rem',
+												fontWeight: '600',
+												cursor: completingLesson ? 'not-allowed' : 'pointer',
+												transition: 'background-color 0.3s ease',
+												boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+											}}
+											onMouseEnter={(e) => {
+												if (!completingLesson) {
+													e.target.style.background = '#218838';
+												}
+											}}
+											onMouseLeave={(e) => {
+												if (!completingLesson) {
+													e.target.style.background = '#28a745';
+												}
+											}}
+										>
+											{completingLesson ? 'Đang xử lý...' : '✅ Hoàn thành bài học'}
+										</button>
+										<p style={{ marginTop: '8px', fontSize: '0.9rem', color: '#666' }}>
+											Nhấn nút này để đánh dấu bạn đã hoàn thành bài học "{currentLesson.title}"
+										</p>
+									</div>
 								)}
 							</div>
 						) : (
