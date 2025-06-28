@@ -93,26 +93,33 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [{
-                path: '/hocho/admin/course/approval', name: 'Course Manager'
-            }, {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'}, {
-                path: '/hocho/admin/accounts', name: 'Manager Account'
-            }, {path: '/hocho/admin/video/approval', name: 'Approval Video'}, {
-                path: '/hocho/questions', name: 'Forum'
-            }, {
-                name: 'Approval', dropdown: [{
-                    path: '/hocho/admin/course/approval', name: 'Course Manager'
-                }, {path: '/hocho/admin/course/approval', name: 'CoursesPage'}, {
-                    path: '/hocho/admin/course/approval', name: 'CoursesPage'
+            ROLE_ADMIN: [
+                {path: '/hocho/admin/course/approval', name: 'Course Manager'},
+                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
+                {path: '/hocho/admin/accounts', name: 'Manager Account'},
+                {path: '/hocho/admin/video/approval', name: 'Approval Video'},
+                {path: '/hocho/questions', name: 'Forum'},
+                {name: 'Approval', dropdown: [
+                        {path: '/hocho/admin/course/approval', name: 'Course Manager'},
+                        {path: '/hocho/admin/course/approval', name: 'CoursesPage'},
+                        {path: '/hocho/admin/course/approval', name: 'CoursesPage'},
+                    ],
                 },],
-            },],
-            ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
-                path: '/hocho/questions', name: 'Forum'
-            }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
-            ROLE_PARENT: [{path: '/hocho/parent', name: 'Thông tin Phụ huynh'}, {
-                path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'
-            }, {path: '/hocho/questions', name: 'Forum'}, {path: '/hocho/parent/time-restriction', name: 'Time'},],
-            ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}],
+            ROLE_TEACHER: [
+                {path: '/hocho/teacher/course', name: 'Course Manager'},
+                {path: '/hocho/questions', name: 'Forum'},
+                {path: '/hocho/teacher/video', name: 'Entertainment'},
+            ],
+            ROLE_PARENT: [
+                {path: '/hocho/parent', name: 'Thông tin Phụ huynh'},
+                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
+                {path: '/hocho/questions', name: 'Forum'},
+                {path: '/hocho/parent/time-restriction', name: 'Time'},
+                {path: '/hocho/parent/learning-progress', name: 'Learning Progress'},
+            ],
+            ROLE_CHILD: [
+                {path: '/hocho/questions', name: 'Forum'},
+            ],
         };
 
         if (!menuItems[role]) {
