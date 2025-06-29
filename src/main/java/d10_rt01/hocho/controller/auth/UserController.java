@@ -123,14 +123,32 @@ public class UserController {
         Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + filename);
         Resource resource = new FileSystemResource(filePath);
 
-        if (!resource.exists()) {
-            filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR);
+        // Nếu file không tồn tại hoặc là thư mục, thử lần lượt default.png rồi default.jpg
+        if (!resource.exists() || resource.getFile().isDirectory()) {
+            // Thử default.png trước
+            filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + "default.png");
             resource = new FileSystemResource(filePath);
+            if (!resource.exists() || resource.getFile().isDirectory()) {
+                // Nếu không có, thử default.jpg
+                filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_PROFILE_UPLOAD_DIR + "default.jpg");
+                resource = new FileSystemResource(filePath);
+                if (!resource.exists() || resource.getFile().isDirectory()) {
+                    // Không có file nào, trả về 404
+                    return ResponseEntity.notFound().build();
+                }
+            }
         }
 
-        MediaType mediaType = filename.toLowerCase().endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
+        // Xác định media type dựa trên đuôi file thực tế
+        String lower = filePath.toString().toLowerCase();
+        MediaType mediaType = lower.endsWith(".png") ? MediaType.IMAGE_PNG : MediaType.IMAGE_JPEG;
 
-        return ResponseEntity.ok().header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate").header(HttpHeaders.PRAGMA, "no-cache").header(HttpHeaders.EXPIRES, "0").contentType(mediaType).body(resource);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, must-revalidate")
+                .header(HttpHeaders.PRAGMA, "no-cache")
+                .header(HttpHeaders.EXPIRES, "0")
+                .contentType(mediaType)
+                .body(resource);
     }
 
     @GetMapping("/children")
@@ -150,6 +168,30 @@ public class UserController {
         }
         return ResponseEntity.ok(result);
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<Map<String, Object>>> getAllUsers(Authentication authentication) {
+        String username = authentication.getName();
+        User currentUser = userService.findByUsername(username);
+        List<User> allUsers = userService.getAllActiveUsers();
+        List<Map<String, Object>> result = new java.util.ArrayList<>();
+        
+        for (User user : allUsers) {
+            // Không trả về user hiện tại
+            if (!user.getId().equals(currentUser.getId())) {
+                Map<String, Object> userInfo = new HashMap<>();
+                userInfo.put("id", user.getId());
+                userInfo.put("username", user.getUsername());
+                userInfo.put("fullName", user.getFullName());
+                userInfo.put("role", user.getRole());
+                userInfo.put("avatarUrl", user.getAvatarUrl());
+                userInfo.put("email", user.getEmail());
+                result.add(userInfo);
+            }
+        }
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/teacher-verification/{filename:.+}")
     public ResponseEntity<Resource> getTeacherVerificationImage(@PathVariable String filename) throws IOException {
         Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_TEACHER_VERIFICATION_UPLOAD_DIR, filename);

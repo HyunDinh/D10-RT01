@@ -99,6 +99,7 @@ export default function CoursesPage() {
                     <tr>
                         <th>Title</th>
                         <th>Age Group</th>
+                        <th>Subject</th>
                         <th>Price</th>
                         <th>Status</th>
                         <th>Created At</th>
@@ -109,6 +110,7 @@ export default function CoursesPage() {
                     {filteredCourses.map(course => (<tr key={course.courseId}>
                         <td>{course.title}</td>
                         <td>{course.ageGroup}</td>
+                        <td>{course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}</td>
                         <td>{course.price}</td>
                         <td>{course.status}</td>
                         <td>{new Date(course.createdAt).toLocaleString()}</td>

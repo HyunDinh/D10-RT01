@@ -11,12 +11,26 @@ export default function EditCoursePage() {
     const [ageGroups, setAgeGroups] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
+    const subjectOptions = [
+        { value: 'MATHEMATICS', label: 'Mathematics' },
+        { value: 'LITERATURE', label: 'Literature' },
+        { value: 'ENGLISH', label: 'English' },
+        { value: 'PHYSICS', label: 'Physics' },
+        { value: 'CHEMISTRY', label: 'Chemistry' },
+        { value: 'BIOLOGY', label: 'Biology' },
+        { value: 'HISTORY', label: 'History' },
+        { value: 'GEOGRAPHY', label: 'Geography' },
+        { value: 'CIVICS', label: 'Civics' },
+        { value: 'PHYSICAL_EDUCATION', label: 'Physical Education' },
+        { value: 'TECHNOLOGY', label: 'Technology' },
+    ];
     const [course, setCourse] = useState({
         title: '',
         description: '',
         age_group: '',
         price: '',
-        courseImageUrl: ''
+        courseImageUrl: '',
+        subject: '',
     });
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
@@ -117,6 +131,7 @@ export default function EditCoursePage() {
         if (!course.description) tempErrors.description = 'Required';
         if (!course.age_group) tempErrors.age_group = 'Required';
         if (!course.price) tempErrors.price = 'Required';
+        if (!course.subject) tempErrors.subject = 'Required';
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
     };
@@ -275,6 +290,23 @@ export default function EditCoursePage() {
                         required
                     />
                     {errors.price && <div className={styles.courseFormError + " text-danger"}>{errors.price}</div>}
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="subject" className={styles.courseFormLabel + " form-label"}>Subject</label>
+                    <select
+                        className={styles.courseFormSelect + " form-select"}
+                        name="subject"
+                        id="subject"
+                        value={course.subject}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select subject</option>
+                        {subjectOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                        ))}
+                    </select>
+                    {errors.subject && <div className={styles.courseFormError + " text-danger"}>{errors.subject}</div>}
                 </div>
                 <button 
                     type="submit" 

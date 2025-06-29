@@ -26,6 +26,9 @@ import QuestionList from './pages/question/QuestionList';
 import QuestionEdit from './pages/question/QuestionEdit';
 import AnswerForm from './pages/question/AnswerForm';
 
+// messaging routes
+import MessagingPage from './pages/messaging/MessagingPage';
+
 // payment routes
 import PaymentHistoryPage from './pages/payment/PaymentHistoryPage';
 import HandlePayosReturn from './pages/payment/HandlePayosReturn';
@@ -81,6 +84,7 @@ import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
 import LessonContentStudentPage from "./pages/course/LessonContentStudentPage";
 import ChildCoursePage from "./pages/learning/ChildCoursePage.jsx";
 import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
+import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
 
@@ -140,6 +144,7 @@ const App = () => {
                 <Route path="/hocho/child/course" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage /></ProtectedRoute>}/>
                 <Route path="/hocho/child/course/:courseId/learning" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage /></ProtectedRoute>}/>
                 <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage />} />
+                <Route path="/hocho/child/learning-history" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildLearningHistory /></ProtectedRoute>}/>
 
                 // ************************************** HOME PAGE ****************************************
                 <Route path="" element={<Home/>}/>
@@ -186,6 +191,10 @@ const App = () => {
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
                 <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+
+                // ************************************** MESSAGING ROUTES ***********************************
+                <Route path="/hocho/messaging" element={<MessagingPage />} />
+
 
             </Routes>
         </Router>);

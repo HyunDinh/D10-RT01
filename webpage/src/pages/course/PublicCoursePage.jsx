@@ -154,6 +154,13 @@ const CoursesList = () => {
         setChildId(Number(e.target.value));
     };
 
+    useEffect(() => {
+        // Không fetch khi chỉ thay đổi search text
+        fetchCourses();
+        setCurrentPage(1);
+        // eslint-disable-next-line
+    }, [filters.category, filters.priceRange, filters.level]);
+
     return (
         <>
             <Header />
@@ -240,17 +247,17 @@ const CoursesList = () => {
                                 className={styles.filterSelect}
                             >
                                 <option value="">All subject</option>
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Literature">Literature</option>
-                                <option value="English">English</option>
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
-                                <option value="Biology">Biology</option>
-                                <option value="History">History</option>
-                                <option value="Geography">Geography</option>
-                                <option value="Civics">Civics</option>
-                                <option value="Physical Education">Physical Education</option>
-                                <option value="Technology">Technology</option>
+                                <option value="MATHEMATICS">Mathematics</option>
+                                <option value="LITERATURE">Literature</option>
+                                <option value="ENGLISH">English</option>
+                                <option value="PHYSICS">Physics</option>
+                                <option value="CHEMISTRY">Chemistry</option>
+                                <option value="BIOLOGY">Biology</option>
+                                <option value="HISTORY">History</option>
+                                <option value="GEOGRAPHY">Geography</option>
+                                <option value="CIVICS">Civics</option>
+                                <option value="PHYSICAL_EDUCATION">Physical Education</option>
+                                <option value="TECHNOLOGY">Technology</option>
                             </select>
                             <span className={styles.dropdownIcon}>
                 <FontAwesomeIcon icon={faCaretDown} />
@@ -305,6 +312,9 @@ const CoursesList = () => {
                                     </p>
                                     <p className={styles.cardText}>
                                         <b>Giá:</b> {course.price.toLocaleString('vi-VN')} VND
+                                    </p>
+                                    <p className={styles.cardText}>
+                                        <b>Subject:</b> {course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
                                     </p>
                                     <div style={{ textAlign: 'end' }}>
                                         <button

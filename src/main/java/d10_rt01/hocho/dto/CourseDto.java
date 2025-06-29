@@ -2,6 +2,7 @@ package d10_rt01.hocho.dto;
 
 import d10_rt01.hocho.model.enums.AgeGroup;
 import d10_rt01.hocho.model.enums.CourseStatus;
+import d10_rt01.hocho.model.enums.Subject;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,4 +21,5 @@ public class CourseDto {
     private CourseStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Subject subject;
 } 

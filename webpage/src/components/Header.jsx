@@ -12,6 +12,7 @@ import {
     faIdBadge,
     faMapMarkerAlt,
     faSearch,
+    faComments,
 } from '@fortawesome/free-solid-svg-icons';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faFacebookF, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
@@ -23,6 +24,7 @@ function Header() {
     const [refreshKey, setRefreshKey] = useState(0);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation(); // Lấy đường dẫn hiện tại
 
@@ -59,6 +61,17 @@ function Header() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            axios.get('http://localhost:8080/api/messages/sessions', { withCredentials: true })
+                .then(res => {
+                    const totalUnreadChats = res.data.filter(session => session.unreadCount > 0).length;
+                    setUnreadCount(totalUnreadChats);
+                })
+                .catch(() => setUnreadCount(0));
+        }
+    }, [isLoggedIn, refreshKey]);
 
     const handleLogout = () => {
         axios
@@ -105,6 +118,7 @@ function Header() {
                 {path: '/hocho/admin/accounts', name: 'Manager Account'},
                 {path: '/hocho/admin/video/approval', name: 'Approval Video'},
                 {path: '/hocho/questions', name: 'Forum'},
+                {path: '/hocho/messaging', name: '', icon: faComments},
                 {name: 'Approval', dropdown: [
                         {path: '/hocho/admin/course/approval', name: 'Course Manager'},
                         {path: '/hocho/admin/course/approval', name: 'CoursesPage'},
@@ -115,17 +129,20 @@ function Header() {
                 {path: '/hocho/teacher/course', name: 'Course Manager'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/teacher/video', name: 'Entertainment'},
+                {path: '/hocho/messaging', name: '', icon: faComments},
             ],
             ROLE_PARENT: [
                 {path: '/hocho/parent', name: 'Thông tin Phụ huynh'},
                 {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/parent/time-restriction', name: 'Time'},
-                {path: '/hocho/parent/learning-progress', name: 'Learning Progress'},
+                {path: '/hocho/parent/monitor', name: 'Learning Progress'},
+                {path: '/hocho/messaging', name: '', icon: faComments},
             ],
             ROLE_CHILD: [
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/child/course', name: 'My Learning'},
+                {path: '/hocho/messaging', name: '', icon: faComments},
             ],
         };
 
@@ -144,7 +161,17 @@ function Header() {
                             {item.dropdown ? (
                                 <>
                                     <a href="#" className={styles.navLink}>
-                                        {item.name}{' '}
+                                        {item.icon ? (
+                                            <span style={{position: 'relative', display: 'inline-block'}}>
+                                                <FontAwesomeIcon icon={item.icon} className={styles.navIconOnly} />
+                                                {item.path === '/hocho/messaging' && unreadCount > 0 && (
+                                                    <span className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                                                )}
+                                            </span>
+                                        ) : (
+                                            item.name
+                                        )}
+                                        {' '}
                                         <FontAwesomeIcon icon={faAngleDown} className={styles.mainMenuIcon} />
                                     </a>
                                     <ul className={styles.submenu}>
@@ -159,7 +186,16 @@ function Header() {
                                 </>
                             ) : (
                                 <a href={item.path} className={styles.navLink} onClick={(e) => handleNavClick(e, item.path)}>
-                                    {item.name}
+                                    {item.icon ? (
+                                        <span style={{position: 'relative', display: 'inline-block'}}>
+                                            <FontAwesomeIcon icon={item.icon} className={styles.navIconOnly} />
+                                            {item.path === '/hocho/messaging' && unreadCount > 0 && (
+                                                <span className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                                            )}
+                                        </span>
+                                    ) : (
+                                        item.name
+                                    )}
                                 </a>
                             )}
                         </li>
