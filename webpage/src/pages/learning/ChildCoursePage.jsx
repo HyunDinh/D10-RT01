@@ -30,6 +30,15 @@ export default function ChildCoursePage() {
     fetchData();
   }, []);
 
+  const getCourseImageUrl = (courseImageUrl) => {
+    const baseUrl = 'http://localhost:8080';
+    if (!courseImageUrl || courseImageUrl === 'none') {
+      return '/avaBack.jpg';
+    }
+    const fileName = courseImageUrl.split('/').pop();
+    return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
+  };
+
   if (loading) {
     return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>Loading...</div></div>;
   }
@@ -56,7 +65,7 @@ export default function ChildCoursePage() {
             >
               <div className={styles.courseCardImageWrapper}>
                 <img
-                  // src={enrollment.course.courseImageUrl}
+                  src={getCourseImageUrl(enrollment.course.courseImageUrl)}
                   alt={enrollment.course.title}
                   className={styles.courseCardImage}
                   onError={e => { e.target.src = '/images/default-course.jpg'; }}

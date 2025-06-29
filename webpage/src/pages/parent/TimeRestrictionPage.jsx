@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, InputNumber, Modal, Select, Spin, message, Typography, Form, Row, Col, Card, Input } from 'antd';
+import { Table, Button, InputNumber, Modal, Select, Spin, message, Typography, Form, Card, Input } from 'antd';
 import axios from 'axios';
-import {Link} from "react-router-dom";
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -35,17 +34,6 @@ export default function TimeRestrictionPage() {
     const [loading, setLoading] = useState(true);
     const [restrictions, setRestrictions] = useState([]);
     const [editing, setEditing] = useState({});
-    const [visible, setVisible] = useState(false);
-    const [newRestriction, setNewRestriction] = useState({
-        childId: null,
-        maxPlayTimeHours: 0,
-        maxPlayTimeMinutes: 0,
-        maxPlayTimeSeconds: 0,
-        maxVideoTimeHours: 0,
-        maxVideoTimeMinutes: 0,
-        maxVideoTimeSeconds: 0
-    });
-    const [form] = Form.useForm();
     const [deleteModal, setDeleteModal] = useState({ visible: false, childId: null });
 
     // Calculate total seconds from hours, minutes, and seconds

@@ -133,9 +133,6 @@ const QuizResult = () => {
               <span className={answer.isCorrect ? styles.quizDetailBadge : styles.quizDetailBadge + ' ' + styles.secondary}>
                 {answer.isCorrect ? 'Đúng' : 'Sai'}
               </span>
-                  <span className={styles.quizDetailInfoText} style={{marginLeft: 12}}>
-                Điểm: {answer.isCorrect ? answer.question.points : 0}/{answer.question.points}
-              </span>
                 </div>
               </div>
           ))}

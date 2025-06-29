@@ -26,6 +26,9 @@ import QuestionList from './pages/question/QuestionList';
 import QuestionEdit from './pages/question/QuestionEdit';
 import AnswerForm from './pages/question/AnswerForm';
 
+// messaging routes
+import MessagingPage from './pages/messaging/MessagingPage';
+
 // payment routes
 import PaymentHistoryPage from './pages/payment/PaymentHistoryPage';
 import HandlePayosReturn from './pages/payment/HandlePayosReturn';
@@ -64,6 +67,10 @@ import QuizDetailTeacher from './pages/quiz/QuizDetailTeacher';
 import TimeRestrictionPage from "./pages/parent/TimeRestrictionPage";
 import PublicCoursePage from "./pages/course/PublicCoursePage";
 
+// Learning Progress Routes
+import LearningProgress from "./pages/parent/LearningProgress";
+import ParentLearningMonitor from "./pages/parent/./ParentLearningMonitor.jsx";
+
 // Game Routes
 import PlayDinoRun from "./pages/game/PlayDinoRun";
 import PlayClumsyBird from "./pages/game/PlayClumsyBird";
@@ -83,7 +90,7 @@ import FeedbackForm from './pages/feedback/FeedbackForm';
 import MyFeedbacks from './pages/feedback/MyFeedbacks';
 import AdminFeedback from './pages/admin/AdminFeedback';
 
-// import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
+import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 
 
 
@@ -125,7 +132,9 @@ const App = () => {
 
                 // ************************************** PARENT ONLY ROUTES **************************************
 
+                <Route path="/hocho/parent/monitor" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentLearningMonitor /></ProtectedRoute>}/>
                 <Route path="/hocho/parent/cart" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentCart /></ProtectedRoute>}/>
+                <Route path="/hocho/parent/learning-progress/:childId" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><LearningProgress /></ProtectedRoute>}/>
                 <Route path="/hocho/payment/history" element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><PaymentHistoryPage /></ProtectedRoute>}/>
 
                 // ************************************** CHILD ONLY ROUTES **************************************
@@ -141,6 +150,7 @@ const App = () => {
                 <Route path="/hocho/child/course" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage /></ProtectedRoute>}/>
                 <Route path="/hocho/child/course/:courseId/learning" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage /></ProtectedRoute>}/>
                 <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage />} />
+                <Route path="/hocho/child/learning-history" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildLearningHistory /></ProtectedRoute>}/>
 
                 // ************************************** FEEDBACK ROUTES **************************************
                 <Route path="/hocho/feedback/submit" element={<ProtectedRoute allowedRoles={['ROLE_CHILD', 'ROLE_PARENT', 'ROLE_TEACHER']}><FeedbackForm /></ProtectedRoute>}/>
@@ -191,6 +201,10 @@ const App = () => {
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
                 <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+
+                // ************************************** MESSAGING ROUTES ***********************************
+                <Route path="/hocho/messaging" element={<MessagingPage />} />
+
 
             </Routes>
         </Router>);

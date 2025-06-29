@@ -153,6 +153,15 @@ const ParentCart = () => {
         }
     };
 
+    const getCourseImageUrl = (courseImageUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!courseImageUrl || courseImageUrl === 'none') {
+            return '/avaBack.jpg';
+        }
+        const fileName = courseImageUrl.split('/').pop();
+        return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
+    };
+
     if (loading) return <div className={styles.loading + " loading"}>Đang tải giỏ hàng...</div>;
     if (error) return <div className={styles.error + " error"}>{error}</div>;
 
@@ -173,7 +182,7 @@ const ParentCart = () => {
                                 <div className="row g-0 align-items-center">
                                     <div className="col-4">
                                         <img
-                                            src={item.course.imageUrl || '/default-course.jpg'}
+                                            src={getCourseImageUrl(item.course.courseImageUrl)}
                                             alt={item.course.title}
                                             className={styles.cartImage + " img-fluid rounded-start"}
                                             style={{ height: '120px', objectFit: 'cover', width: '100%' }}

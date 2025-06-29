@@ -131,6 +131,18 @@ const AnswerForm = () => {
         setAnswerToDelete(null);
     };
 
+    const getQuestionImageUrl = (imageUrl) => {
+        if (!imageUrl || imageUrl === 'none') return '/images/default-course.jpg';
+        const fileName = imageUrl.split('/').pop();
+        return `http://localhost:8080/api/questions/image/${fileName}`;
+    };
+
+    const getAnswerImageUrl = (imageUrl) => {
+        if (!imageUrl || imageUrl === 'none') return '/images/default-course.jpg';
+        const fileName = imageUrl.split('/').pop();
+        return `http://localhost:8080/api/questions/answers/image/${fileName}`;
+    };
+
     if (loading) return <div className="alert alert-info text-center">Đang tải dữ liệu...</div>;
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
     if (!question) return null;
@@ -171,11 +183,14 @@ const AnswerForm = () => {
                     <p className={styles.cardText}>
                         <b>Thời gian:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
                     </p>
-                    {question.imageUrl && (<img
-                        src={`http://localhost:8080/${question.imageUrl}`}
-                        alt="Ảnh minh họa"
-                        className={styles.questionImage}
-                    />)}
+                    {question.imageUrl && (
+                        <img
+                            src={getQuestionImageUrl(question.imageUrl)}
+                            alt="Ảnh minh họa"
+                            className={styles.questionImage}
+                            onError={e => (e.target.src = '/images/default-course.jpg')}
+                        />
+                    )}
                     <div className={styles.line}></div>
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <label className={styles.formLabel}>Nhập câu trả lời của bạn</label>
@@ -242,11 +257,14 @@ const AnswerForm = () => {
                                     </div>
                                 </>) : (<>
                                     <div className={styles.answerContent}>{a.content}</div>
-                                    {a.imageUrl && (<img
-                                        src={`http://localhost:8080${a.imageUrl}`}
-                                        alt="Ảnh trả lời"
-                                        className={styles.answerImage}
-                                    />)}
+                                    {a.imageUrl && (
+                                        <img
+                                            src={getAnswerImageUrl(a.imageUrl)}
+                                            alt="Ảnh trả lời"
+                                            className={styles.answerImage}
+                                            onError={e => (e.target.src = '/images/default-course.jpg')}
+                                        />
+                                    )}
                                 </>)}
                                 <div className={styles.answerFooter}>
                                     <div className={styles.answerTimestamp}>

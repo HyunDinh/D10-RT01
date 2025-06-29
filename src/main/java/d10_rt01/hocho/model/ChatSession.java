@@ -28,6 +28,12 @@ public class ChatSession {
     @Column(name = "last_message_at")
     private LocalDateTime lastMessageAt;
 
+    @Column(name = "last_read_message_id_user1")
+    private Long lastReadMessageIdUser1;
+
+    @Column(name = "last_read_message_id_user2")
+    private Long lastReadMessageIdUser2;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
