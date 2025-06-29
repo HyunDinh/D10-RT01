@@ -1,0 +1,564 @@
+.main {
+    min-height: calc(100vh - 200px);
+    /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    color: #2c3e50;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.subtitle {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin: 0.5rem 0 0 0;
+}
+
+.newFeedbackButton {
+    background: linear-gradient(135deg, #f39f5f 0%, #e88f4f 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.newFeedbackButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(243, 159, 95, 0.4);
+}
+
+.plusIcon {
+    font-size: 0.9rem;
+}
+
+.form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.formGroup {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1rem;
+}
+
+.required {
+    color: #e74c3c;
+}
+
+.input, .select, .textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background: #fafafa;
+}
+
+.input:focus, .select:focus, .textarea:focus {
+    outline: none;
+    border-color: #f39f5f;
+    background: white;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.charCount {
+    text-align: right;
+    font-size: 0.875rem;
+    color: #7f8c8d;
+    margin-top: 0.25rem;
+}
+
+.priorityIndicator {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.formActions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.cancelButton {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancelButton:hover {
+    background: #5a6268;
+}
+
+.submitButton {
+    background: linear-gradient(135deg, #f39f5f 0%, #e88f4f 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.submitButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(243, 159, 95, 0.4);
+}
+
+.submitButton:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.submitIcon {
+    font-size: 0.9rem;
+}
+
+.successMessage, .errorMessage {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.successMessage {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.errorMessage {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.successIcon, .errorIcon {
+    font-size: 1.1rem;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.feedbackList {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.feedbackCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid #f39f5f;
+}
+
+.feedbackCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.feedbackHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.feedbackTitle h3 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.feedbackMeta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.feedbackDate {
+    color: #7f8c8d;
+    font-size: 0.875rem;
+}
+
+.priorityBadge, .categoryBadge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+}
+
+.categoryBadge {
+    background: #6c757d;
+}
+
+.feedbackStatus {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.statusLabel {
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.statusIconPending, .statusIconInProgress, .statusIconResolved, .statusIconClosed, .statusIconDefault {
+    font-size: 1rem;
+}
+
+.statusIconPending { color: #ffc107; }
+.statusIconInProgress { color: #17a2b8; }
+.statusIconResolved { color: #28a745; }
+.statusIconClosed { color: #6c757d; }
+.statusIconDefault { color: #6c757d; }
+
+.feedbackContent {
+    margin-bottom: 1rem;
+}
+
+.feedbackPreview {
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.adminResponse {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    padding: 1rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1rem;
+}
+
+.adminResponse h4 {
+    margin: 0 0 0.5rem 0;
+    color: #28a745;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.adminResponse p {
+    margin: 0 0 0.5rem 0;
+    color: #555;
+    line-height: 1.6;
+}
+
+.responseDate {
+    color: #7f8c8d;
+    font-size: 0.875rem;
+}
+
+.feedbackActions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.viewButton {
+    background: #f39f5f;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.viewButton:hover {
+    background: #e88f4f;
+    transform: translateY(-1px);
+}
+
+.viewIcon {
+    font-size: 0.8rem;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.emptyIcon {
+    font-size: 3rem;
+    color: #bdc3c7;
+    margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+}
+
+.emptyState p {
+    color: #7f8c8d;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.1rem;
+}
+
+.emptyStateButton {
+    background: linear-gradient(135deg, #f39f5f 0%, #e88f4f 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.emptyStateButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(243, 159, 95, 0.4);
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modalContent {
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modalHeader h2 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+    color: #e74c3c;
+}
+
+.modalBody {
+    padding: 1.5rem;
+}
+
+.modalMeta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.metaItem strong {
+    color: #2c3e50;
+    min-width: 80px;
+}
+
+.modalContent h4 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.modalContent p {
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+}
+
+.modalResponse {
+    background: #f8f9fa;
+    border-left: 4px solid #28a745;
+    padding: 1rem;
+    border-radius: 0 8px 8px 0;
+    margin-top: 1rem;
+}
+
+.modalResponse h4 {
+    color: #28a745;
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.modalResponse p {
+    color: #555;
+    line-height: 1.6;
+    margin: 0 0 0.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .feedbackHeader {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .feedbackMeta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .formActions {
+        flex-direction: column;
+    }
+
+    .modalMeta {
+        grid-template-columns: 1fr;
+    }
+
+    .metaItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .metaItem strong {
+        min-width: auto;
+    }
+} 

@@ -1,8 +1,12 @@
 package d10_rt01.hocho.controller.admin;
 
+import d10_rt01.hocho.model.Feedback;
 import d10_rt01.hocho.model.ParentChildMapping;
 import d10_rt01.hocho.model.User;
+import d10_rt01.hocho.model.enums.FeedbackStatus;
 import d10_rt01.hocho.repository.ParentChildMappingRepository;
+import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.service.feedback.FeedbackService;
 import d10_rt01.hocho.service.user.UserService;
 import d10_rt01.hocho.utils.CustomLogger;
 import jakarta.mail.MessagingException;
@@ -11,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -29,6 +36,12 @@ public class AdminController {
 
     @Autowired
     private ParentChildMappingRepository parentChildMappingRepository;
+
+    @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     // Get all users
     @GetMapping("/users")
@@ -207,5 +220,147 @@ public class AdminController {
             logger.error("Unexpected error during teacher rejection: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to reject teacher: " + e.getMessage());
         }
+    }
+
+    // ========== FEEDBACK MANAGEMENT ENDPOINTS ==========
+
+    // Get all feedbacks
+    @GetMapping("/feedbacks")
+    public ResponseEntity<List<Feedback>> getAllFeedbacks() {
+        logger.info("Admin fetching all feedbacks");
+        List<Feedback> feedbacks = feedbackService.getAllFeedbacks();
+        logger.info("Retrieved {} feedbacks", feedbacks.size());
+        return ResponseEntity.ok(feedbacks);
+    }
+
+    // Get feedbacks by status
+    @GetMapping("/feedbacks/status/{status}")
+    public ResponseEntity<List<Feedback>> getFeedbacksByStatus(@PathVariable String status) {
+        logger.info("Admin fetching feedbacks with status: {}", status);
+        try {
+            FeedbackStatus feedbackStatus = FeedbackStatus.valueOf(status.toUpperCase());
+            List<Feedback> feedbacks = feedbackService.getFeedbacksByStatus(feedbackStatus);
+            logger.info("Retrieved {} feedbacks with status {}", feedbacks.size(), status);
+            return ResponseEntity.ok(feedbacks);
+        } catch (IllegalArgumentException e) {
+            logger.error("Invalid feedback status: {}", status);
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // Get feedback by ID
+    @GetMapping("/feedbacks/{feedbackId}")
+    public ResponseEntity<?> getFeedbackById(@PathVariable Long feedbackId) {
+        logger.info("Admin fetching feedback: {}", feedbackId);
+        Optional<Feedback> feedback = feedbackService.getFeedbackById(feedbackId);
+        if (feedback.isPresent()) {
+            logger.info("Feedback found: id={}, subject={}", feedbackId, feedback.get().getSubject());
+            return ResponseEntity.ok(feedback.get());
+        } else {
+            logger.warn("Feedback not found: {}", feedbackId);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Respond to feedback
+    @PostMapping("/feedbacks/{feedbackId}/respond")
+    public ResponseEntity<?> respondToFeedback(@PathVariable Long feedbackId, @RequestBody Map<String, String> request) {
+        logger.info("Admin responding to feedback: {}", feedbackId);
+        
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User admin = userRepository.findByUsername(auth.getName())
+                    .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+            String response = request.get("response");
+            String status = request.get("status");
+
+            if (response == null || response.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Response is required");
+            }
+            if (status == null || status.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Status is required");
+            }
+
+            FeedbackStatus feedbackStatus;
+            try {
+                feedbackStatus = FeedbackStatus.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("Invalid status: " + status);
+            }
+
+            Feedback updatedFeedback = feedbackService.respondToFeedback(
+                    feedbackId,
+                    admin.getId(),
+                    response.trim(),
+                    feedbackStatus
+            );
+
+            logger.info("Feedback response saved: id={}, status={}", feedbackId, feedbackStatus);
+            return ResponseEntity.ok(updatedFeedback);
+            
+        } catch (IllegalArgumentException e) {
+            logger.error("Failed to respond to feedback: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error responding to feedback: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to respond to feedback: " + e.getMessage());
+        }
+    }
+
+    // Update feedback status only
+    @PutMapping("/feedbacks/{feedbackId}/status")
+    public ResponseEntity<?> updateFeedbackStatus(@PathVariable Long feedbackId, @RequestBody Map<String, String> request) {
+        logger.info("Admin updating feedback status: {}", feedbackId);
+        
+        try {
+            String status = request.get("status");
+            if (status == null || status.trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Status is required");
+            }
+
+            FeedbackStatus feedbackStatus;
+            try {
+                feedbackStatus = FeedbackStatus.valueOf(status.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().body("Invalid status: " + status);
+            }
+
+            Feedback updatedFeedback = feedbackService.updateFeedbackStatus(feedbackId, feedbackStatus);
+            logger.info("Feedback status updated: id={}, newStatus={}", feedbackId, feedbackStatus);
+            return ResponseEntity.ok(updatedFeedback);
+            
+        } catch (IllegalArgumentException e) {
+            logger.error("Failed to update feedback status: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error updating feedback status: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to update feedback status: " + e.getMessage());
+        }
+    }
+
+    // Get feedback statistics
+    @GetMapping("/feedbacks/stats")
+    public ResponseEntity<Map<String, Object>> getFeedbackStats() {
+        logger.info("Admin fetching feedback statistics");
+        
+        long pendingCount = feedbackService.getPendingFeedbacksCount();
+        long inProgressCount = feedbackService.getFeedbacksCountByStatus(FeedbackStatus.IN_PROGRESS);
+        long resolvedCount = feedbackService.getFeedbacksCountByStatus(FeedbackStatus.RESOLVED);
+        long closedCount = feedbackService.getFeedbacksCountByStatus(FeedbackStatus.CLOSED);
+        
+        Map<String, Object> stats = Map.of(
+                "pending", pendingCount,
+                "inProgress", inProgressCount,
+                "resolved", resolvedCount,
+                "closed", closedCount,
+                "total", pendingCount + inProgressCount + resolvedCount + closedCount
+        );
+        
+        logger.info("Feedback stats: pending={}, inProgress={}, resolved={}, closed={}", 
+                pendingCount, inProgressCount, resolvedCount, closedCount);
+        return ResponseEntity.ok(stats);
     }
 }

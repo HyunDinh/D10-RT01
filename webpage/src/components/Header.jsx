@@ -117,6 +117,7 @@ function Header() {
                 {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
                 {path: '/hocho/admin/accounts', name: 'Manager Account'},
                 {path: '/hocho/admin/video/approval', name: 'Approval Video'},
+                {path: '/hocho/admin/feedbacks', name: 'Quản lý phản hồi'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
                 {name: 'Approval', dropdown: [
@@ -129,6 +130,7 @@ function Header() {
                 {path: '/hocho/teacher/course', name: 'Course Manager'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/teacher/video', name: 'Entertainment'},
+                {path: '/hocho/my-feedbacks', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
             ],
             ROLE_PARENT: [
@@ -136,12 +138,15 @@ function Header() {
                 {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/parent/time-restriction', name: 'Time'},
+                {path: '/hocho/parent/learning-progress', name: 'Learning Progress'},
+                {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/parent/monitor', name: 'Learning Progress'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
             ],
             ROLE_CHILD: [
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/child/course', name: 'My Learning'},
+                {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
             ],
         };
