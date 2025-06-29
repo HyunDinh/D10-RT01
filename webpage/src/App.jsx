@@ -77,6 +77,12 @@ import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
 import LessonContentStudentPage from "./pages/course/LessonContentStudentPage";
 import ChildCoursePage from "./pages/learning/ChildCoursePage.jsx";
 import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
+
+// feedback routes
+import FeedbackForm from './pages/feedback/FeedbackForm';
+import MyFeedbacks from './pages/feedback/MyFeedbacks';
+import AdminFeedback from './pages/admin/AdminFeedback';
+
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
 
@@ -93,6 +99,7 @@ const App = () => {
                 <Route path="hocho/admin/course/approval" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><CourseApproval /></ProtectedRoute>}/>
                 <Route path="hocho/admin/video/approval" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><VideoApprovalPage /></ProtectedRoute>}/>
                 <Route path="hocho/admin/games/storage" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><GameApproval /></ProtectedRoute>}/>
+                <Route path="hocho/admin/feedbacks" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminFeedback /></ProtectedRoute>}/>
 
                 // ************************************** TEACHER ONLY ROUTES **************************************
 
@@ -134,6 +141,10 @@ const App = () => {
                 <Route path="/hocho/child/course" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage /></ProtectedRoute>}/>
                 <Route path="/hocho/child/course/:courseId/learning" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage /></ProtectedRoute>}/>
                 <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage />} />
+
+                // ************************************** FEEDBACK ROUTES **************************************
+                <Route path="/hocho/feedback/submit" element={<ProtectedRoute allowedRoles={['ROLE_CHILD', 'ROLE_PARENT', 'ROLE_TEACHER']}><FeedbackForm /></ProtectedRoute>}/>
+                <Route path="/hocho/feedback" element={<ProtectedRoute allowedRoles={['ROLE_CHILD', 'ROLE_PARENT', 'ROLE_TEACHER']}><MyFeedbacks /></ProtectedRoute>}/>
 
                 // ************************************** HOME PAGE ****************************************
                 <Route path="" element={<Home/>}/>
