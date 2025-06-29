@@ -26,6 +26,9 @@ import QuestionList from './pages/question/QuestionList';
 import QuestionEdit from './pages/question/QuestionEdit';
 import AnswerForm from './pages/question/AnswerForm';
 
+// messaging routes
+import MessagingPage from './pages/messaging/MessagingPage';
+
 // payment routes
 import PaymentHistoryPage from './pages/payment/PaymentHistoryPage';
 import HandlePayosReturn from './pages/payment/HandlePayosReturn';
@@ -188,6 +191,10 @@ const App = () => {
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
                 <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+
+                // ************************************** MESSAGING ROUTES ***********************************
+                <Route path="/hocho/messaging" element={<MessagingPage />} />
+
 
             </Routes>
         </Router>);

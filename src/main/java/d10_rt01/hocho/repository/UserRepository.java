@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByRole(String role);
     Optional<User> findById(Long id);
     List<User> findByRoleAndIsActiveFalse(String role);
+    List<User> findByIsActiveTrue();
 }

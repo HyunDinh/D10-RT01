@@ -561,6 +561,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getAllActiveUsers() {
+        return userRepository.findByIsActiveTrue();
+    }
+
     public Optional<User> findById(Long id){
         return userRepository.findById(id);
     }
