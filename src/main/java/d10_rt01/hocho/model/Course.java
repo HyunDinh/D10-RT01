@@ -2,6 +2,7 @@ package d10_rt01.hocho.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import d10_rt01.hocho.model.enums.AgeGroup;
 import d10_rt01.hocho.model.enums.CourseStatus;
+import d10_rt01.hocho.model.enums.Subject;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -41,6 +42,10 @@ public class Course {
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private CourseStatus status = CourseStatus.PENDING;
+
+    @Column(name = "subject")
+    @Enumerated(EnumType.STRING)
+    private Subject subject;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

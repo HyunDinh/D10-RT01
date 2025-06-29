@@ -81,6 +81,7 @@ import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
 import LessonContentStudentPage from "./pages/course/LessonContentStudentPage";
 import ChildCoursePage from "./pages/learning/ChildCoursePage.jsx";
 import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
+import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
 
@@ -140,6 +141,7 @@ const App = () => {
                 <Route path="/hocho/child/course" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage /></ProtectedRoute>}/>
                 <Route path="/hocho/child/course/:courseId/learning" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage /></ProtectedRoute>}/>
                 <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage />} />
+                <Route path="/hocho/child/learning-history" element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildLearningHistory /></ProtectedRoute>}/>
 
                 // ************************************** HOME PAGE ****************************************
                 <Route path="" element={<Home/>}/>

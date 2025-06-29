@@ -64,6 +64,15 @@ const ChildCart = () => {
         }
     };
 
+    const getCourseImageUrl = (courseImageUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!courseImageUrl || courseImageUrl === 'none') {
+            return '/avaBack.jpg';
+        }
+        const fileName = courseImageUrl.split('/').pop();
+        return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
+    };
+
     useEffect(() => {
         fetchCart();
     }, []);
@@ -86,7 +95,7 @@ const ChildCart = () => {
                                     <div className="row g-0 align-items-center">
                                         <div className="col-4">
                                             <img
-                                                src={item.course.imageUrl || '/default-course.jpg'}
+                                                src={getCourseImageUrl(item.course.courseImageUrl)}
                                                 alt={item.course.title}
                                                 className={styles.cartImage + " img-fluid rounded-start"}
                                                 style={{ height: '120px', objectFit: 'cover', width: '100%' }}

@@ -42,8 +42,13 @@ public class CourseController {
 
     // Retrieves all courses publicly
     @GetMapping
-    public ResponseEntity<List<CourseDto>> getAllCourses() {
-        List<CourseDto> courses = courseService.getAllCoursesAsDto();
+    public ResponseEntity<List<CourseDto>> getAllCourses(
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) String priceRange,
+        @RequestParam(required = false) String level,
+        @RequestParam(required = false) String search
+    ) {
+        List<CourseDto> courses = courseService.getFilteredCourses(category, priceRange, level, search);
         return ResponseEntity.ok(courses);
     }
 
