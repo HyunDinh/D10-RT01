@@ -9,6 +9,7 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import Profile from './pages/auth/Profile';
 import Admin from "./pages/admin/Admin";
+import AdminHome from "./pages/admin/AdminHome";
 
 // tutor routes
 import TutorProfile from './pages/tutor/TutorProfile';
@@ -101,6 +102,7 @@ const App = () => {
 
                 // ************************************** ADMIN ONLY ROUTES **************************************
 
+                <Route path="hocho/admin" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminHome /></ProtectedRoute>}/>
                 <Route path="hocho/admin/accounts" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><Admin /></ProtectedRoute>}/>
                 <Route path="hocho/admin/tutors" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminTutorList /></ProtectedRoute>}/>
                 <Route path="hocho/admin/course/approval" element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><CourseApproval /></ProtectedRoute>}/>

@@ -11,6 +11,7 @@
 
 ## — DOWNLOAD NECESSARY RESOURCES
 ```
+cd webpage
 npm install
 npm install react react-dom react-router-dom axios
 npm install @react-oauth/google @react-oauth/google
@@ -21,4 +22,5 @@ npm install @fortawesome/free-brands-svg-icons
 npm install @fortawesome/react-fontawesome
 npm install @fontsource/inter
 npm install swiper
+npm install recharts
 ```
