@@ -4,9 +4,13 @@ import d10_rt01.hocho.model.enums.AgeGroup;
 import d10_rt01.hocho.model.enums.ContentStatus;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Data
 @Entity
 @Table(name = "games")

@@ -67,13 +67,16 @@ import PublicCoursePage from "./pages/course/PublicCoursePage";
 // Game Routes
 import PlayDinoRun from "./pages/game/PlayDinoRun";
 import PlayClumsyBird from "./pages/game/PlayClumsyBird";
+import GamesPage from "./pages/game/GamesPage";
+import LeaderboardPage from "./pages/game/GameLeaderBoard";
 
 // Approval Routes
 import CourseApproval from "./pages/course/CensorCourse";
 import GameApproval from "./pages/game/GameApproval";
-import GamesPage from "./pages/game/GamesPage";
+
 
 import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
+
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
 
@@ -174,6 +177,7 @@ const App = () => {
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
                 <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+                <Route path="/hocho/games/leaderboard" element={<LeaderboardPage />} />
 
             </Routes>
         </Router>);
