@@ -4,7 +4,8 @@ import styles from '../../styles/Messaging.module.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import CreateChatModal from './CreateChatModal';
-import { FaPaperclip } from 'react-icons/fa';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 
 const MessagingPage = () => {
     const [chatSessions, setChatSessions] = useState([]);
@@ -336,7 +337,7 @@ const MessagingPage = () => {
                             <form className={styles.messageForm} onSubmit={sendMessage}>
                                 <div className={styles.fileInputWrapper}>
                                     <label htmlFor="file-upload" className={styles.fileInputLabel} title="Đính kèm file hoặc hình ảnh">
-                                        <FaPaperclip />
+                                        <FontAwesomeIcon icon={faPaperclip} />
                                     </label>
                                     <input
                                         id="file-upload"

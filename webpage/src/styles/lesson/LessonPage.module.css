@@ -1,0 +1,272 @@
+/* General container styling */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+/* Page Header Styling */
+.pageHeader {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pageTitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #343a40;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Table Styling */
+.lessonTable {
+    margin-bottom: 2rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: left;
+    margin-bottom: 0;
+    background-color: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.table th {
+    background-color: #343a40;
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.table td {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+.tableResponsive {
+    overflow-x: auto;
+}
+
+/* Action Group Styling */
+.actionGroup {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Button Styling */
+.btn {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btnSuccess {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    color: #fff;
+}
+
+.btnSuccess:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.btnWarning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btnWarning:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+}
+
+.btnInfo {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: #fff;
+}
+
+.btnInfo:hover {
+    background-color: #138496;
+    transform: translateY(-2px);
+}
+
+.btnDanger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.btnDanger:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+.btnSecondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: #fff;
+}
+
+.btnSecondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btnSm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+}
+
+/* No Lessons Styling */
+.noLessons {
+    text-align: center;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.noLessons p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Error Alert Styling */
+.alertDanger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sectionHeader {
+        padding: 2rem 1rem;
+    }
+
+    .headerInfo h1 {
+        font-size: 1.8rem;
+    }
+
+    .breadcrumbItems {
+        font-size: 0.9rem;
+    }
+
+    .pageHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+
+    .actionButtons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .table th,
+    .table td {
+        font-size: 0.85rem;
+        padding: 0.75rem;
+    }
+
+    .actionGroup {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btnSm {
+        width: 100%;
+    }
+}

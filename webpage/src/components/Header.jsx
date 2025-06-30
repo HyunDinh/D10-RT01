@@ -249,7 +249,7 @@ function Header() {
                 <div className={styles.containerFluid}>
                     <div className={styles.headerMain}>
                         <div className={styles.headerLeft}>
-                            <a href="/hocho/home"><img alt="Logo" width="500" height="100" src="/logo.png" /></a>
+                            <a href="/hocho/home"><img alt="Logo" width="100" height="100" src="/logo.png" /></a>
                         </div>
                         <div className={styles.headerRight}>
                             <button className={`${styles.sidebarToggle} ${styles.dXlNone}`} onClick={toggleMobileMenu}>
@@ -292,7 +292,7 @@ function Header() {
                                             <li><a href="/hocho/games">Games</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="/contact">Contact Us</a></li>
+                                    <li><a href="/hocho/messaging">Contact Us</a></li>
                                     {renderMenu()}
                                 </ul>
                             </nav>
