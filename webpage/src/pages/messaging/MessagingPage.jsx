@@ -301,16 +301,16 @@ const MessagingPage = () => {
                                                     message.fileType && message.fileType.startsWith('image/') ? (
                                                         <div className={styles.mediaWrapper}>
                                                             <img
-                                                                src={`http://localhost:8080${message.fileUrl}`}
+                                                                src={`http://localhost:8080/api/messages/image/${message.fileUrl.split('/').pop()}`}
                                                                 alt="img"
                                                                 className={styles.chatImage}
-                                                                onClick={() => setSelectedImage(`http://localhost:8080${message.fileUrl}`)}
+                                                                onClick={() => setSelectedImage(`http://localhost:8080/api/messages/image/${message.fileUrl.split('/').pop()}`)}
                                                             />
                                                         </div>
                                                     ) : message.fileType && message.fileType.startsWith('video/') ? (
                                                         <div className={styles.mediaWrapper}>
                                                             <video
-                                                                src={`http://localhost:8080${message.fileUrl}`}
+                                                                src={`http://localhost:8080/api/messages/image/${message.fileUrl.split('/').pop()}`}
                                                                 controls
                                                                 className={styles.chatVideo}
                                                             />
@@ -318,7 +318,8 @@ const MessagingPage = () => {
                                                     ) : (
                                                         <div className={styles.fileWrapper}>
                                                             <span className={styles.fileIcon}>📎</span>
-                                                            <a href={`http://localhost:8080${message.fileUrl}`} target="_blank" rel="noopener noreferrer" className={styles.fileName}>
+                                                            <a href={`http://localhost:8080/api/messages/file/${message.fileUrl.split('/').pop()}`}
+                                                                target="_blank" rel="noopener noreferrer" className={styles.fileName}>
                                                                 {message.fileUrl.split('/').pop()}
                                                             </a>
                                                         </div>

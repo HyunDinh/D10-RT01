@@ -146,7 +146,7 @@ const EditCoursePage = ({ course, onClose }) => {
 
             const courseData = { ...formData, courseImageUrl: imageUrl };
 
-             await axios.put(`/api/teacher/course/${course.courseId}`, courseData, {
+             await axios.put(`/api/teacher/courses/${course.courseId}`, courseData, {
                 withCredentials: true,
             });
             onClose();

@@ -164,38 +164,44 @@ export default function ChildLearningHistory() {
                 {/* Lessons completed & Quizzes taken chỉ hiển thị khi đã chọn course */}
                 {selectedCourse && (
                     <>
-                        {/* Lessons completed */}
+                        {/* Lessons */}
                         <div className={styles.section}>
-                            <h2>📖 Lessons Completed</h2>
-                            {selectedCourse.lessonProgresses?.filter(lesson => lesson.status === 'COMPLETED').length > 0 ? (
+                            <h2>📖 Lessons</h2>
+                            {selectedCourse.lessonProgresses && selectedCourse.lessonProgresses.length > 0 ? (
                                 <div className={styles.lessonList}>
-                                    {selectedCourse.lessonProgresses
-                                        .filter(lesson => lesson.status === 'COMPLETED')
-                                        .map((lesson, index) => (
-                                            <div key={`${lesson.lessonId}-${index}`} className={styles.lessonCard}>
-                                                <div className={styles.lessonInfo}>
-                                                    <h4>{lesson.lessonTitle}</h4>
-                                                    <span className={styles.lessonDate}>
-                                                        Completed: {formatDateTime(lesson.completionDate)}
-                                                    </span>
-                                                </div>
+                                    {selectedCourse.lessonProgresses.map((lesson, index) => (
+                                        <div
+                                            key={`${lesson.lessonId}-${index}`}
+                                            className={`${styles.lessonCard} ${lesson.status === 'COMPLETED' ? styles.completed : styles.notCompleted}`}
+                                        >
+                                            <div className={styles.lessonInfo}>
+                                                <h4>{lesson.lessonTitle}</h4>
+                                                <span className={styles.lessonDate}>
+                                                    {lesson.status === 'COMPLETED'
+                                                        ? `Completed: ${formatDateTime(lesson.completionDate)}`
+                                                        : `Last studied: ${formatDateTime(lesson.lastStudyDate)}`}
+                                                </span>
                                             </div>
-                                        ))}
+                                        </div>
+                                    ))}
                                 </div>
                             ) : (
                                 <div className={styles.noData}>
-                                    <p>No lessons completed yet.</p>
+                                    <p>No lessons found.</p>
                                 </div>
                             )}
                         </div>
 
-                        {/* Quizzes taken */}
+                        {/* Quizzes */}
                         <div className={styles.section}>
                             <h2>🧠 Quizzes Taken</h2>
                             {selectedCourse.quizResults && selectedCourse.quizResults.length > 0 ? (
                                 <div className={styles.quizList}>
                                     {selectedCourse.quizResults.map((quiz, index) => (
-                                        <div key={`${quiz.quizId}-${index}`} className={styles.quizCard}>
+                                        <div
+                                            key={`${quiz.quizId}-${index}`}
+                                            className={`${styles.quizCard} ${styles.completed}`}
+                                        >
                                             <div className={styles.quizInfo}>
                                                 <h4>{quiz.quizTitle}</h4>
                                                 <span className={styles.quizDate}>
@@ -210,7 +216,7 @@ export default function ChildLearningHistory() {
                                 </div>
                             ) : (
                                 <div className={styles.noData}>
-                                    <p>No quizzes taken yet.</p>
+                                    <p>No quizzes found.</p>
                                 </div>
                             )}
                         </div>

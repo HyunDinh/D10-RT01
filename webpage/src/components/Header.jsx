@@ -130,7 +130,7 @@ function Header() {
                 {path: '/hocho/teacher/course', name: 'Course Manager'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/teacher/video', name: 'Entertainment'},
-                {path: '/hocho/my-feedbacks', name: 'My Feedbacks'},
+                {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
             ],
             ROLE_PARENT: [
@@ -138,7 +138,6 @@ function Header() {
                 {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/parent/time-restriction', name: 'Time'},
-                {path: '/hocho/parent/learning-progress', name: 'Learning Progress'},
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/parent/monitor', name: 'Learning Progress'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
@@ -146,6 +145,7 @@ function Header() {
             ROLE_CHILD: [
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/child/course', name: 'My Learning'},
+                {path: '/hocho/child/learning-history', name: 'Learning History'},
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
             ],
@@ -292,7 +292,7 @@ function Header() {
                                             <li><a href="/hocho/games">Games</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="/hocho/messaging">Contact Us</a></li>
+                                    <li><a href="/hocho/contact">Contact Us</a></li>
                                     {renderMenu()}
                                 </ul>
                             </nav>

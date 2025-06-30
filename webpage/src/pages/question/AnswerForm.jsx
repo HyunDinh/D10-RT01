@@ -26,6 +26,8 @@ const AnswerForm = () => {
     const [deletingId, setDeletingId] = useState(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false); // New state for dialog
     const [answerToDelete, setAnswerToDelete] = useState(null); // Track answer ID
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [modalImageSrc, setModalImageSrc] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -143,6 +145,13 @@ const AnswerForm = () => {
         return `http://localhost:8080/api/questions/answers/image/${fileName}`;
     };
 
+    const openImageModal = (src) => {
+        setModalImageSrc(src);
+        setShowImageModal(true);
+    };
+
+    const closeImageModal = () => setShowImageModal(false);
+
     if (loading) return <div className="alert alert-info text-center">Đang tải dữ liệu...</div>;
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
     if (!question) return null;
@@ -189,6 +198,8 @@ const AnswerForm = () => {
                             alt="Ảnh minh họa"
                             className={styles.questionImage}
                             onError={e => (e.target.src = '/images/default-course.jpg')}
+                            onClick={() => openImageModal(getQuestionImageUrl(question.imageUrl))}
+                            style={{ cursor: 'pointer' }}
                         />
                     )}
                     <div className={styles.line}></div>
@@ -263,6 +274,8 @@ const AnswerForm = () => {
                                             alt="Ảnh trả lời"
                                             className={styles.answerImage}
                                             onError={e => (e.target.src = '/images/default-course.jpg')}
+                                            onClick={() => openImageModal(getAnswerImageUrl(a.imageUrl))}
+                                            style={{ cursor: 'pointer' }}
                                         />
                                     )}
                                 </>)}
@@ -296,6 +309,16 @@ const AnswerForm = () => {
 
                 </div>
             </div>
+            {showImageModal && (
+                <div className={styles.modal} onClick={closeImageModal}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <img src={modalImageSrc} alt="Zoomed" style={{ maxWidth: '80vw', maxHeight: '80vh' }} />
+                        <button className={styles.modalClose} onClick={closeImageModal} aria-label="Close">
+                            &times;
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     </>);
 };

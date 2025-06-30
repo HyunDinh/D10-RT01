@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams, Link} from 'react-router-dom';
 import axios from 'axios';
+import styles from '../../styles/lesson/AddLesson.module.css';
 
 export default function AddLessonPage() {
     const {courseId} = useParams();
@@ -10,6 +11,7 @@ export default function AddLessonPage() {
         duration: ''
     });
     const [errors, setErrors] = useState({});
+    const [showModal, setShowModal] = useState(false);
 
     const handleChange = (e) => {
         setLesson({...lesson, [e.target.name]: e.target.value});
@@ -23,11 +25,14 @@ export default function AddLessonPage() {
         return Object.keys(tempErrors).length === 0;
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
+
+    const confirmSubmit = async () => {
         if (!validate()) return;
         try {
             await axios.post(`/api/lessons/add/${courseId}`, lesson);
+            setShowModal(false);
             setTimeout(() => {
                 navigate(`/hocho/teacher/course/${courseId}/lesson`);
             }, 1500);
@@ -51,7 +56,7 @@ export default function AddLessonPage() {
                         <h4>Add New Lesson</h4>
                     </div>
                     <div className={styles.cardBody}>
-                        <form onSubmit={handleSubmit}>
+                        <form onSubmit={e => e.preventDefault()}>
                             <div className={styles.formGroup}>
                                 <label htmlFor="lessonTitle" className={styles.formLabel}>
                                     Lesson Title
@@ -84,7 +89,11 @@ export default function AddLessonPage() {
                                 />
                                 {errors.duration && <div className={styles.textDanger}>{errors.duration}</div>}
                             </div>
-                            <button type="submit" className={`${styles.btn} ${styles.btnSuccess}`}>
+                            <button
+                                type="button"
+                                className={`${styles.btn} ${styles.btnSuccess}`}
+                                onClick={openModal}
+                            >
                                 Add Lesson
                             </button>
                             <button
@@ -98,32 +107,32 @@ export default function AddLessonPage() {
                     </div>
                 </div>
             </div>
-
-            {/* Custom Modal */}
-            <div className={`${styles.modal} ${showModal ? styles.show : ''}`}>
-                <div className={styles.modalContent}>
-                    <div className={styles.modalHeader}>
-                        <h5>Confirm Lesson Creation</h5>
-                        <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
-                            &times;
-                        </button>
-                    </div>
-                    <div className={styles.modalBody}>
-                        <p>
-                            Are you sure you want to add the lesson "<strong>{lesson.title}</strong>" with duration{' '}
-                            <strong>{lesson.duration}</strong> minutes?
-                        </p>
-                    </div>
-                    <div className={styles.modalFooter}>
-                        <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={closeModal}>
-                            Cancel
-                        </button>
-                        <button className={`${styles.btn} ${styles.btnSuccess}`} onClick={confirmSubmit}>
-                            Confirm
-                        </button>
+            {showModal && (
+                <div className={styles.modal}>
+                    <div className={styles.modalContent}>
+                        <div className={styles.modalHeader}>
+                            <h5>Xác nhận thêm bài học</h5>
+                            <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
+                                &times;
+                            </button>
+                        </div>
+                        <div className={styles.modalBody}>
+                            <p>
+                                Bạn có chắc chắn muốn thêm bài học "<strong>{lesson.title}</strong>" với thời lượng{' '}
+                                <strong>{lesson.duration}</strong> phút không?
+                            </p>
+                        </div>
+                        <div className={styles.modalFooter}>
+                            <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={closeModal}>
+                                Hủy
+                            </button>
+                            <button className={`${styles.btn} ${styles.btnSuccess}`} onClick={confirmSubmit}>
+                                Xác nhận
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </>
     );
 }

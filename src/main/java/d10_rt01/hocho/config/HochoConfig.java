@@ -24,4 +24,6 @@ public class HochoConfig {
 
     // ------------------------------- LESSON CONTENT CONFIG ------------------------------
     public static final String ABSOLUTE_PATH_LESSON_CONTENT_UPLOAD_DIR = "D:/res/static/lesson-content/";
+
+    public static final String ABSOLUTE_PATH_MESSAGE_UPLOAD_DIR = "D:/res/static/message/";
 }
