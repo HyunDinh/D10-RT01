@@ -5,7 +5,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import CreateChatModal from './CreateChatModal';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
+import { faPaperclip,faComment } from "@fortawesome/free-solid-svg-icons";
 
 const MessagingPage = () => {
     const [chatSessions, setChatSessions] = useState([]);
@@ -216,11 +216,11 @@ const MessagingPage = () => {
                 <div className={styles.sidebar}>
                     <div className={styles.sidebarHeader}>
                         <h2>Messages</h2>
-                        <button 
+                        <button
                             className={styles.newChatButton}
                             onClick={() => setShowCreateModal(true)}
                         >
-                            +
+                            <FontAwesomeIcon icon={faComment} />
                         </button>
                     </div>
                     <div className={styles.chatList}>
@@ -276,7 +276,7 @@ const MessagingPage = () => {
                         <>
                             <div className={styles.chatHeader}>
                                 <h3>
-                                    {getOtherUser(selectedSession).fullName || 
+                                    {getOtherUser(selectedSession).fullName ||
                                      getOtherUser(selectedSession).username}
                                 </h3>
                             </div>
@@ -294,8 +294,8 @@ const MessagingPage = () => {
                                                 message.sender.id === currentUser?.id 
                                                     ? styles.sent 
                                                     : styles.received
-                                            }`}
-                                        >
+                                            }`}>
+
                                             <div className={styles.messageContent}>
                                                 {message.fileUrl ? (
                                                     message.fileType && message.fileType.startsWith('image/') ? (
