@@ -35,7 +35,7 @@ function Profile() {
             console.log('Fetched user data:', response.data);
         } catch (err) {
             console.error('Error fetching profile:', err);
-            setError('Không thể tải thông tin profile. Vui lòng thử lại.');
+            setError('Cannot load profile information. Please try again.');
             if (err.response && err.response.status === 401) {
                 navigate('/hocho/login');
             }
@@ -76,19 +76,19 @@ function Profile() {
 
     const handleSavePassword = () => {
         if (!oldPassword) {
-            setError('Vui lòng nhập mật khẩu cũ');
+            setError('Please enter old password');
             return;
         }
         if (!newPassword) {
-            setError('Vui lòng nhập mật khẩu mới');
+            setError('Please enter new password');
             return;
         }
         if (!confirmPassword) {
-            setError('Vui lòng xác nhận mật khẩu mới');
+            setError('Please confirm new password');
             return;
         }
         if (newPassword !== confirmPassword) {
-            setError('Mật khẩu mới và xác nhận mật khẩu không khớp');
+            setError('New password and confirmation do not match');
             return;
         }
 
@@ -101,11 +101,11 @@ function Profile() {
                 setOldPassword('');
                 setNewPassword('');
                 setConfirmPassword('');
-                setError('Cập nhật mật khẩu thành công!');
+                setError('Password updated successfully!');
             })
             .catch((err) => {
                 console.error('Error updating password:', err);
-                setError(err.response?.data?.message || 'Cập nhật mật khẩu thất bại. Vui lòng thử lại.');
+                setError(err.response?.data?.message || 'Failed to update password. Please try again.');
             });
     };
 
@@ -124,14 +124,14 @@ function Profile() {
                 setRefreshKey((prevKey) => prevKey + 1);
                 await fetchProfileData();
                 fileInputRef.current.value = '';
-                setError('Cập nhật ảnh đại diện thành công!');
+                setError('Avatar updated successfully!');
             } catch (err) {
                 console.error('Error uploading profile picture:', err);
-                setError(err.response?.data || 'Cập nhật ảnh đại diện thất bại. Vui lòng thử lại.');
+                setError(err.response?.data || 'Failed to update avatar. Please try again.');
                 fileInputRef.current.value = '';
             }
         } else {
-            setError('Vui lòng chọn file PNG hoặc JPG.');
+            setError('Please select a PNG or JPG file.');
             fileInputRef.current.value = '';
         }
     };

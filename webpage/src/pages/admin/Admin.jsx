@@ -79,7 +79,7 @@ const Admin = () => {
             setUsers(response.data);
             console.log('Users fetched:', response.data);
         } catch (err) {
-            setError(`Lỗi khi tải danh sách người dùng: ${err.response?.data || err.message}`);
+            setError(`Error loading user list: ${err.response?.data || err.message}`);
         }
     };
 
@@ -90,7 +90,7 @@ const Admin = () => {
             });
             setPendingTeachers(response.data);
         } catch (err) {
-            setError(`Lỗi khi tải danh sách giáo viên chờ duyệt: ${err.response?.data || err.message}`);
+            setError(`Error loading pending teachers: ${err.response?.data || err.message}`);
         }
     };
 
@@ -106,7 +106,7 @@ const Admin = () => {
             console.log(`Fetched children for ${parentEmail}:`, response.data);
         } catch (err) {
             console.error(`Error fetching children for ${parentEmail}:`, err);
-            setError(`Lỗi khi tải danh sách con cái: ${err.response?.data || err.message}`);
+            setError(`Error loading children: ${err.response?.data || err.message}`);
         }
     };
 
@@ -134,7 +134,7 @@ const Admin = () => {
                     isActive: currentUser.isActive.toString(),
                     verified: currentUser.verified.toString(),
                 }, {withCredentials: true});
-                setMessage('Cập nhật người dùng thành công!');
+                setMessage('User updated successfully!');
                 setUsers(users.map(user => user.id === currentUser.id ? response.data : user));
             } else {
                 const payload = {
@@ -153,7 +153,7 @@ const Admin = () => {
                 const response = await axios.post('http://localhost:8080/api/admin/users', payload, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Thêm người dùng thành công!');
+                setMessage(response.data || 'User added successfully!');
                 fetchUsers();
             }
             setShowModal(false);
@@ -171,7 +171,7 @@ const Admin = () => {
                 verified: false,
             });
         } catch (err) {
-            setError(err.response?.data || 'Lỗi khi lưu người dùng.');
+            setError(err.response?.data || 'Error saving user.');
         }
     };
 
@@ -194,12 +194,12 @@ const Admin = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+        if (window.confirm('Are you sure you want to delete this user?')) {
             try {
                 const response = await axios.delete(`http://localhost:8080/api/admin/users/${id}`, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Xóa người dùng thành công!');
+                setMessage(response.data || 'User deleted successfully!');
                 setUsers(users.filter(user => user.id !== id));
                 // Cập nhật childrenData để xóa dữ liệu con cái nếu phụ huynh bị xóa
                 setChildrenData(prev => {
@@ -211,7 +211,7 @@ const Admin = () => {
                     return updated;
                 });
             } catch (err) {
-                setError(err.response?.data || 'Lỗi khi xóa người dùng.');
+                setError(err.response?.data || 'Error deleting user.');
             }
         }
     };
@@ -221,24 +221,24 @@ const Admin = () => {
             const response = await axios.post(`http://localhost:8080/api/admin/approve-teacher/${id}`, {}, {
                 withCredentials: true,
             });
-            setMessage(response.data || 'Duyệt giáo viên thành công!');
+            setMessage(response.data || 'Teacher approved successfully!');
             fetchPendingTeachers();
             fetchUsers();
         } catch (err) {
-            setError(err.response?.data || 'Lỗi khi duyệt giáo viên.');
+            setError(err.response?.data || 'Error approving teacher.');
         }
     };
 
     const handleRejectTeacher = async (id) => {
-        if (window.confirm('Bạn có chắc muốn từ chối giáo viên này?')) {
+        if (window.confirm('Are you sure you want to reject this teacher?')) {
             try {
                 const response = await axios.post(`http://localhost:8080/api/admin/reject-teacher/${id}`, {}, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Từ chối giáo viên thành công!');
+                setMessage(response.data || 'Teacher rejected successfully!');
                 fetchPendingTeachers();
             } catch (err) {
-                setError(err.response?.data || 'Lỗi khi từ chối giáo viên.');
+                setError(err.response?.data || 'Error rejecting teacher.');
             }
         }
     };
@@ -284,22 +284,22 @@ const Admin = () => {
     return (<>
             <Header/>
                 <main className="flex-grow container mx-auto my-8 px-4">
-                    <h1 className="text-4xl font-bold text-[#385469] mb-6">Quản lý người dùng</h1>
+                    <h1 className="text-4xl font-bold text-[#385469] mb-6">User Management</h1>
                     {message && <div className="bg-green-100 text-green-800 p-4 rounded mb-4">{message}</div>}
                     {error && <div className="bg-red-100 text-red-800 p-4 rounded mb-4">{error}</div>}
                     <button
                         onClick={openAddModal}
                         className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition mb-6"
                     >
-                        <FontAwesomeIcon icon={faPlus} className="mr-2"/> Thêm người dùng
+                        <FontAwesomeIcon icon={faPlus} className="mr-2"/> Add User
                     </button>
 
                     {/* Admin Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Danh sách Admin</h2>
+                    <h2 className="text-3xl font-bold text-[#385469] my-8">Admin List</h2>
                     <div className="mb-4">
                         <input
                             type="text"
-                            placeholder="Tìm kiếm bằng email..."
+                            placeholder="Search by email..."
                             value={adminSearch}
                             onChange={(e) => setAdminSearch(e.target.value)}
                             className="border border-gray-300 p-2 rounded w-full"
@@ -310,19 +310,19 @@ const Admin = () => {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên đăng nhập</th>
+                                <th>Username</th>
                                 <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Họ tên</th>
-                                <th>Ngày sinh</th>
-                                <th>Trạng thái</th>
-                                <th>Xác minh</th>
-                                <th>Hành động</th>
+                                <th>Phone Number</th>
+                                <th>Full Name</th>
+                                <th>Date of Birth</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {filteredAdmins.length === 0 ? (<tr>
-                                <td colSpan="9" className="text-center py-4">Không có admin nào.</td>
+                                <td colSpan="9" className="text-center py-4">No admins found.</td>
                             </tr>) : (filteredAdmins.map(user => (<tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
@@ -330,8 +330,8 @@ const Admin = () => {
                                 <td>{user.phoneNumber || '-'}</td>
                                 <td>{user.fullName || '-'}</td>
                                 <td>{user.dateOfBirth || '-'}</td>
-                                <td>{user.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
-                                <td>{user.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                <td>{user.isActive ? 'Active' : 'Inactive'}</td>
+                                <td>{user.verified ? 'Verified' : 'Not verified'}</td>
                                 <td>
                                     <button
                                         onClick={() => handleEdit(user)}
@@ -352,11 +352,11 @@ const Admin = () => {
                     </div>
 
                     {/* Parent Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Danh sách Phụ huynh</h2>
+                    <h2 className="text-3xl font-bold text-[#385469] my-8">Parent List</h2>
                     <div className="mb-4">
                         <input
                             type="text"
-                            placeholder="Tìm kiếm bằng email..."
+                            placeholder="Search by email..."
                             value={parentSearch}
                             onChange={(e) => setParentSearch(e.target.value)}
                             className="border border-gray-300 p-2 rounded w-full"
@@ -367,20 +367,20 @@ const Admin = () => {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên đăng nhập</th>
+                                <th>Username</th>
                                 <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Họ tên</th>
-                                <th>Ngày sinh</th>
-                                <th>Trạng thái</th>
-                                <th>Xác minh</th>
-                                <th>Số lượng con</th>
-                                <th>Hành động</th>
+                                <th>Phone Number</th>
+                                <th>Full Name</th>
+                                <th>Date of Birth</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Children</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {filteredParents.length === 0 ? (<tr>
-                                <td colSpan="10" className="text-center py-4">Không có phụ huynh nào.</td>
+                                <td colSpan="10" className="text-center py-4">No parents found.</td>
                             </tr>) : (filteredParents.map(parent => (<React.Fragment key={parent.id}>
                                 <tr>
                                     <td>{parent.id}</td>
@@ -389,8 +389,8 @@ const Admin = () => {
                                     <td>{parent.phoneNumber || '-'}</td>
                                     <td>{parent.fullName || '-'}</td>
                                     <td>{parent.dateOfBirth || '-'}</td>
-                                    <td>{parent.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
-                                    <td>{parent.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                    <td>{parent.isActive ? 'Active' : 'Inactive'}</td>
+                                    <td>{parent.verified ? 'Verified' : 'Not verified'}</td>
                                     <td>
                                         {parentChildCounts[parent.id] > 0 ? (<button
                                             onClick={() => toggleParentChildren(parent.id, parent.email)}
@@ -418,21 +418,20 @@ const Admin = () => {
                                 {expandedParents[parent.id] && (<tr className="bg-gray-100">
                                     <td colSpan="10">
                                         <div className="pl-8 py-4">
-                                            <h3 className="text-lg font-semibold text-[#385469] mb-2">Danh sách
-                                                con cái</h3>
+                                            <h3 className="text-lg font-semibold text-[#385469] mb-2">Children List</h3>
                                             <div className={styles.tableContainer}>
                                                 <table className={styles.userTable}>
                                                     <thead>
                                                     <tr>
                                                         <th>ID</th>
-                                                        <th>Tên đăng nhập</th>
+                                                        <th>Username</th>
                                                         <th>Email</th>
-                                                        <th>Số điện thoại</th>
-                                                        <th>Họ tên</th>
-                                                        <th>Ngày sinh</th>
-                                                        <th>Trạng thái</th>
-                                                        <th>Xác minh</th>
-                                                        <th>Hành động</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Full Name</th>
+                                                        <th>Date of Birth</th>
+                                                        <th>Status</th>
+                                                        <th>Verified</th>
+                                                        <th>Actions</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -444,8 +443,8 @@ const Admin = () => {
                                                             <td>{child.phoneNumber || '-'}</td>
                                                             <td>{child.fullName || '-'}</td>
                                                             <td>{child.dateOfBirth || '-'}</td>
-                                                            <td>{child.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
-                                                            <td>{child.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                                            <td>{child.isActive ? 'Active' : 'Inactive'}</td>
+                                                            <td>{child.verified ? 'Verified' : 'Not verified'}</td>
                                                             <td>
                                                                 <button
                                                                     onClick={() => handleEdit(child)}
@@ -462,12 +461,10 @@ const Admin = () => {
                                                             </td>
                                                         </tr>))) : (<tr>
                                                         <td colSpan="9"
-                                                            className="text-center py-4">Không có con
-                                                            cái.
+                                                            className="text-center py-4">No children found.
                                                         </td>
                                                     </tr>)) : (<tr>
-                                                        <td colSpan="9" className="text-center py-4">Đang
-                                                            tải...
+                                                        <td colSpan="9" className="text-center py-4">Loading...
                                                         </td>
                                                     </tr>)}
                                                     </tbody>
@@ -482,11 +479,11 @@ const Admin = () => {
                     </div>
 
                     {/* Teacher Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Danh sách Giáo viên</h2>
+                    <h2 className="text-3xl font-bold text-[#385469] my-8">Teacher List</h2>
                     <div className="mb-4">
                         <input
                             type="text"
-                            placeholder="Tìm kiếm bằng email..."
+                            placeholder="Search by email..."
                             value={teacherSearch}
                             onChange={(e) => setTeacherSearch(e.target.value)}
                             className="border border-gray-300 p-2 rounded w-full"
@@ -497,19 +494,19 @@ const Admin = () => {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên đăng nhập</th>
+                                <th>Username</th>
                                 <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Họ tên</th>
-                                <th>Ngày sinh</th>
-                                <th>Trạng thái</th>
-                                <th>Xác minh</th>
-                                <th>Hành động</th>
+                                <th>Phone Number</th>
+                                <th>Full Name</th>
+                                <th>Date of Birth</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {filteredTeachers.length === 0 ? (<tr>
-                                <td colSpan="9" className="text-center py-4">Không có giáo viên nào.</td>
+                                <td colSpan="9" className="text-center py-4">No teachers found.</td>
                             </tr>) : (filteredTeachers.map(user => (<tr key={user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.username}</td>
@@ -517,8 +514,8 @@ const Admin = () => {
                                 <td>{user.phoneNumber || '-'}</td>
                                 <td>{user.fullName || '-'}</td>
                                 <td>{user.dateOfBirth || '-'}</td>
-                                <td>{user.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
-                                <td>{user.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                <td>{user.isActive ? 'Active' : 'Inactive'}</td>
+                                <td>{user.verified ? 'Verified' : 'Not verified'}</td>
                                 <td>
                                     <button
                                         onClick={() => handleEdit(user)}
@@ -539,11 +536,11 @@ const Admin = () => {
                     </div>
 
                     {/* Pending Teachers Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Danh sách Giáo viên chờ duyệt</h2>
+                    <h2 className="text-3xl font-bold text-[#385469] my-8">Pending Teachers List</h2>
                     <div className="mb-4">
                         <input
                             type="text"
-                            placeholder="Tìm kiếm bằng email..."
+                            placeholder="Search by email..."
                             value={pendingTeacherSearch}
                             onChange={(e) => setPendingTeacherSearch(e.target.value)}
                             className="border border-gray-300 p-2 rounded w-full"
@@ -554,16 +551,16 @@ const Admin = () => {
                             <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Tên đăng nhập</th>
+                                <th>Username</th>
                                 <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Thông tin</th>
-                                <th>Hành động</th>
+                                <th>Phone Number</th>
+                                <th>Info</th>
+                                <th>Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             {filteredPendingTeachers.length === 0 ? (<tr>
-                                <td colSpan="6" className="text-center py-4">Không có giáo viên chờ duyệt.</td>
+                                <td colSpan="6" className="text-center py-4">No pending teachers found.</td>
                             </tr>) : (filteredPendingTeachers.map(teacher => (<tr key={teacher.id}>
                                 <td>{teacher.id}</td>
                                 <td>{teacher.username}</td>
@@ -574,7 +571,7 @@ const Admin = () => {
                                         onClick={() => handleViewTeacherInfo(teacher.email)}
                                         className="text-[#385469] hover:text-[#f39f5f] flex items-center"
                                     >
-                                        <FontAwesomeIcon icon={faInfoCircle} className="mr-1"/> Xem thông tin
+                                        <FontAwesomeIcon icon={faInfoCircle} className="mr-1"/> View Info
                                     </button>
                                 </td>
                                 <td>
@@ -601,7 +598,7 @@ const Admin = () => {
                         <div className={styles.modalContent}>
                             <div className="flex justify-between items-center mb-4">
                                 <h2 className="text-2xl font-bold text-[#385469]">
-                                    {isEditing ? 'Cập nhật người dùng' : 'Thêm người dùng'}
+                                    {isEditing ? 'Update User' : 'Add User'}
                                 </h2>
                                 <button onClick={() => setShowModal(false)}
                                         className="text-[#385469] hover:text-[#f39f5f]">
@@ -620,7 +617,7 @@ const Admin = () => {
                                             required
                                             placeholder=" "
                                         />
-                                        <label className={styles.label}>Tên đăng nhập</label>
+                                        <label className={styles.label}>Username</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -635,7 +632,7 @@ const Admin = () => {
                                             required
                                             placeholder=" "
                                         />
-                                        <label className={styles.label}>Mật khẩu</label>
+                                        <label className={styles.label}>Password</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>)}
@@ -664,7 +661,7 @@ const Admin = () => {
                                             required
                                             placeholder=" "
                                         />
-                                        <label className={styles.label}>Email phụ huynh</label>
+                                        <label className={styles.label}>Parent Email</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>)}
@@ -677,12 +674,12 @@ const Admin = () => {
                                             onChange={handleInputChange}
                                             required
                                         >
-                                            <option value="child">Học sinh</option>
-                                            <option value="parent">Phụ huynh</option>
-                                            <option value="teacher">Giáo viên</option>
-                                            <option value="admin">Quản trị viên</option>
+                                            <option value="child">Child</option>
+                                            <option value="parent">Parent</option>
+                                            <option value="teacher">Teacher</option>
+                                            <option value="admin">Admin</option>
                                         </select>
-                                        <label className={styles.label}>Vai trò</label>
+                                        <label className={styles.label}>Role</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -697,7 +694,7 @@ const Admin = () => {
                                                 onChange={handleInputChange}
                                                 placeholder=" "
                                             />
-                                            <label className={styles.label}>Số điện thoại</label>
+                                            <label className={styles.label}>Phone Number</label>
                                             <span className={styles.notch}></span>
                                         </div>
                                     </div>)}
@@ -711,7 +708,7 @@ const Admin = () => {
                                             onChange={handleInputChange}
                                             placeholder=" "
                                         />
-                                        <label className={styles.label}>Họ tên</label>
+                                        <label className={styles.label}>Full Name</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -725,7 +722,7 @@ const Admin = () => {
                                             onChange={handleInputChange}
                                             placeholder=" "
                                         />
-                                        <label className={styles.label}>Ngày sinh</label>
+                                        <label className={styles.label}>Date of Birth</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -738,7 +735,7 @@ const Admin = () => {
                                             checked={currentUser.isActive}
                                             onChange={handleInputChange}
                                         />
-                                        <span className="text-[#385469]">Hoạt động</span>
+                                        <span className="text-[#385469]">Active</span>
                                     </label>
                                 </div>
                                 <div className={styles.formGroup}>
@@ -750,7 +747,7 @@ const Admin = () => {
                                             checked={currentUser.verified}
                                             onChange={handleInputChange}
                                         />
-                                        <span className="text-[#385469]">Đã xác minh</span>
+                                        <span className="text-[#385469]">Verified</span>
                                     </label>
                                 </div>
                                 <div className="flex justify-end mt-6">
@@ -759,13 +756,13 @@ const Admin = () => {
                                         onClick={() => setShowModal(false)}
                                         className="bg-[#385469] text-white px-4 py-2 rounded hover:bg-[#2a3f4e] transition mr-2"
                                     >
-                                        Đóng
+                                        Close
                                     </button>
                                     <button
                                         type="submit"
                                         className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition"
                                     >
-                                        {isEditing ? 'Cập nhật' : 'Thêm'}
+                                        {isEditing ? 'Update' : 'Add'}
                                     </button>
                                 </div>
                             </form>

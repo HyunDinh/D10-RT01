@@ -177,7 +177,7 @@ const Auth = () => {
             }
         } catch (err) {
             console.error('Login error:', err);
-            setMessage('Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.');
+            setMessage('An error occurred during login. Please try again.');
         }
     };
 

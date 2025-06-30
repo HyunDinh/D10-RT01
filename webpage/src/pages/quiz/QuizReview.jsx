@@ -17,7 +17,7 @@ const QuizReview = () => {
                 const profileResponse = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
                 setUserId(profileResponse.data.id);
             } catch (err) {
-                setError('Không thể lấy thông tin người dùng. Vui lòng đăng nhập.');
+                setError('Cannot get user information. Please log in.');
                 setLoading(false);
             }
         };
@@ -39,7 +39,7 @@ const QuizReview = () => {
             setResult(res.data);
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải kết quả bài làm');
+            setError('Cannot load quiz result');
             setLoading(false);
         }
     };
@@ -54,25 +54,25 @@ const QuizReview = () => {
         return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
     };
 
-    if (loading) return <div className={styles.quizDetailAlert}>Đang tải...</div>;
+    if (loading) return <div className={styles.quizDetailAlert}>Loading...</div>;
     if (error) return <div className={styles.quizDetailAlert}>{error}</div>;
     if (!result) return null;
 
     return (
         <div className={styles.quizDetailContainer}>
             <div className={styles.quizDetailHeader}>
-                <div className={styles.quizDetailTitle}>Xem lại bài làm</div>
+                <div className={styles.quizDetailTitle}>Review Submission</div>
             </div>
             <div className={styles.quizDetailBody}>
                 <div className={styles.quizDetailInfoRow}>
                     <div className={styles.quizDetailInfoCol}>
-                        <div className={styles.quizDetailInfoTitle}>Thông tin bài làm</div>
-                        <div className={styles.quizDetailInfoText}><strong>Tiêu đề:</strong> {result.quiz.title}</div>
-                        <div className={styles.quizDetailInfoText}><strong>Điểm số:</strong> {result.score}/{result.quiz.totalPoints}</div>
-                        <div className={styles.quizDetailInfoText}><strong>Thời gian nộp:</strong> {new Date(result.submittedAt).toLocaleString()}</div>
+                        <div className={styles.quizDetailInfoTitle}>Submission Info</div>
+                        <div className={styles.quizDetailInfoText}><strong>Title:</strong> {result.quiz.title}</div>
+                        <div className={styles.quizDetailInfoText}><strong>Score:</strong> {result.score}/{result.quiz.totalPoints}</div>
+                        <div className={styles.quizDetailInfoText}><strong>Submitted at:</strong> {new Date(result.submittedAt).toLocaleString()}</div>
                     </div>
                     <div className={styles.quizDetailInfoCol}>
-                        <div className={styles.quizDetailInfoTitle}>Tỷ lệ hoàn thành</div>
+                        <div className={styles.quizDetailInfoTitle}>Completion Rate</div>
                         <div style={{marginTop: 12}}>
                             <div style={{background: '#e3e9f7', borderRadius: 8, height: 30, width: '100%', overflow: 'hidden'}}>
                                 <div style={{
@@ -95,15 +95,15 @@ const QuizReview = () => {
                     </div>
                 </div>
 
-                <div className={styles.quizDetailQuestionListTitle}>Chi tiết bài làm</div>
+                <div className={styles.quizDetailQuestionListTitle}>Submission Details</div>
                 {result.answers.map((answer, index) => (
                     <div key={answer.answerId} className={styles.quizDetailQuestionCard}>
                         <div className={styles.quizDetailQuestionTitle}>
-                            Câu {index + 1}: {answer.question.questionText}
+                            Question {index + 1}: {answer.question.questionText}
                         </div>
                         <img
                             src={getQuizImageUrl(answer.question.questionImageUrl)}
-                            alt="Ảnh minh họa"
+                            alt="Illustration image"
                             className={styles.quizDetailQuestionImage}
                             onError={e => (e.target.src = '/images/default-quiz.jpg')}
                             style={{ display: answer.question.questionImageUrl ? 'block' : 'none' }}
@@ -125,15 +125,15 @@ const QuizReview = () => {
                         </div>
                         <div style={{marginTop: 8}}>
                             <span className={answer.isCorrect ? styles.quizDetailBadge : styles.quizDetailBadge + ' ' + styles.secondary}>
-                                {answer.isCorrect ? 'Đúng' : 'Sai'}
+                                {answer.isCorrect ? 'Correct' : 'Incorrect'}
                             </span>
                             <span className={styles.quizDetailInfoText} style={{marginLeft: 12}}>
-                                Điểm: {answer.isCorrect ? answer.question.points : 0}/{answer.question.points}
+                                Score: {answer.isCorrect ? answer.question.points : 0}/{answer.question.points}
                             </span>
                         </div>
                         {!answer.isCorrect && (
                             <div style={{marginTop: 8, color: '#e53e3e', fontSize: '0.98rem'}}>
-                                <small>Đáp án đúng: {answer.question.correctOptionId}</small>
+                                <small>Correct answer: {answer.question.correctOptionId}</small>
                             </div>
                         )}
                     </div>
@@ -144,7 +144,7 @@ const QuizReview = () => {
                         className={styles.quizDetailBtn}
                         onClick={() => navigate(`/hocho/quizzes/${id}/do`)}
                     >
-                        Làm lại bài
+                        Retake Quiz
                     </button>
                 </div>
             </div>

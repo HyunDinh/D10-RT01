@@ -17,7 +17,7 @@ export default function CourseLearningPage() {
 	const [openLesson, setOpenLesson] = useState(null); // lessonId
 	const [lessonContents, setLessonContents] = useState({}); // lessonId -> [contents]
 	const [selectedContent, setSelectedContent] = useState(null); // content object
-	const [currentLesson, setCurrentLesson] = useState(null); // lesson object hiện tại
+	const [currentLesson, setCurrentLesson] = useState(null); // current lesson object
 	const [pdfPage, setPdfPage] = useState(1);
 	const [numPages, setNumPages] = useState(null);
 	const [lastLoadedContentId, setLastLoadedContentId] = useState(null);
@@ -37,7 +37,7 @@ export default function CourseLearningPage() {
 	const [pdfLoading, setPdfLoading] = useState(false);
 	const [pdfError, setPdfError] = useState(null);
 	const [pdfKey, setPdfKey] = useState(0); // Key to force re-render
-	const [completingLesson, setCompletingLesson] = useState(false); // Loading state cho nút hoàn thành
+	const [completingLesson, setCompletingLesson] = useState(false); // Loading state for complete button
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -175,7 +175,7 @@ export default function CourseLearningPage() {
 
 	const handleCompleteLesson = async () => {
 		if (!currentLesson || !childId) {
-			alert('Không thể hoàn thành bài học. Vui lòng thử lại.');
+			alert('Cannot complete the lesson. Please try again.');
 			return;
 		}
 
@@ -184,10 +184,10 @@ export default function CourseLearningPage() {
 			await axios.post(`/api/parent/learning-progress/child/${childId}/lesson/${currentLesson.lessonId}/complete`, {}, {
 				withCredentials: true
 			});
-			alert('Chúc mừng! Bạn đã hoàn thành bài học này.');
+			alert('Congratulations! You have completed this lesson.');
 		} catch (error) {
 			console.error('Error completing lesson:', error);
-			alert('Có lỗi xảy ra khi hoàn thành bài học. Vui lòng thử lại.');
+			alert('An error occurred while completing the lesson. Please try again.');
 		} finally {
 			setCompletingLesson(false);
 		}
@@ -403,10 +403,10 @@ export default function CourseLearningPage() {
 												}
 											}}
 										>
-											{completingLesson ? 'Đang xử lý...' : '✅ Hoàn thành bài học'}
+											{completingLesson ? 'Processing...' : '✅ Complete Lesson'}
 										</button>
 										<p style={{ marginTop: '8px', fontSize: '0.9rem', color: '#666' }}>
-											Nhấn nút này để đánh dấu bạn đã hoàn thành bài học "{currentLesson.title}"
+											Click this button to mark that you have completed the lesson "{currentLesson.title}"
 										</p>
 									</div>
 								)}

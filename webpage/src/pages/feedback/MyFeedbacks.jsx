@@ -136,7 +136,7 @@ const MyFeedbacks = () => {
                 <main className={styles.main}>
                     <div className={styles.loadingContainer}>
                         <div className={styles.spinner}></div>
-                        <p>Đang tải danh sách phản hồi...</p>
+                        <p>Loading feedback list...</p>
                     </div>
                 </main>
                 <Footer />

@@ -213,7 +213,7 @@ const FeedbackForm = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="content" className={styles.label}>
-                                Nội dung <span className={styles.required}>*</span>
+                                Content <span className={styles.required}>*</span>
                             </label>
                             <textarea
                                 id="content"
@@ -227,7 +227,7 @@ const FeedbackForm = () => {
                                 maxLength={2000}
                             />
                             <div className={styles.charCount}>
-                                {formData.content.length}/2000 ký tự
+                                {formData.content.length}/2000 characters
                             </div>
                         </div>
 

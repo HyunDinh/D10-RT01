@@ -23,7 +23,7 @@ const ParentLearningMonitor = () => {
             setChildren(response.data);
             setError(null);
         } catch (err) {
-            setError('Không thể tải danh sách con');
+            setError('Cannot load children list');
             console.error('Error fetching children:', err);
         } finally {
             setLoading(false);
@@ -43,7 +43,7 @@ const ParentLearningMonitor = () => {
         return (
             <div className={styles.loadingContainer}>
                 <div className={styles.spinner}></div>
-                <p>Đang tải...</p>
+                <p>Loading...</p>
             </div>
         );
     }
@@ -51,10 +51,10 @@ const ParentLearningMonitor = () => {
     if (error) {
         return (
             <div className={styles.errorContainer}>
-                <h2>Lỗi</h2>
+                <h2>Error</h2>
                 <p>{error}</p>
                 <button onClick={fetchChildren} className={styles.retryButton}>
-                    Thử lại
+                    Retry
                 </button>
             </div>
         );
@@ -63,13 +63,13 @@ const ParentLearningMonitor = () => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Theo dõi tiến độ học tập của con</h1>
-                <p>Chọn con để xem tiến độ học tập chi tiết</p>
+                <h1>Monitor your child's learning progress</h1>
+                <p>Select a child to view detailed learning progress</p>
             </div>
 
             <div className={styles.content}>
                 <div className={styles.section}>
-                    <h2>Danh sách con</h2>
+                    <h2>Children List</h2>
                     {children.length > 0 ? (
                         <div className={styles.childrenGrid}>
                             {children.map((child) => (
@@ -85,8 +85,8 @@ const ParentLearningMonitor = () => {
                                         <h3>{child.fullName}</h3>
                                         <p>{child.email}</p>
                                         <div className={styles.childStats}>
-                                            <span>{child.age ? `${child.age} tuổi` : ''}</span>
-                                            <span>{child.grade ? `${child.grade} lớp` : ''}</span>
+                                            <span>{child.age ? `${child.age} years old` : ''}</span>
+                                            <span>{child.grade ? `Grade ${child.grade}` : ''}</span>
                                         </div>
                                     </div>
                                     <div className={styles.childActions}>
@@ -94,7 +94,7 @@ const ParentLearningMonitor = () => {
                                             to={`/hocho/parent/learning-progress/${child.id}`}
                                             className={styles.progressButton}
                                         >
-                                            Xem tiến độ học tập
+                                            View learning progress
                                         </Link>
                                     </div>
                                 </div>
@@ -102,9 +102,9 @@ const ParentLearningMonitor = () => {
                         </div>
                     ) : (
                         <div className={styles.noChildren}>
-                            <p>Bạn chưa có con nào được đăng ký.</p>
+                            <p>You have not registered any children yet.</p>
                             <Link to="/hocho/register-child" className={styles.addChildButton}>
-                                Đăng ký con
+                                Register child
                             </Link>
                         </div>
                     )}

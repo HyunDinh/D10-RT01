@@ -166,7 +166,7 @@ export default function VideoApprovalPage() {
                         Confirmation to reject the selected video.
                     </div>
                     <p className={styles.videoApprovalModalText}>
-                        Bạn có chắc chắn muốn từ chối video này không?
+                        Are you sure you want to reject this video?
                     </p>
                 </Modal>
             </div>

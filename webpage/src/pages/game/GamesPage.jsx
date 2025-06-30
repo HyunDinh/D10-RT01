@@ -122,7 +122,7 @@ function GamesPage() {
             </section>
 
             <div className={styles.gamesContainer}>
-                <h2 className={styles.gamesTitle}>🎮 Danh sách trò chơi cho học sinh</h2>
+                <h2 className={styles.gamesTitle}>🎮 List of games for students</h2>
                 <div className={styles.gamesGrid}>
                     {games.map(game => (
                         <div key={game.gameId} className={styles.gameCard}>
@@ -134,13 +134,13 @@ function GamesPage() {
                                 />
                                 <h3 className={styles.gameTitle}>{game.title}</h3>
                             </div>
-                            <p className={styles.gameAgeGroup}><strong>Độ tuổi:</strong> {game.ageGroup}</p>
+                            <p className={styles.gameAgeGroup}><strong>Age group:</strong> {game.ageGroup}</p>
                             <p className={styles.gameDescription}>{game.description}</p>
                             <button
                                 onClick={() => handlePlay(game)}
                                 className={styles.playButton}
                             >
-                                ▶️ Chơi ngay
+                                ▶️ Play now
                             </button>
                         </div>
                     ))}

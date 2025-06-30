@@ -52,13 +52,13 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
             setFilteredUsers(response.data);
         } catch (error) {
             console.error('Error fetching users:', error);
-            setError('Không thể tải danh sách người dùng');
+            setError('Cannot load user list');
         }
     };
 
     const createChatSession = async () => {
         if (!selectedUserId) {
-            setError('Vui lòng chọn người dùng');
+            setError('Please select a user');
             return;
         }
 
@@ -80,7 +80,7 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
             if (error.response?.data) {
                 setError(error.response.data);
             } else {
-                setError('Không thể tạo cuộc trò chuyện. Có thể đã tồn tại cuộc trò chuyện với người này.');
+                setError('Cannot create chat session. A session with this user may already exist.');
             }
         } finally {
             setLoading(false);
@@ -105,7 +105,7 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
         <div className={styles.modalOverlay}>
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
-                    <h3>Tạo cuộc trò chuyện mới</h3>
+                    <h3>Create new chat session</h3>
                     <button className={styles.closeButton} onClick={onClose}>
                         ×
                     </button>
@@ -115,22 +115,22 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
                     {error && <div className={styles.errorMessage}>{error}</div>}
                     
                     <div className={styles.formGroup}>
-                        <label>Tìm kiếm người dùng:</label>
+                        <label>Search user:</label>
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={handleSearchChange}
-                            placeholder="Nhập tên, username hoặc email..."
+                            placeholder="Enter name, username or email..."
                             className={styles.searchInput}
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Chọn người dùng:</label>
+                        <label>Select user:</label>
                         <div className={styles.userList}>
                             {filteredUsers.length === 0 ? (
                                 <div className={styles.noUsers}>
-                                    {searchTerm ? 'Không tìm thấy người dùng nào' : 'Không có người dùng nào'}
+                                    {searchTerm ? 'No users found' : 'No users available'}
                                 </div>
                             ) : (
                                 filteredUsers.map((user) => (
@@ -170,14 +170,14 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
                         onClick={onClose}
                         disabled={loading}
                     >
-                        Hủy
+                        Cancel
                     </button>
                     <button 
                         className={styles.createButton} 
                         onClick={createChatSession}
                         disabled={loading || !selectedUserId}
                     >
-                        {loading ? 'Đang tạo...' : 'Tạo cuộc trò chuyện'}
+                        {loading ? 'Creating...' : 'Create chat session'}
                     </button>
                 </div>
             </div>

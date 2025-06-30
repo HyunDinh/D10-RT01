@@ -12,7 +12,7 @@ const CoursesList = () => {
     const [user, setUser] = useState(null);
     const [childId, setChildId] = useState(null);
     const [children, setChildren] = useState([]);
-    const [loadingStates, setLoadingStates] = useState({}); // State để theo dõi loading cho từng khóa học
+    const [loadingStates, setLoadingStates] = useState({}); // State to track loading for each course
     const [error, setError] = useState(null);
     const coursesPerPage = 12;
     const navigate = useNavigate();
@@ -59,7 +59,7 @@ const CoursesList = () => {
                 await fetchCourses();
             } catch (err) {
                 console.error('Failed to initialize data:', err);
-                setError('Không thể tải dữ liệu. Vui lòng đăng nhập lại.');
+                setError('Cannot load data. Please log in again.');
                 if (err.response?.status === 401) {
                     navigate('/hocho/login?redirect=course-list');
                 }
@@ -82,7 +82,7 @@ const CoursesList = () => {
             setCourses(response.data);
         } catch (error) {
             console.error('Failed to fetch courses:', error);
-            setError('Không thể tải danh sách khóa học.');
+            setError('Cannot load course list.');
         }
     };
 
@@ -93,7 +93,7 @@ const CoursesList = () => {
             return;
         }
         if (!user) {
-            alert('Vui lòng đăng nhập để thêm vào giỏ hàng!');
+            alert('Please log in to add to cart!');
             navigate('/hocho/login?redirect=course-list');
             return;
         }
@@ -104,11 +104,11 @@ const CoursesList = () => {
                     {},
                     { withCredentials: true }
                 );
-                alert('Đã thêm khóa học vào giỏ hàng!');
+                alert('Course added to cart!');
                 navigate('/hocho/child/cart');
             } else if (user.role === "parent" ) {
                 if (!childId) {
-                    alert('Vui lòng chọn một đứa trẻ để thêm khóa học!');
+                    alert('Please select a child to add the course!');
                     setLoadingStates((prev) => ({ ...prev, [courseId]: false }));
                     return;
                 }
@@ -117,11 +117,11 @@ const CoursesList = () => {
                     {},
                     { withCredentials: true }
                 );
-                alert('Đã thêm khóa học vào giỏ hàng!');
+                alert('Course added to cart!');
                 navigate('/hocho/parent/cart');
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';
+            const errorMessage = error.response?.data?.message || 'Cannot add course to cart!';
             alert(errorMessage);
             console.error('Failed to add to cart:', error, error.response);
         }
@@ -266,14 +266,14 @@ const CoursesList = () => {
                     </div>
                     {user && user.role && user.role.toLowerCase() === 'parent' && children.length > 0 && (
                         <div className={styles.filterGroup}>
-                            <label>Chọn trẻ em</label>
+                            <label>Select child</label>
                             <div className={styles.filterWrapper}>
                                 <select
                                     value={childId || ''}
                                     onChange={handleChildChange}
                                     className={styles.filterSelect}
                                 >
-                                    <option value="">Chọn trẻ em</option>
+                                    <option value="">Select child</option>
                                     {children.map((child) => (
                                         <option key={child.id} value={child.id}>
                                             {child.fullName || child.username}
@@ -311,7 +311,7 @@ const CoursesList = () => {
                                         <b>Description</b> {course.description.substring(0, 100)}...
                                     </p>
                                     <p className={styles.cardText}>
-                                        <b>Giá:</b> {course.price.toLocaleString('vi-VN')} VND
+                                        <b>Price:</b> {course.price.toLocaleString('vi-VN')} VND
                                     </p>
                                     <p className={styles.cardText}>
                                         <b>Subject:</b> {course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
@@ -328,7 +328,7 @@ const CoursesList = () => {
                                             onClick={() => { handleAddToCart(course.courseId); }}
                                             style={{ marginLeft: '10px' }}
                                         >
-                                            <FontAwesomeIcon icon={faCartPlus} /> Thêm vào giỏ
+                                            <FontAwesomeIcon icon={faCartPlus} /> Add to cart
                                         </button>
                                     </div>
                                 </div>
@@ -350,20 +350,20 @@ const CoursesList = () => {
                     </nav>
                 </div>
             </div>
-            {/* Modal chọn trẻ em cho phụ huynh */}
+            {/* Modal select child for parent */}
             {showChildModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
                     <div style={{ background: '#fff', padding: 32, borderRadius: 8, minWidth: 320 }}>
-                        <h4>Chọn trẻ em để thêm khóa học</h4>
+                        <h4>Select child to add course</h4>
                         <select
                             id="child-select"
                             value={childId || ''}
                             onChange={handleChildChange}
                             style={{ width: '100%', padding: 8, margin: '16px 0' }}
                         >
-                            <option value="">Chọn trẻ em</option>
+                            <option value="">Select child</option>
                             {children.map((child) => (
                                 <option key={child.id} value={child.id}>
                                     {child.fullName || child.username}
@@ -383,31 +383,31 @@ const CoursesList = () => {
                                             {},
                                             { withCredentials: true }
                                         ).then(() => {
-                                            alert('Đã thêm khóa học vào giỏ hàng!');
+                                            alert('Course added to cart!');
                                             navigate('/hocho/parent/cart');
                                         }).catch(error => {
-                                            let errorMessage = error.response?.data?.message || 'Không thể thêm khóa học vào giỏ hàng!';
-                                            if (errorMessage.includes('đã được đăng ký')) {
-                                                errorMessage = 'Trẻ đã tham gia khóa học này!';
+                                            let errorMessage = error.response?.data?.message || 'Cannot add course to cart!';
+                                            if (errorMessage.includes('has been registered')) {
+                                                errorMessage = 'Child has already joined this course!';
                                             }
                                             alert(errorMessage);
                                         }).finally(() => {
                                             setPendingCourseId(null);
                                         });
                                     } else {
-                                        alert('Vui lòng chọn trẻ em!');
+                                        alert('Please select a child!');
                                         setPendingCourseId(null);
                                     }
                                 }}
                                 disabled={!childId}
                             >
-                                Xác nhận
+                                Confirm
                             </button>
                             <button
                                 className={styles.detailsBtn}
                                 onClick={() => { setShowChildModal(false); setPendingCourseId(null); }}
                             >
-                                Hủy
+                                Cancel
                             </button>
                         </div>
                     </div>

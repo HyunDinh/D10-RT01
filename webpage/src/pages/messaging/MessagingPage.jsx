@@ -203,7 +203,7 @@ const MessagingPage = () => {
         return (
             <div>
                 <Header />
-                <div className={styles.loading}>Đang tải...</div>
+                <div className={styles.loading}>Loading...</div>
                 <Footer />
             </div>
         );
@@ -215,7 +215,7 @@ const MessagingPage = () => {
             <div className={styles.messagingContainer}>
                 <div className={styles.sidebar}>
                     <div className={styles.sidebarHeader}>
-                        <h2>Tin nhắn</h2>
+                        <h2>Messages</h2>
                         <button 
                             className={styles.newChatButton}
                             onClick={() => setShowCreateModal(true)}
@@ -226,7 +226,7 @@ const MessagingPage = () => {
                     <div className={styles.chatList}>
                         {sortedSessions.length === 0 ? (
                             <div className={styles.noChats}>
-                                Chưa có cuộc trò chuyện nào
+                                No conversations yet
                             </div>
                         ) : (
                             sortedSessions.map((session) => {
@@ -258,9 +258,9 @@ const MessagingPage = () => {
                                                     ? session.lastMessageContent
                                                     : session.lastMessageSenderId && session.lastMessageFileType
                                                         ? (session.lastMessageFileType.startsWith('image/')
-                                                            ? 'Đã gửi một hình ảnh'
-                                                            : 'Đã gửi một tệp tin')
-                                                        : 'Chưa có tin nhắn'
+                                                            ? 'Sent an image'
+                                                            : 'Sent a file')
+                                                        : 'No messages yet'
                                                 }
                                             </div>
                                         </div>
@@ -284,7 +284,7 @@ const MessagingPage = () => {
                             <div className={styles.messagesContainer}>
                                 {messages.length === 0 ? (
                                     <div className={styles.noMessages}>
-                                        Chưa có tin nhắn nào. Hãy bắt đầu cuộc trò chuyện!
+                                        No messages yet. Start the conversation!
                                     </div>
                                 ) : (
                                     messages.map((message) => (
@@ -337,7 +337,7 @@ const MessagingPage = () => {
 
                             <form className={styles.messageForm} onSubmit={sendMessage}>
                                 <div className={styles.fileInputWrapper}>
-                                    <label htmlFor="file-upload" className={styles.fileInputLabel} title="Đính kèm file hoặc hình ảnh">
+                                    <label htmlFor="file-upload" className={styles.fileInputLabel} title="Attach file or image">
                                         <FontAwesomeIcon icon={faPaperclip} />
                                     </label>
                                     <input
@@ -354,17 +354,17 @@ const MessagingPage = () => {
                                     type="text"
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
-                                    placeholder="Nhập tin nhắn..."
+                                    placeholder="Type a message..."
                                     className={styles.messageInput}
                                 />
                                 <button type="submit" className={styles.sendButton}>
-                                    Gửi
+                                    Send
                                 </button>
                             </form>
                         </>
                     ) : (
                         <div className={styles.noSelection}>
-                            Chọn một cuộc trò chuyện để bắt đầu nhắn tin
+                            Select a conversation to start messaging
                         </div>
                     )}
                 </div>
