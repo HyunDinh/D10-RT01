@@ -3,6 +3,7 @@ package d10_rt01.hocho.service.payment;
 
 import d10_rt01.hocho.dto.transaction.TransactionDto;
 import d10_rt01.hocho.model.Payment;
+import d10_rt01.hocho.model.enums.PaymentStatus;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ public interface PaymentService {
     Payment handlePaymentReturn(Long orderCode);
     
     List<TransactionDto> getTransactionsByUserId(Long userId);
+    int getTotalRevenue();
 } 

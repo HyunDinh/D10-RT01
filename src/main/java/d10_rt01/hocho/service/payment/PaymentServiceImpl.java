@@ -363,6 +363,17 @@ public class PaymentServiceImpl implements PaymentService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public int getTotalRevenue() {
+        int totalRevenue = 0;
+        List<Payment > payments = paymentRepository.findByStatus(PaymentStatus.COMPLETED);
+        for (Payment payment : payments) {
+            totalRevenue += payment.getAmount();
+        }
+        return totalRevenue;
+    }
+
+
     private TransactionDto convertToDto(Transaction transaction) {
         List<OrderItemDto> itemDtos = new ArrayList<>();
         if (transaction.getOrder() != null && transaction.getOrder().getOrderItems() != null) {
