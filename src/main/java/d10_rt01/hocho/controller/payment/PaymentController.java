@@ -132,13 +132,6 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/revenue/total") // tong doanh thu
-    public ResponseEntity<?> getRevenueTotal() {
-        try {
-            return ResponseEntity.ok(paymentService.getTotalRevenue());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Lỗi khi tìm những giao dịch đã thanh toán: " + e.getMessage());
-        }
-    }
+
+
 }

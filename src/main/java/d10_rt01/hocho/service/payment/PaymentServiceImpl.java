@@ -1,6 +1,7 @@
 package d10_rt01.hocho.service.payment;
 
 
+import d10_rt01.hocho.dto.TotalRevenueDto;
 import d10_rt01.hocho.dto.transaction.TransactionDto;
 import d10_rt01.hocho.model.*;
 import d10_rt01.hocho.model.enums.CartStatus;
@@ -363,16 +364,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public int getTotalRevenue() {
-        int totalRevenue = 0;
-        List<Payment > payments = paymentRepository.findByStatus(PaymentStatus.COMPLETED);
-        for (Payment payment : payments) {
-            totalRevenue += payment.getAmount();
-        }
-        return totalRevenue;
+    @Override // LTD
+    public TotalRevenueDto getTotalRevenueForTeacher(Long teacherId) {
+        double totalRevenue = orderItemRepository.calculateRevenueForTeacher(teacherId);
+        return new TotalRevenueDto(totalRevenue);
     }
-
 
     private TransactionDto convertToDto(Transaction transaction) {
         List<OrderItemDto> itemDtos = new ArrayList<>();

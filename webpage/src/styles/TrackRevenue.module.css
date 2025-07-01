@@ -1,0 +1,166 @@
+/* Container for the entire page */
+.container {
+    padding: 20px;
+    background-color: #f7f7f9;
+    min-height: 100vh;
+}
+
+/* Top 3 statistic cards */
+.statCardContainerTop {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.statCard.revenue {
+    width: 100%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+}
+
+/* Chart container */
+.chartContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+/* Each chart box */
+.chartContainer .chart {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Stacked box container for student and course counts */
+.statCardContainerMiddle {
+    display: flex;
+    flex-direction: column;  /* Stack cards vertically */
+    justify-content: space-between;
+    gap: 20px;  /* Add space between the stacked cards */
+    margin-top: 40px;
+    width: 100%;
+    max-width: 800px;  /* Limit max width */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.statCard.students, .statCard.courses {
+    width: 100%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+}
+
+/* Style for values inside the cards */
+.statCard .value {
+    font-size: 40px;  /* Increase font size */
+    font-weight: bold;  /* Make the value bold */
+    text-align: center;
+}
+
+/* Green color for revenue */
+.statCard.revenue {
+    color: #34d399;
+}
+
+/* Blue color for students */
+.statCard.students {
+    color: #60a5fa;
+}
+
+/* Purple color for courses */
+.statCard.courses {
+    color: #a78bfa;
+}
+
+/* Table container */
+.tableContainer {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.tableContainer table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.tableContainer th, .tableContainer td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    word-wrap: break-word;  /* Ensure text doesn't overflow */
+}
+
+.tableContainer th {
+    background-color: #f9fafb;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Set specific column widths if necessary for consistent layout */
+.tableContainer th:nth-child(1), .tableContainer td:nth-child(1) {
+    width: 5%;
+    text-align: center;
+}
+
+.tableContainer th:nth-child(2), .tableContainer td:nth-child(2) {
+    width: 40%; /* Adjust the width of the course title */
+}
+
+.tableContainer th:nth-child(3), .tableContainer td:nth-child(3) {
+    width: 25%;
+    text-align: center;
+}
+
+.tableContainer th:nth-child(4), .tableContainer td:nth-child(4) {
+    width: 30%;
+    text-align: center;
+}
+
+/* Ensure table text is aligned properly */
+.tableContainer td {
+    text-align: center;  /* Align data in table cells to center */
+}
+
+/* Styling for even row highlighting (optional) */
+.tableContainer tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+
+/* Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+    .statCardContainerTop {
+        flex-direction: column; /* Stack cards vertically on small screens */
+        gap: 16px;
+    }
+
+    .statCardContainerMiddle {
+        flex-direction: column; /* Stack cards vertically on small screens */
+        gap: 16px;
+    }
+
+    .statCard {
+        width: 100%;
+    }
+
+    .chartContainer {
+        flex-direction: column; /* Stack charts vertically on small screens */
+        gap: 16px;
+    }
+}

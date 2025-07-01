@@ -76,6 +76,7 @@ import GameApproval from "./pages/game/GameApproval";
 
 
 import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
+import TrackRevenue from "./pages/course/TrackRevenue";
 
 // import TimeRestrictionAddPage from "./pages/parent/TimeRestrictionAddPage.jsx";
 
@@ -115,6 +116,7 @@ const App = () => {
                 <Route path="/hocho/teacher/quizzes/create" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizForm /></ProtectedRoute>}/>
                 <Route path="/hocho/teacher/quizzes/:id" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizDetailTeacher /></ProtectedRoute>}/>
                 <Route path="/hocho/teacher/quizzes/:id/edit" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizEdit /></ProtectedRoute>}/>
+                <Route path="/hocho/teacher/track-revenue" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TrackRevenue /></ProtectedRoute>}/>
 
                 // ************************************** PARENT ONLY ROUTES **************************************
 

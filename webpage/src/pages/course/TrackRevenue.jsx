@@ -1,57 +1,76 @@
-import React from 'react';
-import {
-    BarChart, Bar, XAxis, YAxis, Tooltip,
-    PieChart, Pie, Cell,
-} from 'recharts';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import styles from '../../styles/TrackRevenue.module.css';
 
-const ageChartData = [
-    { ageGroup: '4-6', students: 150 },
-    { ageGroup: '7-9', students: 300 },
-    { ageGroup: '10-12', students: 420 },
-    { ageGroup: '13-15', students: 290 },
-];
-
-const pieData = [
-    { name: 'Hôm nay', value: 124 },
-    { name: 'Trước đó', value: 1116 },
-];
+import { BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell } from 'recharts';
 
 const COLORS = ['#0088FE', '#FF8042'];
 
-const topCourses = [
-    { name: 'Toán lớp 5', students: 200, revenue: 4000 },
-    { name: 'Tiếng Anh lớp 3', students: 180, revenue: 3600 },
-    { name: 'Khoa học vui', students: 150, revenue: 3000 },
-    { name: 'Lập trình Scratch', students: 120, revenue: 2500 },
-    { name: 'Tư duy logic', students: 100, revenue: 2000 },
-];
+function TrackRevenue() {
+    const [totalRevenue, setTotalRevenue] = useState(0);
+    const [totalStudents, setTotalStudents] = useState(0);
+    const [totalCourses, setTotalCourses] = useState(0);
+    const [topCourses, setTopCourses] = useState([]);
+    const [totalStudentsToday, setTotalStudentsToday] = useState(0);
+    const [ageChartData, setAgeChartData] = useState([]); // Contains data for students by age group
 
-export default function Dashboard() {
+    // Fetch data on component load
+    useEffect(() => {
+        axios.get('/api/teacher/revenue/total', { withCredentials: true })
+            .then(response => setTotalRevenue(response.data.totalRevenue || 0))
+            .catch(error => console.error("Error fetching total revenue", error));
+
+        axios.get('/api/teacher/student/total', { withCredentials: true })
+            .then(response => setTotalStudents(response.data))
+            .catch(error => console.error("Error fetching total students", error));
+
+        axios.get('/api/teacher/courses/total', { withCredentials: true })
+            .then(response => setTotalCourses(response.data))
+            .catch(error => console.error("Error fetching total courses", error));
+
+        axios.get('/api/teacher/courses/top', { withCredentials: true })
+            .then(response => setTopCourses(response.data))
+            .catch(error => console.error("Error fetching top courses", error));
+
+        axios.get('/api/teacher/student/total/today', { withCredentials: true })
+            .then(response => setTotalStudentsToday(response.data.totalStudents))
+            .catch(error => console.error("Error fetching students today", error));
+
+        axios.get('/api/teacher/student/age-groups', { withCredentials: true })
+            .then(response => {
+                const data = [
+                    { ageGroup: '4-6', students: response.data['AGE_4_6'] || 0 },
+                    { ageGroup: '7-9', students: response.data['AGE_7_9'] || 0 },
+                    { ageGroup: '10-12', students: response.data['AGE_10_12'] || 0 },
+                    { ageGroup: '13-15', students: response.data['AGE_13_15'] || 0 },
+                ];
+                setAgeChartData(data); // Update data for the Bar Chart
+            })
+            .catch(error => console.error("Error fetching age group data", error));
+    }, []);
+
+    const pieData = [
+        { name: 'Today', value: totalStudentsToday },
+        { name: 'Before', value: totalStudents - totalStudentsToday },
+    ];
+
     return (
-        <div className="p-6 bg-gray-100 min-h-screen">
-            <h1 className="text-3xl font-bold mb-6">Thống kê tổng quan</h1>
+        <div className={styles.container}>
+            <h1 className="text-3xl font-bold mb-6">Overview Statistics</h1>
 
-            {/* Top 3 statistic cards */}
-            <div className="grid grid-cols-3 gap-6 mb-6">
-                <div className="bg-white p-4 shadow rounded">
-                    <p className="text-gray-500">Tổng doanh thu</p>
-                    <p className="text-2xl font-bold text-green-600">$18,600</p>
-                </div>
-                <div className="bg-white p-4 shadow rounded">
-                    <p className="text-gray-500">Tổng học sinh</p>
-                    <p className="text-2xl font-bold text-blue-600">1,240</p>
-                </div>
-                <div className="bg-white p-4 shadow rounded">
-                    <p className="text-gray-500">Tổng khóa học</p>
-                    <p className="text-2xl font-bold text-purple-600">36</p>
+            {/* Total Revenue Box */}
+            <div className={styles.statCardContainerTop}>
+                <div className={`${styles.statCard} ${styles.revenue}`}>
+                    <p className="text-gray-500">Total Revenue</p>
+                    <p className={`${styles.value} value`}>{totalRevenue} ₫</p>  {/* Bold & Large */}
                 </div>
             </div>
 
             {/* Charts */}
-            <div className="grid grid-cols-2 gap-6 mb-6">
+            <div className={styles.chartContainer}>
                 {/* Bar Chart: Students by Age Group */}
-                <div className="bg-white p-4 shadow rounded">
-                    <h2 className="text-xl mb-2 font-semibold">Số học sinh theo độ tuổi</h2>
+                <div className={styles.chart}>
+                    <h2>Students by Age Group</h2>
                     <BarChart width={500} height={300} data={ageChartData}>
                         <XAxis dataKey="ageGroup" />
                         <YAxis />
@@ -60,9 +79,21 @@ export default function Dashboard() {
                     </BarChart>
                 </div>
 
+                {/* Stacked statistic cards for students and courses */}
+                <div className={styles.statCardContainerMiddle}>
+                    <div className={`${styles.statCard} ${styles.students}`}>
+                        <p className="text-gray-500">Total Students</p>
+                        <p className={`${styles.value} value`}>{totalStudents}</p>  {/* Bold & Large */}
+                    </div>
+                    <div className={`${styles.statCard} ${styles.courses}`}>
+                        <p className="text-gray-500">Total Courses</p>
+                        <p className={`${styles.value} value`}>{totalCourses}</p>  {/* Bold & Large */}
+                    </div>
+                </div>
+
                 {/* Pie Chart: New vs Old Students */}
-                <div className="bg-white p-4 shadow rounded">
-                    <h2 className="text-xl mb-2 font-semibold">Tỷ lệ học sinh mới hôm nay</h2>
+                <div className={styles.chart}>
+                    <h2>New vs Old Students</h2>
                     <PieChart width={400} height={300}>
                         <Pie
                             data={pieData}
@@ -82,29 +113,41 @@ export default function Dashboard() {
             </div>
 
             {/* Top courses table */}
-            <div className="bg-white p-6 shadow rounded">
-                <h2 className="text-xl mb-4 font-semibold">Top khóa học được mua nhiều</h2>
-                <table className="w-full table-auto">
-                    <thead className="bg-gray-100 text-left">
+            <div className={styles.tableContainer}>
+                <h2 className="text-xl font-semibold mb-4">Top Purchased Courses</h2>
+                <table>
+                    <thead>
                     <tr>
                         <th className="p-2">#</th>
-                        <th className="p-2">Tên khóa học</th>
-                        <th className="p-2">Số học sinh</th>
-                        <th className="p-2">Doanh thu ($)</th>
+                        <th className="p-2">Course Name</th>
+                        <th className="p-2">Number of Students</th>
+                        <th className="p-2">Revenue</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {topCourses.map((course, index) => (
-                        <tr key={index} className="border-b">
-                            <td className="p-2">{index + 1}</td>
-                            <td className="p-2">{course.name}</td>
-                            <td className="p-2">{course.students}</td>
-                            <td className="p-2">{course.revenue}</td>
+                    {topCourses.length > 0 ? (
+                        topCourses.map((courseData, index) => {
+                            const { course, students, revenue } = courseData;
+                            return (
+                                <tr key={index}>
+                                    <td className="p-2">{index + 1}</td>
+                                    <td className="p-2">{course.title}</td>
+                                    <td className="p-2">{students}</td>
+                                    <td className="p-2">{revenue} ₫</td>
+                                </tr>
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="4" className="p-2 text-center">No Data Available</td>
                         </tr>
-                    ))}
+                    )}
                     </tbody>
                 </table>
             </div>
+
         </div>
     );
 }
+
+export default TrackRevenue;

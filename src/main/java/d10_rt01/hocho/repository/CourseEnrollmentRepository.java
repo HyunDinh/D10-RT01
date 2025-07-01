@@ -13,4 +13,8 @@ public interface CourseEnrollmentRepository extends JpaRepository<CourseEnrollme
     List<CourseEnrollment> findByParentId(Long parentId);
     boolean existsByChildIdAndCourseCourseId(Long childId, Long courseId);
 
+    int countByCourse_CourseId(Long courseId);
+
+    List<CourseEnrollment> findByCourse(Course course);
+
 }
