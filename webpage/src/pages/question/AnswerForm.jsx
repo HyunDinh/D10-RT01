@@ -187,7 +187,18 @@ const AnswerForm = () => {
                         <b>Subject:</b> {question.subject} &nbsp; <b>Grade:</b> {question.grade}
                     </p>
                     <p className={styles.cardText}>
-                        <b>Asker:</b> {question.user?.fullName || 'Anonymous'}
+                        <b>Asker:</b>
+                        <span className={styles.userInfoRow}>
+                          <img
+                            src={question.user?.avatarUrl && question.user.avatarUrl !== 'none'
+                                ? `http://localhost:8080/api/hocho/profile/${question.user.avatarUrl}`
+                                : '/images/default-avatar.png'}
+                            alt="Asker Avatar"
+                            className={styles.userAvatar}
+                            onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                          />
+                          <span className={styles.userName}>{question.user?.fullName || 'Anonymous'}</span>
+                        </span>
                     </p>
                     <p className={styles.cardText}>
                         <b>Time:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
@@ -235,7 +246,17 @@ const AnswerForm = () => {
                         return (
                             <div key={a.answerId} className={styles.answerItem}>
                                 <div className={styles.answerUser}>
-                                    <b>{a.user?.fullName || 'Anonymous'}:</b>
+                                    <span className={styles.userInfoRow}>
+                                      <img
+                                        src={a.user?.avatarUrl && a.user.avatarUrl !== 'none'
+                                            ? `http://localhost:8080/api/hocho/profile/${a.user.avatarUrl}`
+                                            : '/images/default-avatar.png'}
+                                        alt="Answer User Avatar"
+                                        className={styles.userAvatar}
+                                        onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                                      />
+                                      <span className={styles.userName}>{a.user?.fullName || 'Anonymous'}:</span>
+                                    </span>
                                 </div>
                                 {editingAnswerId === a.answerId ? (<>
                     <textarea

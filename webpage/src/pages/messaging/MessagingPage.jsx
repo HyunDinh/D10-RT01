@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import CreateChatModal from './CreateChatModal';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faPaperclip,faComment } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from 'react-router-dom';
 
 const MessagingPage = () => {
     const [chatSessions, setChatSessions] = useState([]);
@@ -17,6 +18,8 @@ const MessagingPage = () => {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+    const location = useLocation();
+    const [preselectedTeacher, setPreselectedTeacher] = useState(null);
 
     useEffect(() => {
         fetchCurrentUser();
@@ -48,6 +51,26 @@ const MessagingPage = () => {
             }
         }
     }, [selectedSession, messages]);
+
+    useEffect(() => {
+        // Nếu có state truyền vào từ trang khác (ví dụ: từ trang khóa học)
+        if (location.state?.teacherId && chatSessions.length > 0 && currentUser) {
+            // Tìm session chat với giáo viên này
+            const existingSession = chatSessions.find(
+                s => (s.user1.id === location.state.teacherId || s.user2.id === location.state.teacherId)
+            );
+            if (existingSession) {
+                setSelectedSession(existingSession);
+            } else {
+                setShowCreateModal(true);
+                setPreselectedTeacher({
+                    id: location.state.teacherId,
+                    fullName: location.state.teacherName,
+                    avatarUrl: location.state.teacherAvatarUrl
+                });
+            }
+        }
+    }, [location.state, chatSessions, currentUser]);
 
     const fetchCurrentUser = async () => {
         try {
@@ -379,6 +402,7 @@ const MessagingPage = () => {
                 onChatCreated={handleChatCreated}
                 chatSessions={chatSessions}
                 currentUser={currentUser}
+                preselectedTeacher={preselectedTeacher}
             />
             
             <Footer />

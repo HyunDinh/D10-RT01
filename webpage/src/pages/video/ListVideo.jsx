@@ -101,7 +101,14 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                         </div>
                     </div>
                     <div className={styles.bottomVideo}>
-                        <img src="/logo.png" alt="User Avatar" className={styles.userAvatar}/>
+                        <img 
+                            src={video.createdBy?.avatarUrl && video.createdBy.avatarUrl !== 'none'
+                                ? `http://localhost:8080/api/hocho/profile/${video.createdBy.avatarUrl}`
+                                : '/images/default-avatar.png'}
+                            alt="Teacher Avatar"
+                            className={styles.userAvatar}
+                            onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                        />
                         <div className={styles.bottomVideoTitle}>
                             <h3 className={styles.videoPageCardTitle}>{video.title}</h3>
                             <p className={styles.videoPageUploadedBy}>

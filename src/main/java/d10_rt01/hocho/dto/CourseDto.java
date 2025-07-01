@@ -22,4 +22,5 @@ public class CourseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Subject subject;
+    private String teacherAvatarUrl;
 } 

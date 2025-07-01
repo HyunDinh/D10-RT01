@@ -397,3 +397,26 @@
   cursor: pointer;
   z-index: 2;
 }
+
+.userAvatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1px;
+    border: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.userInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.userName {
+  font-weight: 600;
+  color: #2d6cdf;
+  font-size: 1rem;
+}
