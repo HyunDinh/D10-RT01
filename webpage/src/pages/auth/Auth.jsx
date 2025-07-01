@@ -81,19 +81,41 @@ const Auth = () => {
     };
 
     const handleRegisterFileChange = (e) => {
-        const {name, files} = e.target;
-        if (name === 'teacherImage' && files.length > 0) {
-            setFormData((prev) => ({...prev, [name]: files[0]}));
-            setFileName(files[0].name); // Update displayed file name
+        const file = e.target.files[0];
+        const allowedTypes = ['image/png', 'image/jpeg'];
+        const maxSize = 5 * 1024 * 1024; // 5MB
+
+        if (file) {
+            if (!allowedTypes.includes(file.type)) {
+                setError('Vui lòng chọn tệp PNG hoặc JPG.');
+                setFileName('');
+                setRegisterData((prev) => ({ ...prev, teacherImage: null }));
+                return;
+            }
+            if (file.size > maxSize) {
+                setError('Kích thước tệp không được vượt quá 5MB.');
+                setFileName('');
+                setRegisterData((prev) => ({ ...prev, teacherImage: null }));
+                return;
+            }
+            setRegisterData((prev) => ({ ...prev, teacherImage: file }));
+            setFileName(file.name);
         } else {
-            setFormData((prev) => ({...prev, [name]: null}));
-            setFileName(''); // Reset if no file is selected
+            setRegisterData((prev) => ({ ...prev, teacherImage: null }));
+            setFileName('');
         }
     };
 
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
+        setError('');
+
+        // Kiểm tra client-side
+        if (registerData.role === 'teacher' && !registerData.teacherImage) {
+            setError('Ảnh xác thực giáo viên là bắt buộc.');
+            return;
+        }
 
         try {
             const formData = new FormData();
@@ -105,24 +127,22 @@ const Auth = () => {
                 parentEmail: registerData.parentEmail,
                 role: registerData.role,
                 phoneNumber: registerData.phoneNumber
-            })], {type: 'application/json'}));
+            })], { type: 'application/json' }));
             if (registerData.role === 'teacher' && registerData.teacherImage) {
                 formData.append('teacherImage', registerData.teacherImage);
             }
 
             const response = await axios.post('http://localhost:8080/api/auth/register', formData, {
-                headers: {'Content-Type': 'multipart/form-data'},
+                headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
             });
 
-            setMessage(response.data);
-            if (registerData.role === 'parent') {
-                setMessage('Registration successful! Please check your email to confirm your email.');
-            } else if (registerData.role === 'teacher') {
-                setMessage('Registration successful! Please wait for admin approval.');
-            }
+            setMessage(response.data.message || 'Đăng ký thành công!');
+            setError('');
         } catch (error) {
-            setMessage(error.response?.data || 'Registration failed. Please try again.');
+            const errorMessage = error.response?.data?.error || 'Đăng ký thất bại. Vui lòng thử lại.';
+            setError(errorMessage);
+            setMessage('');
         }
     };
 
@@ -210,12 +230,8 @@ const Auth = () => {
                         <div className={styles.formHeader}>
                             <h4>Adventure starts here 🚀</h4>
                             <p>Make your app management easy and fun!</p>
-                            {message && (
-                                <div
-                                    className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
-                                    {message}
-                                </div>
-                            )}
+                            {message && <div className={`${styles.alert} ${styles.alertSuccess}`}>{message}</div>}
+                            {error && <div className={`${styles.alert} ${styles.alertDanger}`}>{error}</div>}
                         </div>
                         <form onSubmit={handleRegisterSubmit} noValidate autoComplete="off" className={styles.form}>
                             <div className={styles.formGroup}>
@@ -347,14 +363,13 @@ const Auth = () => {
                                             name="teacherImage"
                                             accept="image/png,image/jpeg"
                                             onChange={handleRegisterFileChange}
-                                            required
+                                            required={registerData.role === 'teacher'}
                                         />
-                                        <label htmlFor="teacherImage"
-                                               title={'Teacher Verification Image (PNG/JPG)'}>
-                                            {'Teacher Verification Image (PNG/JPG)'}
+                                        <label htmlFor="teacherImage">
+                                            {fileName || 'Teacher Verification Image (PNG/JPG)'}
                                         </label>
                                         <span className={styles.notch}></span>
-                                        <FontAwesomeIcon icon={faUpload} className={styles.customArrow}/>
+                                        <FontAwesomeIcon icon={faUpload} className={styles.customArrow} />
                                     </div>
                                 </div>
                             )}
