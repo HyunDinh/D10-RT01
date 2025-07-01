@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface LessonContentRepository extends JpaRepository<LessonContent, Long> {
     List<LessonContent> findByLessonLessonId(Long lessonId);
+    void deleteByLessonLessonId(Long lessonId);
 }
