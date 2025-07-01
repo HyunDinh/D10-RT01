@@ -218,7 +218,10 @@ const MessagingPage = () => {
                         <h2>Messages</h2>
                         <button
                             className={styles.newChatButton}
-                            onClick={() => setShowCreateModal(true)}
+                            onClick={() => {
+                                console.log("Clicked new chat button");
+                                setShowCreateModal(true);
+                            }}
                         >
                             <FontAwesomeIcon icon={faComment} />
                         </button>

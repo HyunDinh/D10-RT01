@@ -102,7 +102,7 @@ const CreateChatModal = ({ isOpen, onClose, onChatCreated, chatSessions, current
     if (!isOpen) return null;
 
     return (
-        <div className={styles.modalOverlay}>
+        <div className={`${styles.modalOverlay} ${styles.show}`}>
             <div className={styles.modalContent}>
                 <div className={styles.modalHeader}>
                     <h3>Create new chat session</h3>
