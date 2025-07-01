@@ -17,15 +17,15 @@ function Home() {
             })
             .catch((error) => {
                 console.error('Error fetching home data:', error);
-                setData({}); // Đặt dữ liệu mặc định nếu API thất bại
+                setData({}); // Set default data if API fails
             });
     }, []);
 
-    return (<> {/* Bọc trong div để đảm bảo min-height */}
+    return (<> {/* Wrap in div to ensure min-height */}
             <Header/>
             <BannerHeader/>
             <div style={{background: '#f0f0f0'}}>
-                Nội dung dài để test cuộn
+                Long content for scroll testing
             </div>
             <Footer/>
             <BackToTop/>

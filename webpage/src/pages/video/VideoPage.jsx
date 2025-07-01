@@ -28,7 +28,7 @@ export default function VideoPage() {
                 setLoading(false);
             } catch (err) {
                 console.error('Error fetching videos:', err);
-                setError('Không thể tải video. Vui lòng thử lại sau.');
+                setError('Cannot load video. Please try again later.');
                 setLoading(false);
             }
         };
@@ -50,7 +50,7 @@ export default function VideoPage() {
     if (loading) {
         return (
             <div className={styles.videoPageContainer}>
-                <div className={styles.videoPageLoading}>Đang tải...</div>
+                <div className={styles.videoPageLoading}>Loading...</div>
             </div>
         );
     }
@@ -81,13 +81,13 @@ export default function VideoPage() {
                             value={ageGroupFilter}
                             className={styles.videoPageFilter}
                             onChange={(e) => setAgeGroupFilter(e.target.value)}
-                            aria-label="Lọc video theo nhóm tuổi"
+                            aria-label="Filter videos by age group"
                         >
-                            <option value="ALL">Tất cả</option>
-                            <option value="AGE_4_6">4-6 tuổi</option>
-                            <option value="AGE_7_9">7-9 tuổi</option>
-                            <option value="AGE_10_12">10-12 tuổi</option>
-                            <option value="AGE_13_15">13-15 tuổi</option>
+                            <option value="ALL">All</option>
+                            <option value="AGE_4_6">4-6 years old</option>
+                            <option value="AGE_7_9">7-9 years old</option>
+                            <option value="AGE_10_12">10-12 years old</option>
+                            <option value="AGE_13_15">13-15 years old</option>
                         </select>
                     </div>
                 </header>

@@ -83,7 +83,7 @@ const Admin = () => {
             setUsers(response.data);
             console.log('Users fetched:', response.data);
         } catch (err) {
-            setError(`Lỗi khi tải danh sách người dùng: ${err.response?.data || err.message}`);
+            setError(`Error loading user list: ${err.response?.data || err.message}`);
         }
     };
 
@@ -94,7 +94,7 @@ const Admin = () => {
             });
             setPendingTeachers(response.data);
         } catch (err) {
-            setError(`Lỗi khi tải danh sách giáo viên chờ duyệt: ${err.response?.data || err.message}`);
+            setError(`Error loading pending teachers: ${err.response?.data || err.message}`);
         }
     };
 
@@ -110,7 +110,7 @@ const Admin = () => {
             console.log(`Fetched children for ${parentEmail}:`, response.data);
         } catch (err) {
             console.error(`Error fetching children for ${parentEmail}:`, err);
-            setError(`Lỗi khi tải danh sách con cái: ${err.response?.data || err.message}`);
+            setError(`Error loading children: ${err.response?.data || err.message}`);
         }
     };
 
@@ -138,7 +138,7 @@ const Admin = () => {
                     isActive: currentUser.isActive.toString(),
                     verified: currentUser.verified.toString(),
                 }, {withCredentials: true});
-                setMessage('Cập nhật người dùng thành công!');
+                setMessage('User updated successfully!');
                 setUsers(users.map(user => user.id === currentUser.id ? response.data : user));
             } else {
                 const payload = {
@@ -157,7 +157,7 @@ const Admin = () => {
                 const response = await axios.post('http://localhost:8080/api/admin/users', payload, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Thêm người dùng thành công!');
+                setMessage(response.data || 'User added successfully!');
                 fetchUsers();
             }
             setShowModal(false);
@@ -175,7 +175,7 @@ const Admin = () => {
                 verified: false,
             });
         } catch (err) {
-            setError(err.response?.data || 'Lỗi khi lưu người dùng.');
+            setError(err.response?.data || 'Error saving user.');
         }
     };
 
@@ -198,12 +198,12 @@ const Admin = () => {
     };
 
     const handleDelete = async (id) => {
-        if (window.confirm('Bạn có chắc muốn xóa người dùng này?')) {
+        if (window.confirm('Are you sure you want to delete this user?')) {
             try {
                 const response = await axios.delete(`http://localhost:8080/api/admin/users/${id}`, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Xóa người dùng thành công!');
+                setMessage(response.data || 'User deleted successfully!');
                 setUsers(users.filter(user => user.id !== id));
                 // Cập nhật childrenData để xóa dữ liệu con cái nếu phụ huynh bị xóa
                 setChildrenData(prev => {
@@ -215,7 +215,7 @@ const Admin = () => {
                     return updated;
                 });
             } catch (err) {
-                setError(err.response?.data || 'Lỗi khi xóa người dùng.');
+                setError(err.response?.data || 'Error deleting user.');
             }
         }
     };
@@ -225,24 +225,24 @@ const Admin = () => {
             const response = await axios.post(`http://localhost:8080/api/admin/approve-teacher/${id}`, {}, {
                 withCredentials: true,
             });
-            setMessage(response.data || 'Duyệt giáo viên thành công!');
+            setMessage(response.data || 'Teacher approved successfully!');
             fetchPendingTeachers();
             fetchUsers();
         } catch (err) {
-            setError(err.response?.data || 'Lỗi khi duyệt giáo viên.');
+            setError(err.response?.data || 'Error approving teacher.');
         }
     };
 
     const handleRejectTeacher = async (id) => {
-        if (window.confirm('Bạn có chắc muốn từ chối giáo viên này?')) {
+        if (window.confirm('Are you sure you want to reject this teacher?')) {
             try {
                 const response = await axios.post(`http://localhost:8080/api/admin/reject-teacher/${id}`, {}, {
                     withCredentials: true,
                 });
-                setMessage(response.data || 'Từ chối giáo viên thành công!');
+                setMessage(response.data || 'Teacher rejected successfully!');
                 fetchPendingTeachers();
             } catch (err) {
-                setError(err.response?.data || 'Lỗi khi từ chối giáo viên.');
+                setError(err.response?.data || 'Error rejecting teacher.');
             }
         }
     };

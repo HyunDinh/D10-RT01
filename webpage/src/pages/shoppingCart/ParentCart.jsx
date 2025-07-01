@@ -10,7 +10,7 @@ const ParentCart = () => {
     const [paymentLoading, setPaymentLoading] = useState(false);
     const [error, setError] = useState(null);
     
-    // State để lưu kết quả tính toán
+    // State to store calculation results
     const [calculatedPayableItems, setCalculatedPayableItems] = useState([]);
     const [calculatedTotalAmount, setCalculatedTotalAmount] = useState(0);
 
@@ -26,7 +26,7 @@ const ParentCart = () => {
                 window.lastCancelledOrderCode = orderCode;
                 paymentService.cancelPayment(orderCode)
                     .catch(err => {
-                        console.error('Lỗi khi hủy thanh toán:', err);
+                        console.error('Error when cancelling payment:', err);
                     });
             }
         }
@@ -53,7 +53,7 @@ const ParentCart = () => {
 
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải giỏ hàng');
+            setError('Cannot load cart');
             setLoading(false);
         }
     };
@@ -68,10 +68,10 @@ const ParentCart = () => {
             await axios.post(`http://localhost:8080/api/parent-cart/${parentId}/approve/${cartItemId}`, {}, {
                 withCredentials: true
             });
-            alert('Đã chấp nhận yêu cầu');
-            fetchCart(); // Fetch lại giỏ hàng để cập nhật trạng thái và tính toán lại tổng tiền
+            alert('Request accepted');
+            fetchCart(); // Fetch cart again to update status and recalculate total amount
         } catch (err) {
-            setError('Không thể chấp nhận yêu cầu');
+            setError('Cannot accept request');
         }
     };
 
@@ -85,10 +85,10 @@ const ParentCart = () => {
             await axios.post(`http://localhost:8080/api/parent-cart/${parentId}/reject/${cartItemId}`, {}, {
                 withCredentials: true
             });
-            alert('Đã từ chối yêu cầu');
-            fetchCart(); // Fetch lại giỏ hàng
+            alert('Request rejected');
+            fetchCart(); // Fetch cart again
         } catch (err) {
-            setError('Không thể từ chối yêu cầu');
+            setError('Cannot reject request');
         }
     };
 
@@ -102,10 +102,10 @@ const ParentCart = () => {
             await axios.delete(`http://localhost:8080/api/parent-cart/${parentId}/remove/${cartItemId}`, {
                 withCredentials: true
             });
-            alert('Đã xóa khóa học khỏi giỏ hàng');
-            fetchCart(); // Fetch lại giỏ hàng
+            alert('Course removed from cart');
+            fetchCart(); // Fetch cart again
         } catch (err) {
-            setError('Không thể xóa khóa học khỏi giỏ hàng');
+            setError('Cannot remove course from cart');
         }
     };
 
@@ -113,7 +113,7 @@ const ParentCart = () => {
     const handleCheckout = async () => {
         // Sử dụng state đã tính toán cho điều kiện kiểm tra
         if (calculatedPayableItems.length === 0) {
-            alert('Không có mặt hàng nào trong giỏ hàng có thể thanh toán.');
+            alert('No items in the cart can be paid for.');
             return;
         }
 
@@ -124,7 +124,7 @@ const ParentCart = () => {
             });
              const userId = userResponse.data.id;
 
-            const description = "Thanh toán các khóa học đã chọn";
+            const description = "Pay for selected courses";
             const cartItemIds = calculatedPayableItems.map(item => item.cartId);
 
             const payment = await paymentService.createPayment(userId, cartItemIds, description);
@@ -135,7 +135,7 @@ const ParentCart = () => {
                 paymentObject = JSON.parse(payment);
               } catch (e) {
                 console.error("Failed to parse payment JSON:", e);
-                setError('Không nhận được URL thanh toán hợp lệ từ backend.');
+                setError('Did not receive a valid payment URL from backend.');
                 return;
               }
             }
@@ -143,11 +143,11 @@ const ParentCart = () => {
             if (paymentObject && typeof paymentObject.paymentUrl === 'string' && paymentObject.paymentUrl) {
               window.location.href = paymentObject.paymentUrl;
             } else {
-              setError('Không nhận được URL thanh toán hợp lệ từ backend.');
+              setError('Did not receive a valid payment URL from backend.');
             }
 
         } catch (err) {
-            setError('Không thể tạo yêu cầu thanh toán: ' + (err.response?.data || err.message));
+            setError('Cannot create payment request: ' + (err.response?.data || err.message));
         } finally {
             setPaymentLoading(false);
         }
@@ -162,18 +162,18 @@ const ParentCart = () => {
         return `${baseUrl}/api/courses/image/${fileName}?t=${new Date().getTime()}`;
     };
 
-    if (loading) return <div className={styles.loading + " loading"}>Đang tải giỏ hàng...</div>;
+    if (loading) return <div className={styles.loading + " loading"}>Loading cart...</div>;
     if (error) return <div className={styles.error + " error"}>{error}</div>;
 
     return (
         <div className={styles.cartContainer + " container mt-5"}>
-            <h2 className={styles.cartTitle + " text-primary mb-4 text-center"}>Giỏ hàng của tôi</h2>
+            <h2 className={styles.cartTitle + " text-primary mb-4 text-center"}>My Cart</h2>
             {loading ? (
-                <div className={styles.loading + " alert alert-info text-center"}>Đang tải giỏ hàng...</div>
+                <div className={styles.loading + " alert alert-info text-center"}>Loading cart...</div>
             ) : error ? (
                 <div className={styles.error + " alert alert-danger text-center"}>{error}</div>
             ) : cartItems.length === 0 ? (
-                <div className={styles.emptyCart + " alert alert-warning text-center"}>Giỏ hàng trống</div>
+                <div className={styles.emptyCart + " alert alert-warning text-center"}>Cart is empty</div>
             ) : (
                 <div className={styles.cartGrid + " row g-4"}>
                     {cartItems.map(item => (
@@ -195,18 +195,18 @@ const ParentCart = () => {
                                                 {item.course.price.toLocaleString('vi-VN')} VNĐ
                                             </p>
                                             <p className={styles.cartDesc + " card-text"}>{item.course.description}</p>
-                                            <p className="card-text child-name">Con: {item.child.fullName}</p>
+                                            <p className="card-text child-name">Child: {item.child.fullName}</p>
                                             <p className={styles.cartStatus + " card-text status"}>
-                                                Trạng thái: {item.statusByParent === 'PENDING_APPROVAL' ? (
-                                                    <span className="badge bg-warning text-dark">Chờ phê duyệt</span>
+                                                Status: {item.statusByParent === 'PENDING_APPROVAL' ? (
+                                                    <span className="badge bg-warning text-dark">Pending approval</span>
                                                 ) : item.statusByParent && item.statusByParent.trim() === 'ACCEPTED' ? (
-                                                    <span className="badge bg-success">Đã chấp nhận</span>
+                                                    <span className="badge bg-success">Accepted</span>
                                                 ) : item.statusByParent && item.statusByParent.trim() === 'REJECTED' ? (
-                                                    <span className="badge bg-danger">Đã từ chối</span>
+                                                    <span className="badge bg-danger">Rejected</span>
                                                 ) : item.statusByParent && item.statusByParent.trim() === 'DIRECTLY_ADDED' ? (
-                                                    <span className="badge bg-primary">Đã thêm trực tiếp</span>
+                                                    <span className="badge bg-primary">Directly added</span>
                                                 ) : (
-                                                    <span className="badge bg-secondary">{item.statusByParent || 'Không rõ'}</span>
+                                                    <span className="badge bg-secondary">{item.statusByParent || 'Unknown'}</span>
                                                 )}
                                             </p>
                                             <div className={styles.cartBtnGroup + " d-flex gap-2 flex-wrap mt-2"}>
@@ -217,14 +217,14 @@ const ParentCart = () => {
                                                             onClick={() => handleApprove(item.cartId)}
                                                             disabled={paymentLoading}
                                                         >
-                                                            <i className="bi bi-check-circle"></i> Chấp nhận
+                                                            <i className="bi bi-check-circle"></i> Accept
                                                         </button>
                                                         <button
                                                             className={styles.cartBtn + ' ' + styles.reject + " btn btn-outline-danger btn-sm"}
                                                             onClick={() => handleReject(item.cartId)}
                                                             disabled={paymentLoading}
                                                         >
-                                                            <i className="bi bi-x-circle"></i> Từ chối
+                                                            <i className="bi bi-x-circle"></i> Reject
                                                         </button>
                                                     </>
                                                 )}
@@ -233,7 +233,7 @@ const ParentCart = () => {
                                                     onClick={() => handleRemoveItem(item.cartId)}
                                                     disabled={paymentLoading}
                                                 >
-                                                    <i className="bi bi-trash"></i> Xóa
+                                                    <i className="bi bi-trash"></i> Remove
                                                 </button>
                                             </div>
                                         </div>
@@ -247,14 +247,14 @@ const ParentCart = () => {
 
             {cartItems.length > 0 && ( 
                 <div className={styles.cartSummary + " cart-summary mt-4"}>
-                    <h4 className="text-end">Tổng tiền: {calculatedTotalAmount.toLocaleString('vi-VN')} VNĐ</h4>
+                    <h4 className="text-end">Total amount: {calculatedTotalAmount.toLocaleString('vi-VN')} VNĐ</h4>
                     <div className="d-grid gap-2">
                         <button 
                             className={styles.cartBtn + ' ' + styles.checkout + " btn btn-success btn-lg"}
                             onClick={handleCheckout}
                             disabled={paymentLoading || calculatedPayableItems.length === 0}
                         >
-                            {paymentLoading ? 'Đang xử lý thanh toán...' : 'Thanh toán giỏ hàng'}
+                            {paymentLoading ? 'Processing payment...' : 'Checkout cart'}
                         </button>
                     </div>
                 </div>

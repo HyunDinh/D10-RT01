@@ -16,7 +16,7 @@ const PaymentHistory = () => {
                 const data = await paymentService.getUserTransactions();
                 setTransactions(data);
             } catch (error) {
-                setError('Lỗi khi tải lịch sử giao dịch');
+                setError('Error loading transaction history');
                 console.error('Fetch transactions error:', error);
             } finally {
                 setLoading(false);
@@ -30,7 +30,7 @@ const PaymentHistory = () => {
         setExpandedRow(expandedRow === transactionId ? null : transactionId);
     };
 
-    if (loading) return <div>Đang tải...</div>;
+    if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
     return (
@@ -39,12 +39,12 @@ const PaymentHistory = () => {
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Mã PayOS</th>
-                        <th>Mã Đơn Hàng</th>
-                        <th>Số Tiền</th>
-                        <th>Trạng Thái</th>
-                        <th>Ngày Giao Dịch</th>
-                        <th>Thao Tác</th>
+                        <th>PayOS ID</th>
+                        <th>Order ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Transaction Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,12 +55,12 @@ const PaymentHistory = () => {
                                     <td>{index + 1}</td>
                                     <td>{transaction.payosTransactionId}</td>
                                     <td>{transaction.orderId || 'N/A'}</td>
-                                    <td>{transaction.amount ? transaction.amount.toLocaleString('vi-VN') + ' VNĐ' : ''}</td>
+                                    <td>{transaction.amount ? transaction.amount.toLocaleString('en-US') + ' VND' : ''}</td>
                                     <td>{transaction.status}</td>
                                     <td>{transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString('vi-VN') : ''}</td>
                                     <td>
                                         <button onClick={() => handleToggleDetails(transaction.transactionId)}>
-                                            {expandedRow === transaction.transactionId ? 'Ẩn chi tiết' : 'Xem Chi Tiết'}
+                                            {expandedRow === transaction.transactionId ? 'Hide details' : 'View Details'}
                                         </button>
                                     </td>
                                 </tr>
@@ -68,13 +68,13 @@ const PaymentHistory = () => {
                                     <tr>
                                         <td colSpan="7">
                                             <div style={{ padding: '10px', backgroundColor: '#f9f9f9' }}>
-                                                <h4>Chi tiết đơn hàng</h4>
+                                                <h4>Order Details</h4>
                                                 <ul>
                                                     {transaction.items && transaction.items.map((item, itemIndex) => (
                                                         <li key={itemIndex}>
-                                                            <strong>Khóa học:</strong> {item.courseTitle} <br />
-                                                            <strong>Giá:</strong> {item.price.toLocaleString('vi-VN')} VNĐ <br />
-                                                            <strong>Dành cho con:</strong> {item.childFullName}
+                                                            <strong>Course:</strong> {item.courseTitle} <br />
+                                                            <strong>Price:</strong> {item.price.toLocaleString('en-US')} VND <br />
+                                                            <strong>For child:</strong> {item.childFullName}
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -86,7 +86,7 @@ const PaymentHistory = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="7">Không có lịch sử giao dịch nào.</td>
+                            <td colSpan="7">No transaction history.</td>
                         </tr>
                     )}
                 </tbody>

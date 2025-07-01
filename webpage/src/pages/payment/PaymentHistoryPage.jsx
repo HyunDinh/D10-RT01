@@ -22,13 +22,13 @@ const PaymentHistoryPage = () => {
         <div className="container mt-5">
             <div className="card shadow-sm">
                 <div className="card-header bg-primary text-white">
-                    <h2 className="mb-0">Lịch sử Giao dịch</h2>
+                    <h2 className="mb-0">Transaction History</h2>
                 </div>
                 <div className="card-body">
                     {isLoggedIn ? (
                         <PaymentHistory />
                     ) : (
-                        <div className="alert alert-warning">Vui lòng đăng nhập để xem lịch sử.</div>
+                        <div className="alert alert-warning">Please log in to view history.</div>
                     )}
                 </div>
             </div>

@@ -12,7 +12,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         if (!newComment.trim()) {
-            message.warning('Vui lòng nhập bình luận.');
+            message.warning('Please enter a comment.');
             return;
         }
         const mockComment = {
@@ -24,7 +24,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
         };
         setComments([...comments, mockComment]);
         setNewComment('');
-        message.success('Bình luận đã được thêm (mẫu).');
+        message.success('Comment has been added (sample).');
         setIsTyping(false); // Resume video after submission
         if (typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);
@@ -69,19 +69,19 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
 
     return (
         <div className={styles.videoDetailComments}>
-            <h3 className={styles.videoDetailCommentsTitle}>Bình luận</h3>
+            <h3 className={styles.videoDetailCommentsTitle}>Comments</h3>
             <form className={styles.videoDetailCommentForm} onSubmit={handleCommentSubmit}>
         <textarea
             className={styles.videoDetailCommentInput}
             value={newComment}
             onChange={handleCommentChange}
             onBlur={handleCommentBlur}
-            placeholder="Viết bình luận của bạn..."
-            aria-label="Viết bình luận"
+            placeholder="Write your comment..."
+            aria-label="Write your comment"
             rows="4"
         />
                 <button type="submit" className={styles.videoDetailCommentButton}>
-                    Gửi
+                    Send
                 </button>
             </form>
             <ul className={styles.videoDetailCommentList}>
@@ -97,7 +97,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
                     ))
                 ) : (
                     <p className={styles.videoDetailNoComments} aria-live="polite">
-                        Chưa có bình luận nào.
+                        No comments yet.
                     </p>
                 )}
             </ul>

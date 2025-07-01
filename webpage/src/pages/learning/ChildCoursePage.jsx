@@ -3,6 +3,10 @@ import axios from 'axios';
 import styles from '../../styles/LearningPage.module.css';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 export default function ChildCoursePage() {
   const [loading, setLoading] = useState(true);
@@ -51,7 +55,23 @@ export default function ChildCoursePage() {
 
   return (
     <>
-      <h2 className={styles.learningTitle} style={{ textAlign: 'center', marginTop: 40 }}>My Learning</h2>
+      <Header />
+      <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+        <div className={styles.headerInfo}>
+          <p>My Learning</p>
+          <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+              data-aos-delay="500">
+            <li>
+              <a href="/hocho/home">Home</a>
+            </li>
+            <li>
+              <FontAwesomeIcon icon={faChevronRight}/>
+            </li>
+            <li>My Learning</li>
+          </ul>
+        </div>
+      </section>
+
       <div className={styles.learningPageContainer}>
         <div className={styles.courseGrid}>
           {enrollments.map((enrollment) => (
@@ -68,7 +88,7 @@ export default function ChildCoursePage() {
                   src={getCourseImageUrl(enrollment.course.courseImageUrl)}
                   alt={enrollment.course.title}
                   className={styles.courseCardImage}
-                  onError={e => { e.target.src = '/images/default-course.jpg'; }}
+                  onError={e => { e.target.src = '/avaBack.jpg'; }}
                 />
               </div>
               <div className={styles.courseCardInfo}>
@@ -79,6 +99,8 @@ export default function ChildCoursePage() {
           ))}
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

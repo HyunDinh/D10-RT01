@@ -21,7 +21,7 @@ const LearningProgress = () => {
             setProgressData(response.data);
             setError(null);
         } catch (err) {
-            setError('Không thể tải dữ liệu tiến độ học tập');
+            setError('Failed to load learning progress data');
             console.error('Error fetching learning progress:', err);
         } finally {
             setLoading(false);
@@ -57,7 +57,7 @@ const LearningProgress = () => {
         return (
             <div className={styles.loadingContainer}>
                 <div className={styles.spinner}></div>
-                <p>Đang tải dữ liệu...</p>
+                <p>Loading data...</p>
             </div>
         );
     }
@@ -65,10 +65,10 @@ const LearningProgress = () => {
     if (error) {
         return (
             <div className={styles.errorContainer}>
-                <h2>Lỗi</h2>
+                <h2>Error</h2>
                 <p>{error}</p>
                 <button onClick={fetchLearningProgress} className={styles.retryButton}>
-                    Thử lại
+                    Retry
                 </button>
             </div>
         );
@@ -77,8 +77,8 @@ const LearningProgress = () => {
     if (!progressData) {
         return (
             <div className={styles.noDataContainer}>
-                <h2>Không có dữ liệu</h2>
-                <p>Chưa có thông tin tiến độ học tập cho trẻ này.</p>
+                <h2>No data</h2>
+                <p>No learning progress information for this child yet.</p>
             </div>
         );
     }
@@ -86,18 +86,18 @@ const LearningProgress = () => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Tiến độ học tập của {progressData.childName}</h1>
+                <h1>Learning progress of {progressData.childName}</h1>
                 <div className={styles.overview}>
                     <div className={styles.overviewCard}>
-                        <h3>Tổng quan</h3>
+                        <h3>Overview</h3>
                         <div className={styles.overviewStats}>
                             <div className={styles.stat}>
                                 <span className={styles.statValue}>{progressData.totalCourses}</span>
-                                <span className={styles.statLabel}>Khóa học</span>
+                                <span className={styles.statLabel}>Courses</span>
                             </div>
                             <div className={styles.stat}>
                                 <span className={styles.statValue}>{progressData.completedCourses}</span>
-                                <span className={styles.statLabel}>Đã hoàn thành</span>
+                                <span className={styles.statLabel}>Completed</span>
                             </div>
                         </div>
                     </div>
@@ -106,7 +106,7 @@ const LearningProgress = () => {
 
             <div className={styles.content}>
                 <div className={styles.coursesSection}>
-                    <h2>Danh sách khóa học</h2>
+                    <h2>Course list</h2>
                     <div className={styles.coursesGrid}>
                         {progressData.courses.map((course) => (
                             <div 
@@ -136,7 +136,7 @@ const LearningProgress = () => {
                                         <span>{course.progressPercentage.toFixed(1)}%</span>
                                     </div>
                                     <div className={styles.courseStats}>
-                                        <span>{course.completedLessons}/{course.totalLessons} bài học</span>
+                                        <span>{course.completedLessons}/{course.totalLessons} lessons</span>
                                     </div>
                                 </div>
                             </div>
@@ -146,18 +146,18 @@ const LearningProgress = () => {
 
                 {selectedCourse && (
                     <div className={styles.courseDetail}>
-                        <h2>Chi tiết: {selectedCourse.courseTitle}</h2>
+                        <h2>Details: {selectedCourse.courseTitle}</h2>
                         <div className={styles.detailGrid}>
                             <div className={styles.detailCard}>
-                                <h3>Tiến độ bài học</h3>
+                                <h3>Lesson progress</h3>
                                 <div className={styles.lessonsList}>
                                     {selectedCourse.lessonProgresses.map((lesson) => (
                                         <div key={lesson.lessonId} className={styles.lessonItem}>
                                             <div className={styles.lessonInfo}>
                                                 <h4>{lesson.lessonTitle}</h4>
                                                 <span className={`${styles.status} ${styles[lesson.status.toLowerCase()]}`}>
-                                                    {lesson.status === 'COMPLETED' ? 'Hoàn thành' :
-                                                     lesson.status === 'IN_PROGRESS' ? 'Đang học' : 'Chưa học'}
+                                                    {lesson.status === 'COMPLETED' ? 'Completed' :
+                                                     lesson.status === 'IN_PROGRESS' ? 'In progress' : 'Not started'}
                                                 </span>
                                             </div>
                                             <div className={styles.lessonProgress}>
@@ -177,7 +177,7 @@ const LearningProgress = () => {
                             </div>
 
                             <div className={styles.detailCard}>
-                                <h3>Kết quả Quiz</h3>
+                                <h3>Quiz results</h3>
                                 <div className={styles.quizList}>
                                     {selectedCourse.quizResults.length > 0 ? (
                                         selectedCourse.quizResults.map((quiz) => (
@@ -190,16 +190,16 @@ const LearningProgress = () => {
                                                 </div>
                                                 <div className={styles.quizScore}>
                                                     <span className={styles.score}>
-                                                        {quiz.correctAnswers}/{quiz.totalQuestions} câu đúng
+                                                        {quiz.correctAnswers}/{quiz.totalQuestions} correct answers
                                                     </span>
                                                     <span className={styles.score} style={{marginLeft: 12}}>
-                                                        {quiz.score}/{quiz.maxScore} điểm
+                                                        {quiz.score}/{quiz.maxScore} points
                                                     </span>
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
-                                        <p>Chưa có kết quả quiz nào</p>
+                                        <p>No quiz results yet</p>
                                     )}
                                 </div>
                             </div>

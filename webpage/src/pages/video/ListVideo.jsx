@@ -4,9 +4,9 @@ import styles from '../../styles/video/VideoPage.module.css';
 import {base64ToArrayBuffer} from '../../components/videoUtils';
 
 const ListVideo = ({videos = [], onCardClick, className = ''}) => {
-    const [playingVideoId, setPlayingVideoId] = useState(null); // ID của video đang phát
-    const [hoveredVideoId, setHoveredVideoId] = useState(null); // ID của video đang hover
-    const playerRefs = useRef({}); // Lưu tham chiếu đến ReactPlayer
+    const [playingVideoId, setPlayingVideoId] = useState(null); // ID of the currently playing video
+    const [hoveredVideoId, setHoveredVideoId] = useState(null); // ID of the currently hovered video
+    const playerRefs = useRef({}); // Store reference to ReactPlayer
 
     // Tạo danh sách video URLs một lần duy nhất
     const videoUrls = useMemo(() => {
@@ -31,9 +31,9 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
 
     // Xử lý khi hover vào video
     const handleMouseEnter = (videoId) => {
-        setPlayingVideoId(videoId); // Phát video được hover
-        setHoveredVideoId(videoId); // Đặt trạng thái hover
-        // Đặt lại video từ đầu
+        setPlayingVideoId(videoId); // Play the hovered video
+        setHoveredVideoId(videoId); // Set hover state
+        // Reset video to start
         if (playerRefs.current[videoId]) {
             playerRefs.current[videoId].seekTo(0, 'seconds');
         }
@@ -41,8 +41,8 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
 
     // Xử lý khi rời chuột
     const handleMouseLeave = (videoId) => {
-        setPlayingVideoId(null); // Dừng video
-        setHoveredVideoId(null); // Xóa trạng thái hover
+        setPlayingVideoId(null); // Stop video
+        setHoveredVideoId(null); // Remove hover state
     };
 
     // Xử lý khi phím được nhấn
@@ -63,7 +63,7 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
     if (!videos.length) {
         return (
             <div className={styles.videoPageContainer}>
-                <p className={styles.videoPageNoVideo}>Không có video nào để hiển thị.</p>
+                <p className={styles.videoPageNoVideo}>No videos to display.</p>
             </div>
         );
     }
@@ -80,18 +80,18 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                     tabIndex={0}
                     onKeyDown={(e) => handleKeyDown(e, video.videoId)}
                     role="button"
-                    aria-label={`Xem video ${video.title}`}
+                    aria-label={`Watch video ${video.title}`}
                 >
                     <div className={styles.videoPageCardBody}>
                         <div className={styles.videoPagePlayerWrapper}>
                             <ReactPlayer
                                 ref={(player) => (playerRefs.current[video.videoId] = player)}
                                 url={videoUrls[video.videoId]}
-                                controls={hoveredVideoId === video.videoId} // Hiển  thị controls khi hover
+                                controls={hoveredVideoId === video.videoId} // Show controls on hover
                                 className={styles.videoPagePlayer}
                                 width="100%"
                                 height="100%"
-                                playing={playingVideoId === video.videoId} // Phát khi hover
+                                playing={playingVideoId === video.videoId} // Play on hover
                                 muted={true}
                                 aria-label={`Video: ${video.title}`}
                                 config={{
@@ -105,7 +105,7 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                         <div className={styles.bottomVideoTitle}>
                             <h3 className={styles.videoPageCardTitle}>{video.title}</h3>
                             <p className={styles.videoPageUploadedBy}>
-                                Tải lên bởi: {video.createdBy?.fullName || 'Không rõ'}
+                                Uploaded by: {video.createdBy?.fullName || 'Unknown'}
                             </p>
                         </div>
                     </div>

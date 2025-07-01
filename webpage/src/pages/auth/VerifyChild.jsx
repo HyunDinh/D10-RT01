@@ -25,7 +25,7 @@ const styles = `
 const VerifyChild = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const [message, setMessage] = useState('Đang xác nhận...');
+    const [message, setMessage] = useState('Verifying...');
 
     useEffect(() => {
         const token = searchParams.get('token');
@@ -36,10 +36,10 @@ const VerifyChild = () => {
                     setTimeout(() => navigate('/hocho/login'), 2000); // Chuyển hướng sau 2 giây
                 })
                 .catch(error => {
-                    setMessage(error.response?.data || 'Xác nhận thất bại.');
+                    setMessage(error.response?.data || 'Verification failed.');
                 });
         } else {
-            setMessage('Token không hợp lệ.');
+            setMessage('Invalid token.');
         }
     }, [searchParams, navigate]);
 
@@ -47,7 +47,7 @@ const VerifyChild = () => {
         <>
             <style>{styles}</style>
             <div className="verify-container">
-                <h2 className="verify-heading">Xác nhận tài khoản học sinh</h2>
+                <h2 className="verify-heading">Verify child account</h2>
                 <p className={message.includes('thành công') ? 'verify-success' : 'verify-error'}>
                     {message}
                 </p>

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const HandlePayosReturn = () => {
-    const { orderCode } = useParams(); // Lấy orderCode từ URL
+    const { orderCode } = useParams(); // Get orderCode from URL
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,7 +15,7 @@ const HandlePayosReturn = () => {
                     });
                     navigate('/hocho/parent/cart');
                 } catch (err) {
-                    console.error("Lỗi khi xử lý PayOS return:", err);
+                    console.error("Error handling PayOS return:", err);
                     navigate('/hocho/parent/cart?payment_error=true'); 
                 }
             } else {
@@ -29,7 +29,7 @@ const HandlePayosReturn = () => {
 
     return (
         <div className="handle-payos-return">
-            <p>Đang xử lý thanh toán...</p>
+            <p>Processing payment...</p>
         </div>
     );
 };

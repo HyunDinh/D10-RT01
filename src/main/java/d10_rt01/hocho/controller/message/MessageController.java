@@ -1,5 +1,6 @@
 package d10_rt01.hocho.controller.message;
 
+import d10_rt01.hocho.config.HochoConfig;
 import d10_rt01.hocho.model.ChatSession;
 import d10_rt01.hocho.model.Message;
 import d10_rt01.hocho.dto.ChatSessionDto;
@@ -78,7 +79,7 @@ public class MessageController {
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
-            String uploadDir = "uploads/messages/";
+            String uploadDir = HochoConfig.ABSOLUTE_PATH_MESSAGE_UPLOAD_DIR;
             File dir = new File(uploadDir);
             if (!dir.exists()) dir.mkdirs();
 
@@ -86,26 +87,43 @@ public class MessageController {
             Path filePath = Paths.get(uploadDir, fileName);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            // Trả về đường dẫn file (hoặc URL nếu có cấu hình static resource)
-            return ResponseEntity.ok("/api/messages/file/" + fileName);
+            // Trả về đường dẫn file giống question/answer
+            return ResponseEntity.ok("/message/" + fileName);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");
         }
     }
 
     // Lấy file gửi kèm tin nhắn
-    @GetMapping("/file/{fileName:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName) throws IOException {
-        Path filePath = Paths.get("uploads/messages/", fileName);
+    @GetMapping("/image/{fileName:.+}")
+    public ResponseEntity<Resource> getMessageImage(@PathVariable String fileName) throws IOException {
+        Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_MESSAGE_UPLOAD_DIR, fileName);
         Resource resource = new UrlResource(filePath.toUri());
         if (resource.exists() || resource.isReadable()) {
-            // Lấy content type động
             String contentType = Files.probeContentType(filePath);
             if (contentType == null) {
                 contentType = "application/octet-stream";
             }
             return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_TYPE, contentType)
+                .body(resource);
+        } else {
+            throw new FileNotFoundException("File not found " + fileName);
+        }
+    }
+
+    @GetMapping("/file/{fileName:.+}")
+    public ResponseEntity<Resource> downloadMessageFile(@PathVariable String fileName) throws IOException {
+        Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_MESSAGE_UPLOAD_DIR, fileName);
+        Resource resource = new UrlResource(filePath.toUri());
+        if (resource.exists() || resource.isReadable()) {
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+            return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .header(HttpHeaders.CONTENT_TYPE, contentType)
                 .body(resource);
         } else {
