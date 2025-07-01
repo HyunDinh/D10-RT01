@@ -13,6 +13,7 @@ import {
     faIdBadge,
     faMapMarkerAlt,
     faSearch,
+    faComments, faUniversalAccess,
 } from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
@@ -113,10 +114,6 @@ function Header() {
 
         const menuItems = {
             ROLE_ADMIN: [
-                {path: '/hocho/admin/course/approval', name: 'Course Manager'},
-                {path: '/hocho/dashboard', name: 'Thanh toán & Giao dịch'},
-                {path: '/hocho/admin/accounts', name: 'Manager Account'},
-                {path: '/hocho/admin/video/approval', name: 'Approval Video'},
                 {path: '/hocho/admin/feedbacks', name: 'Quản lý phản hồi'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {
@@ -326,17 +323,16 @@ function Header() {
                                             }}
                                         />
                                         <ul className={styles.profileDropdown}>
-                                            <li><a href="/hocho/profile"><FontAwesomeIcon icon={faIdBadge}/> Profile</a>
+                                            <li><a href="/hocho/profile"><FontAwesomeIcon icon={faIdBadge} /> Profile</a></li>
+                                            {role === 'ROLE_ADMIN' && (
+                                                <li><a href="/hocho/admin"><FontAwesomeIcon icon={faUniversalAccess} /> Administration</a></li>
+                                            )}
+                                            <li className={styles.notificate}>
+                                              <a href="/hocho/messaging"><FontAwesomeIcon icon={faComments}/> Message
+                                                {unreadCount > 0 && (<span className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}</span>)}
+                                              </a>
                                             </li>
-                                            <li className={styles.notificate}><a href="/hocho/messaging"><FontAwesomeIcon icon={faComments}/> Message
-                                                {unreadCount > 0 && (
-                                                    <span
-                                                        className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}
-                                                    </span>)}
-                                            </a>
-                                            </li>
-                                            <li><a className={styles.logoutLink} onClick={handleLogout}><FontAwesomeIcon
-                                                icon={faDoorOpen}/> Logout</a></li>
+                                            <li><a className={styles.logoutLink} onClick={handleLogout}><FontAwesomeIcon icon={faDoorOpen}/> Logout</a></li>
                                         </ul>
                                     </div>
                                 </div>

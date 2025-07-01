@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import styles from '../../styles/Admin.module.css';
+import styles from '../../styles/AdminAccounts.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {
     faBan,
@@ -11,7 +11,11 @@ import {
     faPlus,
     faTimes,
     faTrash,
-    faUsers
+    faUsers,
+    faUserTie,
+    faUserGraduate,
+    faChild,
+    faUserShield
 } from '@fortawesome/free-solid-svg-icons';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -283,491 +287,566 @@ const Admin = () => {
 
     return (<>
             <Header/>
-                <main className="flex-grow container mx-auto my-8 px-4">
-                    <h1 className="text-4xl font-bold text-[#385469] mb-6">User Management</h1>
-                    {message && <div className="bg-green-100 text-green-800 p-4 rounded mb-4">{message}</div>}
-                    {error && <div className="bg-red-100 text-red-800 p-4 rounded mb-4">{error}</div>}
-                    <button
-                        onClick={openAddModal}
-                        className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition mb-6"
-                    >
-                        <FontAwesomeIcon icon={faPlus} className="mr-2"/> Add User
-                    </button>
+                <main className={styles.container}>
+                    <div className={styles.header}>
+                        <div className={styles.headerContent}>
+                            <h1 className={styles.headerTitle}>Quản lý người dùng</h1>
+                            <p className={styles.headerDescription}>Quản lý tài khoản người dùng trong hệ thống Hocho</p>
+                        </div>
+                        <div className={styles.headerIcon}>
+                            <FontAwesomeIcon icon={faUsers} />
+                        </div>
+                    </div>
+
+                    {message && <div className={styles.successMessage}>{message}</div>}
+                    {error && <div className={styles.errorMessage}>{error}</div>}
+
+                    <div className={styles.buttonContainer}>
+                        <button
+                            onClick={openAddModal}
+                            className={`${styles.button} ${styles.primaryButton}`}
+                        >
+                            <FontAwesomeIcon icon={faPlus} style={{ marginRight: '0.5rem' }}/> Thêm người dùng
+                        </button>
+                    </div>
 
                     {/* Admin Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Admin List</h2>
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search by email..."
-                            value={adminSearch}
-                            onChange={(e) => setAdminSearch(e.target.value)}
-                            className="border border-gray-300 p-2 rounded w-full"
-                        />
-                    </div>
-                    <div className={styles.tableContainer}>
-                        <table className={styles.userTable}>
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Full Name</th>
-                                <th>Date of Birth</th>
-                                <th>Status</th>
-                                <th>Verified</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredAdmins.length === 0 ? (<tr>
-                                <td colSpan="9" className="text-center py-4">No admins found.</td>
-                            </tr>) : (filteredAdmins.map(user => (<tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.username}</td>
-                                <td>{user.email || '-'}</td>
-                                <td>{user.phoneNumber || '-'}</td>
-                                <td>{user.fullName || '-'}</td>
-                                <td>{user.dateOfBirth || '-'}</td>
-                                <td>{user.isActive ? 'Active' : 'Inactive'}</td>
-                                <td>{user.verified ? 'Verified' : 'Not verified'}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleEdit(user)}
-                                        className="text-[#385469] hover:text-[#f39f5f] mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(user.id)}
-                                        className="text-[#dc3545] hover:text-[#b02a37]"
-                                    >
-                                        <FontAwesomeIcon icon={faTrash}/>
-                                    </button>
-                                </td>
-                            </tr>)))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <FontAwesomeIcon icon={faUserShield} className={styles.sectionIcon} />
+                            <h2 className={styles.sectionTitle}>Danh sách Admin</h2>
+                        </div>
+                        <div className={styles.sectionContent}>
+                            <div className={styles.searchContainer}>
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm bằng email..."
+                                    value={adminSearch}
+                                    onChange={(e) => setAdminSearch(e.target.value)}
+                                    className={styles.searchInput}
+                                />
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.userTable}>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên đăng nhập</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Họ tên</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Trạng thái</th>
+                                        <th>Xác minh</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {filteredAdmins.length === 0 ? (<tr>
+                                        <td colSpan="9" style={{ textAlign: 'center', padding: '1rem' }}>Không có admin nào.</td>
+                                    </tr>) : (filteredAdmins.map(user => (<tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.email || '-'}</td>
+                                        <td>{user.phoneNumber || '-'}</td>
+                                        <td>{user.fullName || '-'}</td>
+                                        <td>{user.dateOfBirth || '-'}</td>
+                                        <td>{user.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                        <td>{user.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleEdit(user)}
+                                                className={`${styles.iconButton} ${styles.editButton}`}
+                                                style={{ marginRight: '0.5rem' }}
+                                            >
+                                                <FontAwesomeIcon icon={faEdit}/>
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(user.id)}
+                                                className={`${styles.iconButton} ${styles.deleteButton}`}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash}/>
+                                            </button>
+                                        </td>
+                                    </tr>)))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Parent Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Parent List</h2>
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search by email..."
-                            value={parentSearch}
-                            onChange={(e) => setParentSearch(e.target.value)}
-                            className="border border-gray-300 p-2 rounded w-full"
-                        />
-                    </div>
-                    <div className={styles.tableContainer}>
-                        <table className={styles.userTable}>
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Full Name</th>
-                                <th>Date of Birth</th>
-                                <th>Status</th>
-                                <th>Verified</th>
-                                <th>Children</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredParents.length === 0 ? (<tr>
-                                <td colSpan="10" className="text-center py-4">No parents found.</td>
-                            </tr>) : (filteredParents.map(parent => (<React.Fragment key={parent.id}>
-                                <tr>
-                                    <td>{parent.id}</td>
-                                    <td>{parent.username}</td>
-                                    <td>{parent.email || '-'}</td>
-                                    <td>{parent.phoneNumber || '-'}</td>
-                                    <td>{parent.fullName || '-'}</td>
-                                    <td>{parent.dateOfBirth || '-'}</td>
-                                    <td>{parent.isActive ? 'Active' : 'Inactive'}</td>
-                                    <td>{parent.verified ? 'Verified' : 'Not verified'}</td>
-                                    <td>
-                                        {parentChildCounts[parent.id] > 0 ? (<button
-                                            onClick={() => toggleParentChildren(parent.id, parent.email)}
-                                            className="text-[#385469] hover:text-[#f39f5f] flex items-center"
-                                        >
-                                            <FontAwesomeIcon icon={faUsers} className="mr-1"/>
-                                            <span>({parentChildCounts[parent.id]})</span>
-                                        </button>) : (<span>-</span>)}
-                                    </td>
-                                    <td>
-                                        <button
-                                            onClick={() => handleEdit(parent)}
-                                            className="text-[#385469] hover:text-[#f39f5f] mr-2"
-                                        >
-                                            <FontAwesomeIcon icon={faEdit}/>
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(parent.id)}
-                                            className="text-[#dc3545] hover:text-[#b02a37]"
-                                        >
-                                            <FontAwesomeIcon icon={faTrash}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                {expandedParents[parent.id] && (<tr className="bg-gray-100">
-                                    <td colSpan="10">
-                                        <div className="pl-8 py-4">
-                                            <h3 className="text-lg font-semibold text-[#385469] mb-2">Children List</h3>
-                                            <div className={styles.tableContainer}>
-                                                <table className={styles.userTable}>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Username</th>
-                                                        <th>Email</th>
-                                                        <th>Phone Number</th>
-                                                        <th>Full Name</th>
-                                                        <th>Date of Birth</th>
-                                                        <th>Status</th>
-                                                        <th>Verified</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {childrenData[parent.id] ? (childrenData[parent.id].length > 0 ? (childrenData[parent.id].map(child => (
-                                                        <tr key={child.id}>
-                                                            <td>{child.id}</td>
-                                                            <td>{child.username}</td>
-                                                            <td>{child.email || '-'}</td>
-                                                            <td>{child.phoneNumber || '-'}</td>
-                                                            <td>{child.fullName || '-'}</td>
-                                                            <td>{child.dateOfBirth || '-'}</td>
-                                                            <td>{child.isActive ? 'Active' : 'Inactive'}</td>
-                                                            <td>{child.verified ? 'Verified' : 'Not verified'}</td>
-                                                            <td>
-                                                                <button
-                                                                    onClick={() => handleEdit(child)}
-                                                                    className="text-[#385469] hover:text-[#f39f5f] mr-2"
-                                                                >
-                                                                    <FontAwesomeIcon icon={faEdit}/>
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => handleDelete(child.id)}
-                                                                    className="text-[#dc3545] hover:text-[#b02a37]"
-                                                                >
-                                                                    <FontAwesomeIcon icon={faTrash}/>
-                                                                </button>
-                                                            </td>
-                                                        </tr>))) : (<tr>
-                                                        <td colSpan="9"
-                                                            className="text-center py-4">No children found.
-                                                        </td>
-                                                    </tr>)) : (<tr>
-                                                        <td colSpan="9" className="text-center py-4">Loading...
-                                                        </td>
-                                                    </tr>)}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>)}
-                            </React.Fragment>)))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <FontAwesomeIcon icon={faUsers} className={styles.sectionIcon} />
+                            <h2 className={styles.sectionTitle}>Danh sách Phụ huynh</h2>
+                        </div>
+                        <div className={styles.sectionContent}>
+                            <div className={styles.searchContainer}>
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm bằng email..."
+                                    value={parentSearch}
+                                    onChange={(e) => setParentSearch(e.target.value)}
+                                    className={styles.searchInput}
+                                />
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.userTable}>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên đăng nhập</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Họ tên</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Trạng thái</th>
+                                        <th>Xác minh</th>
+                                        <th>Số lượng con</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {filteredParents.length === 0 ? (<tr>
+                                        <td colSpan="10" style={{ textAlign: 'center', padding: '1rem' }}>Không có phụ huynh nào.</td>
+                                    </tr>) : (filteredParents.map(parent => (<React.Fragment key={parent.id}>
+                                        <tr>
+                                            <td>{parent.id}</td>
+                                            <td>{parent.username}</td>
+                                            <td>{parent.email || '-'}</td>
+                                            <td>{parent.phoneNumber || '-'}</td>
+                                            <td>{parent.fullName || '-'}</td>
+                                            <td>{parent.dateOfBirth || '-'}</td>
+                                            <td>{parent.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                            <td>{parent.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                            <td>
+                                                {parentChildCounts[parent.id] > 0 ? (
+                                                    <button
+                                                        onClick={() => toggleParentChildren(parent.id, parent.email)}
+                                                        className={`${styles.iconButton} ${styles.editButton}`}
+                                                        style={{ display: 'flex', alignItems: 'center' }}
+                                                    >
+                                                        <FontAwesomeIcon icon={faUsers} style={{ marginRight: '0.25rem' }}/>
+                                                        <span>({parentChildCounts[parent.id]})</span>
+                                                    </button>
+                                                ) : (
+                                                    <span>-</span>
+                                                )}
+                                            </td>
+                                            <td>
+                                                <button
+                                                    onClick={() => handleEdit(parent)}
+                                                    className={`${styles.iconButton} ${styles.editButton}`}
+                                                    style={{ marginRight: '0.5rem' }}
+                                                >
+                                                    <FontAwesomeIcon icon={faEdit}/>
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(parent.id)}
+                                                    className={`${styles.iconButton} ${styles.deleteButton}`}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash}/>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {expandedParents[parent.id] && (
+                                            <tr className={styles.childRow}>
+                                                <td colSpan="10">
+                                                    <div className={styles.childContainer}>
+                                                        <h3 className={styles.childTableTitle}>Danh sách con cái</h3>
+                                                        <div className={styles.tableContainer}>
+                                                            <table className={styles.userTable}>
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>ID</th>
+                                                                    <th>Tên đăng nhập</th>
+                                                                    <th>Email</th>
+                                                                    <th>Số điện thoại</th>
+                                                                    <th>Họ tên</th>
+                                                                    <th>Ngày sinh</th>
+                                                                    <th>Trạng thái</th>
+                                                                    <th>Xác minh</th>
+                                                                    <th>Hành động</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                {childrenData[parent.id] ? (
+                                                                    childrenData[parent.id].length > 0 ? (
+                                                                        childrenData[parent.id].map(child => (
+                                                                            <tr key={child.id}>
+                                                                                <td>{child.id}</td>
+                                                                                <td>{child.username}</td>
+                                                                                <td>{child.email || '-'}</td>
+                                                                                <td>{child.phoneNumber || '-'}</td>
+                                                                                <td>{child.fullName || '-'}</td>
+                                                                                <td>{child.dateOfBirth || '-'}</td>
+                                                                                <td>{child.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                                                                <td>{child.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                                                                <td>
+                                                                                    <button
+                                                                                        onClick={() => handleEdit(child)}
+                                                                                        className={`${styles.iconButton} ${styles.editButton}`}
+                                                                                        style={{ marginRight: '0.5rem' }}
+                                                                                    >
+                                                                                        <FontAwesomeIcon icon={faEdit}/>
+                                                                                    </button>
+                                                                                    <button
+                                                                                        onClick={() => handleDelete(child.id)}
+                                                                                        className={`${styles.iconButton} ${styles.deleteButton}`}
+                                                                                    >
+                                                                                        <FontAwesomeIcon icon={faTrash}/>
+                                                                                    </button>
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))
+                                                                    ) : (
+                                                                        <tr>
+                                                                            <td colSpan="9" style={{ textAlign: 'center', padding: '1rem' }}>
+                                                                                Không có con cái.
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                ) : (
+                                                                    <tr>
+                                                                        <td colSpan="9" style={{ textAlign: 'center', padding: '1rem' }}>
+                                                                            Đang tải...
+                                                                        </td>
+                                                                    </tr>
+                                                                )}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </React.Fragment>)))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Teacher Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Teacher List</h2>
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search by email..."
-                            value={teacherSearch}
-                            onChange={(e) => setTeacherSearch(e.target.value)}
-                            className="border border-gray-300 p-2 rounded w-full"
-                        />
-                    </div>
-                    <div className={styles.tableContainer}>
-                        <table className={styles.userTable}>
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Full Name</th>
-                                <th>Date of Birth</th>
-                                <th>Status</th>
-                                <th>Verified</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredTeachers.length === 0 ? (<tr>
-                                <td colSpan="9" className="text-center py-4">No teachers found.</td>
-                            </tr>) : (filteredTeachers.map(user => (<tr key={user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.username}</td>
-                                <td>{user.email || '-'}</td>
-                                <td>{user.phoneNumber || '-'}</td>
-                                <td>{user.fullName || '-'}</td>
-                                <td>{user.dateOfBirth || '-'}</td>
-                                <td>{user.isActive ? 'Active' : 'Inactive'}</td>
-                                <td>{user.verified ? 'Verified' : 'Not verified'}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleEdit(user)}
-                                        className="text-[#385469] hover:text-[#f39f5f] mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faEdit}/>
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(user.id)}
-                                        className="text-[#dc3545] hover:text-[#b02a37]"
-                                    >
-                                        <FontAwesomeIcon icon={faTrash}/>
-                                    </button>
-                                </td>
-                            </tr>)))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <FontAwesomeIcon icon={faUserTie} className={styles.sectionIcon} />
+                            <h2 className={styles.sectionTitle}>Danh sách Giáo viên</h2>
+                        </div>
+                        <div className={styles.sectionContent}>
+                            <div className={styles.searchContainer}>
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm bằng email..."
+                                    value={teacherSearch}
+                                    onChange={(e) => setTeacherSearch(e.target.value)}
+                                    className={styles.searchInput}
+                                />
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.userTable}>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên đăng nhập</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Họ tên</th>
+                                        <th>Ngày sinh</th>
+                                        <th>Trạng thái</th>
+                                        <th>Xác minh</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {filteredTeachers.length === 0 ? (<tr>
+                                        <td colSpan="9" style={{ textAlign: 'center', padding: '1rem' }}>Không có giáo viên nào.</td>
+                                    </tr>) : (filteredTeachers.map(user => (<tr key={user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.email || '-'}</td>
+                                        <td>{user.phoneNumber || '-'}</td>
+                                        <td>{user.fullName || '-'}</td>
+                                        <td>{user.dateOfBirth || '-'}</td>
+                                        <td>{user.isActive ? 'Hoạt động' : 'Không hoạt động'}</td>
+                                        <td>{user.verified ? 'Đã xác minh' : 'Chưa xác minh'}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleEdit(user)}
+                                                className={`${styles.iconButton} ${styles.editButton}`}
+                                                style={{ marginRight: '0.5rem' }}
+                                            >
+                                                <FontAwesomeIcon icon={faEdit}/>
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(user.id)}
+                                                className={`${styles.iconButton} ${styles.deleteButton}`}
+                                            >
+                                                <FontAwesomeIcon icon={faTrash}/>
+                                            </button>
+                                        </td>
+                                    </tr>)))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Pending Teachers Table */}
-                    <h2 className="text-3xl font-bold text-[#385469] my-8">Pending Teachers List</h2>
-                    <div className="mb-4">
-                        <input
-                            type="text"
-                            placeholder="Search by email..."
-                            value={pendingTeacherSearch}
-                            onChange={(e) => setPendingTeacherSearch(e.target.value)}
-                            className="border border-gray-300 p-2 rounded w-full"
-                        />
-                    </div>
-                    <div className={styles.tableContainer}>
-                        <table className={styles.userTable}>
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th>Email</th>
-                                <th>Phone Number</th>
-                                <th>Info</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {filteredPendingTeachers.length === 0 ? (<tr>
-                                <td colSpan="6" className="text-center py-4">No pending teachers found.</td>
-                            </tr>) : (filteredPendingTeachers.map(teacher => (<tr key={teacher.id}>
-                                <td>{teacher.id}</td>
-                                <td>{teacher.username}</td>
-                                <td>{teacher.email}</td>
-                                <td>{teacher.phoneNumber || '-'}</td>
-                                <td>
-                                    <button
-                                        onClick={() => handleViewTeacherInfo(teacher.email)}
-                                        className="text-[#385469] hover:text-[#f39f5f] flex items-center"
-                                    >
-                                        <FontAwesomeIcon icon={faInfoCircle} className="mr-1"/> View Info
-                                    </button>
-                                </td>
-                                <td>
-                                    <button
-                                        onClick={() => handleApproveTeacher(teacher.id)}
-                                        className="text-green-600 hover:text-green-800 mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faCheck}/>
-                                    </button>
-                                    <button
-                                        onClick={() => handleRejectTeacher(teacher.id)}
-                                        className="text-red-600 hover:text-red-800"
-                                    >
-                                        <FontAwesomeIcon icon={faBan}/>
-                                    </button>
-                                </td>
-                            </tr>)))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <section className={styles.section}>
+                        <div className={styles.sectionHeader}>
+                            <FontAwesomeIcon icon={faUserGraduate} className={styles.sectionIcon} />
+                            <h2 className={styles.sectionTitle}>Danh sách Giáo viên chờ duyệt</h2>
+                        </div>
+                        <div className={styles.sectionContent}>
+                            <div className={styles.searchContainer}>
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm bằng email..."
+                                    value={pendingTeacherSearch}
+                                    onChange={(e) => setPendingTeacherSearch(e.target.value)}
+                                    className={styles.searchInput}
+                                />
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.userTable}>
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên đăng nhập</th>
+                                        <th>Email</th>
+                                        <th>Số điện thoại</th>
+                                        <th>Thông tin</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {filteredPendingTeachers.length === 0 ? (<tr>
+                                        <td colSpan="6" style={{ textAlign: 'center', padding: '1rem' }}>Không có giáo viên chờ duyệt.</td>
+                                    </tr>) : (filteredPendingTeachers.map(teacher => (<tr key={teacher.id}>
+                                        <td>{teacher.id}</td>
+                                        <td>{teacher.username}</td>
+                                        <td>{teacher.email}</td>
+                                        <td>{teacher.phoneNumber || '-'}</td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleViewTeacherInfo(teacher.email)}
+                                                className={`${styles.iconButton} ${styles.editButton}`}
+                                                style={{ display: 'flex', alignItems: 'center' }}
+                                            >
+                                                <FontAwesomeIcon icon={faInfoCircle} style={{ marginRight: '0.25rem' }}/> Xem thông tin
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                onClick={() => handleApproveTeacher(teacher.id)}
+                                                className={`${styles.iconButton} ${styles.approveButton}`}
+                                                style={{ marginRight: '0.5rem' }}
+                                            >
+                                                <FontAwesomeIcon icon={faCheck}/>
+                                            </button>
+                                            <button
+                                                onClick={() => handleRejectTeacher(teacher.id)}
+                                                className={`${styles.iconButton} ${styles.rejectButton}`}
+                                            >
+                                                <FontAwesomeIcon icon={faBan}/>
+                                            </button>
+                                        </td>
+                                    </tr>)))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
 
                     {/* Modal for Add/Edit User */}
-                    {showModal && (<div className={styles.modalOverlay}>
-                        <div className={styles.modalContent}>
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-2xl font-bold text-[#385469]">
-                                    {isEditing ? 'Update User' : 'Add User'}
-                                </h2>
-                                <button onClick={() => setShowModal(false)}
-                                        className="text-[#385469] hover:text-[#f39f5f]">
-                                    <FontAwesomeIcon icon={faTimes} size="lg"/>
-                                </button>
-                            </div>
-                            <form onSubmit={handleSubmit}>
-                                <div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="text"
-                                            name="username"
-                                            className={styles.input}
-                                            value={currentUser.username}
-                                            onChange={handleInputChange}
-                                            required
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Username</label>
-                                        <span className={styles.notch}></span>
-                                    </div>
+                    {showModal && (
+                        <div className={styles.modalOverlay}>
+                            <div className={styles.modalContent}>
+                                <div className={styles.modalHeader}>
+                                    <h2 className={styles.modalTitle}>
+                                        {isEditing ? 'Cập nhật người dùng' : 'Thêm người dùng'}
+                                    </h2>
+                                    <button 
+                                        onClick={() => setShowModal(false)}
+                                        className={styles.modalCloseButton}
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} />
+                                    </button>
                                 </div>
-                                {!isEditing && (<div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="password"
-                                            name="password"
-                                            className={styles.input}
-                                            value={currentUser.password}
-                                            onChange={handleInputChange}
-                                            required
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Password</label>
-                                        <span className={styles.notch}></span>
-                                    </div>
-                                </div>)}
-                                {currentUser.role !== 'child' && (<div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="email"
-                                            name="email"
-                                            className={styles.input}
-                                            value={currentUser.email}
-                                            onChange={handleInputChange}
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Email</label>
-                                        <span className={styles.notch}></span>
-                                    </div>
-                                </div>)}
-                                {!isEditing && currentUser.role === 'child' && (<div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="email"
-                                            name="parentEmail"
-                                            className={styles.input}
-                                            value={currentUser.parentEmail}
-                                            onChange={handleInputChange}
-                                            required
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Parent Email</label>
-                                        <span className={styles.notch}></span>
-                                    </div>
-                                </div>)}
-                                <div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <select
-                                            name="role"
-                                            className={styles.input}
-                                            value={currentUser.role}
-                                            onChange={handleInputChange}
-                                            required
-                                        >
-                                            <option value="child">Child</option>
-                                            <option value="parent">Parent</option>
-                                            <option value="teacher">Teacher</option>
-                                            <option value="admin">Admin</option>
-                                        </select>
-                                        <label className={styles.label}>Role</label>
-                                        <span className={styles.notch}></span>
-                                    </div>
-                                </div>
-                                {(currentUser.role === 'parent' || currentUser.role === 'teacher' || currentUser.role === 'admin') && (
+                                <form onSubmit={handleSubmit}>
                                     <div className={styles.formGroup}>
                                         <div className={styles.inputContainer}>
                                             <input
                                                 type="text"
-                                                name="phoneNumber"
+                                                name="username"
                                                 className={styles.input}
-                                                value={currentUser.phoneNumber}
+                                                value={currentUser.username}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Tên đăng nhập</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                    {!isEditing && (
+                                        <div className={styles.formGroup}>
+                                            <div className={styles.inputContainer}>
+                                                <input
+                                                    type="password"
+                                                    name="password"
+                                                    className={styles.input}
+                                                    value={currentUser.password}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    placeholder=" "
+                                                />
+                                                <label className={styles.label}>Mật khẩu</label>
+                                                <span className={styles.notch}></span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {currentUser.role !== 'child' && (
+                                        <div className={styles.formGroup}>
+                                            <div className={styles.inputContainer}>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    className={styles.input}
+                                                    value={currentUser.email}
+                                                    onChange={handleInputChange}
+                                                    placeholder=" "
+                                                />
+                                                <label className={styles.label}>Email</label>
+                                                <span className={styles.notch}></span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {!isEditing && currentUser.role === 'child' && (
+                                        <div className={styles.formGroup}>
+                                            <div className={styles.inputContainer}>
+                                                <input
+                                                    type="email"
+                                                    name="parentEmail"
+                                                    className={styles.input}
+                                                    value={currentUser.parentEmail}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    placeholder=" "
+                                                />
+                                                <label className={styles.label}>Email phụ huynh</label>
+                                                <span className={styles.notch}></span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <select
+                                                name="role"
+                                                className={styles.input}
+                                                value={currentUser.role}
+                                                onChange={handleInputChange}
+                                                required
+                                            >
+                                                <option value="child">Học sinh</option>
+                                                <option value="parent">Phụ huynh</option>
+                                                <option value="teacher">Giáo viên</option>
+                                                <option value="admin">Quản trị viên</option>
+                                            </select>
+                                            <label className={styles.label}>Vai trò</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
+                                    </div>
+                                    {(currentUser.role === 'parent' || currentUser.role === 'teacher' || currentUser.role === 'admin') && (
+                                        <div className={styles.formGroup}>
+                                            <div className={styles.inputContainer}>
+                                                <input
+                                                    type="text"
+                                                    name="phoneNumber"
+                                                    className={styles.input}
+                                                    value={currentUser.phoneNumber}
+                                                    onChange={handleInputChange}
+                                                    placeholder=" "
+                                                />
+                                                <label className={styles.label}>Số điện thoại</label>
+                                                <span className={styles.notch}></span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="text"
+                                                name="fullName"
+                                                className={styles.input}
+                                                value={currentUser.fullName}
                                                 onChange={handleInputChange}
                                                 placeholder=" "
                                             />
-                                            <label className={styles.label}>Phone Number</label>
+                                            <label className={styles.label}>Họ tên</label>
                                             <span className={styles.notch}></span>
                                         </div>
-                                    </div>)}
-                                <div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="text"
-                                            name="fullName"
-                                            className={styles.input}
-                                            value={currentUser.fullName}
-                                            onChange={handleInputChange}
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Full Name</label>
-                                        <span className={styles.notch}></span>
                                     </div>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <div className={styles.inputContainer}>
-                                        <input
-                                            type="date"
-                                            name="dateOfBirth"
-                                            className={styles.input}
-                                            value={currentUser.dateOfBirth}
-                                            onChange={handleInputChange}
-                                            placeholder=" "
-                                        />
-                                        <label className={styles.label}>Date of Birth</label>
-                                        <span className={styles.notch}></span>
+                                    <div className={styles.formGroup}>
+                                        <div className={styles.inputContainer}>
+                                            <input
+                                                type="date"
+                                                name="dateOfBirth"
+                                                className={styles.input}
+                                                value={currentUser.dateOfBirth}
+                                                onChange={handleInputChange}
+                                                placeholder=" "
+                                            />
+                                            <label className={styles.label}>Ngày sinh</label>
+                                            <span className={styles.notch}></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            name="isActive"
-                                            className="mr-2"
-                                            checked={currentUser.isActive}
-                                            onChange={handleInputChange}
-                                        />
-                                        <span className="text-[#385469]">Active</span>
-                                    </label>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            name="verified"
-                                            className="mr-2"
-                                            checked={currentUser.verified}
-                                            onChange={handleInputChange}
-                                        />
-                                        <span className="text-[#385469]">Verified</span>
-                                    </label>
-                                </div>
-                                <div className="flex justify-end mt-6">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowModal(false)}
-                                        className="bg-[#385469] text-white px-4 py-2 rounded hover:bg-[#2a3f4e] transition mr-2"
-                                    >
-                                        Close
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="bg-[#f39f5f] text-white px-4 py-2 rounded hover:bg-[#e88f4f] transition"
-                                    >
-                                        {isEditing ? 'Update' : 'Add'}
-                                    </button>
-                                </div>
-                            </form>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.checkboxLabel}>
+                                            <input
+                                                type="checkbox"
+                                                name="isActive"
+                                                className={styles.checkbox}
+                                                checked={currentUser.isActive}
+                                                onChange={handleInputChange}
+                                            />
+                                            <span>Hoạt động</span>
+                                        </label>
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.checkboxLabel}>
+                                            <input
+                                                type="checkbox"
+                                                name="verified"
+                                                className={styles.checkbox}
+                                                checked={currentUser.verified}
+                                                onChange={handleInputChange}
+                                            />
+                                            <span>Đã xác minh</span>
+                                        </label>
+                                    </div>
+                                    <div className={styles.modalFooter}>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowModal(false)}
+                                            className={`${styles.button} ${styles.secondaryButton}`}
+                                            style={{ marginRight: '0.5rem' }}
+                                        >
+                                            Đóng
+                                        </button>
+                                        <button
+                                            type="submit"
+                                            className={`${styles.button} ${styles.primaryButton}`}
+                                        >
+                                            {isEditing ? 'Cập nhật' : 'Thêm'}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>)}
+                    )}
                 </main>
                 <Footer/>
         </>);
