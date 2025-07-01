@@ -149,7 +149,7 @@ const MessagingPage = () => {
         if (user.avatarUrl && user.avatarUrl !== 'none') {
             return `http://localhost:8080/api/hocho/profile/${user.avatarUrl}`;
         }
-        return `http://localhost:8080/api/hocho/profile/default.png`;
+        return `/default.png`;
     };
 
     const formatTime = (dateString) => {
