@@ -71,7 +71,7 @@
 .sectionContent {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 @media (min-width: 992px) {
@@ -84,20 +84,16 @@
 .cardGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 2rem;
+  margin-bottom: 1rem;
 }
 
 .cardGrid2 {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.cardGrid3 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
 
 @media (min-width: 768px) {
   .cardGrid {

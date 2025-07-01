@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
-import {useNavigate, useParams, Link} from 'react-router-dom';
 import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 import styles from '../../styles/lesson/AddLesson.module.css';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faXmark} from "@fortawesome/free-solid-svg-icons";
 
-export default function AddLessonPage() {
-    const {courseId} = useParams();
+const AddLessonPage = ({showModal, closeModal, courseId}) => {
     const navigate = useNavigate();
     const [lesson, setLesson] = useState({
         title: '',
-        duration: ''
+        duration: '',
     });
     const [errors, setErrors] = useState({});
-    const [showModal, setShowModal] = useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     const handleChange = (e) => {
         setLesson({...lesson, [e.target.name]: e.target.value});
@@ -25,14 +26,15 @@ export default function AddLessonPage() {
         return Object.keys(tempErrors).length === 0;
     };
 
-    const openModal = () => setShowModal(true);
-    const closeModal = () => setShowModal(false);
+    const openConfirmModal = () => setShowConfirmModal(true);
+    const closeConfirmModal = () => setShowConfirmModal(false);
 
     const confirmSubmit = async () => {
         if (!validate()) return;
         try {
             await axios.post(`/api/lessons/add/${courseId}`, lesson);
-            setShowModal(false);
+            closeConfirmModal();
+            closeModal(); // Close the dialog
             setTimeout(() => {
                 navigate(`/hocho/teacher/course/${courseId}/lesson`);
             }, 1500);
@@ -42,78 +44,73 @@ export default function AddLessonPage() {
     };
 
     return (
-        <>
-            <Link
-                to={`/hocho/teacher/course/${courseId}/lesson/add`}
-                className={`${styles.btn} ${styles.btnSuccess}`}
-                aria-label="Add a new lesson"
-            >
-                Add New Lesson
-            </Link>
-            <div className={styles.container}>
-                <div className={styles.card}>
-                    <div className={styles.cardHeader}>
-                        <h4>Add New Lesson</h4>
-                    </div>
-                    <div className={styles.cardBody}>
-                        <form onSubmit={e => e.preventDefault()}>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="lessonTitle" className={styles.formLabel}>
-                                    Lesson Title
-                                </label>
-                                <input
-                                    type="text"
-                                    className={styles.formControl}
-                                    name="title"
-                                    id="lessonTitle"
-                                    placeholder="Enter lesson title"
-                                    value={lesson.title}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                {errors.title && <div className={styles.textDanger}>{errors.title}</div>}
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label htmlFor="lessonDuration" className={styles.formLabel}>
-                                    Duration
-                                </label>
-                                <input
-                                    type="number"
-                                    className={styles.formControl}
-                                    name="duration"
-                                    id="lessonDuration"
-                                    placeholder="Enter lesson duration"
-                                    value={lesson.duration}
-                                    onChange={handleChange}
-                                    required
-                                />
-                                {errors.duration && <div className={styles.textDanger}>{errors.duration}</div>}
-                            </div>
-                            <button
-                                type="button"
-                                className={`${styles.btn} ${styles.btnSuccess}`}
-                                onClick={openModal}
-                            >
-                                Add Lesson
-                            </button>
-                            <button
-                                type="button"
-                                className={`${styles.btn} ${styles.btnSecondary}`}
-                                onClick={() => navigate(-1)}
-                            >
-                                Cancel
-                            </button>
-                        </form>
-                    </div>
-                </div>
+        <div className={styles.card}>
+            <div className={styles.cardHeader}>
+                <h4>Add New Lesson</h4>
+                <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
+                    <FontAwesomeIcon icon={faXmark}/>
+                </button>
             </div>
-            {showModal && (
+            <div className={styles.cardBody}>
+                <form onSubmit={(e) => e.preventDefault()}>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="lessonTitle" className={styles.formLabel}>
+                            Lesson Title
+                        </label>
+                        <input
+                            type="text"
+                            className={styles.formControl}
+                            name="title"
+                            id="lessonTitle"
+                            placeholder="Enter lesson title"
+                            value={lesson.title}
+                            onChange={handleChange}
+                            required
+                        />
+                        {errors.title && <div className={styles.textDanger}>{errors.title}</div>}
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label htmlFor="lessonDuration" className={styles.formLabel}>
+                            Duration
+                        </label>
+                        <input
+                            type="number"
+                            className={styles.formControl}
+                            name="duration"
+                            id="lessonDuration"
+                            placeholder="Enter lesson duration"
+                            value={lesson.duration}
+                            onChange={handleChange}
+                            required
+                        />
+                        {errors.duration && <div className={styles.textDanger}>{errors.duration}</div>}
+                    </div>
+                    <div className={styles.formGroupButton}>
+                        <button
+                            type="button"
+                            className={`${styles.btn} ${styles.btnSuccess}`}
+                            onClick={openConfirmModal}
+                        >
+                            Add Lesson
+                        </button>
+                        <button
+                            type="button"
+                            className={`${styles.btn} ${styles.btnSecondary}`}
+                            onClick={closeModal}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {showConfirmModal && (
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <div className={styles.modalHeader}>
                             <h5>Xác nhận thêm bài học</h5>
-                            <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
-                                &times;
+                            <button className={styles.modalClose} onClick={closeConfirmModal} aria-label="Close">
+                                ×
                             </button>
                         </div>
                         <div className={styles.modalBody}>
@@ -123,7 +120,7 @@ export default function AddLessonPage() {
                             </p>
                         </div>
                         <div className={styles.modalFooter}>
-                            <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={closeModal}>
+                            <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={closeConfirmModal}>
                                 Hủy
                             </button>
                             <button className={`${styles.btn} ${styles.btnSuccess}`} onClick={confirmSubmit}>
@@ -133,6 +130,8 @@ export default function AddLessonPage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
-}
+};
+
+export default AddLessonPage;

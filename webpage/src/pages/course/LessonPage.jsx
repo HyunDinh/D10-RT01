@@ -1,20 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import Header from "../../components/Header.jsx";
-import Footer from "../../components/Footer.jsx";
-import styles from "../../styles/lesson/LessonPage.module.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import DeleteConfirmDialog from "../../components/DeleteConfirmDialog.jsx";
+import Header from '../../components/Header.jsx';
+import Footer from '../../components/Footer.jsx';
+import styles from '../../styles/lesson/LessonPage.module.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import DeleteConfirmDialog from '../../components/DeleteConfirmDialog.jsx';
+import AddLessonPage from './AddLessonPage.jsx';
 
 export default function LessonPage() {
-    const {courseId} = useParams();
+    const { courseId } = useParams();
     const navigate = useNavigate();
     const [lessons, setLessons] = useState([]);
     const [error, setError] = useState(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [selectedLessonId, setSelectedLessonId] = useState(null);
+    const [showAddLessonDialog, setShowAddLessonDialog] = useState(false);
+
+    const openAddLessonDialog = () => setShowAddLessonDialog(true);
+    const closeAddLessonDialog = () => setShowAddLessonDialog(false);
 
     useEffect(() => {
         fetchLessons();
@@ -23,7 +28,7 @@ export default function LessonPage() {
     const fetchLessons = async () => {
         try {
             const result = await axios.get(`/api/lessons/course/${courseId}`, {
-                withCredentials: true
+                withCredentials: true,
             });
             setLessons(result.data);
         } catch (error) {
@@ -67,6 +72,13 @@ export default function LessonPage() {
             }
         }
     };
+
+    // Callback to refresh lessons after adding a new one
+    const handleLessonAdded = () => {
+        closeAddLessonDialog();
+        fetchLessons(); // Refresh the lesson list
+    };
+
     if (error) {
         return (
             <div className={styles.container}>
@@ -74,22 +86,25 @@ export default function LessonPage() {
             </div>
         );
     }
-    return (<>
-            <Header/>
-            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+
+    return (
+        <>
+            <Header />
+            <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
                 <div className={styles.headerInfo}>
                     <p>Course Detail</p>
-                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
-                        data-aos-delay="500">
+                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
                         <li>
                             <a href="/hocho/home">Home</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight}/>
+                            <FontAwesomeIcon icon={faChevronRight} />
                         </li>
-                        <li><a href="/hocho/teacher/course">Teacher Course</a></li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight}/>
+                            <a href="/hocho/teacher/course">Teacher Course</a>
+                        </li>
+                        <li>
+                            <FontAwesomeIcon icon={faChevronRight} />
                         </li>
                         <li>Course Detail</li>
                     </ul>
@@ -100,16 +115,16 @@ export default function LessonPage() {
                 <header className={styles.pageHeader}>
                     <h2 className={styles.pageTitle}>Lessons Overview</h2>
                     <div className={styles.actionButtons}>
-                        <Link
-                            to={`/hocho/teacher/course/${courseId}/lesson/add`}
-                            className={`${styles.btn} ${styles.btnSuccess}`}
+                        <button
+                            className={`${styles.chip} ${styles.chipSuccess}`}
                             aria-label="Add a new lesson"
+                            onClick={openAddLessonDialog}
                         >
                             Add New Lesson
-                        </Link>
+                        </button>
                         <Link
                             to="/hocho/teacher/course"
-                            className={`${styles.btn} ${styles.btnSecondary}`}
+                            className={`${styles.chip} ${styles.chipSecondary}`}
                             aria-label="Return to courses"
                         >
                             Back to Courses
@@ -145,21 +160,21 @@ export default function LessonPage() {
                                             <div className={styles.actionGroup}>
                                                 <Link
                                                     to={`/hocho/teacher/course/${courseId}/lesson/${lesson.lessonId}/edit`}
-                                                    className={`${styles.btn} ${styles.btnWarning} ${styles.btnSm}`}
-                                                    state={{lesson}}
+                                                    className={`${styles.chip} ${styles.chipWarning} ${styles.chipSm}`}
+                                                    state={{ lesson }}
                                                     aria-label={`Edit lesson ${lesson.title}`}
                                                 >
                                                     Edit
                                                 </Link>
                                                 <Link
                                                     to={`/hocho/teacher/course/${courseId}/lesson/${lesson.lessonId}/content`}
-                                                    className={`${styles.btn} ${styles.btnInfo} ${styles.btnSm}`}
+                                                    className={`${styles.chip} ${styles.chipInfo} ${styles.chipSm}`}
                                                     aria-label={`View content of lesson ${lesson.title}`}
                                                 >
                                                     View
                                                 </Link>
                                                 <button
-                                                    className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
+                                                    className={`${styles.chip} ${styles.chipDanger} ${styles.chipSm}`}
                                                     onClick={() => handleDeleteClick(lesson.lessonId)}
                                                     aria-label={`Delete lesson ${lesson.title}`}
                                                 >
@@ -174,11 +189,26 @@ export default function LessonPage() {
                         </div>
                     )}
                 </section>
-                <DeleteConfirmDialog sh={showDeleteDialog} onConfirm={handleDeleteConfirm} onCancel={handleDeleteCancel}
-                                     message="Are you sure you want to delete this lesson?"/>
+                <DeleteConfirmDialog
+                    sh={showDeleteDialog}
+                    onConfirm={handleDeleteConfirm}
+                    onCancel={handleDeleteCancel}
+                    message="Are you sure you want to delete this lesson?"
+                />
             </main>
-            <Footer/>
+            <Footer />
+            {showAddLessonDialog && (
+                <div className={styles.modal} onClick={closeAddLessonDialog}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <AddLessonPage
+                            showModal={showAddLessonDialog}
+                            closeModal={closeAddLessonDialog}
+                            courseId={courseId}
+                            onLessonAdded={handleLessonAdded} // Pass callback to refresh lessons
+                        />
+                    </div>
+                </div>
+            )}
         </>
-
     );
 }

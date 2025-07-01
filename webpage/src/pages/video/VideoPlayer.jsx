@@ -194,7 +194,6 @@ export default function VideoPlayer() {
             <Header/>
             <section className={styles.videoDetailContainer}>
                 <div className={styles.videoDetailMain}>
-                    <h2 className={styles.videoDetailTitle}>{video.title}</h2>
                     <h2>{maxVideoTime !== null ? `Time remaining: ${formatTime(remainingTime ?? maxVideoTime)}` : ' '}</h2>
                     <div className={styles.videoDetailPlayerWrapper}>
                         {video.contentData ? (
@@ -244,6 +243,7 @@ export default function VideoPlayer() {
                             </div>
                         )}
                     </div>
+                    <h2 className={styles.videoDetailTitle}>{video.title}</h2>
                     <p className={styles.videoDetailUploadedBy}>Uploaded by: {video.createdBy.fullName}</p>
                     <CommentSection videoId={videoId} playerRef={playerRef} playedSecondsRef={playedSecondsRef}/>
                 </div>
