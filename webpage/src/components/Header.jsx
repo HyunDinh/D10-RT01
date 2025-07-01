@@ -12,8 +12,7 @@ import {
     faDoorOpen,
     faIdBadge,
     faMapMarkerAlt,
-    faSearch,
-    faComments, faUniversalAccess,
+    faSearch,faUniversalAccess,
 } from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
