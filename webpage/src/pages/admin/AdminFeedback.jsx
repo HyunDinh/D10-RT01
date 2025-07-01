@@ -154,6 +154,8 @@ const AdminFeedback = () => {
                 return <FontAwesomeIcon icon={faCheckCircle} className={styles.statusIconResolved} />;
             case 'CLOSED':
                 return <FontAwesomeIcon icon={faTimesCircle} className={styles.statusIconClosed} />;
+            case 'REJECTED':
+                return <FontAwesomeIcon icon={faExclamationTriangle} className={styles.statusIconRejected} />;
             default:
                 return <FontAwesomeIcon icon={faInfoCircle} className={styles.statusIconDefault} />;
         }
@@ -164,7 +166,8 @@ const AdminFeedback = () => {
             'PENDING': 'Chờ xử lý',
             'IN_PROGRESS': 'Đang xử lý',
             'RESOLVED': 'Đã giải quyết',
-            'CLOSED': 'Đã đóng'
+            'CLOSED': 'Đã đóng',
+            'REJECTED': 'Đã từ chối',
         };
         return labels[status] || status;
     };
@@ -174,7 +177,8 @@ const AdminFeedback = () => {
             'PENDING': '#ffc107',
             'IN_PROGRESS': '#17a2b8',
             'RESOLVED': '#28a745',
-            'CLOSED': '#6c757d'
+            'CLOSED': '#6c757d',
+            'REJECTED': '#dc3545',
         };
         return colors[status] || '#6c757d';
     };
@@ -512,6 +516,7 @@ const AdminFeedback = () => {
                                         <option value="IN_PROGRESS">Đang xử lý</option>
                                         <option value="RESOLVED">Đã giải quyết</option>
                                         <option value="CLOSED">Đã đóng</option>
+                                        <option value="REJECTED">Đã từ chối</option>
                                     </select>
                                     <button
                                         onClick={handleRespondToFeedback}
