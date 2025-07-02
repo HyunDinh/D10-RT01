@@ -92,7 +92,7 @@ import AdminFeedback from './pages/admin/AdminFeedback';
 
 import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 
-
+import NotificationPage from './pages/notification/NotificationPage';
 
 const App = () => {
     return (
@@ -205,6 +205,8 @@ const App = () => {
                 // ************************************** MESSAGING ROUTES ***********************************
                 <Route path="/hocho/messaging" element={<MessagingPage />} />
 
+                // ************************************** NOTIFICATION ROUTE **************************************
+                <Route path="/hocho/notifications" element={<ProtectedRoute allowedRoles={['ROLE_CHILD', 'ROLE_PARENT', 'ROLE_TEACHER', 'ROLE_ADMIN']}><NotificationPage /></ProtectedRoute>}/>
 
             </Routes>
         </Router>);

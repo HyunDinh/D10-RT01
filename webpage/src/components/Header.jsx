@@ -14,7 +14,7 @@ import {
     faSearch,
     faComments,
 } from '@fortawesome/free-solid-svg-icons';
-import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faEnvelope, faBell } from '@fortawesome/free-regular-svg-icons';
 import { faFacebookF, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 function Header() {
@@ -25,6 +25,7 @@ function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuActive, setIsMobileMenuActive] = useState(false);
     const [unreadCount, setUnreadCount] = useState(0);
+    const [unreadNotifications, setUnreadNotifications] = useState(0);
     const navigate = useNavigate();
     const location = useLocation(); // Lấy đường dẫn hiện tại
 
@@ -70,6 +71,18 @@ function Header() {
                     setUnreadCount(totalUnreadChats);
                 })
                 .catch(() => setUnreadCount(0));
+        }
+    }, [isLoggedIn, refreshKey]);
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true })
+                .then(profileRes => {
+                    const userId = profileRes.data.id;
+                    return axios.get(`http://localhost:8080/api/notifications/user/${userId}?status=unread`, { withCredentials: true });
+                })
+                .then(res => setUnreadNotifications(res.data.length))
+                .catch(() => setUnreadNotifications(0));
         }
     }, [isLoggedIn, refreshKey]);
 
@@ -120,6 +133,7 @@ function Header() {
                 {path: '/hocho/admin/feedbacks', name: 'Quản lý phản hồi'},
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
+                {path: '/hocho/notifications', name: 'Notifications'},
                 {name: 'Approval', dropdown: [
                         {path: '/hocho/admin/course/approval', name: 'Course Manager'},
                         {path: '/hocho/admin/course/approval', name: 'CoursesPage'},
@@ -132,6 +146,7 @@ function Header() {
                 {path: '/hocho/teacher/video', name: 'Entertainment'},
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
+                {path: '/hocho/notifications', name: 'Notifications'},
             ],
             ROLE_PARENT: [
                 {path: '/hocho/parent', name: 'Thông tin Phụ huynh'},
@@ -141,6 +156,7 @@ function Header() {
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/parent/monitor', name: 'Learning Progress'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
+                {path: '/hocho/notifications', name: 'Notifications'},
             ],
             ROLE_CHILD: [
                 {path: '/hocho/questions', name: 'Forum'},
@@ -148,6 +164,7 @@ function Header() {
                 {path: '/hocho/child/learning-history', name: 'Learning History'},
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
                 {path: '/hocho/messaging', name: '', icon: faComments},
+                {path: '/hocho/notifications', name: 'Notifications'},
             ],
         };
 
@@ -190,18 +207,30 @@ function Header() {
                                     </ul>
                                 </>
                             ) : (
-                                <a href={item.path} className={styles.navLink} onClick={(e) => handleNavClick(e, item.path)}>
-                                    {item.icon ? (
+                                item.path === '/hocho/notifications' ? (
+                                    <a href={item.path} className={styles.navLink} onClick={(e) => handleNavClick(e, item.path)}>
                                         <span style={{position: 'relative', display: 'inline-block'}}>
-                                            <FontAwesomeIcon icon={item.icon} className={styles.navIconOnly} />
-                                            {item.path === '/hocho/messaging' && unreadCount > 0 && (
-                                                <span className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                                            <FontAwesomeIcon icon={faBell} className={styles.navIconOnly} />
+                                            {unreadNotifications > 0 && (
+                                                <span className={styles.unreadBadge}>{unreadNotifications > 99 ? '99+' : unreadNotifications}</span>
                                             )}
                                         </span>
-                                    ) : (
-                                        item.name
-                                    )}
-                                </a>
+                                        Notifications
+                                    </a>
+                                ) : (
+                                    <a href={item.path} className={styles.navLink} onClick={(e) => handleNavClick(e, item.path)}>
+                                        {item.icon ? (
+                                            <span style={{position: 'relative', display: 'inline-block'}}>
+                                                <FontAwesomeIcon icon={item.icon} className={styles.navIconOnly} />
+                                                {item.path === '/hocho/messaging' && unreadCount > 0 && (
+                                                    <span className={styles.unreadBadge}>{unreadCount > 99 ? '99+' : unreadCount}</span>
+                                                )}
+                                            </span>
+                                        ) : (
+                                            item.name
+                                        )}
+                                    </a>
+                                )
                             )}
                         </li>
                     ))}
