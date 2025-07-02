@@ -10,6 +10,10 @@ const NotificationPage = () => {
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(null);
     const [role, setRole] = useState(null);
+    
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [notificationsPerPage] = useState(10);
 
     // Lấy userId và role
     useEffect(() => {
@@ -56,63 +60,175 @@ const NotificationPage = () => {
                 });
                 setNotifications(data);
                 setLoading(false);
+                // Reset về trang đầu tiên khi có thay đổi filter hoặc dateRange
+                setCurrentPage(1);
             })
             .catch(err => {
-                setError('Không thể tải thông báo.');
+                setError('Cannot load notifications.');
                 setLoading(false);
             });
     }, [userId, role, filter, dateRange]);
 
+    // Tính toán pagination
+    const indexOfLastNotification = currentPage * notificationsPerPage;
+    const indexOfFirstNotification = indexOfLastNotification - notificationsPerPage;
+    const currentNotifications = notifications.slice(indexOfFirstNotification, indexOfLastNotification);
+    const totalPages = Math.ceil(notifications.length / notificationsPerPage);
+
+    // Xử lý thay đổi trang
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     // Xóa toàn bộ thông báo: (nếu backend chưa có API xóa all, có thể cần bổ sung)
     const handleDeleteAll = () => {
-        if (!window.confirm('Bạn có chắc muốn xóa toàn bộ thông báo?')) return;
+        if (!window.confirm('Do you want to clear all notifications?')) return;
         axios.delete(`http://localhost:8080/api/notifications?userId=${userId}&role=${role}`, { withCredentials: true })
-            .then(() => setNotifications([]))
-            .catch(() => setError('Không thể xóa thông báo.'));
+            .then(() => {
+                setNotifications([]);
+                setCurrentPage(1);
+            })
+            .catch(() => setError('Cannot delete notifications.'));
     };
 
     const handleDeleteOne = (notificationId) => {
-        if (!window.confirm('Bạn có chắc muốn xóa thông báo này?')) return;
+        if (!window.confirm('Are you sure you want to clear this notification?')) return;
         axios.delete(`http://localhost:8080/api/notifications/${notificationId}`, { withCredentials: true })
-            .then(() => setNotifications(notifications.filter(n => (n.notificationId || n.id) !== notificationId)))
+            .then(() => {
+                const updatedNotifications = notifications.filter(n => (n.notificationId || n.id) !== notificationId);
+                setNotifications(updatedNotifications);
+                // Nếu trang hiện tại không còn thông báo nào và không phải trang đầu tiên, chuyển về trang trước
+                const newTotalPages = Math.ceil(updatedNotifications.length / notificationsPerPage);
+                if (currentPage > newTotalPages && newTotalPages > 0) {
+                    setCurrentPage(newTotalPages);
+                }
+            })
             .catch(() => setError('Không thể xóa thông báo.'));
     };
 
     const handleFilterChange = (e) => setFilter(e.target.value);
     const handleDateChange = (e) => setDateRange({ ...dateRange, [e.target.name]: e.target.value });
 
+    // Render pagination controls
+    const renderPagination = () => {
+        if (totalPages <= 1) return null;
+
+        const pageNumbers = [];
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+        if (endPage - startPage + 1 < maxVisiblePages) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            pageNumbers.push(i);
+        }
+
+        return (
+            <div className={styles.pagination}>
+                <button 
+                    onClick={() => handlePageChange(1)} 
+                    disabled={currentPage === 1}
+                    className={styles.pageButton}
+                >
+                    &laquo; Đầu
+                </button>
+                <button 
+                    onClick={() => handlePageChange(currentPage - 1)} 
+                    disabled={currentPage === 1}
+                    className={styles.pageButton}
+                >
+                    &lsaquo; Trước
+                </button>
+                
+                {startPage > 1 && (
+                    <>
+                        <button 
+                            onClick={() => handlePageChange(1)} 
+                            className={styles.pageButton}
+                        >
+                            1
+                        </button>
+                        {startPage > 2 && <span className={styles.pageEllipsis}>...</span>}
+                    </>
+                )}
+
+                {pageNumbers.map(number => (
+                    <button
+                        key={number}
+                        onClick={() => handlePageChange(number)}
+                        className={`${styles.pageButton} ${currentPage === number ? styles.activePage : ''}`}
+                    >
+                        {number}
+                    </button>
+                ))}
+
+                {endPage < totalPages && (
+                    <>
+                        {endPage < totalPages - 1 && <span className={styles.pageEllipsis}>...</span>}
+                        <button 
+                            onClick={() => handlePageChange(totalPages)} 
+                            className={styles.pageButton}
+                        >
+                            {totalPages}
+                        </button>
+                    </>
+                )}
+
+                <button 
+                    onClick={() => handlePageChange(currentPage + 1)} 
+                    disabled={currentPage === totalPages}
+                    className={styles.pageButton}
+                >
+                    Sau &rsaquo;
+                </button>
+                <button 
+                    onClick={() => handlePageChange(totalPages)} 
+                    disabled={currentPage === totalPages}
+                    className={styles.pageButton}
+                >
+                    Cuối &raquo;
+                </button>
+            </div>
+        );
+    };
+
     return (
         <div className={styles.notificationPage}>
-            <h2>Thông báo của tôi</h2>
-            <div className={styles.filterBar}>
-                <label>
-                    Lọc trạng thái:
-                    <select value={filter} onChange={handleFilterChange}>
-                        <option value="all">Tất cả</option>
-                        <option value="unread">Chưa đọc</option>
-                    </select>
-                </label>
-                <label>
-                    Từ ngày:
-                    <input type="date" name="from" value={dateRange.from} onChange={handleDateChange} />
-                </label>
-                <label>
-                    Đến ngày:
-                    <input type="date" name="to" value={dateRange.to} onChange={handleDateChange} />
-                </label>
-                <button onClick={handleDeleteAll} className={styles.deleteAllBtn}>Xóa toàn bộ</button>
+            <div className={styles.headerRow}>
+                <h2>Notifications</h2>
+                <button onClick={handleDeleteAll} className={styles.deleteAllBtn}>Clear all</button>
             </div>
-            {loading ? <div>Đang tải...</div> : error ? <div className={styles.error}>{error}</div> : (
-                <ul className={styles.notificationList}>
-                    {notifications.length === 0 ? <li>Không có thông báo nào.</li> : notifications.map(n => (
-                        <li key={n.notificationId || n.id} className={n.read ? styles.read : styles.unread}>
-                            <div className={styles.title}>{n.title || n.type || 'Thông báo'}</div>
-                            <div className={styles.content}>{n.content || n.message}</div>
-                            <div className={styles.time}>{new Date(n.createdAt || n.timestamp || n.date || n.created_date).toLocaleString()}</div>
-                            <button className={styles.deleteOneBtn} onClick={() => handleDeleteOne(n.notificationId || n.id)}>Xóa</button>
-                        </li>
-                    ))}
-                </ul>
+            
+            {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <div className={styles.error}>{error}</div>
+            ) : (
+                <>
+                    <div className={styles.notificationInfo}>
+                        <p>Display {indexOfFirstNotification + 1}-{Math.min(indexOfLastNotification, notifications.length)} out of {notifications.length} notifications</p>
+                    </div>
+                    
+                    <ul className={styles.notificationList}>
+                        {currentNotifications.length === 0 ? (
+                            <li>No notifications.</li>
+                        ) : (
+                            currentNotifications.map(n => (
+                                <li key={n.notificationId || n.id} className={n.read ? styles.read : styles.unread}>
+                                    <div className={styles.title}>{n.title || n.type || 'Notifications'}</div>
+                                    <div className={styles.content}>{n.content || n.message}</div>
+                                    <div className={styles.time}>{new Date(n.createdAt || n.timestamp || n.date || n.created_date).toLocaleString()}</div>
+                                    <button className={styles.deleteOneBtn} onClick={() => handleDeleteOne(n.notificationId || n.id)}>Clear</button>
+                                </li>
+                            ))
+                        )}
+                    </ul>
+                    
+                    {renderPagination()}
+                </>
             )}
         </div>
     );

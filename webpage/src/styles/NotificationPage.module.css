@@ -7,6 +7,17 @@
   padding: 32px 24px;
 }
 
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.headerRow h2 {
+  margin: 0;
+}
+
 .filterBar {
   display: flex;
   gap: 18px;
@@ -35,7 +46,6 @@
   padding: 7px 18px;
   font-weight: bold;
   cursor: pointer;
-  margin-left: auto;
   transition: background 0.2s;
 }
 .deleteAllBtn:hover {
@@ -93,4 +103,64 @@
 .error {
   color: #d32f2f;
   margin: 12px 0;
+}
+
+.notificationInfo {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #007bff;
+}
+
+.notificationInfo p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.pageButton {
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  color: #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.pageButton:hover:not(:disabled) {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pageButton:disabled {
+  background: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #dee2e6;
+}
+
+.activePage {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pageEllipsis {
+  padding: 8px 4px;
+  color: #6c757d;
+  font-weight: bold;
 } 
