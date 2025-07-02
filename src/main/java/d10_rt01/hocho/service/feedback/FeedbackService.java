@@ -5,6 +5,7 @@ import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.model.enums.FeedbackStatus;
 import d10_rt01.hocho.repository.FeedbackRepository;
 import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import d10_rt01.hocho.utils.CustomLogger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class FeedbackService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
+
     @Transactional
     public Feedback createFeedback(Long userId, String subject, String content, String category, String priority) {
         logger.info("Creating feedback for user: {}", userId);
@@ -43,6 +47,14 @@ public class FeedbackService {
 
         Feedback savedFeedback = feedbackRepository.save(feedback);
         logger.info("Feedback created successfully: id={}, subject={}", savedFeedback.getFeedbackId(), savedFeedback.getSubject());
+        
+        // Tạo notification cho admin khi có feedback mới
+        try {
+            notificationIntegrationService.createFeedbackNotifications(user.getFullName(), category);
+            logger.info("Notification created successfully for feedback: {}", savedFeedback.getFeedbackId());
+        } catch (Exception e) {
+            logger.error("Failed to create notification for feedback: {}", savedFeedback.getFeedbackId(), e);
+        }
         
         return savedFeedback;
     }
@@ -99,6 +111,25 @@ public class FeedbackService {
         Feedback updatedFeedback = feedbackRepository.save(feedback);
         logger.info("Feedback response saved: id={}, status={}", feedbackId, newStatus);
         
+        // Tạo notification cho user khi feedback được phản hồi hoặc từ chối
+        try {
+            if (newStatus == FeedbackStatus.RESOLVED) {
+                notificationIntegrationService.createFeedbackRespondedNotification(
+                    feedback.getUser().getId(), 
+                    feedback.getSubject()
+                );
+                logger.info("Feedback responded notification created for user: {}", feedback.getUser().getId());
+            } else if (newStatus == FeedbackStatus.REJECTED) {
+                notificationIntegrationService.createFeedbackRejectedNotification(
+                    feedback.getUser().getId(), 
+                    feedback.getSubject()
+                );
+                logger.info("Feedback rejected notification created for user: {}", feedback.getUser().getId());
+            }
+        } catch (Exception e) {
+            logger.error("Failed to create feedback status notification for user: {}", feedback.getUser().getId(), e);
+        }
+        
         return updatedFeedback;
     }
 
@@ -114,6 +145,25 @@ public class FeedbackService {
 
         Feedback updatedFeedback = feedbackRepository.save(feedback);
         logger.info("Feedback status updated: id={}, newStatus={}", feedbackId, newStatus);
+        
+        // Tạo notification cho user khi feedback được phản hồi hoặc từ chối
+        try {
+            if (newStatus == FeedbackStatus.RESOLVED) {
+                notificationIntegrationService.createFeedbackRespondedNotification(
+                    feedback.getUser().getId(), 
+                    feedback.getSubject()
+                );
+                logger.info("Feedback responded notification created for user: {}", feedback.getUser().getId());
+            } else if (newStatus == FeedbackStatus.REJECTED) {
+                notificationIntegrationService.createFeedbackRejectedNotification(
+                    feedback.getUser().getId(), 
+                    feedback.getSubject()
+                );
+                logger.info("Feedback rejected notification created for user: {}", feedback.getUser().getId());
+            }
+        } catch (Exception e) {
+            logger.error("Failed to create feedback status notification for user: {}", feedback.getUser().getId(), e);
+        }
         
         return updatedFeedback;
     }

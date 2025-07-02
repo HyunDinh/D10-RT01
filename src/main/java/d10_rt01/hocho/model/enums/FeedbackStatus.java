@@ -4,5 +4,6 @@ public enum FeedbackStatus {
     PENDING,
     IN_PROGRESS,
     RESOLVED,
-    CLOSED
+    CLOSED,
+    REJECTED
 } 

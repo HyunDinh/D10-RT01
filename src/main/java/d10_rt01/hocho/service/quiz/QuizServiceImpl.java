@@ -4,6 +4,7 @@ import d10_rt01.hocho.dto.quiz.QuizAnswerDto;
 import d10_rt01.hocho.model.*;
 import d10_rt01.hocho.repository.UserRepository;
 import d10_rt01.hocho.repository.quiz.*;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +32,9 @@ public class QuizServiceImpl implements QuizService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
 
     @Override
     @Transactional
@@ -319,7 +323,13 @@ public class QuizServiceImpl implements QuizService {
         quizResult.setScore(totalScore);
         // Thay vì setAnswers, hãy thêm từng câu trả lời vào danh sách của quizResult
         quizAnswers.forEach(quizResult.getAnswers()::add); // Thêm các câu trả lời mới vào danh sách hiện có/trống
-        return quizResultRepository.save(quizResult);
+        
+        QuizResult savedResult = quizResultRepository.save(quizResult);
+        
+        // Tạo notification khi child hoàn thành quiz
+        notificationIntegrationService.createQuizCompletionNotifications(childId, quiz.getTitle());
+        
+        return savedResult;
     }
 
     @Override

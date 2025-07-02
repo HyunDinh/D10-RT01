@@ -6,6 +6,7 @@ import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.model.enums.CourseStatus;
 import d10_rt01.hocho.repository.CourseRepository;
 import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class CourseService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -51,7 +55,14 @@ public class CourseService {
             .orElseThrow(() -> new IllegalArgumentException("Teacher not found with ID: " + teacherId));
 
         course.setTeacher(teacher);
-        return courseRepository.save(course);
+        
+        Course savedCourse = courseRepository.save(course);
+        
+        // Tạo notification cho admin khi teacher thêm course mới
+        String teacherName = teacher.getFullName() != null ? teacher.getFullName() : teacher.getUsername();
+        notificationIntegrationService.createTeacherAddedCourseNotifications(teacherName, savedCourse.getTitle());
+        
+        return savedCourse;
     }
 
     @Transactional

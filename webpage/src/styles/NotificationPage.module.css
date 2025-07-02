@@ -1,0 +1,166 @@
+.notificationPage {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 32px 24px;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.headerRow h2 {
+  margin: 0;
+}
+
+.filterBar {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterBar label {
+  font-size: 15px;
+  color: #385469;
+}
+
+.filterBar select, .filterBar input[type="date"] {
+  margin-left: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.deleteAllBtn {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.deleteAllBtn:hover {
+  background: #d32f2f;
+}
+
+.deleteOneBtn {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 12px;
+  font-size: 13px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.deleteOneBtn:hover {
+  background: #d32f2f;
+}
+
+.notificationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notificationList li {
+  border-bottom: 1px solid #eee;
+  padding: 16px 0 10px 0;
+  transition: background 0.2s;
+}
+
+.unread {
+  background: #f7faff;
+  font-weight: bold;
+}
+.read {
+  background: #fff;
+  color: #888;
+}
+.title {
+  font-size: 16px;
+  color: #385469;
+  margin-bottom: 4px;
+}
+.content {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.time {
+  font-size: 13px;
+  color: #888;
+}
+.error {
+  color: #d32f2f;
+  margin: 12px 0;
+}
+
+.notificationInfo {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #007bff;
+}
+
+.notificationInfo p {
+  margin: 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.pageButton {
+  padding: 8px 12px;
+  border: 1px solid #dee2e6;
+  background: #fff;
+  color: #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  min-width: 40px;
+}
+
+.pageButton:hover:not(:disabled) {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pageButton:disabled {
+  background: #f8f9fa;
+  color: #6c757d;
+  cursor: not-allowed;
+  border-color: #dee2e6;
+}
+
+.activePage {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pageEllipsis {
+  padding: 8px 4px;
+  color: #6c757d;
+  font-weight: bold;
+} 
