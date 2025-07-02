@@ -5,6 +5,7 @@ import d10_rt01.hocho.model.enums.AgeGroup;
 import d10_rt01.hocho.model.enums.ContentStatus;
 import d10_rt01.hocho.repository.UserRepository;
 import d10_rt01.hocho.repository.VideoRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +22,24 @@ public class VideoService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
+
     // Thêm video mới (cho giáo viên)
     @Transactional
     public Video addVideo(Long teacherId, Video video, MultipartFile file) throws IOException {
         video.setCreatedBy(userRepository.findById(teacherId)
                 .orElseThrow(() -> new RuntimeException("Teacher not found")));
         video.setContentData(file.getBytes());
-        return videoRepository.save(video);
+        
+        Video savedVideo = videoRepository.save(video);
+        
+        // Tạo notification cho admin khi teacher thêm video mới
+        String teacherName = savedVideo.getCreatedBy().getFullName() != null ? 
+            savedVideo.getCreatedBy().getFullName() : savedVideo.getCreatedBy().getUsername();
+        notificationIntegrationService.createTeacherAddedVideoNotifications(teacherName, savedVideo.getTitle());
+        
+        return savedVideo;
     }
 
     // Lấy danh sách video của giáo viên

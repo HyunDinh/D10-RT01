@@ -5,6 +5,7 @@ import d10_rt01.hocho.model.*;
 import d10_rt01.hocho.repository.*;
 import d10_rt01.hocho.repository.lesson.LessonRepository;
 import d10_rt01.hocho.repository.quiz.QuizResultRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,9 @@ public class LearningProgressServiceImpl implements LearningProgressService {
     
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
 
     @Override
     public LearningProgressDto getChildLearningProgress(Long childId) {
@@ -280,5 +284,33 @@ public class LearningProgressServiceImpl implements LearningProgressService {
         
         // Lưu vào database
         learningHistoryRepository.save(history);
+        
+        // Kiểm tra xem khóa học có được hoàn thành không
+        checkAndNotifyCourseCompletion(childId, lesson.getCourse().getCourseId());
+    }
+    
+    /**
+     * Kiểm tra và thông báo khi khóa học được hoàn thành
+     */
+    private void checkAndNotifyCourseCompletion(Long childId, Long courseId) {
+        // Tính progress của khóa học
+        double progress = calculateCourseProgress(childId, courseId);
+        
+        // Nếu progress = 100%, khóa học đã hoàn thành
+        if (progress >= 100.0) {
+            // Lấy tên khóa học
+            Course course = lessonRepository.findLessonByCourseCourseId(courseId).stream()
+                .findFirst()
+                .map(Lesson::getCourse)
+                .orElse(null);
+            
+            if (course != null) {
+                notificationIntegrationService.createCourseCompletionNotifications(
+                    childId, 
+                    courseId, 
+                    course.getTitle()
+                );
+            }
+        }
     }
 } 

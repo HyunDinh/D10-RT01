@@ -222,7 +222,7 @@
     font-size: 0.875rem;
 }
 
-.statusIconPending, .statusIconInProgress, .statusIconResolved, .statusIconClosed, .statusIconDefault {
+.statusIconPending, .statusIconInProgress, .statusIconResolved, .statusIconClosed, .statusIconRejected, .statusIconDefault {
     font-size: 1rem;
 }
 

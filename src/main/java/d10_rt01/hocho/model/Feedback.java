@@ -19,7 +19,7 @@ public class Feedback {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "subject", nullable = false, length = 200)
+    @Column(name = "subject", nullable = false, columnDefinition = "NVARCHAR(MAX)", length = 200)
     private String subject;
 
     @Column(name = "content", nullable = false, columnDefinition = "NVARCHAR(MAX)", length = 5000)

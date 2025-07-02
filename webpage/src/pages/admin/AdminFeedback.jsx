@@ -154,6 +154,8 @@ const AdminFeedback = () => {
                 return <FontAwesomeIcon icon={faCheckCircle} className={styles.statusIconResolved} />;
             case 'CLOSED':
                 return <FontAwesomeIcon icon={faTimesCircle} className={styles.statusIconClosed} />;
+            case 'REJECTED':
+                return <FontAwesomeIcon icon={faExclamationTriangle} className={styles.statusIconRejected} />;
             default:
                 return <FontAwesomeIcon icon={faInfoCircle} className={styles.statusIconDefault} />;
         }
@@ -162,9 +164,10 @@ const AdminFeedback = () => {
     const getStatusLabel = (status) => {
         const labels = {
             'PENDING': 'Pending',
-            'IN_PROGRESS': 'In progress',
+            'IN_PROGRESS': 'In Progress',
             'RESOLVED': 'Resolved',
-            'CLOSED': 'Closed'
+            'CLOSED': 'Closed',
+            'REJECTED': 'Rejected',
         };
         return labels[status] || status;
     };
@@ -174,7 +177,8 @@ const AdminFeedback = () => {
             'PENDING': '#ffc107',
             'IN_PROGRESS': '#17a2b8',
             'RESOLVED': '#28a745',
-            'CLOSED': '#6c757d'
+            'CLOSED': '#6c757d',
+            'REJECTED': '#dc3545',
         };
         return colors[status] || '#6c757d';
     };
@@ -509,9 +513,10 @@ const AdminFeedback = () => {
                                         onChange={handleResponseChange}
                                         className={styles.statusSelect}
                                     >
-                                        <option value="IN_PROGRESS">In progress</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
                                         <option value="RESOLVED">Resolved</option>
                                         <option value="CLOSED">Closed</option>
+                                        <option value="REJECTED">Rejected</option>
                                     </select>
                                     <button
                                         onClick={handleRespondToFeedback}
