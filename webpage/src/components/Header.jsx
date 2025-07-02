@@ -7,6 +7,7 @@ import {
     faAngleDown,
     faArrowRightLong,
     faBars,
+    faBell,
     faCartShopping,
     faComments,
     faDoorOpen,
