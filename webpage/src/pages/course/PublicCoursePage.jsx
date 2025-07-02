@@ -162,52 +162,6 @@ const CoursesList = () => {
         // eslint-disable-next-line
     }, [filters.category, filters.priceRange, filters.level]);
 
-    // Thêm hàm xử lý gửi tin nhắn cho giáo viên
-    const handleSendMessageToTeacher = async (course) => {
-        if (!user) {
-            alert('Vui lòng đăng nhập để nhắn tin với giáo viên!');
-            navigate('/hocho/login?redirect=course-list');
-            return;
-        }
-        try {
-            // Lấy danh sách session chat
-            const sessionsRes = await axios.get('http://localhost:8080/api/messages/sessions', { withCredentials: true });
-            const sessions = sessionsRes.data;
-            // Kiểm tra đã có session với giáo viên chưa
-            const existingSession = sessions.find(s =>
-                (s.user1.id === user.id && s.user2.id === course.teacherId) ||
-                (s.user2.id === user.id && s.user1.id === course.teacherId)
-            );
-            if (existingSession) {
-                // Đã có session, chuyển sang trang nhắn tin với session này
-                navigate('/hocho/messaging', {
-                    state: {
-                        teacherId: course.teacherId,
-                        teacherName: course.teacherName,
-                        teacherAvatarUrl: course.teacherAvatarUrl
-                    }
-                });
-            } else {
-                // Chưa có session, tạo mới
-                await axios.post('http://localhost:8080/api/messages/sessions', null, {
-                    params: { user1Id: course.teacherId },
-                    withCredentials: true
-                });
-                // Sau khi tạo xong, chuyển sang trang nhắn tin
-                navigate('/hocho/messaging', {
-                    state: {
-                        teacherId: course.teacherId,
-                        teacherName: course.teacherName,
-                        teacherAvatarUrl: course.teacherAvatarUrl
-                    }
-                });
-            }
-        } catch (error) {
-            alert('Không thể tạo phiên trò chuyện với giáo viên.');
-            console.error(error);
-        }
-    };
-
     return (
         <>
             <Header />
@@ -391,26 +345,6 @@ const CoursesList = () => {
                                                 {course.teacherName}
                                             </span>
                                         </div>
-                                        {hoveredTeacherCard === course.courseId && (
-                                            <button
-                                                style={{
-                                                    marginTop: 6,
-                                                    background: '#2d6cdf',
-                                                    color: '#fff',
-                                                    border: 'none',
-                                                    borderRadius: 6,
-                                                    padding: '4px 12px',
-                                                    fontSize: 13,
-                                                    cursor: 'pointer',
-                                                    zIndex: 2,
-                                                    whiteSpace: 'nowrap',
-                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-                                                }}
-                                                onClick={() => handleSendMessageToTeacher(course)}
-                                            >
-                                                Send message
-                                            </button>
-                                        )}
                                     </div>
                                     <div style={{ textAlign: 'end' }}>
                                         <button

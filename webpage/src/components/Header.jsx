@@ -140,7 +140,6 @@ function Header() {
                 {path: '/hocho/questions', name: 'Forum'},
                 {path: '/hocho/teacher/video', name: 'Entertainment'},
                 {path: '/hocho/feedback', name: 'My Feedbacks'},
-                {path: '/hocho/messaging', name: '', icon: faComments},
                 {path: '/hocho/notifications', name: 'Notifications'},
             ],
             ROLE_PARENT: [
