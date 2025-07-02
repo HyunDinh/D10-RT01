@@ -166,4 +166,18 @@ public class NotificationController {
                     .body("Failed to create test feedback: " + e.getMessage());
         }
     }
+
+    // Xóa toàn bộ notification theo userId và role
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllNotifications(@RequestParam Long userId, @RequestParam UserRole role) {
+        notificationService.deleteAllNotifications(userId, role);
+        return ResponseEntity.ok().build();
+    }
+
+    // Xóa một notification theo id
+    @DeleteMapping("/{notificationId}")
+    public ResponseEntity<Void> deleteNotification(@PathVariable Long notificationId) {
+        notificationService.deleteNotification(notificationId);
+        return ResponseEntity.ok().build();
+    }
 } 

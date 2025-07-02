@@ -307,6 +307,16 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.save(notification);
     }
 
+    @Override
+    public void deleteAllNotifications(Long userId, UserRole role) {
+        notificationRepository.deleteByUserIdAndUserRole(userId, role);
+    }
+
+    @Override
+    public void deleteNotification(Long notificationId) {
+        notificationRepository.deleteById(notificationId);
+    }
+
     // Helper method to convert entity to DTO
     private NotificationDto convertToDto(UserNotification notification) {
         NotificationDto dto = new NotificationDto();

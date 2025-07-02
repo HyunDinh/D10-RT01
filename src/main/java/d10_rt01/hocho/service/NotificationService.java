@@ -54,4 +54,10 @@ public interface NotificationService {
     // Tạo notification cho user khi feedback được phản hồi/từ chối
     void createFeedbackRespondedNotification(Long userId, String feedbackSubject);
     void createFeedbackRejectedNotification(Long userId, String feedbackSubject);
+    
+    // Xóa tất cả notification cho user theo userId và role
+    void deleteAllNotifications(Long userId, UserRole role);
+    
+    // Xóa notification theo notificationId
+    void deleteNotification(Long notificationId);
 } 

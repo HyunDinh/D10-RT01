@@ -1,0 +1,96 @@
+.notificationPage {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 32px 24px;
+}
+
+.filterBar {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filterBar label {
+  font-size: 15px;
+  color: #385469;
+}
+
+.filterBar select, .filterBar input[type="date"] {
+  margin-left: 6px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.deleteAllBtn {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 7px 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: auto;
+  transition: background 0.2s;
+}
+.deleteAllBtn:hover {
+  background: #d32f2f;
+}
+
+.deleteOneBtn {
+  background: #ff3b3b;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 12px;
+  font-size: 13px;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.deleteOneBtn:hover {
+  background: #d32f2f;
+}
+
+.notificationList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notificationList li {
+  border-bottom: 1px solid #eee;
+  padding: 16px 0 10px 0;
+  transition: background 0.2s;
+}
+
+.unread {
+  background: #f7faff;
+  font-weight: bold;
+}
+.read {
+  background: #fff;
+  color: #888;
+}
+.title {
+  font-size: 16px;
+  color: #385469;
+  margin-bottom: 4px;
+}
+.content {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.time {
+  font-size: 13px;
+  color: #888;
+}
+.error {
+  color: #d32f2f;
+  margin: 12px 0;
+} 
