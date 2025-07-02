@@ -5,7 +5,7 @@ import styles from '../../styles/lesson/AddLesson.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
 
-const AddLessonPage = ({showModal, closeModal, courseId}) => {
+const AddLessonPage = ({showModal, closeModal, courseId, onLessonAdded}) => {
     const navigate = useNavigate();
     const [lesson, setLesson] = useState({
         title: '',
@@ -34,7 +34,7 @@ const AddLessonPage = ({showModal, closeModal, courseId}) => {
         try {
             await axios.post(`/api/lessons/add/${courseId}`, lesson);
             closeConfirmModal();
-            closeModal(); // Close the dialog
+            if (onLessonAdded) onLessonAdded();
             setTimeout(() => {
                 navigate(`/hocho/teacher/course/${courseId}/lesson`);
             }, 1500);
@@ -108,23 +108,23 @@ const AddLessonPage = ({showModal, closeModal, courseId}) => {
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <div className={styles.modalHeader}>
-                            <h5>Xác nhận thêm bài học</h5>
+                            <h5>Confirm Add Lesson</h5>
                             <button className={styles.modalClose} onClick={closeConfirmModal} aria-label="Close">
                                 ×
                             </button>
                         </div>
                         <div className={styles.modalBody}>
                             <p>
-                                Bạn có chắc chắn muốn thêm bài học "<strong>{lesson.title}</strong>" với thời lượng{' '}
-                                <strong>{lesson.duration}</strong> phút không?
+                                Are you sure you want to add the lesson "<strong>{lesson.title}</strong>" with duration 
+                                <strong>{lesson.duration}</strong> minutes?
                             </p>
                         </div>
                         <div className={styles.modalFooter}>
                             <button className={`${styles.btn} ${styles.btnSecondary}`} onClick={closeConfirmModal}>
-                                Hủy
+                                Cancel
                             </button>
                             <button className={`${styles.btn} ${styles.btnSuccess}`} onClick={confirmSubmit}>
-                                Xác nhận
+                                Confirm
                             </button>
                         </div>
                     </div>

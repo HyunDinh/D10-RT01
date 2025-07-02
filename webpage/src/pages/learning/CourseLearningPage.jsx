@@ -221,6 +221,25 @@ export default function CourseLearningPage() {
 		return bytes.slice().buffer;
 	}
 
+	function getDownloadUrl(content) {
+		if (!content || !content.contentData) return null;
+		const buffer = createFreshArrayBuffer(content.contentData);
+		let mime = 'application/octet-stream';
+		let ext = '';
+		if (content.contentType === 'VIDEO') {
+			mime = 'video/mp4';
+			ext = '.mp4';
+		} else if (content.contentType === 'PDF') {
+			mime = 'application/pdf';
+			ext = '.pdf';
+		}
+		const blob = new Blob([buffer], { type: mime });
+		return {
+			url: URL.createObjectURL(blob),
+			filename: (content.title || 'lesson') + ext
+		};
+	}
+
 	if (loading) {
 		return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>Loading...</div></div>;
 	}
@@ -369,6 +388,30 @@ export default function CourseLearningPage() {
 											<div style={{ textAlign: 'center', padding: '20px' }}>No PDF file available.</div>
 										)}
 									</div>
+								)}
+								{/* Download button for VIDEO or PDF */}
+								{(selectedContent.contentType === 'VIDEO' || selectedContent.contentType === 'PDF') && (
+									(() => {
+										const download = getDownloadUrl(selectedContent);
+										return download ? (
+											<div style={{ marginTop: 16, textAlign: 'center' }}>
+												<a href={download.url} download={download.filename}>
+													<button style={{
+														background: '#1967d2',
+														color: '#fff',
+														border: 'none',
+														borderRadius: 6,
+														padding: '10px 28px',
+														fontSize: '1rem',
+														fontWeight: 600,
+														cursor: 'pointer'
+													}}>
+														Download {selectedContent.contentType === 'VIDEO' ? 'Video' : 'PDF'}
+													</button>
+												</a>
+											</div>
+										) : null;
+									})()
 								)}
 								{selectedContent.contentType !== 'VIDEO' && selectedContent.contentType !== 'PDF' && (
 									<div style={{ color: '#888', fontStyle: 'italic' }}>Unsupported content type</div>
