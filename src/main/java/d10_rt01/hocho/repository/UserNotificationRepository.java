@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,4 +24,9 @@ public interface UserNotificationRepository extends JpaRepository<UserNotificati
     Long countUnreadByUserIdAndRole(@Param("userId") Long userId, @Param("role") UserRole role);
     
     List<UserNotification> findByUserIdOrderByCreatedAtDesc(Long userId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM UserNotification n WHERE n.user.id = :userId AND n.userRole = :userRole")
+    void deleteByUserIdAndUserRole(@Param("userId") Long userId, @Param("userRole") UserRole userRole);
 } 

@@ -1,5 +1,7 @@
 package d10_rt01.hocho.model;
 
+import d10_rt01.hocho.model.enums.NotificationType;
+import d10_rt01.hocho.model.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,8 +24,13 @@ public class UserNotification {
     @JoinColumn(name = "sender_id")
     private User sender;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "notification_type", nullable = false)
-    private String notificationType;
+    private NotificationType notificationType;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false)
+    private UserRole userRole;
 
     @Column(name = "content", columnDefinition = "NVARCHAR(MAX)")
     private String content;
