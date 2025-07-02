@@ -21,33 +21,33 @@ const TutorProfile = () => {
             setTutor(response.data);
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải thông tin gia sư');
+            setError('Cannot load tutor information');
             setLoading(false);
         }
     };
 
-    if (loading) return <div className="alert alert-info text-center">Đang tải thông tin gia sư...</div>;
+    if (loading) return <div className="alert alert-info text-center">Loading tutor information...</div>;
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
     if (!tutor) return null;
 
     return (
         <div className={styles.tutorContainer}>
-            <h2 className={styles.tutorTitle}>Thông tin gia sư</h2>
+            <h2 className={styles.tutorTitle}>Tutor Information</h2>
             <div className={styles.tutorCard}>
                 <h4 className={styles.tutorCardTitle}>{tutor.user.fullName}</h4>
                 <p className={styles.tutorCardText}><b>Email:</b> {tutor.user.email}</p>
-                <p className={styles.tutorCardText}><b>Số điện thoại:</b> {tutor.user.phoneNumber}</p>
-                <p className={styles.tutorCardText}><b>Chuyên môn:</b> {tutor.specialization}</p>
-                <p className={styles.tutorCardText}><b>Kinh nghiệm:</b> {tutor.experience} năm</p>
-                <p className={styles.tutorCardText}><b>Học vấn:</b> {tutor.education}</p>
-                <p className={styles.tutorCardText}><b>Giới thiệu:</b> {tutor.introduction}</p>
+                <p className={styles.tutorCardText}><b>Phone number:</b> {tutor.user.phoneNumber}</p>
+                <p className={styles.tutorCardText}><b>Specialization:</b> {tutor.specialization}</p>
+                <p className={styles.tutorCardText}><b>Experience:</b> {tutor.experience} years</p>
+                <p className={styles.tutorCardText}><b>Education:</b> {tutor.education}</p>
+                <p className={styles.tutorCardText}><b>Introduction:</b> {tutor.introduction}</p>
                 <p className={styles.tutorCardText}>
-                    <b>Trạng thái:</b> {tutor.status === 'APPROVED' ? (
-                        <span className={`${styles.tutorBadge} ${styles.approved}`}>Đã duyệt</span>
+                    <b>Status:</b> {tutor.status === 'APPROVED' ? (
+                        <span className={`${styles.tutorBadge} ${styles.approved}`}>Approved</span>
                     ) : tutor.status === 'REJECTED' ? (
-                        <span className={`${styles.tutorBadge} ${styles.rejected}`}>Từ chối</span>
+                        <span className={`${styles.tutorBadge} ${styles.rejected}`}>Rejected</span>
                     ) : (
-                        <span className={`${styles.tutorBadge} ${styles.pending}`}>Chờ duyệt</span>
+                        <span className={`${styles.tutorBadge} ${styles.pending}`}>Pending</span>
                     )}
                 </p>
             </div>

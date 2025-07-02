@@ -1,0 +1,403 @@
+/* AddLesson.module.css */
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+/* Container for the page */
+.container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Page header */
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* Action buttons container */
+.actionButtons {
+    display: flex;
+    gap: 12px;
+}
+
+/* Split container for left (content list) and right (player) */
+.splitContainer {
+    display: flex;
+    gap: 24px;
+    min-height: 400px;
+}
+
+/* Content list (left side) */
+.contentList {
+    width: 30%;
+    background: #faf5ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.contentListTitle {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 0 16px;
+    color: #333;
+}
+
+.contentItems {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contentItem {
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.contentItem:hover {
+    background: rgba(223, 138, 73, 0.1);
+    transform: translateY(-2px);
+}
+
+.contentItemActive {
+    background: var(--primary-color);
+    color: #faf5ff;
+}
+
+.contentItemActive:hover {
+    background: #df8039;
+}
+
+.contentItemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.contentItemContent h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.contentItemContent p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.contentItemActions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* Content player (right side) */
+.playerContainer {
+    width: 100%;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+
+/* PDF controls */
+.pdfControls {
+    text-align: center;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.pdfControls span {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    border: none;
+}
+
+.btnSm {
+    padding: 6px 12px;
+    font-size: 13px;
+}
+
+.btnSuccess {
+    background: var(--primary-color); /* #f28c38 */
+    color: #faf5ff;
+}
+
+.btnSuccess:hover {
+    background: #df8039;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnSecondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btnSecondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnWarning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.btnWarning:hover {
+    background: #e0a800;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnDanger {
+    background: #e3342f;
+    color: #fff;
+}
+
+.btnDanger:hover {
+    background: #c5302b;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Error message */
+.textDanger {
+    color: #e3342f;
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Loading state */
+.loading {
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    padding: 20px;
+}
+
+/* No content message */
+.noLessons {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Modal styles for confirmation dialog */
+.modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Modal content */
+.modalContent {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    min-width: 320px;
+    max-width: 70vw;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50px) scale(0.95);
+    opacity: 0;
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+/* Modal header */
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Modal body */
+.modalBody {
+    margin-bottom: 16px;
+}
+
+/* Modal footer */
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Modal close button */
+.modalClose {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.modalClose:hover {
+    color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+}
+
+/* Apply fadeOut when modal is closing */
+.modal.closing {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.modalContent.closing {
+    animation: slideOut 0.3s ease forwards;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .splitContainer {
+        flex-direction: column;
+    }
+
+    .contentList, .playerContainer {
+        width: 100%;
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .btnSm {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .modalContent {
+        width: 95%;
+    }
+
+    .playerContainer {
+        max-height: 400px;
+    }
+}

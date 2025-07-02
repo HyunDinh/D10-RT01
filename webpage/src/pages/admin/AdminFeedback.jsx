@@ -43,7 +43,7 @@ const AdminFeedback = () => {
             });
             setFeedbacks(response.data);
         } catch (err) {
-            setError('Có lỗi xảy ra khi tải danh sách phản hồi.');
+            setError('An error occurred while loading feedback list.');
             console.error('Error fetching feedbacks:', err);
         } finally {
             setLoading(false);
@@ -73,7 +73,7 @@ const AdminFeedback = () => {
                 setFeedbacks(response.data);
             }
         } catch (err) {
-            setError('Có lỗi xảy ra khi tải danh sách phản hồi.');
+            setError('An error occurred while loading feedback list.');
             console.error('Error fetching feedbacks by status:', err);
         } finally {
             setLoading(false);
@@ -101,7 +101,7 @@ const AdminFeedback = () => {
 
     const handleRespondToFeedback = async () => {
         if (!responseData.response.trim()) {
-            alert('Vui lòng nhập phản hồi');
+            alert('Please enter a response');
             return;
         }
 
@@ -119,9 +119,9 @@ const AdminFeedback = () => {
             
             closeModal();
             fetchStats(); // Refresh stats
-            alert('Phản hồi đã được gửi thành công!');
+            alert('Response sent successfully!');
         } catch (err) {
-            alert(err.response?.data || 'Có lỗi xảy ra khi gửi phản hồi.');
+            alert(err.response?.data || 'An error occurred while sending the response.');
         }
     };
 
@@ -140,7 +140,7 @@ const AdminFeedback = () => {
             
             fetchStats(); // Refresh stats
         } catch (err) {
-            alert(err.response?.data || 'Có lỗi xảy ra khi cập nhật trạng thái.');
+            alert(err.response?.data || 'An error occurred while updating status.');
         }
     };
 
@@ -163,11 +163,11 @@ const AdminFeedback = () => {
 
     const getStatusLabel = (status) => {
         const labels = {
-            'PENDING': 'Chờ xử lý',
-            'IN_PROGRESS': 'Đang xử lý',
-            'RESOLVED': 'Đã giải quyết',
-            'CLOSED': 'Đã đóng',
-            'REJECTED': 'Đã từ chối',
+            'PENDING': 'Pending',
+            'IN_PROGRESS': 'In Progress',
+            'RESOLVED': 'Resolved',
+            'CLOSED': 'Closed',
+            'REJECTED': 'Rejected',
         };
         return labels[status] || status;
     };
@@ -185,20 +185,20 @@ const AdminFeedback = () => {
 
     const getCategoryLabel = (category) => {
         const labels = {
-            'BUG_REPORT': 'Báo lỗi',
-            'FEATURE_REQUEST': 'Yêu cầu tính năng',
-            'GENERAL': 'Phản hồi chung',
-            'TECHNICAL_SUPPORT': 'Hỗ trợ kỹ thuật'
+            'BUG_REPORT': 'Bug report',
+            'FEATURE_REQUEST': 'Feature request',
+            'GENERAL': 'General',
+            'TECHNICAL_SUPPORT': 'Technical support'
         };
         return labels[category] || category;
     };
 
     const getPriorityLabel = (priority) => {
         const labels = {
-            'LOW': 'Thấp',
-            'MEDIUM': 'Trung bình',
-            'HIGH': 'Cao',
-            'URGENT': 'Khẩn cấp'
+            'LOW': 'Low',
+            'MEDIUM': 'Medium',
+            'HIGH': 'High',
+            'URGENT': 'Urgent'
         };
         return labels[priority] || priority;
     };
@@ -236,7 +236,7 @@ const AdminFeedback = () => {
                 <main className={styles.main}>
                     <div className={styles.loadingContainer}>
                         <div className={styles.spinner}></div>
-                        <p>Đang tải danh sách phản hồi...</p>
+                        <p>Loading feedback list...</p>
                     </div>
                 </main>
                 <Footer />
@@ -250,7 +250,7 @@ const AdminFeedback = () => {
             <main className={styles.main}>
                 <div className={styles.container}>
                     <div className={styles.header}>
-                        <h1 className={styles.title}>Quản lý phản hồi</h1>
+                        <h1 className={styles.title}>Feedback Management</h1>
                     </div>
 
                     {/* Statistics */}
@@ -261,7 +261,7 @@ const AdminFeedback = () => {
                             </div>
                             <div className={styles.statContent}>
                                 <h3>{stats.total || 0}</h3>
-                                <p>Tổng số phản hồi</p>
+                                <p>Total feedbacks</p>
                             </div>
                         </div>
                         <div className={styles.statCard}>
@@ -270,7 +270,7 @@ const AdminFeedback = () => {
                             </div>
                             <div className={styles.statContent}>
                                 <h3>{stats.pending || 0}</h3>
-                                <p>Chờ xử lý</p>
+                                <p>Pending</p>
                             </div>
                         </div>
                         <div className={styles.statCard}>
@@ -279,7 +279,7 @@ const AdminFeedback = () => {
                             </div>
                             <div className={styles.statContent}>
                                 <h3>{stats.inProgress || 0}</h3>
-                                <p>Đang xử lý</p>
+                                <p>In progress</p>
                             </div>
                         </div>
                         <div className={styles.statCard}>
@@ -288,7 +288,7 @@ const AdminFeedback = () => {
                             </div>
                             <div className={styles.statContent}>
                                 <h3>{stats.resolved || 0}</h3>
-                                <p>Đã giải quyết</p>
+                                <p>Resolved</p>
                             </div>
                         </div>
                     </div>
@@ -305,11 +305,11 @@ const AdminFeedback = () => {
                                 }}
                                 className={styles.filterSelect}
                             >
-                                <option value="ALL">Tất cả trạng thái</option>
-                                <option value="PENDING">Chờ xử lý</option>
-                                <option value="IN_PROGRESS">Đang xử lý</option>
-                                <option value="RESOLVED">Đã giải quyết</option>
-                                <option value="CLOSED">Đã đóng</option>
+                                <option value="ALL">All status</option>
+                                <option value="PENDING">Pending</option>
+                                <option value="IN_PROGRESS">In progress</option>
+                                <option value="RESOLVED">Resolved</option>
+                                <option value="CLOSED">Closed</option>
                             </select>
                         </div>
                     </div>
@@ -326,8 +326,8 @@ const AdminFeedback = () => {
                             <div className={styles.emptyIcon}>
                                 <FontAwesomeIcon icon={faInfoCircle} />
                             </div>
-                            <h3>Không có phản hồi nào</h3>
-                            <p>Không có phản hồi nào với trạng thái đã chọn.</p>
+                            <h3>No feedbacks</h3>
+                            <p>No feedbacks with the selected status.</p>
                         </div>
                     ) : (
                         <div className={styles.feedbackList}>
@@ -338,7 +338,7 @@ const AdminFeedback = () => {
                                             <h3>{feedback.subject}</h3>
                                             <div className={styles.feedbackMeta}>
                                                 <span className={styles.userInfo}>
-                                                    <strong>Người gửi:</strong> {feedback.user?.fullName || feedback.user?.username}
+                                                    <strong>Sender:</strong> {feedback.user?.fullName || feedback.user?.username}
                                                 </span>
                                                 <span className={styles.feedbackDate}>
                                                     {formatDate(feedback.createdAt)}
@@ -376,11 +376,11 @@ const AdminFeedback = () => {
 
                                     {feedback.adminResponse && (
                                         <div className={styles.adminResponse}>
-                                            <h4>Phản hồi của admin:</h4>
+                                            <h4>Admin response:</h4>
                                             <p>{feedback.adminResponse}</p>
                                             {feedback.responseDate && (
                                                 <small className={styles.responseDate}>
-                                                    Phản hồi lúc: {formatDate(feedback.responseDate)}
+                                                    Responded at: {formatDate(feedback.responseDate)}
                                                 </small>
                                             )}
                                         </div>
@@ -392,7 +392,7 @@ const AdminFeedback = () => {
                                             className={styles.viewButton}
                                         >
                                             <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
-                                            Xem chi tiết
+                                            View details
                                         </button>
                                         {feedback.status === 'PENDING' && (
                                             <button
@@ -401,7 +401,7 @@ const AdminFeedback = () => {
                                                 style={{ backgroundColor: '#17a2b8' }}
                                             >
                                                 <FontAwesomeIcon icon={faSpinner} />
-                                                Bắt đầu xử lý
+                                                Start processing
                                             </button>
                                         )}
                                         {feedback.status === 'IN_PROGRESS' && (
@@ -411,7 +411,7 @@ const AdminFeedback = () => {
                                                 style={{ backgroundColor: '#28a745' }}
                                             >
                                                 <FontAwesomeIcon icon={faCheckCircle} />
-                                                Đánh dấu đã giải quyết
+                                                Mark as resolved
                                             </button>
                                         )}
                                         {feedback.status !== 'CLOSED' && (
@@ -421,7 +421,7 @@ const AdminFeedback = () => {
                                                 style={{ backgroundColor: '#6c757d' }}
                                             >
                                                 <FontAwesomeIcon icon={faTimesCircle} />
-                                                Đóng
+                                                Close
                                             </button>
                                         )}
                                     </div>
@@ -446,16 +446,16 @@ const AdminFeedback = () => {
                         <div className={styles.modalBody}>
                             <div className={styles.modalMeta}>
                                 <div className={styles.metaItem}>
-                                    <strong>Người gửi:</strong> {selectedFeedback.user?.fullName || selectedFeedback.user?.username}
+                                    <strong>Sender:</strong> {selectedFeedback.user?.fullName || selectedFeedback.user?.username}
                                 </div>
                                 <div className={styles.metaItem}>
                                     <strong>Email:</strong> {selectedFeedback.user?.email}
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Danh mục:</strong> {getCategoryLabel(selectedFeedback.category)}
+                                    <strong>Category:</strong> {getCategoryLabel(selectedFeedback.category)}
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Mức độ ưu tiên:</strong> 
+                                    <strong>Priority:</strong>
                                     <span 
                                         className={styles.priorityBadge}
                                         style={{ backgroundColor: getPriorityColor(selectedFeedback.priority) }}
@@ -464,7 +464,7 @@ const AdminFeedback = () => {
                                     </span>
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Trạng thái:</strong>
+                                    <strong>Status:</strong>
                                     <span 
                                         className={styles.statusLabel}
                                         style={{ color: getStatusColor(selectedFeedback.status) }}
@@ -474,22 +474,22 @@ const AdminFeedback = () => {
                                     </span>
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Ngày gửi:</strong> {formatDate(selectedFeedback.createdAt)}
+                                    <strong>Sent at:</strong> {formatDate(selectedFeedback.createdAt)}
                                 </div>
                             </div>
 
                             <div className={styles.modalContent}>
-                                <h4>Nội dung phản hồi:</h4>
+                                <h4>Feedback content:</h4>
                                 <p>{selectedFeedback.content}</p>
                             </div>
 
                             {selectedFeedback.adminResponse && (
                                 <div className={styles.modalResponse}>
-                                    <h4>Phản hồi của admin:</h4>
+                                    <h4>Admin response:</h4>
                                     <p>{selectedFeedback.adminResponse}</p>
                                     {selectedFeedback.responseDate && (
                                         <small className={styles.responseDate}>
-                                            Phản hồi lúc: {formatDate(selectedFeedback.responseDate)}
+                                            Responded at: {formatDate(selectedFeedback.responseDate)}
                                         </small>
                                     )}
                                 </div>
@@ -497,13 +497,13 @@ const AdminFeedback = () => {
 
                             {/* Response Form */}
                             <div className={styles.responseForm}>
-                                <h4>Phản hồi:</h4>
+                                <h4>Response:</h4>
                                 <textarea
                                     name="response"
                                     value={responseData.response}
                                     onChange={handleResponseChange}
                                     className={styles.responseTextarea}
-                                    placeholder="Nhập phản hồi của bạn..."
+                                    placeholder="Enter your response..."
                                     rows={4}
                                 />
                                 <div className={styles.responseActions}>
@@ -513,17 +513,17 @@ const AdminFeedback = () => {
                                         onChange={handleResponseChange}
                                         className={styles.statusSelect}
                                     >
-                                        <option value="IN_PROGRESS">Đang xử lý</option>
-                                        <option value="RESOLVED">Đã giải quyết</option>
-                                        <option value="CLOSED">Đã đóng</option>
-                                        <option value="REJECTED">Đã từ chối</option>
+                                        <option value="IN_PROGRESS">In Progress</option>
+                                        <option value="RESOLVED">Resolved</option>
+                                        <option value="CLOSED">Closed</option>
+                                        <option value="REJECTED">Rejected</option>
                                     </select>
                                     <button
                                         onClick={handleRespondToFeedback}
                                         className={styles.respondButton}
                                     >
                                         <FontAwesomeIcon icon={faReply} />
-                                        Gửi phản hồi
+                                        Send response
                                     </button>
                                 </div>
                             </div>

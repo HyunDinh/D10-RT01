@@ -1,49 +1,41 @@
-/* Container */
-.container {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-/* Card-like wrapper */
+/* Card for modal */
 .card {
     background: #faf5ff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added smooth card transition */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-4px); /* Subtle lift effect on hover */
+    transform: translateY(-4px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Card header */
 .cardHeader {
-    background: var(--primary-color); /* Green background for header */
+    background: var(--primary-color); /* #f28c38 */
     color: #faf5ff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    text-align: center;
 }
 
-/* Card header title */
 .cardHeader h4 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
-    transition: opacity 0.3s ease; /* Smooth title fade */
 }
 
-/* Card body */
 .cardBody {
     padding: 20px;
 }
 
-/* Form styling */
+/* Form styling for EditLessonContentPage */
+.form {
+    width: 100%;
+}
+
 .formGroup {
     margin-bottom: 20px;
 }
@@ -52,7 +44,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
 }
 
 .formLabel {
@@ -61,7 +53,7 @@
     font-weight: 500;
     color: #333;
     margin-bottom: 8px;
-    transition: color 0.3s ease; /* Smooth label color transition */
+    transition: color 0.3s ease;
 }
 
 .formControl {
@@ -70,47 +62,43 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; /* Smoother input transitions */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .formControl:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(223, 138, 73, 0.4); /* Softer glow */
-    transform: scale(1.01); /* Subtle scale effect on focus */
-}
-
-/* Error message */
-.textDanger {
-    color: #e3342f;
-    font-size: 14px;
-    margin-top: 5px;
-    opacity: 0;
-    animation: fadeIn 0.3s ease forwards; /* Fade in for error messages */
+    box-shadow: 0 0 8px rgba(223, 138, 73, 0.4);
+    transform: scale(1.01);
 }
 
 /* Button styles */
 .btn {
     display: inline-block;
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 8px 16px;
+    font-size: 14px;
     font-weight: 500;
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     border: none;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smoother button transitions */
-    width: 100%;
+    margin-right: 10px;
+}
+
+.btnSm {
+    padding: 6px 12px;
+    font-size: 13px;
 }
 
 .btnSuccess {
-    background: var(--primary-color);
+    background: var(--primary-color); /* #f28c38 */
     color: #faf5ff;
 }
 
 .btnSuccess:hover {
     background: #df8039;
-    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -121,25 +109,57 @@
 
 .btnSecondary:hover {
     background: #5a6268;
-    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal styles */
-.modal {
-    position: fixed;
-    z-index: 9999;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    animation: fadeIn 0.3s ease forwards; /* Fade in for modal backdrop */
+.btnWarning {
+    background: #ffc107;
+    color: #212529;
 }
+
+.btnWarning:hover {
+    background: #e0a800;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnDanger {
+    background: #e3342f;
+    color: #fff;
+}
+
+.btnDanger:hover {
+    background: #c5302b;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Error message */
+.textDanger {
+    color: #e3342f;
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Loading state */
+.loading {
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    padding: 20px;
+}
+
+/* No content message */
+.noLessons {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
 
 /* Modal content */
 .modalContent {
@@ -147,16 +167,11 @@
     padding: 24px;
     border-radius: 8px;
     min-width: 320px;
-    max-width: 30vw;
+    max-width: 900px; /* Adjusted for form modal */
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
-    transform: translateY(-50px) scale(0.95); /* Initial state for entrance */
+    transform: translateY(-50px) scale(0.95);
     opacity: 0;
-    animation: slideIn 0.3s ease-out forwards; /* Smooth slide and scale */
-}
-
-/* Nested modal (e.g., confirmation modal inside AddLessonPage) */
-.modal .modal {
-    z-index: 10000; /* Ensure nested modal appears above */
+    animation: slideIn 0.3s ease-out forwards;
 }
 
 /* Modal header */
@@ -181,17 +196,19 @@
 
 /* Modal close button */
 .modalClose {
+    margin-left: 10px;
     background: none;
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease; /* Smooth close button transition */
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .modalClose:hover {
-    color: #faf5ff;
-    transform: rotate(90deg); /* Subtle rotate effect on hover */
+    color: var(--bg-color);
+    transform: rotate(90deg);
 }
+
 
 /* Animations */
 @keyframes slideIn {
@@ -223,15 +240,6 @@
     }
 }
 
-/* Apply fadeOut when modal is closing (requires JS to add class) */
-.modal.closing {
-    animation: fadeOut 0.3s ease forwards;
-}
-
-.modalContent.closing {
-    animation: slideOut 0.3s ease forwards;
-}
-
 @keyframes slideOut {
     from {
         transform: translateY(0) scale(1);
@@ -243,27 +251,40 @@
     }
 }
 
+/* Apply fadeOut when modal is closing */
+.modal.closing {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.modalContent.closing {
+    animation: slideOut 0.3s ease forwards;
+}
+
 /* Responsive adjustments */
-@media (max-width: 576px) {
-    .container {
-        margin: 20px auto;
-        padding: 0 15px;
+@media (max-width: 768px) {
+    .splitContainer {
+        flex-direction: column;
     }
 
-    .cardBody {
-        padding: 15px;
+    .contentList, .playerContainer {
+        width: 100%;
     }
 
     .btn {
-        padding: 10px;
-        font-size: 14px;
+        padding: 8px 12px;
+        font-size: 13px;
     }
 
-    .formControl {
-        font-size: 14px;
+    .btnSm {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 
     .modalContent {
         width: 95%;
+    }
+
+    .playerContainer {
+        max-height: 400px;
     }
 }

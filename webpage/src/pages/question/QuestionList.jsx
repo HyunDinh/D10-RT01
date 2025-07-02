@@ -34,7 +34,7 @@ const QuestionList = () => {
             console.log('Fetched user data:', response.data);
         } catch (err) {
             console.error('Error fetching profile:', err);
-            setError('Không thể tải thông tin profile. Vui lòng thử lại.');
+            setError('Cannot load profile information. Please try again.');
             if (err.response && err.response.status === 401) {
                 navigate('/hocho/login');
             }
@@ -47,7 +47,7 @@ const QuestionList = () => {
             setQuestions(res.data);
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải danh sách câu hỏi');
+            setError('Cannot load question list');
             setLoading(false);
         }
     };
@@ -93,7 +93,7 @@ const QuestionList = () => {
             });
             setQuestions(questions.filter((q) => q.questionId !== questionToDelete)); // Update state client-side
         } catch (err) {
-            setError(err.response?.data?.message || 'Không thể xóa câu hỏi');
+            setError(err.response?.data?.message || 'Cannot delete question');
         } finally {
             setDeletingId(null);
             setQuestionToDelete(null);
@@ -133,7 +133,7 @@ const QuestionList = () => {
                     Ask Question
                 </button>
                 <div className={styles.grid}>
-                    {questions.length === 0 && <div className={styles.noQuestions}>Chưa có câu hỏi nào.</div>}
+                    {questions.length === 0 && <div className={styles.noQuestions}>No questions yet.</div>}
                     {questions.map((q) => {
                         const isOwner = currentUser && q.user && currentUser.id === q.user.id;
                         return (
@@ -145,13 +145,13 @@ const QuestionList = () => {
                                             <div className={styles.cardContent}>
                                                 <h5 className={styles.cardTitle}>{q.content}</h5>
                                                 <p className={styles.cardText}>
-                                                    <strong>Môn:</strong>{q.subject} <strong>Lớp:</strong>{q.grade}
+                                                    <strong>Subject:</strong>{q.subject} <strong>Grade:</strong>{q.grade}
                                                 </p>
                                                 <p className={styles.cardText}>
-                                                    <strong>Người hỏi:</strong>{q.user?.fullName || 'Ẩn danh'}
+                                                    <strong>Asker:</strong>{q.user?.fullName || 'Anonymous'}
                                                 </p>
                                                 <p className={styles.cardText}>
-                                                    <strong>Thời gian:</strong>{''}
+                                                    <strong>Time:</strong>{''}
                                                     {q.createdAt ? new Date(q.createdAt).toLocaleString() : ''}
                                                 </p>
                                             </div>
@@ -161,7 +161,7 @@ const QuestionList = () => {
                                                 className={`${styles.btn} ${styles.btnPrimary}`}
                                                 onClick={() => navigate(`/hocho/questions/${q.questionId}/answer`)}
                                             >
-                                                Đặt câu trả lời
+                                                Ask for answer
                                             </button>
                                             {isOwner && (
                                                 <>
@@ -171,7 +171,7 @@ const QuestionList = () => {
                                                         disabled={deletingId === q.questionId}
                                                     >
                                                         <FontAwesomeIcon icon={faUserPen} />
-                                                        Sửa
+                                                        Edit
                                                     </button>
                                                     <button
                                                         className={`${styles.btn} ${styles.btnDanger}`}
@@ -179,7 +179,7 @@ const QuestionList = () => {
                                                         disabled={deletingId === q.questionId}
                                                     >
                                                         <FontAwesomeIcon icon={faEraser} />
-                                                        {deletingId === q.questionId ? 'Đang xóa...' : 'Xóa'}
+                                                        {deletingId === q.questionId ? 'Deleting...' : 'Delete'}
                                                     </button>
                                                 </>
                                             )}

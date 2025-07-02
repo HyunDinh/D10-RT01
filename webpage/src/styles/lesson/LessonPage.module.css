@@ -80,120 +80,185 @@
 .lessonTable {
     margin-bottom: 2rem;
 }
+/* Define CSS Variables for Consistency */
+:root {
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --hover-shadow: rgba(0, 0, 0, 0.15);
+}
 
+/* Table Styling */
 .table {
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
     text-align: left;
-    margin-bottom: 0;
-    background-color: #fafafa;
-    border-radius: 8px;
+    margin-bottom: 1rem; /* Added slight margin for better spacing */
+    background-color: #ffffff; /* Changed to pure white for a cleaner look */
+    border-radius: 12px; /* Slightly larger radius for modern feel */
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--shadow-color); /* Enhanced shadow for depth */
 }
 
+/* Table Cells */
 .table th,
 .table td {
-    padding: 1rem;
+    padding: 1.2rem; /* Slightly increased padding for comfort */
     vertical-align: middle;
     font-size: 0.95rem;
+    line-height: 1.5;
 }
 
 .table th {
-    background-color: #343a40;
-    color: #fff;
+    background-color: var(--text-color);
+    color: #ffffff; /* Changed to pure white for better contrast */
     font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 0.05em; /* Subtle letter spacing for readability */
 }
 
 .table td {
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid #e9ecef; /* Lighter border for modern look */
 }
 
 .table tbody tr:hover {
-    background-color: #f1f3f5;
+    background-color: #f8f9fa; /* Softer hover color */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
 }
 
 .tableResponsive {
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on mobile */
 }
 
-/* Action Group Styling */
 .actionGroup {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.6rem; /* Slightly increased gap for better separation */
     flex-wrap: wrap;
+    align-items: center;
 }
 
-/* Button Styling */
-.btn {
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+.chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem; /* Balanced padding for chip size */
+    border-radius: 20px; /* More rounded for chip aesthetic */
+    font-size: 0.9rem; /* Slightly larger for readability */
     font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    text-align: center;
+    line-height: 1.2;
     text-decoration: none;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background-color: #e9ecef; /* Default chip background */
+    color: #212529; /* Default text color */
+    transition: all 0.3s ease; /* Smooth transition for all properties */
+    box-shadow: 0 2px 6px var(--shadow-color); /* Subtle shadow */
+    position: relative; /* For ripple effect */
+    overflow: hidden; /* Contain ripple effect */
 }
 
-.btnSuccess {
-    background-color: #4CAF50;
-    border-color: #4CAF50;
-    color: #fff;
+/* Hover Effect */
+.chip:hover {
+    transform: translateY(-2px); /* Lift effect */
+    box-shadow: 0 4px 10px var(--hover-shadow); /* Enhanced shadow */
 }
 
-.btnSuccess:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
+/* Active Effect */
+.chip:active {
+    transform: translateY(0); /* Press down */
+    box-shadow: 0 1px 3px var(--shadow-color); /* Reduced shadow */
 }
 
-.btnWarning {
+/* Ripple Effect */
+.chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.4); /* Light ripple for visibility */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
+    pointer-events: none;
+}
+
+.chip:active::after {
+    width: 120px; /* Larger ripple for better effect */
+    height: 120px;
+}
+
+/* Chip Variants */
+.chipSuccess {
+    background-color: var(--primary-color);
+    color: #fafafa;
+}
+
+.chipSuccess:hover {
+    background-color: #ed863a; /* Darker blue for hover (replaced orange for consistency) */
+}
+
+.chipWarning {
     background-color: #ffc107;
-    border-color: #ffc107;
     color: #212529;
 }
 
-.btnWarning:hover {
+.chipWarning:hover {
     background-color: #e0a800;
-    transform: translateY(-2px);
 }
 
-.btnInfo {
+.chipWarning::after {
+    background: rgba(239, 229, 229, 0.2); /* Darker ripple for yellow background */
+}
+
+.chipInfo {
     background-color: #17a2b8;
-    border-color: #17a2b8;
-    color: #fff;
+    color: #ffffff;
 }
 
-.btnInfo:hover {
+.chipInfo:hover {
     background-color: #138496;
-    transform: translateY(-2px);
 }
 
-.btnDanger {
+.chipDanger {
     background-color: #dc3545;
-    border-color: #dc3545;
-    color: #fff;
+    color: #ffffff;
 }
 
-.btnDanger:hover {
+.chipDanger:hover {
     background-color: #c82333;
-    transform: translateY(-2px);
 }
 
-.btnSecondary {
+.chipSecondary {
     background-color: #6c757d;
-    border-color: #6c757d;
-    color: #fff;
+    color: #ffffff;
 }
 
-.btnSecondary:hover {
+.chipSecondary:hover {
     background-color: #5a6268;
-    transform: translateY(-2px);
 }
 
-.btnSm {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.875rem;
+/* Small Chip */
+.chipSm {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 16px; /* Slightly smaller radius */
+}
+
+/* Disabled Chip */
+.chip:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Optional: Icon Support in Chips */
+.chip i {
+    margin-right: 0.4rem;
+    font-size: 0.9rem;
 }
 
 /* No Lessons Styling */
@@ -269,4 +334,50 @@
     .btnSm {
         width: 100%;
     }
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: white;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+}
+
+.modalClose {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.cardBody {
+    padding: 1rem;
+}
+
+.modal .modal {
+    z-index: 1100; /* Ensure confirmation modal appears above the main modal */
 }

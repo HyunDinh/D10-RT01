@@ -1,27 +1,25 @@
-/* Container */
 .container {
     max-width: 600px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
-/* Card-like wrapper */
 .card {
     background: #faf5ff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added smooth card transition */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-4px); /* Subtle lift effect on hover */
+    transform: translateY(-4px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Card header */
+/* Card header for "Edit Lesson" title and close button */
 .cardHeader {
-    background: var(--primary-color); /* Green background for header */
+    background: var(--primary-color); /* #f28c38, matching the orange theme */
     color: #faf5ff;
     display: flex;
     justify-content: space-between;
@@ -30,15 +28,14 @@
     text-align: center;
 }
 
-/* Card header title */
 .cardHeader h4 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
-    transition: opacity 0.3s ease; /* Smooth title fade */
+    transition: opacity 0.3s ease;
 }
 
-/* Card body */
+/* Card body for the form */
 .cardBody {
     padding: 20px;
 }
@@ -61,7 +58,7 @@
     font-weight: 500;
     color: #333;
     margin-bottom: 8px;
-    transition: color 0.3s ease; /* Smooth label color transition */
+    transition: color 0.3s ease;
 }
 
 .formControl {
@@ -70,14 +67,14 @@
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; /* Smoother input transitions */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
 }
 
 .formControl:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 8px rgba(223, 138, 73, 0.4); /* Softer glow */
-    transform: scale(1.01); /* Subtle scale effect on focus */
+    box-shadow: 0 0 8px rgba(223, 138, 73, 0.4);
+    transform: scale(1.01);
 }
 
 /* Error message */
@@ -86,7 +83,7 @@
     font-size: 14px;
     margin-top: 5px;
     opacity: 0;
-    animation: fadeIn 0.3s ease forwards; /* Fade in for error messages */
+    animation: fadeIn 0.3s ease forwards;
 }
 
 /* Button styles */
@@ -98,19 +95,19 @@
     border-radius: 5px;
     text-align: center;
     cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smoother button transitions */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     width: 100%;
+    border: none;
 }
 
 .btnSuccess {
-    background: var(--primary-color);
+    background: var(--primary-color); /* #f28c38 */
     color: #faf5ff;
 }
 
 .btnSuccess:hover {
     background: #df8039;
-    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -121,11 +118,11 @@
 
 .btnSecondary:hover {
     background: #5a6268;
-    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Modal styles */
+/* Modal styles for main and confirmation modals */
 .modal {
     position: fixed;
     z-index: 9999;
@@ -138,7 +135,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    animation: fadeIn 0.3s ease forwards; /* Fade in for modal backdrop */
+    animation: fadeIn 0.3s ease forwards;
 }
 
 /* Modal content */
@@ -147,16 +144,16 @@
     padding: 24px;
     border-radius: 8px;
     min-width: 320px;
-    max-width: 30vw;
+    max-width: 90vw;
     box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
-    transform: translateY(-50px) scale(0.95); /* Initial state for entrance */
+    transform: translateY(-50px) scale(0.95);
     opacity: 0;
-    animation: slideIn 0.3s ease-out forwards; /* Smooth slide and scale */
+    animation: slideIn 0.3s ease-out forwards;
 }
 
-/* Nested modal (e.g., confirmation modal inside AddLessonPage) */
+/* Nested modal (confirmation modal) */
 .modal .modal {
-    z-index: 10000; /* Ensure nested modal appears above */
+    z-index: 10000;
 }
 
 /* Modal header */
@@ -185,12 +182,12 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease; /* Smooth close button transition */
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .modalClose:hover {
-    color: #faf5ff;
-    transform: rotate(90deg); /* Subtle rotate effect on hover */
+    color: var(--primary-color);
+    transform: rotate(90deg);
 }
 
 /* Animations */
@@ -223,15 +220,6 @@
     }
 }
 
-/* Apply fadeOut when modal is closing (requires JS to add class) */
-.modal.closing {
-    animation: fadeOut 0.3s ease forwards;
-}
-
-.modalContent.closing {
-    animation: slideOut 0.3s ease forwards;
-}
-
 @keyframes slideOut {
     from {
         transform: translateY(0) scale(1);
@@ -241,6 +229,15 @@
         transform: translateY(-50px) scale(0.95);
         opacity: 0;
     }
+}
+
+/* Apply fadeOut when modal is closing */
+.modal.closing {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.modalContent.closing {
+    animation: slideOut 0.3s ease forwards;
 }
 
 /* Responsive adjustments */
@@ -267,3 +264,4 @@
         width: 95%;
     }
 }
+

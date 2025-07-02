@@ -164,6 +164,7 @@ public class CourseService {
         dto.setCourseImageUrl(course.getCourseImageUrl());
         dto.setTeacherId(course.getTeacher().getId());
         dto.setTeacherName(course.getTeacher().getFullName());
+        dto.setTeacherAvatarUrl(course.getTeacher().getAvatarUrl());
         dto.setAgeGroup(course.getAgeGroup());
         dto.setPrice(course.getPrice());
         dto.setStatus(course.getStatus());

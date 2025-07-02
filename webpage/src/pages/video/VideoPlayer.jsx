@@ -8,7 +8,7 @@ import styles from '../../styles/video/VideoPlayer.module.css';
 import suggestedStyles from '../../styles/video/SuggestedVideos.module.css';
 import CommentSection from './CommentSection';
 import ListVideo from './ListVideo';
-import {base64ToArrayBuffer} from '../../components/videoUtils'; // Tách hàm ra file util
+import {base64ToArrayBuffer} from '../../components/videoUtils'; // Move function to util file
 
 export default function VideoPlayer() {
     const {videoId} = useParams();
@@ -56,7 +56,7 @@ export default function VideoPlayer() {
                 setLoading(false);
             } catch (err) {
                 console.error('Error fetching video or suggestions:', err);
-                setError('Không thể tải video. Vui lòng thử lại sau.');
+                setError('Cannot load video. Please try again later.');
                 setLoading(false);
             }
         };
@@ -94,7 +94,7 @@ export default function VideoPlayer() {
 
     const handleProgress = ({playedSeconds}) => {
         playedSecondsRef.current = playedSeconds;
-        localStorage.setItem('videoPlayedSeconds', playedSeconds); // Lưu lại mỗi lần xem
+        localStorage.setItem('videoPlayedSeconds', playedSeconds); // Save every time watching
         if (maxVideoTime !== null && maxVideoTime !== undefined) {
             const timeLeft = maxVideoTime - playedSeconds;
             setRemainingTime(timeLeft > 0 ? timeLeft : 0);
@@ -194,7 +194,6 @@ export default function VideoPlayer() {
             <Header/>
             <section className={styles.videoDetailContainer}>
                 <div className={styles.videoDetailMain}>
-                    <h2 className={styles.videoDetailTitle}>{video.title}</h2>
                     <h2>{maxVideoTime !== null ? `Time remaining: ${formatTime(remainingTime ?? maxVideoTime)}` : ' '}</h2>
                     <div className={styles.videoDetailPlayerWrapper}>
                         {video.contentData ? (
@@ -208,7 +207,7 @@ export default function VideoPlayer() {
                                         />
                                     ) : (
                                         <div className={styles.videoDetailPlaceholderNoThumbnail}>
-                                            Đang tải...
+                                            Loading...
                                         </div>
                                     )}
                                     <div className={styles.videoDetailSpinner}></div>
@@ -240,16 +239,17 @@ export default function VideoPlayer() {
                             )
                         ) : (
                             <div className={styles.videoDetailNoVideo} aria-live="polite">
-                                Không có dữ liệu video
+                                No video data available
                             </div>
                         )}
                     </div>
-                    <p className={styles.videoDetailUploadedBy}>Tải lên bởi: {video.createdBy.fullName}</p>
+                    <h2 className={styles.videoDetailTitle}>{video.title}</h2>
+                    <p className={styles.videoDetailUploadedBy}>Uploaded by: {video.createdBy.fullName}</p>
                     <CommentSection videoId={videoId} playerRef={playerRef} playedSecondsRef={playedSecondsRef}/>
                 </div>
 
                 <aside className={styles.videoDetailSuggested}>
-                    <h3 className={styles.videoDetailSuggestedTitle}>Video gợi ý</h3>
+                    <h3 className={styles.videoDetailSuggestedTitle}>Suggested Videos</h3>
                     <ListVideo
                         videos={suggestedVideos}
                         onCardClick={handleSuggestedVideoClick}
