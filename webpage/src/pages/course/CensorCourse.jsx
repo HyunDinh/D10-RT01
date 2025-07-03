@@ -103,8 +103,8 @@ const CourseApproval = () => {
                                     <tr>
                                         <td>{course.courseId}</td>
                                         <td>{course.title}</td>
-                                        {/*<td>{course.teacher ? course.teacher.fullName : 'N/A'}</td>*/}
-                                        <td>{course.teacher.fullName}</td>
+
+                                        <td>{course.teacher?.fullName || 'N/A'}</td>
                                         <td>{course.ageGroup}</td>
                                         <td>{course.price.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
                                         <td>{new Date(course.createdAt).toLocaleString()}</td>

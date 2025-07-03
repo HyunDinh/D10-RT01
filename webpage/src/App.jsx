@@ -75,13 +75,17 @@ import ParentLearningMonitor from "./pages/parent/./ParentLearningMonitor.jsx";
 // Game Routes
 import PlayDinoRun from "./pages/game/PlayDinoRun";
 import PlayClumsyBird from "./pages/game/PlayClumsyBird";
+import GamesPage from "./pages/game/GamesPage";
+import LeaderboardPage from "./pages/game/GameLeaderBoard";
 
 // Approval Routes
 import CourseApproval from "./pages/course/CensorCourse";
 import GameApproval from "./pages/game/GameApproval";
-import GamesPage from "./pages/game/GamesPage";
+
 
 import TeacherVideoDetail from "./pages/video/TeacherVideoDetail";
+import TrackRevenue from "./pages/course/TrackRevenue";
+
 import LessonContentStudentPage from "./pages/course/LessonContentStudentPage";
 import ChildCoursePage from "./pages/learning/ChildCoursePage.jsx";
 import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
@@ -131,6 +135,7 @@ const App = () => {
                 <Route path="/hocho/teacher/quizzes/create" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizForm /></ProtectedRoute>}/>
                 <Route path="/hocho/teacher/quizzes/:id" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizDetailTeacher /></ProtectedRoute>}/>
                 <Route path="/hocho/teacher/quizzes/:id/edit" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizEdit /></ProtectedRoute>}/>
+                <Route path="/hocho/teacher/track-revenue" element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TrackRevenue /></ProtectedRoute>}/>
 
                 // ************************************** PARENT ONLY ROUTES **************************************
 
@@ -201,8 +206,9 @@ const App = () => {
 
                 // ************************************** GAME ROUTES **************************************
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
-                <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
+                <Route path="/hocho/child/games/clumsyBird"lement={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
+                <Route path="/hocho/games/leaderboard" element={<LeaderboardPage />} />
 
                 // ************************************** MESSAGING ROUTES ***********************************
                 <Route path="/hocho/messaging" element={<MessagingPage />} />

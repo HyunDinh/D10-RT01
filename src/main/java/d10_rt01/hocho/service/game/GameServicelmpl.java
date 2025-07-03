@@ -40,6 +40,11 @@ public class GameServicelmpl implements GameService {
         return gameRepository.findById(gameId).get();
     }
 
+    @Override
+    public Game findByTitle(String title) {
+        return gameRepository.findByTitle(title);
+    }
+
     @Transactional
     public void rejectGame(Long gameId) { // moi them boi LTDat
         Game game = gameRepository.findById(gameId).orElseThrow(()-> new RuntimeException("Game Not Found"));
