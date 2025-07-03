@@ -19,11 +19,10 @@ export default function VideoPlayer() {
     const [suggestedVideos, setSuggestedVideos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isTyping, setIsTyping] = useState(false);
+    const [isTyping] = useState(false);
     const [maxVideoTime, setMaxVideoTime] = useState(null); // in seconds
     const [remainingTime, setRemainingTime] = useState(null); // in seconds
-    const [pageSuspended, setPageSuspended] = useState(false);
-    // const childId = localStorage.getItem('childId');
+    const [pageSuspended] = useState(false);
 
 
     const videoUrl = useMemo(() => {
@@ -47,10 +46,7 @@ export default function VideoPlayer() {
                 setVideo(videoResponse.data);
 
                 // Fetch suggested videos
-                const suggestedResponse = await axios.get(
-                    `/api/videos/student/all-approved?excludeVideoId=${videoId}`,
-                    {withCredentials: true}
-                );
+                const suggestedResponse = await axios.get(`/api/videos/student/all-approved?excludeVideoId=${videoId}`, {withCredentials: true});
                 setSuggestedVideos(suggestedResponse.data);
 
                 setLoading(false);
@@ -92,22 +88,6 @@ export default function VideoPlayer() {
         }
     }, []);
 
-    const handleProgress = ({playedSeconds}) => {
-        playedSecondsRef.current = playedSeconds;
-        localStorage.setItem('videoPlayedSeconds', playedSeconds); // Save every time watching
-        if (maxVideoTime !== null && maxVideoTime !== undefined) {
-            const timeLeft = maxVideoTime - playedSeconds;
-            setRemainingTime(timeLeft > 0 ? timeLeft : 0);
-            if (playedSeconds >= maxVideoTime) {
-                if (playerRef.current) {
-                    playerRef.current.getInternalPlayer().pause();
-                }
-                setPageSuspended(true);
-                updateTimeSpent();
-            }
-        }
-    };
-
     // Dọn dẹp URL và gửi thời gian còn lại khi chuyển trang
     useEffect(() => {
         return () => {
@@ -134,19 +114,6 @@ export default function VideoPlayer() {
             });
     };
 
-    const handleEnded = () => {
-        if (playerRef.current) {
-            playerRef.current.seekTo(0);
-            playerRef.current.getInternalPlayer().play();
-        }
-    };
-
-    const handleError = (e) => {
-        if (playerRef.current) {
-            playerRef.current.seekTo(0);
-            playerRef.current.getInternalPlayer().play();
-        }
-    };
 
     const handleSuggestedVideoClick = (suggestedVideoId) => {
         navigate(`/hocho/video/${videoId}`);
@@ -160,65 +127,50 @@ export default function VideoPlayer() {
     };
 
     if (error) {
-        return (
-            <div className={styles.videoDetailContainer}>
+        return (<div className={styles.videoDetailContainer}>
                 <div className={styles.videoDetailError}>{error}</div>
-            </div>
-        );
+            </div>);
     }
 
     if (loading) {
-        return (
-            <div className={styles.videoDetailContainer}>
+        return (<div className={styles.videoDetailContainer}>
                 <div className={styles.videoDetailLoading}></div>
-            </div>
-        );
+            </div>);
     }
 
     if (pageSuspended) {
-        return (
-            <>
-                <Header />
+        return (<>
+                <Header/>
                 <div className={styles.videoDetailContainer}>
                     <div className={styles.videoDetailError}>
                         Video time limit reached. Please contact your parents.
                     </div>
                 </div>
-                <Footer />
-            </>
-        );
+                <Footer/>
+            </>);
     }
 
-    return (
-        <>
+    return (<>
             <Header/>
             <section className={styles.videoDetailContainer}>
                 <div className={styles.videoDetailMain}>
                     <h2>{maxVideoTime !== null ? `Time remaining: ${formatTime(remainingTime ?? maxVideoTime)}` : ' '}</h2>
                     <div className={styles.videoDetailPlayerWrapper}>
-                        {video.contentData ? (
-                            isTyping ? (
+                        {video.contentData ? (isTyping ? (
                                 <div className={styles.videoDetailPlayerPlaceholder} aria-live="polite">
-                                    {video.thumbnailUrl ? (
-                                        <img
+                                    {video.thumbnailUrl ? (<img
                                             src={video.thumbnailUrl}
                                             alt={`Thumbnail for ${video.title}`}
                                             className={styles.videoDetailPlaceholderThumbnail}
-                                        />
-                                    ) : (
-                                        <div className={styles.videoDetailPlaceholderNoThumbnail}>
+                                        />) : (<div className={styles.videoDetailPlaceholderNoThumbnail}>
                                             Loading...
-                                        </div>
-                                    )}
+                                        </div>)}
                                     <div className={styles.videoDetailSpinner}></div>
-                                </div>
-                            ) : (
-                                <ReactPlayer
+                                </div>) : (<ReactPlayer
                                     ref={playerRef}
                                     url={videoUrl}
                                     controls
                                     playing
-                                    onProgress={handleProgress}
                                     className={styles.videoDetailPlayer}
                                     width="100%"
                                     height="100%"
@@ -228,20 +180,9 @@ export default function VideoPlayer() {
                                             controlsList: 'nodownload',
                                         },
                                     }}
-                                    onReady={() => {
-                                        if (playerRef.current && playedSecondsRef.current > 0) {
-                                            playerRef.current.seekTo(playedSecondsRef.current, 'seconds');
-                                        }
-                                    }}
-                                    onEnded={handleEnded}
-                                    onError={handleError}
-                                />
-                            )
-                        ) : (
-                            <div className={styles.videoDetailNoVideo} aria-live="polite">
+                                />)) : (<div className={styles.videoDetailNoVideo} aria-live="polite">
                                 No video data available
-                            </div>
-                        )}
+                            </div>)}
                     </div>
                     <h2 className={styles.videoDetailTitle}>{video.title}</h2>
                     <p className={styles.videoDetailUploadedBy}>Uploaded by: {video.createdBy.fullName}</p>
@@ -258,6 +199,5 @@ export default function VideoPlayer() {
                 </aside>
             </section>
             <Footer/>
-        </>
-    );
+        </>);
 }
