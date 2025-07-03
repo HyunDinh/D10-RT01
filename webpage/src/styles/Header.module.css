@@ -360,7 +360,7 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: #fff;
+    background: #fafafa;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     list-style: none;
     padding: 10px 0;
@@ -546,6 +546,9 @@
     margin-left: 10px;
 }
 .notificate{
+    position: relative;
+}
+.messagesNotification{
     position: relative;
 }
 .unreadBadge {

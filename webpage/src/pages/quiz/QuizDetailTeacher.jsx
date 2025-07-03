@@ -130,7 +130,7 @@ const QuizDetailTeacher = () => {
     const getQuizImageUrl = (questionImageUrl) => {
         const baseUrl = 'http://localhost:8080';
         if (!questionImageUrl || questionImageUrl === 'none') {
-            return '/images/default-quiz.jpg';
+            return '/default.jpg';
         }
         const fileName = questionImageUrl.split('/').pop();
         return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
