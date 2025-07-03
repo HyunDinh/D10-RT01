@@ -4,10 +4,13 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Inter, sans-serif;
-    background-color: #f4f5fa;
     min-height: 100vh;
 }
-body{
-    background-color: #f4f5fa;
-}
 
+html, body {
+    height: auto;
+    min-height: 100vh;
+    overflowX: hidden;
+    margin: 0;
+    padding: 0;
+}

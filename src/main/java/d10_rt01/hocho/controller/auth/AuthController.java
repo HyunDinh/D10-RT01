@@ -50,16 +50,16 @@ public class AuthController {
     public ResponseEntity<?> register(
             @RequestPart("request") RegisterRequest request,
             @RequestPart(value = "teacherImage", required = false) MultipartFile teacherImage) throws MessagingException, IOException {
-        logger.info("Processing register request for username: {}, role: {}", request.getUsername(), request.getRole());
+        logger.info("Xử lý yêu cầu đăng ký cho username: {}, role: {}", request.getUsername(), request.getRole());
 
         if (!request.getPassword().equals(request.getRetypePassword())) {
-            logger.warn("Password mismatch for username: {}", request.getUsername());
-            return ResponseEntity.badRequest().body("Mật khẩu không khớp.");
+            logger.warn("Mật khẩu không khớp cho username: {}", request.getUsername());
+            return ResponseEntity.badRequest().body(Map.of("error", "Mật khẩu không khớp."));
         }
 
         if (request.getRole().equals("teacher") && (teacherImage == null || teacherImage.isEmpty())) {
-            logger.warn("Teacher image is required for teacher registration: {}", request.getUsername());
-            return ResponseEntity.badRequest().body("Ảnh xác thực giáo viên là bắt buộc.");
+            logger.warn("Ảnh giáo viên là bắt buộc cho đăng ký giáo viên: {}", request.getUsername());
+            return ResponseEntity.badRequest().body(Map.of("error", "Ảnh xác thực giáo viên là bắt buộc."));
         }
 
         try {
@@ -75,14 +75,11 @@ public class AuthController {
             String successMessage = user.getRole().equals("parent") || user.getRole().equals("child") ?
                     "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản." :
                     "Đăng ký thành công. Vui lòng chờ admin duyệt tài khoản.";
-            logger.info("Registration successful for username: {}", request.getUsername());
-            return ResponseEntity.ok(successMessage);
+            logger.info("Đăng ký thành công cho username: {}", request.getUsername());
+            return ResponseEntity.ok(Map.of("message", successMessage));
         } catch (IllegalArgumentException e) {
-            logger.error("Registration failed: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .header("Location", "http://localhost:3000/hocho/login?error=" +
-                            URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8))
-                    .body(null);
+            logger.error("Đăng ký thất bại: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 

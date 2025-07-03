@@ -7,6 +7,7 @@ import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.model.enums.UserRole;
 import d10_rt01.hocho.repository.ParentChildMappingRepository;
 import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import d10_rt01.hocho.service.email.EmailService;
 import d10_rt01.hocho.utils.CustomLogger;
 import net.coobird.thumbnailator.Thumbnails;
@@ -42,12 +43,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final NotificationIntegrationService notificationIntegrationService;
 
-    public UserService(UserRepository userRepository, ParentChildMappingRepository parentChildMappingRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
+    public UserService(UserRepository userRepository, ParentChildMappingRepository parentChildMappingRepository, PasswordEncoder passwordEncoder, EmailService emailService, NotificationIntegrationService notificationIntegrationService) {
         this.userRepository = userRepository;
         this.parentChildMappingRepository = parentChildMappingRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.notificationIntegrationService = notificationIntegrationService;
     }
 
     @Transactional
@@ -139,6 +142,14 @@ public class UserService {
                     userRepository.save(savedUser);
                 }
             }
+            
+            // Tạo notification cho admin khi có user mới đăng ký
+            notificationIntegrationService.createNewUserRegistrationNotifications(savedUser.getUsername(), savedUser.getRole());
+            
+            // Tạo notification chào mừng cho user mới
+            String fullName = savedUser.getFullName() != null ? savedUser.getFullName() : savedUser.getUsername();
+            notificationIntegrationService.createWelcomeNotification(savedUser.getId(), fullName);
+            
             return savedUser;
         } catch (Exception e) {
             logger.error("Lỗi khi lưu user vào cơ sở dữ liệu: {}", e.getMessage());
@@ -209,6 +220,14 @@ public class UserService {
                 savedUser.setVerified(true);
                 userRepository.save(savedUser);
             }
+            
+            // Tạo notification cho admin khi có teacher mới đăng ký
+            notificationIntegrationService.createNewUserRegistrationNotifications(savedUser.getUsername(), savedUser.getRole());
+            
+            // Tạo notification chào mừng cho teacher mới
+            String fullName = savedUser.getFullName() != null ? savedUser.getFullName() : savedUser.getUsername();
+            notificationIntegrationService.createWelcomeNotification(savedUser.getId(), fullName);
+            
             return savedUser;
         } catch (Exception e) {
             logger.error("Lỗi khi lưu giáo viên: {}", e.getMessage());
@@ -559,6 +578,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public List<User> getAllActiveUsers() {
+        return userRepository.findByIsActiveTrue();
     }
 
     public Optional<User> findById(Long id){

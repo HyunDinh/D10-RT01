@@ -1,0 +1,321 @@
+/* AdminHome.module.css */
+/* Main container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Header styles */
+.header {
+  background: linear-gradient(to right, #4a90e2, #8e44ad);
+  color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.headerContent {
+  flex: 1;
+}
+
+.headerTitle {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.headerDescription {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.headerIcon {
+  font-size: 3.5rem;
+  opacity: 0.8;
+  margin-left: 1rem;
+}
+
+/* Section styles */
+.section {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionIcon {
+  color: #385469;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #385469;
+}
+
+.sectionContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 992px) {
+  .sectionContent {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Card grid styles */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.cardGrid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+
+@media (min-width: 768px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .cardGrid2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .cardGrid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .cardGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Stat card styles */
+.statCard {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.iconContainer {
+  border-radius: 50%;
+  padding: 1rem;
+  margin-right: 1rem;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.statInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.statTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #1a202c;
+}
+
+/* Chart container styles */
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20rem;
+  width: 100%;
+}
+
+/* Management card styles */
+.managementGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .managementGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.managementCard {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  border-left-width: 4px;
+  display: block;
+  text-decoration: none;
+}
+
+.managementCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.cardIconContainer {
+  border-radius: 50%;
+  padding: 0.75rem;
+  margin-right: 0.75rem;
+  color: white;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cardDescription {
+  color: #4a5568;
+}
+
+/* Color variations for management cards */
+.blueCard {
+  background: linear-gradient(to right, #ebf8ff, #e6f6ff);
+  border-left-color: #4299e1;
+}
+
+.blueCardIcon {
+  background-color: #4299e1;
+}
+
+.blueCardTitle {
+  color: #2b6cb0;
+}
+
+.greenCard {
+  background: linear-gradient(to right, #f0fff4, #e6fffa);
+  border-left-color: #48bb78;
+}
+
+.greenCardIcon {
+  background-color: #48bb78;
+}
+
+.greenCardTitle {
+  color: #2f855a;
+}
+
+.purpleCard {
+  background: linear-gradient(to right, #faf5ff, #f5f0ff);
+  border-left-color: #9f7aea;
+}
+
+.purpleCardIcon {
+  background-color: #9f7aea;
+}
+
+.purpleCardTitle {
+  color: #6b46c1;
+}
+
+.yellowCard {
+  background: linear-gradient(to right, #fffff0, #fefcbf);
+  border-left-color: #ecc94b;
+}
+
+.yellowCardIcon {
+  background-color: #ecc94b;
+}
+
+.yellowCardTitle {
+  color: #b7791f;
+}
+
+.redCard {
+  background: linear-gradient(to right, #fff5f5, #fed7d7);
+  border-left-color: #f56565;
+}
+
+.redCardIcon {
+  background-color: #f56565;
+}
+
+.redCardTitle {
+  color: #c53030;
+}
+
+.indigoCard {
+  background: linear-gradient(to right, #ebf4ff, #c3dafe);
+  border-left-color: #667eea;
+}
+
+.indigoCardIcon {
+  background-color: #667eea;
+}
+
+.indigoCardTitle {
+  color: #4c51bf;
+}
+
+/* Loading spinner */
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 16rem;
+}
+
+.spinner {
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  border: 0.25rem solid rgba(56, 84, 105, 0.1);
+  border-top-color: #385469;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error message */
+.errorMessage {
+  background-color: #fff5f5;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}

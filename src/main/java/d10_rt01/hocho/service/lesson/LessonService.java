@@ -4,6 +4,7 @@ import d10_rt01.hocho.model.Course;
 import d10_rt01.hocho.model.Lesson;
 import d10_rt01.hocho.repository.CourseRepository;
 import d10_rt01.hocho.repository.lesson.LessonRepository;
+import d10_rt01.hocho.repository.lesson.LessonContentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,9 @@ public class LessonService {
 
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private LessonContentRepository lessonContentRepository;
 
     public List<Lesson> getLessonsByCourseId(Long courseId) {
         return lessonRepository.findLessonByCourseCourseId(courseId);
@@ -53,7 +57,9 @@ public class LessonService {
         return lessonRepository.save(existingLesson);
     }
 
+    @Transactional
     public void deleteLesson(Long lessonId) {
+        lessonContentRepository.deleteByLessonLessonId(lessonId);
         lessonRepository.deleteById(lessonId);
     }
 }

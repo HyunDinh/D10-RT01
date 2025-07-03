@@ -26,6 +26,8 @@ const AnswerForm = () => {
     const [deletingId, setDeletingId] = useState(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false); // New state for dialog
     const [answerToDelete, setAnswerToDelete] = useState(null); // Track answer ID
+    const [showImageModal, setShowImageModal] = useState(false);
+    const [modalImageSrc, setModalImageSrc] = useState('');
 
     useEffect(() => {
         fetchData();
@@ -40,7 +42,7 @@ const AnswerForm = () => {
             setUserId(userRes.data.id);
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải dữ liệu câu hỏi hoặc câu trả lời');
+            setError('Failed to load question or answer');
             setLoading(false);
         }
     };
@@ -58,14 +60,14 @@ const AnswerForm = () => {
             await axios.post(`http://localhost:8080/api/questions/${id}/answers`, formData, {
                 withCredentials: true, headers: {'Content-Type': 'multipart/form-data'}
             });
-            setSuccess('Đã gửi câu trả lời!');
+            setSuccess('Answer submitted successfully!');
             setContent('');
             setImageFile(null);
             // Reload lại danh sách câu trả lời
             const aRes = await axios.get(`http://localhost:8080/api/questions/${id}/answers`, {withCredentials: true});
             setAnswers(aRes.data);
         } catch (err) {
-            setError('Không thể gửi câu trả lời');
+            setError('Failed to submit answer');
         }
         setSubmitting(false);
     };
@@ -99,7 +101,7 @@ const AnswerForm = () => {
             const aRes = await axios.get(`http://localhost:8080/api/questions/${id}/answers`, {withCredentials: true});
             setAnswers(aRes.data);
         } catch (err) {
-            setError('Không thể cập nhật câu trả lời');
+            setError('Failed to update answer');
         }
         setEditLoading(false);
     };
@@ -119,7 +121,7 @@ const AnswerForm = () => {
             });
             setAnswers(answers.filter((a) => a.answerId !== answerToDelete)); // Update state client-side
         } catch (err) {
-            setError(err.response?.data?.message || 'Không thể xóa câu trả lời');
+            setError(err.response?.data?.message || 'Failed to delete answer');
         } finally {
             setDeletingId(null);
             setAnswerToDelete(null);
@@ -131,7 +133,26 @@ const AnswerForm = () => {
         setAnswerToDelete(null);
     };
 
-    if (loading) return <div className="alert alert-info text-center">Đang tải dữ liệu...</div>;
+    const getQuestionImageUrl = (imageUrl) => {
+        if (!imageUrl || imageUrl === 'none') return '/images/default-course.jpg';
+        const fileName = imageUrl.split('/').pop();
+        return `http://localhost:8080/api/questions/image/${fileName}`;
+    };
+
+    const getAnswerImageUrl = (imageUrl) => {
+        if (!imageUrl || imageUrl === 'none') return '/images/default-course.jpg';
+        const fileName = imageUrl.split('/').pop();
+        return `http://localhost:8080/api/questions/answers/image/${fileName}`;
+    };
+
+    const openImageModal = (src) => {
+        setModalImageSrc(src);
+        setShowImageModal(true);
+    };
+
+    const closeImageModal = () => setShowImageModal(false);
+
+    if (loading) return <div className="alert alert-info text-center">Loading data...</div>;
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
     if (!question) return null;
 
@@ -163,22 +184,38 @@ const AnswerForm = () => {
                 <div className={styles.cardBody}>
                     <h4 className={styles.cardTitle}>{question.content}</h4>
                     <p className={styles.cardText}>
-                        <b>Môn:</b> {question.subject} &nbsp; <b>Lớp:</b> {question.grade}
+                        <b>Subject:</b> {question.subject} &nbsp; <b>Grade:</b> {question.grade}
                     </p>
                     <p className={styles.cardText}>
-                        <b>Người hỏi:</b> {question.user?.fullName || 'Ẩn danh'}
+                        <b>Asker:</b>
+                        <span className={styles.userInfoRow}>
+                          <img
+                            src={question.user?.avatarUrl && question.user.avatarUrl !== 'none'
+                                ? `http://localhost:8080/api/hocho/profile/${question.user.avatarUrl}`
+                                : '/images/default-avatar.png'}
+                            alt="Asker Avatar"
+                            className={styles.userAvatar}
+                            onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                          />
+                          <span className={styles.userName}>{question.user?.fullName || 'Anonymous'}</span>
+                        </span>
                     </p>
                     <p className={styles.cardText}>
-                        <b>Thời gian:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
+                        <b>Time:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
                     </p>
-                    {question.imageUrl && (<img
-                        src={`http://localhost:8080/${question.imageUrl}`}
-                        alt="Ảnh minh họa"
-                        className={styles.questionImage}
-                    />)}
+                    {question.imageUrl && (
+                        <img
+                            src={getQuestionImageUrl(question.imageUrl)}
+                            alt="Illustration image"
+                            className={styles.questionImage}
+                            onError={e => (e.target.src = '/images/default-course.jpg')}
+                            onClick={() => openImageModal(getQuestionImageUrl(question.imageUrl))}
+                            style={{ cursor: 'pointer' }}
+                        />
+                    )}
                     <div className={styles.line}></div>
                     <form onSubmit={handleSubmit} className={styles.form}>
-                        <label className={styles.formLabel}>Nhập câu trả lời của bạn</label>
+                        <label className={styles.formLabel}>Enter your answer</label>
                         <textarea
                             className={styles.formControl}
                             value={content}
@@ -198,18 +235,28 @@ const AnswerForm = () => {
                         <div className={styles.buttonContainer}>
                             <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}
                                     disabled={submitting || !userId}>
-                                {submitting ? 'Đang gửi...' : 'Gửi câu trả lời'}
+                                {submitting ? 'Submitting...' : 'Submit answer'}
                             </button>
                         </div>
                     </form>
-                    <h5 className={styles.answerListTitle}>Danh sách câu trả lời</h5>
-                    {answers.length === 0 && <div className={styles.noAnswers}>Chưa có câu trả lời nào.</div>}
+                    <h5 className={styles.answerListTitle}>Answer list</h5>
+                    {answers.length === 0 && <div className={styles.noAnswers}>No answers yet.</div>}
                     {answers.map((a) => {
                         const isOwner = userId && a.user && userId === a.user.id;
                         return (
                             <div key={a.answerId} className={styles.answerItem}>
                                 <div className={styles.answerUser}>
-                                    <b>{a.user?.fullName || 'Ẩn danh'}:</b>
+                                    <span className={styles.userInfoRow}>
+                                      <img
+                                        src={a.user?.avatarUrl && a.user.avatarUrl !== 'none'
+                                            ? `http://localhost:8080/api/hocho/profile/${a.user.avatarUrl}`
+                                            : '/images/default-avatar.png'}
+                                        alt="Answer User Avatar"
+                                        className={styles.userAvatar}
+                                        onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                                      />
+                                      <span className={styles.userName}>{a.user?.fullName || 'Anonymous'}:</span>
+                                    </span>
                                 </div>
                                 {editingAnswerId === a.answerId ? (<>
                     <textarea
@@ -230,23 +277,28 @@ const AnswerForm = () => {
                                             onClick={() => handleEditSave(a.answerId)}
                                             disabled={editLoading}
                                         >
-                                            {editLoading ? 'Đang lưu...' : 'Lưu'}
+                                            {editLoading ? 'Saving...' : 'Save'}
                                         </button>
                                         <button
                                             className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
                                             onClick={handleEditCancel}
                                             disabled={editLoading}
                                         >
-                                            Hủy
+                                            Cancel
                                         </button>
                                     </div>
                                 </>) : (<>
                                     <div className={styles.answerContent}>{a.content}</div>
-                                    {a.imageUrl && (<img
-                                        src={`http://localhost:8080${a.imageUrl}`}
-                                        alt="Ảnh trả lời"
-                                        className={styles.answerImage}
-                                    />)}
+                                    {a.imageUrl && (
+                                        <img
+                                            src={getAnswerImageUrl(a.imageUrl)}
+                                            alt="Answer image"
+                                            className={styles.answerImage}
+                                            onError={e => (e.target.src = '/images/default-course.jpg')}
+                                            onClick={() => openImageModal(getAnswerImageUrl(a.imageUrl))}
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    )}
                                 </>)}
                                 <div className={styles.answerFooter}>
                                     <div className={styles.answerTimestamp}>
@@ -259,14 +311,14 @@ const AnswerForm = () => {
                                                 className={`${styles.btn} ${styles.btnOutlineWarning} ${styles.btnSm}`}
                                                 onClick={() => handleEditClick(a)}
                                             >
-                                                Sửa
+                                                Edit
                                             </button>
                                             <button
                                                 className={`${styles.btn} ${styles.btnOutlineDanger} ${styles.btnSm}`}
                                                 onClick={() => handleDelete(a.answerId)}
                                                 disabled={deletingId === a.answerId}
                                             >
-                                                {deletingId === a.answerId ? 'Đang xóa...' : 'Xóa'}
+                                                {deletingId === a.answerId ? 'Deleting...' : 'Delete'}
                                             </button>
                                         </div>)}
                                 </div>
@@ -278,6 +330,16 @@ const AnswerForm = () => {
 
                 </div>
             </div>
+            {showImageModal && (
+                <div className={styles.modal} onClick={closeImageModal}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <img src={modalImageSrc} alt="Zoomed" style={{ maxWidth: '80vw', maxHeight: '80vh' }} />
+                        <button className={styles.modalClose} onClick={closeImageModal} aria-label="Close">
+                            &times;
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     </>);
 };

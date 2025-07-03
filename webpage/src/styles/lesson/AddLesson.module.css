@@ -1,0 +1,269 @@
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Card-like wrapper */
+.card {
+    background: #faf5ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Added smooth card transition */
+}
+
+.card:hover {
+    transform: translateY(-4px); /* Subtle lift effect on hover */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Card header */
+.cardHeader {
+    background: var(--primary-color); /* Green background for header */
+    color: #faf5ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    text-align: center;
+}
+
+/* Card header title */
+.cardHeader h4 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+    transition: opacity 0.3s ease; /* Smooth title fade */
+}
+
+/* Card body */
+.cardBody {
+    padding: 20px;
+}
+
+/* Form styling */
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.formGroupButton {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.formLabel {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 8px;
+    transition: color 0.3s ease; /* Smooth label color transition */
+}
+
+.formControl {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease; /* Smoother input transitions */
+}
+
+.formControl:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(223, 138, 73, 0.4); /* Softer glow */
+    transform: scale(1.01); /* Subtle scale effect on focus */
+}
+
+/* Error message */
+.textDanger {
+    color: #e3342f;
+    font-size: 14px;
+    margin-top: 5px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards; /* Fade in for error messages */
+}
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smoother button transitions */
+    width: 100%;
+}
+
+.btnSuccess {
+    background: var(--primary-color);
+    color: #faf5ff;
+}
+
+.btnSuccess:hover {
+    background: #df8039;
+    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnSecondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+.btnSecondary:hover {
+    background: #5a6268;
+    transform: translateY(-2px) scale(1.02); /* Subtle lift and scale */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards; /* Fade in for modal backdrop */
+}
+
+/* Modal content */
+.modalContent {
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    min-width: 320px;
+    max-width: 30vw;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50px) scale(0.95); /* Initial state for entrance */
+    opacity: 0;
+    animation: slideIn 0.3s ease-out forwards; /* Smooth slide and scale */
+}
+
+/* Nested modal (e.g., confirmation modal inside AddLessonPage) */
+.modal .modal {
+    z-index: 10000; /* Ensure nested modal appears above */
+}
+
+/* Modal header */
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* Modal body */
+.modalBody {
+    margin-bottom: 16px;
+}
+
+/* Modal footer */
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+/* Modal close button */
+.modalClose {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth close button transition */
+}
+
+.modalClose:hover {
+    color: #faf5ff;
+    transform: rotate(90deg); /* Subtle rotate effect on hover */
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Apply fadeOut when modal is closing (requires JS to add class) */
+.modal.closing {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+.modalContent.closing {
+    animation: slideOut 0.3s ease forwards;
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .container {
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+
+    .cardBody {
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .formControl {
+        font-size: 14px;
+    }
+
+    .modalContent {
+        width: 95%;
+    }
+}

@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { Form, Input, Upload, Button, message, Spin } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import {Button, Form, Input, Upload} from 'antd';
+import styles from '../../styles/lesson/EditLessonContent.module.css';
 
-export default function EditLessonContentPage() {
-    const { contentId } = useParams();
-    const navigate = useNavigate();
+const EditLessonContentPage = ({showModal, closeModal, contentId, lessonId, courseId, onContentUpdated}) => {
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -18,12 +15,12 @@ export default function EditLessonContentPage() {
                 setLoading(true);
                 const response = await axios.get(`/api/lesson-contents/content/${contentId}`);
                 const content = response.data;
-                form.setFieldsValue({ title: content.title });
+                form.setFieldsValue({title: content.title});
                 setCurrentTitle(content.title);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching lesson content:', error);
-                message.error('Failed to load content for editing.');
+                alert('Failed to load content for editing.');
                 setLoading(false);
             }
         };
@@ -44,14 +41,12 @@ export default function EditLessonContentPage() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            message.success('Content updated successfully');
-            // Navigate back to the lesson content list (need lessonId)
-            // For now, navigate to a placeholder or a known page
-            // You might need to pass lessonId from the previous page or fetch it here
-            navigate(-1); // Go back to the previous page
+            alert('Content updated successfully');
+            onContentUpdated();
+            closeModal();
         } catch (error) {
             console.error('Error updating content:', error);
-            message.error('Failed to update content');
+            alert('Failed to update content');
         } finally {
             setLoading(false);
         }
@@ -60,73 +55,80 @@ export default function EditLessonContentPage() {
     const beforeUpload = (file) => {
         const isVideo = file.type.startsWith('video/');
         const isPDF = file.type === 'application/pdf';
-        
+
         if (!isVideo && !isPDF) {
-            message.error('You can only upload video or PDF files!');
+            alert('You can only upload video or PDF files!');
             return Upload.LIST_IGNORE;
         }
 
         const isLt100M = file.size / 1024 / 1024 < 100;
         if (!isLt100M) {
-            message.error('File must be smaller than 100MB!');
+            alert('File must be smaller than 100MB!');
             return Upload.LIST_IGNORE;
         }
 
         return false; // Prevent auto upload
     };
 
-    const handleChange = ({ fileList }) => {
+    const handleChange = ({fileList}) => {
         setFileList(fileList);
     };
 
-    if (loading) {
-        return (
-            <div style={{ padding: '24px', textAlign: 'center' }}>
-                <Spin size="large" tip="Loading content..." />
+    return (<div className={styles.card}>
+            <div className={styles.cardHeader}>
+                <h4>Edit Lesson Content: {currentTitle}</h4>
+                <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
+                    ×
+                </button>
             </div>
-        );
-    }
-
-    return (
-        <div style={{ padding: '24px', maxWidth: '600px', margin: '0 auto' }}>
-            <h2>Edit Lesson Content: {currentTitle}</h2>
-            <Form
-                form={form}
-                layout="vertical"
-                onFinish={handleSubmit}
-            >
-                <Form.Item
-                    name="title"
-                    label="Title"
-                    rules={[{ required: true, message: 'Please input the title!' }]}
-                >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item label="Upload New File (Optional)">
-                    <Upload
-                        beforeUpload={beforeUpload}
-                        onChange={handleChange}
-                        fileList={fileList}
-                        maxCount={1}
+            <div className={styles.cardBody}>
+                {loading ? (<div className={styles.loading}>Loading content...</div>) : (<Form
+                        form={form}
+                        layout="vertical"
+                        onFinish={handleSubmit}
+                        className={styles.form}
                     >
-                        <Button icon={<UploadOutlined />}>Select File</Button>
-                    </Upload>
-                    <p style={{ marginTop: 8, color: '#888' }}>Leave blank to keep existing file.</p>
-                </Form.Item>
+                        <Form.Item
+                            name="title"
+                            label={<span className={styles.formLabel}>Title</span>}
+                            rules={[{required: true, message: 'Please input the title!'}]}
+                        >
+                            <Input className={styles.formControl}/>
+                        </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={loading}>
-                        Save Changes
-                    </Button>
-                    <Button 
-                        style={{ marginLeft: 8 }} 
-                        onClick={() => navigate(-1)} // Go back to previous page
-                    >
-                        Cancel
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
-    );
-} 
+                        <Form.Item label={<span className={styles.formLabel}>Upload New File (Optional)</span>}>
+                            <Upload
+                                beforeUpload={beforeUpload}
+                                onChange={handleChange}
+                                fileList={fileList}
+                                maxCount={1}
+                            >
+                                <Button className={styles.btn}>
+                                    Select File
+                                </Button>
+                            </Upload>
+                            <p className={styles.textDanger}>Leave blank to keep existing file.</p>
+                        </Form.Item>
+
+                        <Form.Item className={styles.formGroupButton}>
+                            <Button
+                                type="primary"
+                                htmlType="submit"
+                                loading={loading}
+                                className={`${styles.btn} ${styles.btnSuccess}`}
+                            >
+                                Save Changes
+                            </Button>
+                            <Button
+                                className={`${styles.btn} ${styles.btnSecondary}`}
+                                onClick={closeModal}
+                            >
+                                Cancel
+                            </Button>
+                        </Form.Item>
+                    </Form>)}
+            </div>
+        </div>);
+};
+
+export default EditLessonContentPage;

@@ -1,23 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import styles from '../../styles/course/CoursePublic.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faImage } from '@fortawesome/free-solid-svg-icons';
-// import { toast, ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import styles from '../../styles/course/AddCourse.module.css';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faImage, faUpload} from '@fortawesome/free-solid-svg-icons';
+import {useNavigate} from "react-router-dom";
 
-export default function AddCoursePage() {
+const AddCoursePage = ({onClose}) => {
+
     const [ageGroups, setAgeGroups] = useState([]);
-    const { userId } = useParams();
-    const navigate = useNavigate();
+    const subjectOptions = [
+        {value: 'MATHEMATICS', label: 'Mathematics'}, {
+            value: 'LITERATURE',
+            label: 'Literature'
+        }, {value: 'ENGLISH', label: 'English'}, {value: 'PHYSICS', label: 'Physics'}, {
+            value: 'CHEMISTRY',
+            label: 'Chemistry'
+        }, {value: 'BIOLOGY', label: 'Biology'}, {value: 'HISTORY', label: 'History'}, {
+            value: 'GEOGRAPHY',
+            label: 'Geography'
+        }, {value: 'CIVICS', label: 'Civics'}, {
+            value: 'PHYSICAL_EDUCATION',
+            label: 'Physical Education'
+        }, {value: 'TECHNOLOGY', label: 'Technology'},];
+
     const [course, setCourse] = useState({
-        title: '',
-        description: '',
-        age_group: '',
-        price: '',
-        courseImageUrl: ''
+        title: '', description: '', age_group: '', price: '', courseImageUrl: '', subject: '',
     });
+
     const [errors, setErrors] = useState({});
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -37,7 +46,7 @@ export default function AddCoursePage() {
     };
 
     const handleChange = (e) => {
-        setCourse({ ...course, [e.target.name]: e.target.value });
+        setCourse({...course, [e.target.name]: e.target.value});
     };
 
     const handleImageChange = (e) => {
@@ -48,7 +57,7 @@ export default function AddCoursePage() {
                 alert('Please select an image file (PNG, JPG, JPEG)');
                 return;
             }
-            
+
             // Validate file size (10MB)
             if (file.size > 10 * 1024 * 1024) {
                 alert('File size must be less than 10MB');
@@ -56,7 +65,7 @@ export default function AddCoursePage() {
             }
 
             setImageFile(file);
-            
+
             // Create preview
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -68,19 +77,18 @@ export default function AddCoursePage() {
 
     const uploadImage = async () => {
         if (!imageFile) return null;
-        
+
         setUploading(true);
         try {
             const formData = new FormData();
             formData.append('imageFile', imageFile);
-            
+
             const response = await axios.post('/api/courses/upload-image', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true
+                }, withCredentials: true
             });
-            
+
             return response.data.imageUrl;
         } catch (error) {
             console.error('Error uploading image:', error);
@@ -97,6 +105,7 @@ export default function AddCoursePage() {
         if (!course.description) tempErrors.description = 'Required';
         if (!course.age_group) tempErrors.age_group = 'Required';
         if (!course.price) tempErrors.price = 'Required';
+        if (!course.subject) tempErrors.subject = 'Required';
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
     };
@@ -104,7 +113,7 @@ export default function AddCoursePage() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validate()) return;
-        
+
         try {
             // Upload image first if selected
             let imageUrl = null;
@@ -112,34 +121,31 @@ export default function AddCoursePage() {
                 imageUrl = await uploadImage();
                 if (!imageUrl) return; // Stop if upload failed
             }
-            
+
             // Create course with image URL
             const courseData = {
-                ...course,
-                courseImageUrl: imageUrl
+                ...course, courseImageUrl: imageUrl
             };
-            
+
             await axios.post(`/api/teacher/course/add`, courseData, {
                 withCredentials: true
             });
             // toast.success("Course added successfully!");
-            setTimeout(() => {
-                navigate(`/hocho/teacher/course`);
-            }, 1500); // Delay to let the toast display
+            onClose();
         } catch (error) {
             console.error(error);
             alert('Failed to create course. Please try again.');
         }
     };
 
-    return (
-        <div className="container mt-5">
+    return (<div className={styles.dialogOverlay}>
+        <div className={styles.dialog}>
+            <h2 className={styles.dialogTitle}>➕ Add New Course</h2>
             <form className={styles.courseForm} onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="courseName" className={styles.courseFormLabel + " form-label"}>Course Title</label>
+                <div className={styles.formGroup}>
+                    <label htmlFor="courseName">Course Title</label>
                     <input
                         type="text"
-                        className={styles.courseFormInput + " form-control"}
                         name="title"
                         id="courseName"
                         placeholder="Enter course title"
@@ -147,60 +153,44 @@ export default function AddCoursePage() {
                         onChange={handleChange}
                         required
                     />
-                    {errors.title && <div className={styles.courseFormError + " text-danger"}>{errors.title}</div>}
+                    {errors.title && <div className={styles.error}>{errors.title}</div>}
                 </div>
-                
-                <div className="mb-3">
-                    <label htmlFor="courseImage" className={styles.courseFormLabel + " form-label"}>
-                        <FontAwesomeIcon icon={faImage} /> Course Image
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="courseImage">
+                        <FontAwesomeIcon icon={faImage}/> Course Image
                     </label>
-                    <div className="d-flex align-items-center gap-3">
-                        <input
-                            type="file"
-                            className={styles.courseFormInput + " form-control"}
-                            name="courseImage"
-                            id="courseImage"
-                            accept="image/png,image/jpeg,image/jpg"
-                            onChange={handleImageChange}
-                        />
-                        {uploading && <FontAwesomeIcon icon={faUpload} spin />}
-                    </div>
-                    {imagePreview && (
-                        <div className="mt-2">
-                            <img 
-                                src={imagePreview} 
-                                alt="Preview" 
-                                style={{ 
-                                    maxWidth: '200px', 
-                                    maxHeight: '200px', 
-                                    objectFit: 'cover',
-                                    border: '1px solid #ddd',
-                                    borderRadius: '8px'
-                                }} 
-                            />
-                        </div>
-                    )}
-                    <small className="text-muted">Upload PNG, JPG, or JPEG file (max 10MB)</small>
+                    <input
+                        type="file"
+                        name="courseImage"
+                        id="courseImage"
+                        accept="image/png,image/jpeg,image/jpg"
+                        onChange={handleImageChange}
+                    />
+                    {uploading && <FontAwesomeIcon icon={faUpload} spin/>}
+                    {imagePreview && (<div className={styles.previewBox}>
+                        <img src={imagePreview} alt="Preview"/>
+                    </div>)}
+                    <small className={styles.note}>Upload PNG, JPG, JPEG (max 10MB)</small>
                 </div>
-                
-                <div className="mb-3">
-                    <label htmlFor="courseDescription" className={styles.courseFormLabel + " form-label"}>Description</label>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="courseDescription">Description</label>
                     <textarea
-                        className={styles.courseFormTextarea + " form-control"}
                         name="description"
                         id="courseDescription"
-                        placeholder="Enter course description"
+                        placeholder="Enter description"
                         rows="3"
                         value={course.description}
                         onChange={handleChange}
                         required
                     />
-                    {errors.description && <div className={styles.courseFormError + " text-danger"}>{errors.description}</div>}
+                    {errors.description && <div className={styles.error}>{errors.description}</div>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="ageGroup" className={styles.courseFormLabel + " form-label"}>Age Group</label>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="ageGroup">Age Group</label>
                     <select
-                        className={styles.courseFormSelect + " form-select"}
                         name="age_group"
                         id="ageGroup"
                         value={course.age_group}
@@ -208,17 +198,15 @@ export default function AddCoursePage() {
                         required
                     >
                         <option value="">Select age group</option>
-                        {ageGroups.map((group) => (
-                            <option key={group} value={group}>{group}</option>
-                        ))}
+                        {ageGroups.map(group => (<option key={group} value={group}>{group}</option>))}
                     </select>
-                    {errors.age_group && <div className={styles.courseFormError + " text-danger"}>{errors.age_group}</div>}
+                    {errors.age_group && <div className={styles.error}>{errors.age_group}</div>}
                 </div>
-                <div className="mb-3">
-                    <label htmlFor="price" className={styles.courseFormLabel + " form-label"}>Price</label>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="price">Price</label>
                     <input
                         type="number"
-                        className={styles.courseFormInput + " form-control"}
                         name="price"
                         id="price"
                         placeholder="Enter course price"
@@ -226,20 +214,34 @@ export default function AddCoursePage() {
                         onChange={handleChange}
                         required
                     />
-                    {errors.price && <div className={styles.courseFormError + " text-danger"}>{errors.price}</div>}
+                    {errors.price && <div className={styles.error}>{errors.price}</div>}
                 </div>
-                <button 
-                    type="submit" 
-                    className={styles.courseFormBtn + " btn btn-primary w-100"}
-                    disabled={uploading}
-                >
-                    {uploading ? 'Uploading...' : 'Add Course'}
-                </button>
-                <button type="button" className={styles.courseFormBtn + ' ' + styles.cancel + " btn btn-secondary w-100 mt-2"} onClick={() => navigate(-1)}>
-                    Cancel
-                </button>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="subject">Subject</label>
+                    <select
+                        name="subject"
+                        id="subject"
+                        value={course.subject}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select subject</option>
+                        {subjectOptions.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>))}
+                    </select>
+                    {errors.subject && <div className={styles.error}>{errors.subject}</div>}
+                </div>
+                <div style={{display: 'flex', justifyContent: 'flex-end', gap: '10px'}}>
+                    <button type="submit" className={styles.btnPrimary} disabled={uploading}>
+                        {uploading ? 'Uploading...' : 'Add Course'}
+                    </button>
+                    <button type="button" className={styles.btnSecondary} onClick={(onClose) }>
+                        Cancel
+                    </button>
+                </div>
             </form>
-            {/*<ToastContainer />*/}
         </div>
-    );
+    </div>);
 };
+export default AddCoursePage;

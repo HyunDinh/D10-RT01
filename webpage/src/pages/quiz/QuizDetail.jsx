@@ -94,7 +94,7 @@ const QuizDetail = () => {
   const getQuizImageUrl = (questionImageUrl) => {
     const baseUrl = 'http://localhost:8080';
     if (!questionImageUrl || questionImageUrl === 'none') {
-      return '/images/default-quiz.jpg';
+      return '/avaBack.jpg';
     }
     // Extract filename from questionImageUrl (e.g., "/quiz/filename.jpg" -> "filename.jpg")
     const fileName = questionImageUrl.split('/').pop();
@@ -134,7 +134,7 @@ const QuizDetail = () => {
                     src={getQuizImageUrl(question.questionImageUrl)}
                     alt="Ảnh minh họa"
                     className={styles.quizDetailQuestionImage}
-                    onError={e => (e.target.src = '/images/default-quiz.jpg')}
+                    onError={e => (e.target.src = '/avaBack.jpg')}
                     style={{ display: question.questionImageUrl ? 'block' : 'none' }}
                 />
                 <div>

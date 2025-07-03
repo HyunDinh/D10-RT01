@@ -12,6 +12,7 @@ import d10_rt01.hocho.model.enums.TransactionStatus;
 import d10_rt01.hocho.repository.*;
 import d10_rt01.hocho.repository.order.OrderItemRepository;
 import d10_rt01.hocho.repository.order.OrderRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private CourseEnrollmentRepository courseEnrollmentRepository;
+
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
 
     @Override
     @Transactional
@@ -257,9 +261,15 @@ public class PaymentServiceImpl implements PaymentService {
                                  enrollment.setChild(item.getChild());
                                  enrollment.setParent(completedOrder.getParent());
                                  courseEnrollmentRepository.save(enrollment);
+                                 
+                                 // Tạo notification cho enrollment
+                                 notificationIntegrationService.createEnrollmentNotifications(enrollment);
                              }
                          }
                      }
+                     
+                     // Tạo notification cho thanh toán thành công
+                     notificationIntegrationService.createPaymentSuccessNotifications(completedOrder);
                 }
 
                 break;
@@ -327,9 +337,15 @@ public class PaymentServiceImpl implements PaymentService {
                             enrollment.setChild(item.getChild());
                             enrollment.setParent(order.getParent());
                             courseEnrollmentRepository.save(enrollment);
+                            
+                            // Tạo notification cho enrollment
+                            notificationIntegrationService.createEnrollmentNotifications(enrollment);
                         }
                     }
                 }
+                
+                // Tạo notification cho thanh toán thành công
+                notificationIntegrationService.createPaymentSuccessNotifications(order);
 
                 // XÓA GIỎ HÀNG SAU KHI THANH TOÁN THÀNH CÔNG
                 if (order.getOrderItems() != null && !order.getOrderItems().isEmpty()) {

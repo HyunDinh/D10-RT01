@@ -5,7 +5,7 @@ import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {faImage} from '@fortawesome/free-regular-svg-icons'; // Added icons
 import styles from '../../styles/AnswerQuestion/QuestionForm.module.css'; // Adjust path
 
-const SUBJECTS = ['Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'];
+const SUBJECTS = ['Math', 'Literature', 'English', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Informatics', 'Other'];
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const QuestionForm = ({show, onClose, onSubmitRequest}) => {
@@ -30,7 +30,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                 });
                 setUserId(res.data.id);
             } catch (err) {
-                setError('Không thể lấy thông tin người dùng');
+                setError('Cannot get user information');
             }
         };
         fetchProfile();
@@ -43,7 +43,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && !file.type.startsWith('image/')) {
-            setError('Vui lòng chọn file ảnh.');
+            setError('Please select an image file.');
             e.target.value = '';
         } else {
             setImageFile(file);
@@ -54,7 +54,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.content || !form.subject || !form.grade) {
-            setError('Vui lòng điền đầy đủ thông tin');
+            setError('Please fill in all required information');
             return;
         }
         setLoading(true);
@@ -74,7 +74,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            setSuccess('Đặt câu hỏi thành công!');
+            setSuccess('Question submitted successfully!');
             setForm({ content: '', subject: '', grade: '' });
             setImageFile(null);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -83,7 +83,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
             }
             setTimeout(() => onClose(), 1500); // Close modal after success
         } catch (err) {
-            setError(err.response?.data?.message || 'Không thể gửi câu hỏi');
+            setError(err.response?.data?.message || 'Cannot submit question');
         } finally {
             setLoading(false);
         }
@@ -97,10 +97,10 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
         <span className={styles.closeButton} onClick={onClose}>
           ×
         </span>
-                <h2 className={styles.modalTitle}>Thêm câu hỏi mới</h2>
+                <h2 className={styles.modalTitle}>Add New Question</h2>
                 <form className={styles.formCard} onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Nội dung câu hỏi</label>
+                        <label className={styles.formLabel}>Question Content</label>
                         <textarea
                             className={styles.formTextarea}
                             name="content"
@@ -111,7 +111,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Môn học</label>
+                        <label className={styles.formLabel}>Subject</label>
                         <select
                             className={styles.formSelect}
                             name="subject"
@@ -119,7 +119,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Chọn môn học --</option>
+                            <option value="">-- Select subject --</option>
                             {SUBJECTS.map((s) => (
                                 <option key={s} value={s}>
                                     {s}
@@ -128,7 +128,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Lớp</label>
+                        <label className={styles.formLabel}>Grade</label>
                         <select
                             className={styles.formSelect}
                             name="grade"
@@ -136,7 +136,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Chọn lớp --</option>
+                            <option value="">-- Select grade --</option>
                             {GRADES.map((g) => (
                                 <option key={g} value={g}>
                                     {g}
@@ -146,7 +146,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                     </div>
                     <div className={styles.formGroup}>
                         <label className={`${styles.formLabel} ${styles.formLabelIcon}`}>
-                            <FontAwesomeIcon icon={faImage} className={styles.formIcon}/> Ảnh minh họa (tùy chọn)
+                            <FontAwesomeIcon icon={faImage} className={styles.formIcon}/> Illustration image (optional)
                         </label>
                         <input
                             type="file"
@@ -164,7 +164,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             className={`${styles.btn} ${styles.btnPrimary}`}
                             disabled={loading || !userId}
                         >
-                            Gửi câu hỏi <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon}/>
+                            Submit Question <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon}/>
                         </button>
                     </div>
                 </form>

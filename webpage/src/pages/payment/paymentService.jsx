@@ -12,7 +12,7 @@ export const paymentService = {
             }, { withCredentials: true });
             return response.data;
         } catch (error) {
-            throw error.response?.data || 'Lỗi khi tạo thanh toán';
+            throw error.response?.data || 'Error creating payment';
         }
     },
 
@@ -21,7 +21,7 @@ export const paymentService = {
             const response = await axios.get(`${API_URL}/${orderCode}`);
             return response.data;
         } catch (error) {
-            throw error.response?.data || 'Lỗi khi lấy thông tin thanh toán';
+            throw error.response?.data || 'Error getting payment information';
         }
     },
 
@@ -30,7 +30,7 @@ export const paymentService = {
             const response = await axios.get(`${API_URL}/user/${userId}`);
             return response.data;
         } catch (error) {
-            throw error.response?.data || 'Lỗi khi lấy danh sách thanh toán';
+            throw error.response?.data || 'Error getting payment list';
         }
     },
 
@@ -38,12 +38,12 @@ export const paymentService = {
         try {
             const response = await axios.put(
                 `${API_URL}/${orderCode}/cancel`,
-                {}, // body rỗng
-                { withCredentials: true } // thêm dòng này!
+                {}, // empty body
+                { withCredentials: true } // add this line!
             );
             return response.data;
         } catch (error) {
-            throw error.response?.data || 'Lỗi khi hủy thanh toán';
+            throw error.response?.data || 'Error cancelling payment';
         }
     },
 
@@ -52,7 +52,7 @@ export const paymentService = {
             const response = await axios.get(`${API_URL}/transactions`, { withCredentials: true });
             return response.data;
         } catch (error) {
-            throw error.response?.data || 'Lỗi khi lấy lịch sử giao dịch';
+            throw error.response?.data || 'Error getting transaction history';
         }
     }
 }; 

@@ -40,6 +40,12 @@ public class Message {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "file_url")
+    private String fileUrl;
+
+    @Column(name = "file_type")
+    private String fileType;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByChatSession_SessionId(Long sessionId);
+
+    Message findTopByChatSession_SessionIdOrderByCreatedAtDesc(Long sessionId);
+
+    int countByChatSession_SessionIdAndMessageIdGreaterThan(Long sessionId, Long messageId);
 }

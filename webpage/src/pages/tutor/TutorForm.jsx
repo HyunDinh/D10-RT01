@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import styles from '../../styles/tutor/Tutor.module.css';
 
 const SUBJECTS = [
-  'Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'
+  'Math', 'Literature', 'English', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Informatics', 'Other'
 ];
 
 const TutorForm = () => {
@@ -27,7 +27,7 @@ const TutorForm = () => {
                 const res = await axios.get('http://localhost:8080/api/hocho/profile', { withCredentials: true });
                 setCurrentUserId(res.data.id);
             } catch (err) {
-                setError('Không thể lấy thông tin người dùng');
+                setError('Cannot get user information');
             }
         };
         fetchProfile();
@@ -48,7 +48,7 @@ const TutorForm = () => {
                         phoneNumber: t.user?.phoneNumber || ''
                     });
                 } catch (err) {
-                    setError('Không thể tải thông tin gia sư');
+                    setError('Cannot load tutor information');
                 }
             };
             fetchTutor();
@@ -69,35 +69,35 @@ const TutorForm = () => {
             await axios.post('http://localhost:8080/api/tutors/profile', { ...form, userId: userId || currentUserId }, {
                 withCredentials: true
             });
-            setSuccess(userId ? 'Cập nhật thông tin gia sư thành công!' : 'Lưu thông tin gia sư thành công!');
+            setSuccess(userId ? 'Tutor information updated successfully!' : 'Tutor information saved successfully!');
             if (!userId) {
                 setForm({ specialization: '', experience: '', education: '', introduction: '', phoneNumber: '' });
             }
         } catch (err) {
-            setError('Không thể lưu thông tin gia sư');
+            setError('Cannot save tutor information');
         }
         setLoading(false);
     };
 
     return (
         <div className={styles.tutorContainer}>
-            <h2 className={styles.tutorTitle}>{userId ? 'Chỉnh sửa thông tin gia sư' : 'Tạo thông tin gia sư'}</h2>
+            <h2 className={styles.tutorTitle}>{userId ? 'Edit Tutor Information' : 'Create Tutor Information'}</h2>
             <form className={styles.tutorForm} onSubmit={handleSubmit}>
-                <label>Chuyên môn</label>
+                <label>Specialization</label>
                 <select name="specialization" value={form.specialization} onChange={handleChange} required>
-                    <option value="">-- Chọn môn chuyên môn --</option>
+                    <option value="">-- Select specialization --</option>
                     {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
-                <label>Kinh nghiệm (năm)</label>
+                <label>Experience (years)</label>
                 <input type="number" name="experience" value={form.experience} onChange={handleChange} required min="0" />
-                <label>Học vấn</label>
+                <label>Education</label>
                 <input type="text" name="education" value={form.education} onChange={handleChange} required />
-                <label>Giới thiệu</label>
+                <label>Introduction</label>
                 <textarea name="introduction" value={form.introduction} onChange={handleChange} required rows={3} />
                 {error && <div className="alert alert-danger text-center">{error}</div>}
                 {success && <div className="alert alert-success text-center">{success}</div>}
                 <button type="submit" className={styles.tutorBtn} disabled={loading || (!userId && !currentUserId)}>
-                    {loading ? 'Đang lưu...' : (userId ? 'Cập nhật' : 'Lưu thông tin')}
+                    {loading ? 'Saving...' : (userId ? 'Update' : 'Save Information')}
                 </button>
             </form>
         </div>

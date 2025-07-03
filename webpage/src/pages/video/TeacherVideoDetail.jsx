@@ -7,9 +7,9 @@ import Footer from '../../components/Footer';
 import styles from '../../styles/video/TeacherVideo.module.css';
 
 const statusMap = {
-  PENDING: 'Chờ duyệt',
-  APPROVED: 'Đã duyệt',
-  REJECTED: 'Từ chối',
+  PENDING: 'Pending',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
 };
 
 export default function TeacherVideoDetail() {
@@ -40,7 +40,7 @@ export default function TeacherVideoDetail() {
         setVideo(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Không thể tải video. Vui lòng thử lại sau.');
+        setError('Cannot load video. Please try again later.');
         setLoading(false);
       }
     };
@@ -51,13 +51,13 @@ export default function TeacherVideoDetail() {
   }, [videoId, videoUrl]);
 
   if (loading) {
-    return <div className={styles.myVideosLoading}>Đang tải...</div>;
+    return <div className={styles.myVideosLoading}>Loading...</div>;
   }
   if (error) {
     return <div className={styles.myVideosError}>{error}</div>;
   }
   if (!video) {
-    return <div className={styles.myVideosError}>Không tìm thấy video.</div>;
+    return <div className={styles.myVideosError}>Video not found.</div>;
   }
 
   return (
@@ -66,7 +66,7 @@ export default function TeacherVideoDetail() {
       <div className={styles.teacherVideoDetailContainer}>
         <div className={styles.teacherVideoDetailMain}>
           <button className={styles.teacherVideoDetailBackBtn} onClick={() => navigate(-1)}>
-            <span style={{marginRight: 6}}>←</span> Quay lại
+            <span style={{marginRight: 6}}>←</span> Back
           </button>
           <h2 className={styles.teacherVideoDetailTitle}>{video.title}</h2>
           <div className={styles.teacherVideoDetailPlayerWrapper}>
@@ -80,14 +80,14 @@ export default function TeacherVideoDetail() {
                 className={styles.teacherVideoDetailPlayer}
               />
             ) : (
-              <div>Không có dữ liệu video</div>
+              <div>No video data available</div>
             )}
           </div>
           <div className={styles.teacherVideoDetailInfo}>
-            <p><b>Mô tả:</b> {video.description || 'Không có mô tả'}</p>
-            <p><b>Trạng thái:</b> {statusMap[video.status] || video.status}</p>
-            <p><b>Người đăng:</b> {video.createdBy?.fullName || 'Không rõ'}</p>
-            <p><b>Ngày tạo:</b> {new Date(video.createdAt).toLocaleDateString()}</p>
+            <p><b>Description:</b> {video.description || 'No description'}</p>
+            <p><b>Status:</b> {statusMap[video.status] || video.status}</p>
+            <p><b>Uploaded by:</b> {video.createdBy?.fullName || 'Unknown'}</p>
+            <p><b>Created at:</b> {new Date(video.createdAt).toLocaleDateString()}</p>
           </div>
         </div>
       </div>

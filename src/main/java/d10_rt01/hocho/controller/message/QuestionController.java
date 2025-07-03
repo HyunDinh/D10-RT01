@@ -9,6 +9,9 @@ import d10_rt01.hocho.service.question.AnswerService;
 import d10_rt01.hocho.service.question.QuestionService;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -266,5 +269,39 @@ public class QuestionController {
         }
 
         return fileBytes;
+    }
+
+    @GetMapping("/answers/image/{fileName}")
+    public ResponseEntity<Resource> getAnswerImage(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_ANSWER_UPLOAD_DIR, fileName);
+            Resource resource = new FileSystemResource(filePath.toFile());
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/image/{fileName}")
+    public ResponseEntity<Resource> getQuestionImage(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(HochoConfig.ABSOLUTE_PATH_QUESTION_UPLOAD_DIR, fileName);
+            Resource resource = new FileSystemResource(filePath.toFile());
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 } 

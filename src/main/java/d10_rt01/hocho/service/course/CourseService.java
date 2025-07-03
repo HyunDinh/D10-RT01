@@ -6,6 +6,7 @@ import d10_rt01.hocho.model.User;
 import d10_rt01.hocho.model.enums.CourseStatus;
 import d10_rt01.hocho.repository.CourseRepository;
 import d10_rt01.hocho.repository.UserRepository;
+import d10_rt01.hocho.service.NotificationIntegrationService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class CourseService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationIntegrationService notificationIntegrationService;
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -51,7 +55,14 @@ public class CourseService {
             .orElseThrow(() -> new IllegalArgumentException("Teacher not found with ID: " + teacherId));
 
         course.setTeacher(teacher);
-        return courseRepository.save(course);
+        
+        Course savedCourse = courseRepository.save(course);
+        
+        // Tạo notification cho admin khi teacher thêm course mới
+        String teacherName = teacher.getFullName() != null ? teacher.getFullName() : teacher.getUsername();
+        notificationIntegrationService.createTeacherAddedCourseNotifications(teacherName, savedCourse.getTitle());
+        
+        return savedCourse;
     }
 
     @Transactional
@@ -64,6 +75,7 @@ public class CourseService {
             existingCourse.setCourseImageUrl(course.getCourseImageUrl());
             existingCourse.setAgeGroup(course.getAgeGroup());
             existingCourse.setPrice(course.getPrice());
+            existingCourse.setSubject(course.getSubject());
             return courseRepository.save(existingCourse);
         }
         throw new RuntimeException("Course not found");
@@ -104,6 +116,46 @@ public class CourseService {
         courseRepository.save(course);
     }
 
+    public List<CourseDto> getFilteredCourses(String category, String priceRange, String level, String search) {
+        List<Course> courses = courseRepository.findAll();
+        return courses.stream()
+                .filter(c -> {
+                    if (category == null || category.isEmpty()) return true;
+                    // Map category từ FE sang enum AgeGroup
+                    String expectedAgeGroup = null;
+                    switch (category) {
+                        case "4-6": expectedAgeGroup = "AGE_4_6"; break;
+                        case "7-9": expectedAgeGroup = "AGE_7_9"; break;
+                        case "10-12": expectedAgeGroup = "AGE_10_12"; break;
+                        case "13-15": expectedAgeGroup = "AGE_13_15"; break;
+                        default: return true;
+                    }
+                    return c.getAgeGroup().toString().equals(expectedAgeGroup);
+                })
+                .filter(c -> {
+                    if (priceRange == null || priceRange.isEmpty()) return true;
+                    try {
+                        if (priceRange.endsWith("+")) {
+                            // Xử lý format "1000000+"
+                            double min = Double.parseDouble(priceRange.replace("+", ""));
+                            return c.getPrice() != null && c.getPrice().doubleValue() >= min;
+                        } else {
+                            String[] parts = priceRange.split("-");
+                            if (parts.length == 2) {
+                                double min = Double.parseDouble(parts[0]);
+                                double max = Double.parseDouble(parts[1]);
+                                return c.getPrice() != null && c.getPrice().doubleValue() >= min && c.getPrice().doubleValue() <= max;
+                            }
+                        }
+                    } catch (Exception e) { return true; }
+                    return true;
+                })
+                .filter(c -> level == null || level.isEmpty() || c.getSubject() == null || c.getSubject().toString().equalsIgnoreCase(level))
+                .filter(c -> search == null || search.isEmpty() || c.getTitle().toLowerCase().contains(search.toLowerCase()))
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
     private CourseDto convertToDto(Course course) {
         CourseDto dto = new CourseDto();
         dto.setCourseId(course.getCourseId());
@@ -112,11 +164,13 @@ public class CourseService {
         dto.setCourseImageUrl(course.getCourseImageUrl());
         dto.setTeacherId(course.getTeacher().getId());
         dto.setTeacherName(course.getTeacher().getFullName());
+        dto.setTeacherAvatarUrl(course.getTeacher().getAvatarUrl());
         dto.setAgeGroup(course.getAgeGroup());
         dto.setPrice(course.getPrice());
         dto.setStatus(course.getStatus());
         dto.setCreatedAt(course.getCreatedAt());
         dto.setUpdatedAt(course.getUpdatedAt());
+        dto.setSubject(course.getSubject());
         return dto;
     }
 }

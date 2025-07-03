@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Button, InputNumber, Modal, Select, Spin, message, Typography, Form, Row, Col, Card, Input } from 'antd';
+import React, {useEffect, useState} from 'react';
+import {Button, Card, Input, message, Modal, Select, Spin, Table, Typography} from 'antd';
 import axios from 'axios';
-import {Link} from "react-router-dom";
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
+import styles from "../../styles/game/GamePage.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
-const { Title } = Typography;
-const { Option } = Select;
+const {Title} = Typography;
+const {Option} = Select;
 
 // Helper to format seconds to hh:mm:ss
 function formatSecondsToHMS(seconds) {
@@ -35,18 +39,7 @@ export default function TimeRestrictionPage() {
     const [loading, setLoading] = useState(true);
     const [restrictions, setRestrictions] = useState([]);
     const [editing, setEditing] = useState({});
-    const [visible, setVisible] = useState(false);
-    const [newRestriction, setNewRestriction] = useState({
-        childId: null,
-        maxPlayTimeHours: 0,
-        maxPlayTimeMinutes: 0,
-        maxPlayTimeSeconds: 0,
-        maxVideoTimeHours: 0,
-        maxVideoTimeMinutes: 0,
-        maxVideoTimeSeconds: 0
-    });
-    const [form] = Form.useForm();
-    const [deleteModal, setDeleteModal] = useState({ visible: false, childId: null });
+    const [deleteModal, setDeleteModal] = useState({visible: false, childId: null});
 
     // Calculate total seconds from hours, minutes, and seconds
     const calculateTotalSeconds = (hours, minutes, seconds) => {
@@ -63,8 +56,8 @@ export default function TimeRestrictionPage() {
             setLoading(true);
             // Fetch restrictions and children simultaneously
             const [restrictionsResponse, childrenResponse] = await Promise.all([
-                axios.get('/api/time-restriction/get', { withCredentials: true }),
-                axios.get('/api/parent-child', { withCredentials: true })
+                axios.get('/api/time-restriction/get', {withCredentials: true}),
+                axios.get('/api/parent-child', {withCredentials: true})
             ]);
 
             // Create a map from child id to full name
@@ -73,13 +66,30 @@ export default function TimeRestrictionPage() {
                 childrenMap.set(child.childId, child.fullName);
             });
 
-            // Map through restrictions and add the child's full name based on child id
-            const restrictionsWithNames = restrictionsResponse.data.map(restriction => ({
-                ...restriction,
-                childFullName: childrenMap.get(restriction.childId) || 'Unknown'
-            }));
+            // Map childId to restriction for quick lookup (dùng key là restriction.child.id)
+            const restrictionMap = new Map();
+            restrictionsResponse.data.forEach(restriction => {
+                restrictionMap.set(String(restriction.child.id), restriction);
+            });
 
-            setRestrictions(restrictionsWithNames);
+            // Gộp: Tạo danh sách tất cả các con, nếu có restriction thì lấy, không thì tạo bản ghi mới
+            const allRows = childrenResponse.data.map(child => {
+                const realChildId = child.childId || child.id || child.user_id;
+                const restriction = restrictionMap.get(String(realChildId));
+                const maxVideoTime = restriction?.maxVideoTime ?? 0;
+                return restriction
+                    ? {...restriction, childFullName: child.fullName, childId: realChildId, maxVideoTime}
+                    : {
+                        childId: realChildId,
+                        childFullName: child.fullName,
+                        maxVideoTime: 0,
+                    };
+            });
+
+            setRestrictions(allRows);
+            // Log dữ liệu sau khi map để debug (chi tiết từng trường)
+            // eslint-disable-next-line
+            console.log('All rows after map:', JSON.stringify(allRows, null, 2));
             setLoading(false);
         } catch (err) {
             console.error('Error fetching restrictions:', err);
@@ -99,10 +109,10 @@ export default function TimeRestrictionPage() {
             params.append('maxVideoTime', maxVideoTime);
             await axios.post('/api/time-restriction/set', params, {
                 withCredentials: true,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
             message.success('Restriction saved successfully!');
-            setEditing((prev) => ({ ...prev, [childId]: null }));
+            setEditing((prev) => ({...prev, [childId]: null}));
             fetchRestrictions();
         } catch (err) {
             console.error('Error saving restrictions:', err);
@@ -128,13 +138,13 @@ export default function TimeRestrictionPage() {
     // Reset restriction handler
     const handleReset = async (childId) => {
         try {
-            await axios.post(`/api/time-restriction/reset?childId=${childId}`, {}, { withCredentials: true });
+            await axios.post(`/api/time-restriction/reset?childId=${childId}`, {}, {withCredentials: true});
             message.success("Restriction reset successfully!");
-            setDeleteModal({ visible: false, childId: null });
+            setDeleteModal({visible: false, childId: null});
             fetchRestrictions();
         } catch (err) {
             message.error("Failed to reset restriction.");
-            setDeleteModal({ visible: false, childId: null });
+            setDeleteModal({visible: false, childId: null});
         }
     };
 
@@ -150,8 +160,15 @@ export default function TimeRestrictionPage() {
             dataIndex: 'videoTimeFormatted',
             key: 'maxVideoTime',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
-                // Determine value to show in input
+                // Log chi tiết giá trị thực tế
+                // eslint-disable-next-line
+                console.log('Record in render:', {
+                    childId: record.childId,
+                    childFullName: record.childFullName,
+                    maxVideoTime: record.maxVideoTime,
+                    max_video_time: record.max_video_time
+                });
+                const realChildId = record.childId;
                 let value = editing[realChildId]?.maxVideoTimeHMS;
                 if (value === undefined) {
                     value = formatSecondsToHMS(record.maxVideoTime);
@@ -170,7 +187,7 @@ export default function TimeRestrictionPage() {
                                 }
                             }));
                         }}
-                        style={{ width: 120 }}
+                        style={{width: 120}}
                     />
                 );
             }
@@ -179,20 +196,33 @@ export default function TimeRestrictionPage() {
             title: 'Actions',
             key: 'actions',
             render: (text, record) => {
-                const realChildId = record.childId || (record.child && record.child.id);
+                const realChildId = record.childId;
+                // Log để debug
+                // eslint-disable-next-line
+                console.log('Render Actions for childId:', realChildId);
                 return (
                     <>
                         <Button
                             type="primary"
-                            onClick={() => saveRestrictions(realChildId)}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Save restriction for childId:', realChildId);
+                                saveRestrictions(realChildId);
+                            }}
                             disabled={!editing[realChildId]}
-                            style={{ marginRight: 8 }}
+                            style={{marginRight: 8}}
                         >
                             Save
                         </Button>
                         <Button
                             danger
-                            onClick={() => setDeleteModal({ visible: true, childId: realChildId })}
+                            onClick={() => {
+                                // Log để debug
+                                // eslint-disable-next-line
+                                console.log('Reset restriction for childId:', realChildId);
+                                setDeleteModal({visible: true, childId: realChildId});
+                            }}
                         >
                             Reset
                         </Button>
@@ -202,36 +232,54 @@ export default function TimeRestrictionPage() {
         },
     ];
 
-    return (
-        <div style={{ padding: '24px' }}>
-            <Title level={2}>Manage Time Restrictions</Title>
+    return (<>
+            <Header/>
+            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+                <div className={styles.headerInfo}>
+                    <p>Time Restriction</p>
+                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+                        data-aos-delay="500">
+                        <li>
+                            <a href="/hocho/home">Home</a>
+                        </li>
+                        <li>
+                            <FontAwesomeIcon icon={faChevronRight}/>
+                        </li>
+                        <li>Time Restriction</li>
+                    </ul>
+                </div>
+            </section>
+            <div style={{padding: '40px'}}>
+                <Title level={2}>Manage Time Restrictions</Title>
 
-            <Card title="About Time Restrictions" style={{ marginBottom: 16 }}>
-                <p>Time restrictions limit how long your child can play games or watch videos.</p>
-                <p>After the time limit is reached, your child will be blocked from accessing that content.</p>
-            </Card>
+                <Card title="About Time Restrictions" style={{marginBottom: 16}}>
+                    <p>Time restrictions limit how long your child can play games or watch videos.</p>
+                    <p>After the time limit is reached, your child will be blocked from accessing that content.</p>
+                </Card>
 
-            {loading ? (
-                <Spin />
-            ) : (
-                <>
-                    <Table
-                        dataSource={restrictions.map((r) => ({ ...r, key: r.childId || (r.child && r.child.id) }))}
-                        columns={columns}
-                        pagination={false}
-                    />
-                    <Modal
-                        title="Confirm Reset"
-                        open={deleteModal.visible}
-                        onOk={() => handleReset(deleteModal.childId)}
-                        onCancel={() => setDeleteModal({ visible: false, childId: null })}
-                        okText="Reset"
-                        okButtonProps={{ danger: true }}
-                    >
-                        Are you sure you want to reset this time restriction?
-                    </Modal>
-                </>
-            )}
-        </div>
+                {loading ? (
+                    <Spin/>
+                ) : (
+                    <>
+                        <Table
+                            dataSource={restrictions.map((r) => ({...r, key: r.childId || (r.child && r.child.id)}))}
+                            columns={columns}
+                            pagination={false}
+                        />
+                        <Modal
+                            title="Confirm Reset"
+                            open={deleteModal.visible}
+                            onOk={() => handleReset(deleteModal.childId)}
+                            onCancel={() => setDeleteModal({visible: false, childId: null})}
+                            okText="Reset"
+                            okButtonProps={{danger: true}}
+                        >
+                            Are you sure you want to reset this time restriction?
+                        </Modal>
+                    </>
+                )}
+            </div>
+            <Footer/>
+        </>
     );
 }

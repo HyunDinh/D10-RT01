@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styles from '../../styles/lesson/AddLessonContent.module.css';
 
-export default function AddLessonContentPage() {
-    const { courseId, lessonId } = useParams();
-    const navigate = useNavigate();
+const AddLessonContentPage = ({ showModal, closeModal, lessonId, courseId, onContentAdded }) => {
     const [content, setContent] = useState({
         title: '',
-        file: null
+        file: null,
     });
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === 'file') {
-            setContent({ ...content, file: files[0] });
+            const file = files[0];
+            const isVideo = file.type.startsWith('video/');
+            const isPDF = file.type === 'application/pdf';
+            const isLt100M = file.size / 1024 / 1024 < 100;
+
+            if (!isVideo && !isPDF) {
+                alert('You can only upload video or PDF files!');
+                return;
+            }
+            if (!isLt100M) {
+                alert('File must be smaller than 100MB!');
+                return;
+            }
+            setContent({ ...content, file });
         } else {
             setContent({ ...content, [name]: value });
         }
@@ -28,51 +40,87 @@ export default function AddLessonContentPage() {
         const formData = new FormData();
         formData.append('file', content.file);
         formData.append('title', content.title);
+        setLoading(true);
         try {
-            await axios.post(
-                `/api/lesson-contents/${lessonId}`,
-                formData,
-                { headers: { 'Content-Type': 'multipart/form-data' } }
-            );
-            navigate(`/hocho/teacher/course/${courseId}/lesson/${lessonId}/content`);
+            await axios.post(`/api/lesson-contents/${lessonId}`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true,
+            });
+            alert('Content added successfully');
+            onContentAdded();
+            closeModal();
         } catch (error) {
+            console.error('Error adding content:', error);
             alert('Lỗi khi upload: ' + error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="container mt-5">
-            <h2>Add Lesson Content</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label htmlFor="title" className="form-label">Title</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="title"
-                        name="title"
-                        value={content.title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="file" className="form-label">Upload PDF or Video</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        id="file"
-                        name="file"
-                        accept=".pdf,video/*"
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-success me-2">Add Content</button>
-                <button type="button" className="btn btn-secondary" onClick={() => navigate(-1)}>
-                    Cancel
+        <div className={styles.card}>
+            <div className={styles.cardHeader}>
+                <h4>Add Lesson Content</h4>
+                <button className={styles.modalClose} onClick={closeModal} aria-label="Close">
+                    ×
                 </button>
-            </form>
+            </div>
+            <div className={styles.cardBody}>
+                {loading ? (
+                    <div className={styles.loading}>Adding content...</div>
+                ) : (
+                    <form onSubmit={handleSubmit} className={styles.form}>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="title" className={styles.formLabel}>
+                                Title
+                            </label>
+                            <input
+                                type="text"
+                                className={styles.formControl}
+                                id="title"
+                                name="title"
+                                value={content.title}
+                                onChange={handleChange}
+                                required
+                            />
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label htmlFor="file" className={styles.formLabel}>
+                                Upload PDF or Video
+                            </label>
+                            <input
+                                type="file"
+                                className={styles.formControl}
+                                id="file"
+                                name="file"
+                                accept=".pdf,video/*"
+                                onChange={handleChange}
+                                required
+                            />
+                            <p className={styles.textDanger}>Only PDF or video files, max 100MB.</p>
+                        </div>
+                        <div className={styles.formGroupButton}>
+                            <button
+                                type="submit"
+                                className={`${styles.btn} ${styles.btnSuccess}`}
+                                disabled={loading}
+                            >
+                                Add Content
+                            </button>
+                            <button
+                                type="button"
+                                className={`${styles.btn} ${styles.btnSecondary}`}
+                                onClick={closeModal}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
         </div>
     );
-}
+};
+
+export default AddLessonContentPage;
