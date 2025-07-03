@@ -177,7 +177,7 @@ const App = () => {
 
                 // ************************************** GAME ROUTES **************************************
                 <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun />} />
-                <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird />} />
+                <Route path="/hocho/child/games/clumsyBird"lement={<PlayClumsyBird />} />
                 <Route path="/hocho/games" element={<GamesPage />} />
                 <Route path="/hocho/games/leaderboard" element={<LeaderboardPage />} />
 

@@ -1,5 +1,6 @@
 package d10_rt01.hocho.controller.course;
 
+import d10_rt01.hocho.dto.DailyRevenueDto;
 import d10_rt01.hocho.dto.TotalStudentsDto;
 import d10_rt01.hocho.model.Course;
 import d10_rt01.hocho.model.CourseEnrollment;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -309,6 +312,47 @@ public class TeacherController {
 
         return ResponseEntity.ok(ageGroupCounts); // Trả về số học sinh theo độ tuổi
     }
+
+    @GetMapping("/revenue/daily")
+    public ResponseEntity<List<DailyRevenueDto>> getDailyRevenue(
+            Authentication authentication,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) {
+        // Tham số teacherId có thể là optional
+
+        // Lấy thời gian hiện tại làm endDate
+        LocalDateTime endDateTime = endDate.atStartOfDay();  // Lấy ngày hiện tại làm endDate
+        LocalDateTime startDateTime = startDate.atTime(LocalTime.MAX);
+
+        // In ra các tham số để kiểm tra giá trị
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
+
+        // Lấy username từ authentication
+        String username = authentication.getName();
+        System.out.println("Authenticated Username: " + username);  // In username của người dùng
+
+        // Tìm giáo viên từ username
+        Optional<User> teacherOpt = teacherService.findTeacherByUsername(username);
+
+        if (teacherOpt.isEmpty()) {
+            System.out.println("Teacher not found for username: " + username);  // Nếu không tìm thấy giáo viên
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        User teacher = teacherOpt.get();
+        System.out.println("Teacher found: " + teacher.getUsername());  // In tên giáo viên
+
+        // Lấy doanh thu hàng ngày từ service
+        List<DailyRevenueDto> dailyRevenue = paymentService.getDailyRevenue(teacher.getId(), startDateTime, endDateTime);
+
+        // In kết quả của dữ liệu doanh thu hàng ngày để kiểm tra
+        System.out.println("Daily Revenue Data: " + dailyRevenue);
+
+        return ResponseEntity.ok(dailyRevenue);
+    }
+
+
 
 
 

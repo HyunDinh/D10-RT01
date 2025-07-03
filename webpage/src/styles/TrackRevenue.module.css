@@ -1,11 +1,19 @@
-/* Container for the entire page */
+/* Container cho trang chính */
 .container {
     padding: 20px;
     background-color: #f7f7f9;
     min-height: 100vh;
 }
 
-/* Top 3 statistic cards */
+/* Khoảng cách giữa các section */
+.sectionSpacing {
+    margin-top: 48px;
+}
+
+/* ===================== */
+/* Ô Thống Kê Tổng Quát */
+/* ===================== */
+
 .statCardContainerTop {
     display: flex;
     justify-content: center;
@@ -13,8 +21,7 @@
     margin-top: 20px;
 }
 
-.statCard.revenue {
-    width: 100%;
+.statCard {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -23,7 +30,28 @@
     flex: 1;
 }
 
-/* Chart container */
+.statCard.revenue {
+    color: #34d399;
+}
+
+.statCard.students {
+    color: #60a5fa;
+}
+
+.statCard.courses {
+    color: #a78bfa;
+}
+
+.statCard .value {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* =================== */
+/* Biểu Đồ Thống Kê    */
+/* =================== */
+
 .chartContainer {
     display: flex;
     justify-content: space-between;
@@ -31,60 +59,34 @@
     margin-top: 40px;
 }
 
-/* Each chart box */
-.chartContainer .chart {
+.chartContainer .chart,
+.chart {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Stacked box container for student and course counts */
+/* =============== */
+/* Thống Kê Chi Tiết */
+/* =============== */
+
 .statCardContainerMiddle {
     display: flex;
-    flex-direction: column;  /* Stack cards vertically */
+    flex-direction: column;
     justify-content: space-between;
-    gap: 20px;  /* Add space between the stacked cards */
+    gap: 20px;
     margin-top: 40px;
     width: 100%;
-    max-width: 800px;  /* Limit max width */
+    max-width: 800px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.statCard.students, .statCard.courses {
-    width: 100%;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    flex: 1;
-}
+/* =============== */
+/* Bảng Thống Kê    */
+/* =============== */
 
-/* Style for values inside the cards */
-.statCard .value {
-    font-size: 40px;  /* Increase font size */
-    font-weight: bold;  /* Make the value bold */
-    text-align: center;
-}
-
-/* Green color for revenue */
-.statCard.revenue {
-    color: #34d399;
-}
-
-/* Blue color for students */
-.statCard.students {
-    color: #60a5fa;
-}
-
-/* Purple color for courses */
-.statCard.courses {
-    color: #a78bfa;
-}
-
-/* Table container */
 .tableContainer {
     background-color: white;
     padding: 20px;
@@ -103,7 +105,7 @@
     padding: 15px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
-    word-wrap: break-word;  /* Ensure text doesn't overflow */
+    word-wrap: break-word;
 }
 
 .tableContainer th {
@@ -112,14 +114,13 @@
     text-align: center;
 }
 
-/* Set specific column widths if necessary for consistent layout */
 .tableContainer th:nth-child(1), .tableContainer td:nth-child(1) {
     width: 5%;
     text-align: center;
 }
 
 .tableContainer th:nth-child(2), .tableContainer td:nth-child(2) {
-    width: 40%; /* Adjust the width of the course title */
+    width: 40%;
 }
 
 .tableContainer th:nth-child(3), .tableContainer td:nth-child(3) {
@@ -132,26 +133,57 @@
     text-align: center;
 }
 
-/* Ensure table text is aligned properly */
-.tableContainer td {
-    text-align: center;  /* Align data in table cells to center */
-}
-
-/* Styling for even row highlighting (optional) */
 .tableContainer tr:nth-child(even) {
     background-color: #f9fafb;
 }
 
+/* ================= */
+/* Ngày và Submit    */
+/* ================= */
 
-/* Mobile Responsiveness */
+.dateInputs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 16px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.dateInputs label {
+    font-weight: 500;
+}
+
+.dateInputs input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 150px;
+}
+
+.dateInputs button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dateInputs button:hover {
+    background-color: #45a049;
+}
+
+/* ================== */
+/* Responsive Design  */
+/* ================== */
+
 @media screen and (max-width: 768px) {
-    .statCardContainerTop {
-        flex-direction: column; /* Stack cards vertically on small screens */
-        gap: 16px;
-    }
-
-    .statCardContainerMiddle {
-        flex-direction: column; /* Stack cards vertically on small screens */
+    .statCardContainerTop,
+    .statCardContainerMiddle,
+    .chartContainer {
+        flex-direction: column;
         gap: 16px;
     }
 
@@ -159,8 +191,19 @@
         width: 100%;
     }
 
-    .chartContainer {
-        flex-direction: column; /* Stack charts vertically on small screens */
-        gap: 16px;
+    .dateInputs {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dateInputs input,
+    .dateInputs button {
+        width: 100%;
+    }
+
+    .tableContainer th,
+    .tableContainer td {
+        font-size: 14px;
+        padding: 10px;
     }
 }
