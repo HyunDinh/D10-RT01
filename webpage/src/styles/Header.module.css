@@ -150,7 +150,7 @@
 .mainMenu {
     display: flex;
     flex-wrap: nowrap;
-    max-width: 750px;
+    max-width: 790px;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
@@ -192,7 +192,7 @@
 
 .mainMenu li {
     position: relative;
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
 .mainMenu li a {

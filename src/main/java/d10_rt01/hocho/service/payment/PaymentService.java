@@ -1,9 +1,14 @@
 package d10_rt01.hocho.service.payment;
 
 
+import d10_rt01.hocho.dto.DailyRevenueDto;
+import d10_rt01.hocho.dto.TotalRevenueDto;
 import d10_rt01.hocho.dto.transaction.TransactionDto;
 import d10_rt01.hocho.model.Payment;
+import d10_rt01.hocho.model.enums.PaymentStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PaymentService {
@@ -16,4 +21,8 @@ public interface PaymentService {
     Payment handlePaymentReturn(Long orderCode);
     
     List<TransactionDto> getTransactionsByUserId(Long userId);
+    TotalRevenueDto getTotalRevenueForTeacher(Long teacherId);
+
+    List<DailyRevenueDto> getDailyRevenue(Long teacherId, LocalDateTime startDate, LocalDateTime endDate);
+
 } 

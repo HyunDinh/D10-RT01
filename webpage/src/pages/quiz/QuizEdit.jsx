@@ -4,8 +4,6 @@ import {useNavigate, useParams} from 'react-router-dom';
 import formStyles from '../../styles/quiz/QuizForm.module.css';
 import addLessonStyles from '../../styles/lesson/AddLesson.module.css';
 import * as XLSX from 'xlsx';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
 
 const QuizEdit = () => {
     const {id} = useParams();
@@ -16,8 +14,6 @@ const QuizEdit = () => {
     const [saving, setSaving] = useState(false);
     const [inputMode, setInputMode] = useState('excel'); // 'excel' or 'manual'
     const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(null);
-    const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
-    const [deleteQuestionIndex, setDeleteQuestionIndex] = useState(null);
 
     useEffect(() => {
         fetchQuiz();
@@ -97,38 +93,6 @@ const QuizEdit = () => {
         setSelectedQuestionIndex(quiz.questions.length); // Select the new question
     };
 
-    const handleDeleteQuestionClick = (index) => {
-        setDeleteQuestionIndex(index);
-        setShowDeleteQuestionModal(true);
-    };
-
-    const handleDeleteQuestionCancel = () => {
-        const modal = document.querySelector(`.${addLessonStyles.modal}`);
-        const modalContent = document.querySelector(`.${addLessonStyles.modalContent}`);
-        if (modal && modalContent) {
-            modal.classList.add('closing');
-            modalContent.classList.add('closing');
-            setTimeout(() => {
-                setShowDeleteQuestionModal(false);
-                setDeleteQuestionIndex(null);
-            }, 300);
-        } else {
-            setShowDeleteQuestionModal(false);
-            setDeleteQuestionIndex(null);
-        }
-    };
-
-    const handleDeleteQuestionConfirm = () => {
-        setQuiz((prev) => ({
-            ...prev, questions: prev.questions.filter((_, i) => i !== deleteQuestionIndex),
-        }));
-        setShowDeleteQuestionModal(false);
-        if (selectedQuestionIndex >= quiz.questions.length - 1) {
-            setSelectedQuestionIndex(quiz.questions.length - 2 >= 0 ? quiz.questions.length - 2 : null);
-        }
-        setDeleteQuestionIndex(null);
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (quiz.questions.length === 0) {
@@ -203,12 +167,6 @@ const QuizEdit = () => {
         return (<div className={formStyles.quizDetailQuestionCard}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12}}>
                     <div className={formStyles.quizDetailQuestionTitle}>Câu {selectedQuestionIndex + 1}</div>
-                    <button
-                        className={formStyles.quizFormRemoveBtn}
-                        onClick={() => handleDeleteQuestionClick(selectedQuestionIndex)}
-                    >`
-                        <FontAwesomeIcon icon={faTrash}/> Xóa
-                    </button>
                 </div>
                 <div>
                     <label className={formStyles.quizFormLabel}>Nội dung câu hỏi</label>
@@ -416,38 +374,6 @@ const QuizEdit = () => {
                         {saving ? 'Đang lưu...' : 'Lưu Quiz'}
                     </button>
                 </form>
-
-                {showDeleteQuestionModal && (<div className={addLessonStyles.modal}>
-                        <div className={addLessonStyles.modalContent}>
-                            <div className={addLessonStyles.modalHeader}>
-                                <h5>Xác nhận xóa câu hỏi</h5>
-                                <button
-                                    className={addLessonStyles.modalClose}
-                                    onClick={handleDeleteQuestionCancel}
-                                    aria-label="Close"
-                                >
-                                    ×
-                                </button>
-                            </div>
-                            <div className={addLessonStyles.modalBody}>
-                                <p>Bạn có chắc chắn muốn xóa câu hỏi này không?</p>
-                            </div>
-                            <div className={addLessonStyles.modalFooter}>
-                                <button
-                                    className={`${addLessonStyles.btn} ${addLessonStyles.btnSecondary}`}
-                                    onClick={handleDeleteQuestionCancel}
-                                >
-                                    Hủy
-                                </button>
-                                <button
-                                    className={`${addLessonStyles.btn} ${addLessonStyles.btnSuccess}`}
-                                    onClick={handleDeleteQuestionConfirm}
-                                >
-                                    Xác nhận
-                                </button>
-                            </div>
-                        </div>
-                    </div>)}
             </main>
         </>);
 };

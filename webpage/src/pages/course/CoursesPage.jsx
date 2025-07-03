@@ -31,8 +31,7 @@ export default function CoursesPage() {
                 withCredentials: true,
             });
             const mappedCourses = result.data.map((course) => ({
-                ...course,
-                ageGroup: course.age_group || course.ageGroup,
+                ...course, ageGroup: course.age_group || course.ageGroup,
             }));
             mappedCourses.sort((a, b) => a.ageGroup.localeCompare(b.ageGroup));
             setCourses(mappedCourses);
@@ -98,15 +97,12 @@ export default function CoursesPage() {
     const filteredCourses = filter === 'All' ? courses : courses.filter((course) => course.ageGroup === filter);
 
     if (error) {
-        return (
-            <div className="container mt-5">
+        return (<div className="container mt-5">
                 <div className="alert alert-danger">{error}</div>
-            </div>
-        );
+            </div>);
     }
 
-    return (
-        <>
+    return (<>
             <Header/>
             <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
@@ -128,11 +124,9 @@ export default function CoursesPage() {
                 <div className={styles.courseFilter}>
                     <select className="form-select" value={filter} onChange={(e) => setFilter(e.target.value)}>
                         <option value="All">All Age Groups</option>
-                        {ageGroups.map((group) => (
-                            <option key={group} value={group}>
+                        {ageGroups.map((group) => (<option key={group} value={group}>
                                 {group}
-                            </option>
-                        ))}
+                            </option>))}
                     </select>
                     <div>
                         <button className={styles.customBtn} onClick={() => setShowAddDialog(true)}>
@@ -157,8 +151,7 @@ export default function CoursesPage() {
                         </tr>
                         </thead>
                         <tbody>
-                        {filteredCourses.map((course) => (
-                            <tr key={course.courseId}>
+                        {filteredCourses.map((course) => (<tr key={course.courseId}>
                                 <td>{course.title}</td>
                                 <td>{course.ageGroup}</td>
                                 <td>{course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'N/A'}</td>
@@ -185,24 +178,20 @@ export default function CoursesPage() {
                                         Delete
                                     </button>
                                 </td>
-                            </tr>
-                        ))}
+                            </tr>))}
                         </tbody>
                     </table>
                 </div>
             </div>
 
             {showAddDialog && <AddCoursePage onClose={handleCloseAddDialog}/>}
-            {showDeleteDialog && (
-                <DeleteConfirmDialog
+            {showDeleteDialog && (<DeleteConfirmDialog
                     sh={showDeleteDialog}
                     onConfirm={handleConfirmDelete}
                     onCancel={handleCancelDelete}
                     message="Are you sure you want to delete this course?"
-                />
-            )}
+                />)}
             {showEditDialog && <EditCoursePage course={selectedCourse} onClose={handleCloseEditDialog}/>}
             <Footer/>
-        </>
-    );
+        </>);
 }

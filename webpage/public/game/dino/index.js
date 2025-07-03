@@ -2100,11 +2100,11 @@
             }
 
             // Draw the digits if not flashing.
-            if (paint) {
-                for (var i = this.digits.length - 1; i >= 0; i--) {
-                    this.draw(i, parseInt(this.digits[i]));
-                }
-            }
+            // if (paint) {
+            //     for (var i = this.digits.length - 1; i >= 0; i--) {
+            //         this.draw(i, parseInt(this.digits[i]));
+            //     }
+            // }
 
             this.drawHighScore();
             return playSound;
@@ -2114,12 +2114,12 @@
          * Draw the high score.
          */
         drawHighScore: function () {
-            this.canvasCtx.save();
-            this.canvasCtx.globalAlpha = .8;
-            for (var i = this.highScore.length - 1; i >= 0; i--) {
-                this.draw(i, parseInt(this.highScore[i], 10), true);
-            }
-            this.canvasCtx.restore();
+            // this.canvasCtx.save();
+            // this.canvasCtx.globalAlpha = .8;
+            // for (var i = this.highScore.length - 1; i >= 0; i--) {
+            //     this.draw(i, parseInt(this.highScore[i], 10), true);
+            // }
+            // this.canvasCtx.restore();
         },
 
         /**

@@ -46,8 +46,6 @@ function Header() {
                 localStorage.removeItem('userRole');
                 if (err.response?.status === 401 && location.pathname !== '/hocho/home') {
                     navigate('/hocho/login');
-                } else {
-                    setError('Không thể tải thông tin người dùng');
                 }
             }
         };
@@ -73,7 +71,6 @@ function Header() {
                 setUnreadCount(totalUnreadChats);
             } catch {
                 setUnreadCount(0);
-                setError('Không thể tải số lượng tin nhắn chưa đọc');
             }
         };
 
@@ -252,9 +249,9 @@ function Header() {
                                     </a>
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
-                                            <a href="#" onClick={(e) => {
-                                                e.preventDefault();
-                                            }}>
+                                            <a href="/hocho/course"
+                                                // onClick={(e) => {e.preventDefault();}}
+                                            >
                                                 Subject <FontAwesomeIcon icon={faAngleDown}
                                                                          className={styles.mainMenuIcon}/>
                                             </a>
@@ -363,6 +360,11 @@ function Header() {
                                     {role === 'ROLE_ADMIN' && (<li>
                                         <a href="/hocho/admin" onClick={closeMobileMenu}>
                                             <FontAwesomeIcon icon={faUniversalAccess}/> Administration
+                                        </a>
+                                    </li>)}
+                                    {role === 'ROLE_TEACHER' && (<li>
+                                        <a href="/hocho/teacher/track-revenue" onClick={closeMobileMenu}>
+                                            <FontAwesomeIcon icon={faUniversalAccess}/> Orchestration
                                         </a>
                                     </li>)}
                                     <li className={styles.messagesNotification}>
