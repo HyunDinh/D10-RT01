@@ -118,10 +118,15 @@
     width: 5%;
     text-align: center;
 }
-
 .tableContainer th:nth-child(2), .tableContainer td:nth-child(2) {
-    width: 40%;
+    width: 50%;
+    word-break: break-word;
+    white-space: normal;
+    text-align: center; /* ✅ đổi từ 'left' thành 'center' */
+    padding-left: 8px;
+    padding-right: 8px;
 }
+
 
 .tableContainer th:nth-child(3), .tableContainer td:nth-child(3) {
     width: 25%;
