@@ -19,4 +19,6 @@ public interface GameService {
     List<Game> findApprovedGames();
 
     Game findById(Long gameId);
+
+    Game findByTitle(String title);
 }

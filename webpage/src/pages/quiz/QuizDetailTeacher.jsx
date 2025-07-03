@@ -10,7 +10,6 @@ const QuizDetailTeacher = () => {
     const [quiz, setQuiz] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [statistics, setStatistics] = useState(null);
     const [deleting, setDeleting] = useState(false);
     const [deletingResults, setDeletingResults] = useState(false);
     const [showDeleteQuizModal, setShowDeleteQuizModal] = useState(false);
@@ -19,7 +18,6 @@ const QuizDetailTeacher = () => {
 
     useEffect(() => {
         fetchQuiz();
-        fetchStatistics();
     }, [id]);
 
     const fetchQuiz = async () => {
@@ -27,7 +25,11 @@ const QuizDetailTeacher = () => {
             const res = await axios.get(`http://localhost:8080/api/quizzes/${id}`, {
                 withCredentials: true,
             });
-            setQuiz(res.data);
+            setQuiz({
+                ...res.data,
+                questions: res.data.questions || [],
+                results: res.data.results || [],
+            });
             setLoading(false);
             // Select the first question by default if available
             if (res.data.questions.length > 0) {
@@ -36,17 +38,6 @@ const QuizDetailTeacher = () => {
         } catch (err) {
             setError('Không thể tải thông tin quiz');
             setLoading(false);
-        }
-    };
-
-    const fetchStatistics = async () => {
-        try {
-            const res = await axios.get(`http://localhost:8080/api/quizzes/${id}/statistics`, {
-                withCredentials: true,
-            });
-            setStatistics(res.data);
-        } catch (err) {
-            console.error('Không thể tải thống kê:', err);
         }
     };
 
@@ -112,7 +103,6 @@ const QuizDetailTeacher = () => {
                 withCredentials: true,
             });
             setShowDeleteResultsModal(false);
-            fetchStatistics(); // Refresh statistics after deleting results
             setDeletingResults(false);
         } catch (err) {
             setError('Không thể xóa kết quả bài làm');
@@ -166,10 +156,6 @@ const QuizDetailTeacher = () => {
             </div>
             <div style={{marginTop: 8}}>
                 <span className={styles.quizDetailBadge}>Điểm: {question.points} điểm</span>
-                {statistics && statistics.questionStats[question.questionId] && (
-                    <span className={`${styles.quizDetailBadge} ${styles.secondary}`}>
-              Tỷ lệ đúng: {statistics.questionStats[question.questionId].correctRate}%
-            </span>)}
             </div>
         </div>);
     };
@@ -196,7 +182,7 @@ const QuizDetailTeacher = () => {
                 >
                     Chỉnh sửa
                 </button>
-                {statistics && statistics.totalStudents > 0 && (<button
+                {(quiz.results?.length || 0) > 0 && (<button
                     className={`${styles.quizDetailBtn} ${styles.warning}`}
                     onClick={handleDeleteResultsClick}
                     disabled={deletingResults}
@@ -225,18 +211,9 @@ const QuizDetailTeacher = () => {
                 <div className={styles.quizDetailInfoText}><strong>Thời gian làm bài:</strong> {quiz.timeLimit} phút
                 </div>
                 <div className={styles.quizDetailInfoText}><strong>Tổng điểm:</strong> {quiz.totalPoints} điểm</div>
-                <div className={styles.quizDetailInfoText}><strong>Số câu hỏi:</strong> {quiz.questions.length} câu
+                <div className={styles.quizDetailInfoText}><strong>Số câu hỏi:</strong> {(quiz.questions?.length || 0)} câu
                 </div>
             </div>
-            {statistics && (<div className={styles.quizDetailInfoCol}>
-                <div className={styles.quizDetailInfoTitle}>Thống kê</div>
-                <div className={styles.quizDetailInfoText}><strong>Số học sinh đã
-                    làm:</strong> {statistics.totalStudents}</div>
-                <div className={styles.quizDetailInfoText}><strong>Điểm trung
-                    bình:</strong> {statistics.averageScore}</div>
-                <div className={styles.quizDetailInfoText}><strong>Tỷ lệ đạt:</strong> {statistics.passRate}%
-                </div>
-            </div>)}
         </div>
 
         <div className={styles.splitContainer}>

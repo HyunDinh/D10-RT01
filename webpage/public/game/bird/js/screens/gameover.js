@@ -11,7 +11,6 @@ game.GameOverScreen = me.ScreenObject.extend({
             steps: game.data.steps
         };
         me.save.add(this.savedData);
-
         // Update high score
         if (!me.save.topSteps) {
             me.save.add({ topSteps: game.data.steps });
@@ -21,7 +20,8 @@ game.GameOverScreen = me.ScreenObject.extend({
             game.data.newHiScore = true;
         }
 
-        // ✅ Send score to parent iframe immediately
+
+        // ✅ Gửi score về React
         console.log("🎮 Sending score to parent...");
         window.parent.postMessage({
             type: 'CLUMSY_BIRD_SCORE',
@@ -29,7 +29,7 @@ game.GameOverScreen = me.ScreenObject.extend({
             highScore: me.save.topSteps
         }, '*');
 
-        // ✅ Reply to GET_SCORE requests from React
+        // ✅ Trả lời nếu React gọi GET_SCORE
         window.addEventListener('message', function (event) {
             if (event.data?.type === 'GET_SCORE') {
                 console.log("📨 Replying to GET_SCORE from parent...");
@@ -41,7 +41,7 @@ game.GameOverScreen = me.ScreenObject.extend({
             }
         });
 
-        // Bind input
+        // Giao diện game over
         me.input.bindKey(me.input.KEY.ENTER, "enter", true);
         me.input.bindKey(me.input.KEY.SPACE, "enter", false);
         me.input.bindPointer(me.input.pointer.LEFT, me.input.KEY.ENTER);
@@ -52,7 +52,6 @@ game.GameOverScreen = me.ScreenObject.extend({
             }
         });
 
-        // Game over visuals
         me.game.world.addChild(new me.Sprite(
             me.game.viewport.width / 2,
             me.game.viewport.height / 2 - 100,
@@ -83,37 +82,7 @@ game.GameOverScreen = me.ScreenObject.extend({
             me.game.world.addChild(newRect, 12);
         }
 
-        // Score display
-        this.dialog = new (me.Renderable.extend({
-            init: function () {
-                this._super(me.Renderable, 'init', [
-                    0, 0, me.game.viewport.width / 2, me.game.viewport.height / 2
-                ]);
-                this.font = new me.Font('gamefont', 40, 'black', 'left');
-                this.steps = 'Steps: ' + game.data.steps.toString();
-                this.topSteps = 'Higher Step: ' + me.save.topSteps.toString();
-            },
-
-            draw: function (renderer) {
-                const stepsText = this.font.measureText(renderer, this.steps);
-                const topStepsText = this.font.measureText(renderer, this.topSteps);
-
-                this.font.draw(
-                    renderer,
-                    this.steps,
-                    me.game.viewport.width / 2 - stepsText.width / 2 - 60,
-                    me.game.viewport.height / 2
-                );
-
-                this.font.draw(
-                    renderer,
-                    this.topSteps,
-                    me.game.viewport.width / 2 - topStepsText.width / 2 - 60,
-                    me.game.viewport.height / 2 + 50
-                );
-            }
-        }));
-        me.game.world.addChild(this.dialog, 12);
+        // ❌ Không hiện điểm ở màn game over (đã tắt đoạn this.dialog)
     },
 
     onDestroyEvent: function () {
