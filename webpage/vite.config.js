@@ -4,6 +4,9 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    global: 'window', // Polyfill để ánh xạ global thành window
+  },
   server: {
     port: 3000,
     strictPort: true,
@@ -14,6 +17,12 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/ws': {
+        target: 'http://localhost:8080',
+        ws: true,
+        changeOrigin: true,
+        secure: false
+      }
     },
   }
 });
