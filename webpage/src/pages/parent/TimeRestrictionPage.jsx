@@ -1,14 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Card, Input, message, Modal, Select, Spin, Table, Typography} from 'antd';
 import axios from 'axios';
-import Header from "../../components/Header.jsx";
-import Footer from "../../components/Footer.jsx";
-import styles from "../../styles/game/GamePage.module.css";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
-
-const {Title} = Typography;
-const {Option} = Select;
+import styles from "../../styles/TimeRestriction.module.css";
 
 // Helper to format seconds to hh:mm:ss
 function formatSecondsToHMS(seconds) {
@@ -35,20 +28,11 @@ function parseHMSToSeconds(str) {
     return 0;
 }
 
-export default function TimeRestrictionPage() {
+export default function TimeRestrictionPage({ childId }) {
     const [loading, setLoading] = useState(true);
     const [restrictions, setRestrictions] = useState([]);
     const [editing, setEditing] = useState({});
     const [deleteModal, setDeleteModal] = useState({visible: false, childId: null});
-
-    // Calculate total seconds from hours, minutes, and seconds
-    const calculateTotalSeconds = (hours, minutes, seconds) => {
-        return (
-            (parseInt(hours) || 0) * 3600 +
-            (parseInt(minutes) || 0) * 60 +
-            (parseInt(seconds) || 0)
-        );
-    };
 
     // Fetch all restrictions for the logged-in parent
     const fetchRestrictions = async () => {
@@ -120,20 +104,9 @@ export default function TimeRestrictionPage() {
         }
     };
 
-    // Handle input changes for the editing fields
-    const onInputChange = (childId, field, value) => {
-        setEditing((prev) => ({
-            ...prev,
-            [childId]: {
-                ...prev[childId],
-                [field]: value,
-            },
-        }));
-    };
-
     useEffect(() => {
         fetchRestrictions();
-    }, []);
+    }, [childId]);
 
     // Reset restriction handler
     const handleReset = async (childId) => {
@@ -232,54 +205,43 @@ export default function TimeRestrictionPage() {
         },
     ];
 
-    return (<>
-            <Header/>
-            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
-                <div className={styles.headerInfo}>
-                    <p>Time Restriction</p>
-                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
-                        data-aos-delay="500">
-                        <li>
-                            <a href="/hocho/home">Home</a>
-                        </li>
-                        <li>
-                            <FontAwesomeIcon icon={faChevronRight}/>
-                        </li>
-                        <li>Time Restriction</li>
-                    </ul>
-                </div>
-            </section>
-            <div style={{padding: '40px'}}>
-                <Title level={2}>Manage Time Restrictions</Title>
+    // Filter to only the selected child if childId is provided
+    const filteredRestrictions = childId
+        ? restrictions.filter(r => String(r.childId) === String(childId))
+        : restrictions;
 
+    return (
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <h1>Time Restriction</h1>
+            </div>
                 <Card title="About Time Restrictions" style={{marginBottom: 16}}>
-                    <p>Time restrictions limit how long your child can play games or watch videos.</p>
+                    <p>Time restrictions limit how long your child can watch videos.</p>
                     <p>After the time limit is reached, your child will be blocked from accessing that content.</p>
                 </Card>
 
                 {loading ? (
                     <Spin/>
+                ) : filteredRestrictions.length === 0 ? (
+                    <div>No time restriction data for this child.</div>
                 ) : (
-                    <>
-                        <Table
-                            dataSource={restrictions.map((r) => ({...r, key: r.childId || (r.child && r.child.id)}))}
-                            columns={columns}
-                            pagination={false}
-                        />
-                        <Modal
-                            title="Confirm Reset"
-                            open={deleteModal.visible}
-                            onOk={() => handleReset(deleteModal.childId)}
-                            onCancel={() => setDeleteModal({visible: false, childId: null})}
-                            okText="Reset"
-                            okButtonProps={{danger: true}}
-                        >
-                            Are you sure you want to reset this time restriction?
-                        </Modal>
-                    </>
+                    <Table
+                        dataSource={filteredRestrictions}
+                        columns={columns}
+                        rowKey="childId"
+                        pagination={false}
+                    />
                 )}
-            </div>
-            <Footer/>
-        </>
+                <Modal
+                    title="Confirm Reset"
+                    open={deleteModal.visible}
+                    onOk={() => handleReset(deleteModal.childId)}
+                    onCancel={() => setDeleteModal({visible: false, childId: null})}
+                    okText="Reset"
+                    okButtonProps={{danger: true}}
+                >
+                    Are you sure you want to reset this time restriction?
+                </Modal>
+        </div>
     );
 }
