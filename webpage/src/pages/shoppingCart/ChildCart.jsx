@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import styles from '../../styles/cart/Cart.module.css';
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 const ChildCart = () => {
     const [cartItems, setCartItems] = useState([]);
@@ -77,65 +81,94 @@ const ChildCart = () => {
         fetchCart();
     }, []);
 
-    return (
-        <div className={styles.cartContainer + " container mt-5"}>
-            <h2 className={styles.cartTitle + " text-primary mb-4 text-center"}>Giỏ hàng của tôi</h2>
-            {loading ? (
-                <div className={styles.loading + " alert alert-info text-center"}>Đang tải giỏ hàng...</div>
-            ) : error ? (
-                <div className={styles.error + " alert alert-danger text-center"}>{error}</div>
-            ) : cartItems.length === 0 ? (
-                <div className={styles.emptyCart + " alert alert-warning text-center"}>Giỏ hàng trống</div>
-            ) : (
-                <>
-                    <div className={styles.cartGrid + " row g-4"}>
-                        {cartItems.map((item) => (
-                            <div key={item.requestCartId} className="col-md-6">
-                                <div className={styles.cartCard + " card shadow-sm h-100"}>
-                                    <div className="row g-0 align-items-center">
-                                        <div className="col-4">
-                                            <img
-                                                src={getCourseImageUrl(item.course.courseImageUrl)}
-                                                alt={item.course.title}
-                                                className={styles.cartImage + " img-fluid rounded-start"}
-                                                style={{ height: '120px', objectFit: 'cover', width: '100%' }}
-                                            />
-                                        </div>
-                                        <div className="col-8">
-                                            <div className={styles.cartBody + " card-body"}>
-                                                <h5 className={styles.cartTitleItem + " card-title"}>{item.course.title}</h5>
-                                                <p className={styles.cartPrice + " card-text text-success fw-bold"}>
-                                                    {item.course.price.toLocaleString('vi-VN')} VNĐ
-                                                </p>
-                                                <p className={styles.cartDesc + " card-text"}>{item.course.description}</p>
-                                                <p className={styles.cartStatus + " card-text status"}>
-                                                    Trạng thái:{' '}
-                                                    <span className="badge bg-warning text-dark">{item.status || 'Chờ gửi'}</span>
-                                                </p>
-                                                <div className={styles.cartBtnGroup + " d-flex gap-2 flex-wrap mt-2"}>
-                                                    <button
-                                                        className={styles.cartBtn + ' ' + styles.remove + " btn btn-outline-danger btn-sm"}
-                                                        onClick={() => handleRemoveItem(item.course.courseId)}
-                                                    >
-                                                        <i className="bi bi-trash"></i> Xóa
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+    return (<>
+        <Header/>
+        <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+            <div className={styles.headerInfo}>
+                <p>Children cart</p>
+                <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+                    data-aos-delay="500">
+                    <li>
+                        <a href="/hocho/home">Home</a>
+                    </li>
+                    <li>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </li>
+                    <li>Children cart</li>
+                </ul>
+            </div>
+        </section>
+
+        <div className={styles.cartContainer}>
+            {loading ? (<div className={styles.loading}>Loading cart...</div>) : error ? (
+                <div className={styles.error}>{error}</div>) : cartItems.length === 0 ? (
+                <div className={styles.emptyCart}>Cart is empty</div>) : (<>
+                    <table className={styles.cartTable}>
+                        <thead>
+                        <tr>
+                            <th className={styles.tableHeader}></th>
+                            <th className={styles.tableHeader}>Title</th>
+                            <th className={styles.tableHeader}>Price</th>
+                            <th className={styles.tableHeader}>Description</th>
+                            <th className={styles.tableHeader}>Status</th>
+                            <th className={styles.tableHeader}>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {cartItems.map((item) => (<tr key={item.requestCartId} className={styles.cartRow}>
+                                <td className={styles.tableCell}>
+                                    <div className={styles.imageContainer}>
+                                        <img
+                                            src={getCourseImageUrl(item.course.courseImageUrl)}
+                                            alt={item.course.title}
+                                            className={styles.cartImage}
+                                        />
                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="d-flex justify-content-center mt-4">
-                        <button className={styles.cartBtn + ' ' + styles.checkout + " btn btn-primary btn-lg"} onClick={handleSendToParent}>
-                            <i className="bi bi-send"></i> Gửi yêu cầu cho phụ huynh
+                                </td>
+                                <td className={styles.tableCell}>
+                                    <h5 className={styles.cartTitleItem}>{item.course.title}</h5>
+                                </td>
+                                <td className={styles.tableCell}>
+                                    <p className={styles.cartPrice}>
+                                        {item.course.price.toLocaleString('vi-VN')} VND
+                                    </p>
+                                </td>
+                                <td className={styles.tableCell}>
+                                    <p className={styles.cartDesc}>{item.course.description}</p>
+                                </td>
+                                <td className={styles.tableCell}>
+                                    <p className={styles.cartStatus}>
+                                        {' '}
+                                        <span className={styles.statusBadge}>
+                    {item.status || 'Pending'}
+                  </span>
+                                    </p>
+                                </td>
+                                <td className={styles.tableCell}>
+                                    <div className={styles.cartBtnGroup}>
+                                        <button
+                                            className={`${styles.cartBtn} ${styles.remove}`}
+                                            onClick={() => handleRemoveItem(item.course.courseId)}
+                                        >
+                                            <i className="bi bi-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>))}
+                        </tbody>
+                    </table>
+                    <div className={styles.checkoutContainer}>
+                        <button
+                            className={`${styles.cartBtn} ${styles.checkout}`}
+                            onClick={handleSendToParent}
+                        >
+                            <i className="bi bi-send"></i> Send request to parent
                         </button>
                     </div>
-                </>
-            )}
+                </>)}
         </div>
-    );
+        <Footer/>
+    </>);
 };
 
 export default ChildCart;

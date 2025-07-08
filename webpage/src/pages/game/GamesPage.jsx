@@ -1,6 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
+import styles from "../../styles/AnswerQuestion/QuestionList.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import LeaderboardDialog from "./GameLeaderBoard.jsx";
 
 function GamesPage() {
     const [games, setGames] = useState([]);
@@ -10,6 +16,8 @@ function GamesPage() {
     const [allAges, setAllAges] = useState([]);
     const [allCategories, setAllCategories] = useState([]);
     const navigate = useNavigate();
+    const [openLeaderboard, setOpenLeaderboard] = useState(false);
+    const [selectedGameId, setSelectedGameId] = useState(null);
 
     useEffect(() => {
         axios.get('/api/games/filters/options')
@@ -30,7 +38,7 @@ function GamesPage() {
         if (selectedAge) params.age = selectedAge;
         if (selectedCategory) params.category = selectedCategory;
 
-        axios.get('/api/games/filter', { params })
+        axios.get('/api/games/filter', {params})
             .then(res => setGames(res.data))
             .catch(err => console.error(err));
     };
@@ -42,7 +50,7 @@ function GamesPage() {
             .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
             .join('');
 
-        navigate(`/hocho/child/games/${slug}`, { state: { game } });
+        navigate(`/hocho/child/games/${slug}`, {state: {game}});
     };
 
     const clearFilters = () => {
@@ -52,18 +60,40 @@ function GamesPage() {
     };
 
     const ageGroupLabels = {
-        AGE_4_6: "4–6 years old",
-        AGE_7_9: "7–9 years old",
-        AGE_10_12: "10–12 years old",
-        AGE_13_15: "13–15 years old"
+        AGE_4_6: "4–6 years old", AGE_7_9: "7–9 years old", AGE_10_12: "10–12 years old", AGE_13_15: "13–15 years old"
     };
 
     function getAgeLabel(value) {
         return ageGroupLabels[value] || value; // fallback nếu không khớp
     }
 
-    return (
-        <div style={{ display: 'flex', padding: '40px' }}>
+    const handleOpenLeaderboard = (gameId) => {
+        setSelectedGameId(gameId); // Set the selected gameId
+        setOpenLeaderboard(true);
+    };
+
+    const handleCloseLeaderboard = () => {
+        setOpenLeaderboard(false);
+        setSelectedGameId(null); // Clear the selected gameId
+    };
+    return (<>
+        <Header/>
+        <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+            <div className={styles.headerInfo}>
+                <p>Game Library</p>
+                <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
+                    <li>
+                        <a href="/hocho/home">Home</a>
+                    </li>
+                    <li>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </li>
+                    <li>Games</li>
+                </ul>
+            </div>
+        </section>
+
+        <div style={{display: 'flex', padding: '40px'}}>
             {/* Filter box */}
             <div style={{
                 width: '280px',
@@ -73,7 +103,7 @@ function GamesPage() {
                 borderRadius: '12px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
             }}>
-                <h3 style={{ color: '#f79433', fontSize: '28px', marginBottom: '20px' }}>Search</h3>
+                <h3 style={{color: '#f79433', fontSize: '28px', marginBottom: '20px'}}>Search</h3>
 
                 <input
                     type="text"
@@ -89,7 +119,7 @@ function GamesPage() {
                     }}
                 />
 
-                <div style={{ marginBottom: '16px' }}>
+                <div style={{marginBottom: '16px'}}>
                     <label><strong>Age</strong></label>
                     <select
                         value={selectedAge}
@@ -97,20 +127,17 @@ function GamesPage() {
                         style={selectStyle}
                     >
                         <option value="">All age</option>
-                        {allAges.map(age => (
-                            <option key={age} value={age}>{getAgeLabel(age)}</option>
-                        ))}
+                        {allAges.map(age => (<option key={age} value={age}>{getAgeLabel(age)}</option>))}
                     </select>
 
                 </div>
 
-                <div style={{ marginBottom: '16px' }}>
+                <div style={{marginBottom: '16px'}}>
                     <label><strong>Category</strong></label>
-                    <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)} style={selectStyle}>
+                    <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}
+                            style={selectStyle}>
                         <option value="">All categories</option>
-                        {allCategories.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
+                        {allCategories.map(cat => (<option key={cat} value={cat}>{cat}</option>))}
                     </select>
                 </div>
 
@@ -118,43 +145,47 @@ function GamesPage() {
             </div>
 
             {/* Game list */}
-            <div style={{ flex: 1 }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>🎮 Danh sách trò chơi cho học sinh</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-                    {games.map(game => (
-                        <div key={game.gameId} style={gameCardStyle}>
+            <div style={{flex: 1}}>
+                <div style={{
+                    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'
+                }}>
+                    {games.map(game => (<div key={game.gameId} style={gameCardStyle}>
                             <img
                                 src={`/${game.gameUrl}`}
                                 alt={game.title}
-                                style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }}
+                                style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px'}}
                             />
                             <h3>{game.title}</h3>
                             <p><strong>Độ tuổi:</strong> {game.ageGroup}</p>
                             <p><strong>Category:</strong> {game.category}</p>
-                            <p style={{ minHeight: '60px' }}>{game.description}</p>
+                            <p style={{minHeight: '60px'}}>{game.description}</p>
                             <div style={btnContainerStyle}>
-                                <button onClick={() => handlePlay(game)} style={playBtnStyle}>▶️ Chơi ngay</button>
                                 <button
-                                    onClick={() => navigate(`/hocho/games/leaderboard?gameId=${game.gameId}`)}
+                                    onClick={() => handlePlay(game)} style={playBtnStyle}>▶️ Chơi ngay
+                                </button>
+                                <button
+                                    onClick={handleOpenLeaderboard}
                                     style={leaderBtnStyle}
                                 >
                                     🏆 Leaderboard
                                 </button>
+
                             </div>
-                        </div>
-                    ))}
+                        </div>))}
                 </div>
             </div>
         </div>
-    );
+        <LeaderboardDialog
+            open={openLeaderboard}
+            onClose={handleCloseLeaderboard}
+            gameId={selectedGameId}
+        />
+        <Footer/>
+    </>);
 }
 
 const selectStyle = {
-    width: '100%',
-    padding: '10px',
-    borderRadius: '8px',
-    border: '1px solid #ccc',
-    marginTop: '6px'
+    width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc', marginTop: '6px'
 };
 
 const clearBtnStyle = {
@@ -173,13 +204,11 @@ const gameCardStyle = {
     borderRadius: '12px',
     padding: '16px',
     boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-    background: '#fff'
+    background: '#fafafa'
 };
 
 const btnContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '12px'
+    display: 'flex', justifyContent: 'space-between', marginTop: '12px'
 };
 
 const playBtnStyle = {

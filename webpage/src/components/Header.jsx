@@ -9,12 +9,13 @@ import {
     faBars,
     faBell,
     faCartShopping,
+    faComment,
     faComments,
     faDoorOpen,
     faIdBadge,
     faMapMarkerAlt,
     faSearch,
-    faUniversalAccess,
+    faUniversalAccess
 } from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
@@ -134,17 +135,15 @@ function Header() {
             ROLE_ADMIN: [{path: '/hocho/questions', name: 'Forum'}],
             ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
                 path: '/hocho/questions', name: 'Forum'
-            }, {path: '/hocho/teacher/video', name: 'Entertainment'}, {path: '/hocho/feedback', name: 'My Feedbacks'},],
+            }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
             ROLE_PARENT: [{path: '/hocho/questions', name: 'Forum'}, {
                 path: '/hocho/parent/time-restriction', name: 'Time'
-            }, {path: '/hocho/feedback', name: 'My Feedbacks'}, {
+            }, {
                 path: '/hocho/parent/monitor', name: 'Learning Progress'
             },],
             ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}, {
                 path: '/hocho/child/course', name: 'My Learning'
-            }, {path: '/hocho/child/learning-history', name: 'Learning History'}, {
-                path: '/hocho/feedback', name: 'My Feedbacks'
-            },],
+            }, {path: '/hocho/child/learning-history', name: 'Learning History'},],
         };
 
         return (<div className={styles.navAdminWrapper}>
@@ -378,6 +377,14 @@ function Header() {
                                     <li className={styles.messagesNotification}>
                                         <a href="/hocho/notifications" onClick={closeMobileMenu}>
                                             <FontAwesomeIcon icon={faBell}/> Notifications
+                                            {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
+                                            {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                                        </span>)}
+                                        </a>
+                                    </li>
+                                    <li className={styles.messagesNotification}>
+                                        <a href="/hocho/feedback" onClick={closeMobileMenu}>
+                                            <FontAwesomeIcon icon={faComment}/> Feedbacks
                                             {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
                                             {unreadNotifications > 99 ? '99+' : unreadNotifications}
                                         </span>)}

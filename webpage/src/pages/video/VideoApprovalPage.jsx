@@ -132,7 +132,7 @@ export default function VideoApprovalPage() {
                                     ),
                                     <Button
                                         className={styles.videoApprovalViewButton}
-                                        onClick={() => navigate(`/video/${video.videoId}`)}
+                                        onClick={() => navigate(`/hocho/teacher/video/${video.videoId}`)}
                                         aria-label={`View video ${video.title}`}
                                     >
                                         View Video

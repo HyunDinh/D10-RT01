@@ -1,8 +1,56 @@
 /* Container cho trang chính */
 .container {
-    padding: 20px;
+    padding: 40px;
     background-color: #f7f7f9;
     min-height: 100vh;
+}
+
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
 }
 
 /* Khoảng cách giữa các section */
@@ -23,7 +71,7 @@
 
 .statCard {
     background-color: white;
-    padding: 20px;
+    padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -118,6 +166,7 @@
     width: 5%;
     text-align: center;
 }
+
 .tableContainer th:nth-child(2), .tableContainer td:nth-child(2) {
     width: 50%;
     word-break: break-word;

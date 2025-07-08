@@ -163,7 +163,7 @@ const App = () => {
                    element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditVideoPage/></ProtectedRoute>}/>
             {/*done*/}
             <Route path="/hocho/teacher/video/:videoId" element={<ProtectedRoute
-                allowedRoles={['ROLE_TEACHER']}><TeacherVideoDetail/></ProtectedRoute>}/>
+                allowedRoles={['ROLE_TEACHER','ROLE_ADMIN']}><TeacherVideoDetail/></ProtectedRoute>}/>
             {/*done*/}
             <Route path="/hocho/teacher/quizzes"
                    element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><QuizList/></ProtectedRoute>}/>
@@ -195,20 +195,28 @@ const App = () => {
 
             <Route path="/hocho/child/cart"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCart/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/questions/new"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuestionForm/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/questions/:id/edit"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuestionEdit/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/quizzes/:id/do"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizDetail/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/quizzes/:id/result"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizResult/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/quizzes/:id/review"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><QuizReview/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/child/games/dinoRun"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayDinoRun/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/child/games/clumsyBird"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><PlayClumsyBird/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/child/course"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage/></ProtectedRoute>}/>
             <Route path="/hocho/child/course/:courseId/learning"
@@ -257,21 +265,25 @@ const App = () => {
             <Route path="/hocho/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
 
             // ************************************** VIDEO ROUTES *************************************
+            {/*done*/}
             <Route path="/hocho/video" element={<VideoPage/>}/>
+            {/*done*/}
             <Route path="/hocho/video/:videoId" element={<VideoPlayer/>}/>
 
             // ************************************** QUIZ ROUTES **************************************
             // ************************************** TIME RESTRICTION ROUTES **************************
             <Route path="/hocho/parent/time-restriction" element={<ProtectedRoute
                 allowedRoles={['ROLE_PARENT']}><TimeRestrictionPage/></ProtectedRoute>}/>
-
             // ************************************** GAME ROUTES **************************************
             <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun/>}/>
             <Route path="/hocho/child/games/clumsyBird" element={<PlayClumsyBird/>}/>
+            {/*done*/}
             <Route path="/hocho/games" element={<GamesPage/>}/>
+            {/*done*/}
             <Route path="/hocho/games/leaderboard" element={<LeaderboardPage/>}/>
 
             // ************************************** MESSAGING ROUTES ***********************************
+            {/*done*/}
             <Route path="/hocho/messaging" element={<MessagingPage/>}/>
 
             // ************************************** NOTIFICATION ROUTE **************************************
