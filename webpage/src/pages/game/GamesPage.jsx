@@ -68,13 +68,14 @@ function GamesPage() {
     }
 
     const handleOpenLeaderboard = (gameId) => {
+        console.log("🔥 Đã chọn gameId:", gameId);
         setSelectedGameId(gameId); // Set the selected gameId
         setOpenLeaderboard(true);
     };
 
     const handleCloseLeaderboard = () => {
         setOpenLeaderboard(false);
-        setSelectedGameId(null); // Clear the selected gameId
+        setTimeout(() => setSelectedGameId(null), 300);  // Clear the selected gameId
     };
     return (<>
         <Header/>
@@ -164,7 +165,7 @@ function GamesPage() {
                                     onClick={() => handlePlay(game)} style={playBtnStyle}>▶️ Chơi ngay
                                 </button>
                                 <button
-                                    onClick={handleOpenLeaderboard}
+                                    onClick={() => handleOpenLeaderboard(game.gameId)} // ✅ truyền gameId vào
                                     style={leaderBtnStyle}
                                 >
                                     🏆 Leaderboard

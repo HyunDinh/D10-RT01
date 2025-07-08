@@ -11,10 +11,12 @@ function LeaderboardDialog({open, onClose, gameId}) {
     // Debug: Log gameId to ensure it's passed correctly
     useEffect(() => {
         console.log("📌 LeaderboardDialog gameId:", gameId);
-        if (!gameId) {
+        if (open && !gameId) {
             setError("Không có ID trò chơi được cung cấp");
+        } else {
+            setError(null); // clear error nếu gameId ok
         }
-    }, [gameId]);
+    }, [gameId, open]);
 
     // Fetch current user
     useEffect(() => {
@@ -28,14 +30,20 @@ function LeaderboardDialog({open, onClose, gameId}) {
 
     // Fetch leaderboard
     useEffect(() => {
-        if (!gameId) return;
+        if (!open || !gameId) return;
+
         axios.get(`/api/games/leaderBoard?gameId=${gameId}`, { withCredentials: true })
             .then(res => {
                 console.log("📊 Fetched leaderboard:", res.data);
                 setScores(res.data);
+                setLoading(false);
             })
-            .catch(err => console.error("❌ Lỗi khi lấy BXH:", err));
-    }, [gameId]);
+            .catch(err => {
+                console.error("❌ Lỗi khi lấy BXH:", err);
+                setError("Không thể lấy dữ liệu bảng xếp hạng");
+                setLoading(false);
+            });
+    }, [gameId, open]);
 
     if (!open) return null;
 
