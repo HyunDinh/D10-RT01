@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 @EnableWebSecurity
@@ -58,14 +60,16 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/api/auth/logout",
                                 "/api/auth/forgot-password",
-                                "/api/auth/reset-password")
+                                "/api/auth/reset-password",
+                                "/ws/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/api/auth/user",
                                 "/api/time-restriction/**",
                                 "api/teacher/course",
-                                "api/parent-child").authenticated()
+                                "api/parent-child",
+                                "/api/messages/**").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -132,5 +136,10 @@ public class SecurityConfig {
     @Bean
     public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public ExecutorService executorService() {
+        return Executors.newFixedThreadPool(10);
     }
 }

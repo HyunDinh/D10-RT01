@@ -46,8 +46,12 @@ public class Message {
     @Column(name = "file_type")
     private String fileType;
 
+    @Column(name = "is_delivered")
+    private Boolean isDelivered = false; // Track WebSocket delivery
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
     }
+
 }

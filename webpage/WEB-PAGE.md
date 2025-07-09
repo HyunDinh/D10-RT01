@@ -23,4 +23,6 @@ npm install @fortawesome/react-fontawesome
 npm install @fontsource/inter
 npm install swiper
 npm install recharts
+npm install sockjs-client stompjs
+npm install lodash
 ```
