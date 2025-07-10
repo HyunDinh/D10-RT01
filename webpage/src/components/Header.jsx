@@ -137,8 +137,6 @@ function Header() {
                 path: '/hocho/questions', name: 'Forum'
             }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
             ROLE_PARENT: [{path: '/hocho/questions', name: 'Forum'}, {
-                path: '/hocho/parent/time-restriction', name: 'Time'
-            }, {
                 path: '/hocho/parent/monitor', name: 'Learning Progress'
             },],
             ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}, {
@@ -320,8 +318,8 @@ function Header() {
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="/hocho/contact" onClick={closeMobileMenu}>
-                                        Contact Us
+                                    <a href="/hocho/tutors" onClick={closeMobileMenu}>
+                                        Tutor
                                     </a>
                                 </li>
                                 {renderMenu()}

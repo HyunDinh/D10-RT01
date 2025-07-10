@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../styles/LearningProgress.module.css';
 import TimeRestrictionPage from './TimeRestrictionPage';
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
 
 // Helper to format seconds to hh:mm:ss
 function formatSecondsToHMS(seconds) {
@@ -30,13 +32,12 @@ function parseHMSToSeconds(str) {
 }
 
 const LearningProgress = () => {
-    const { childId } = useParams();
+    const {childId} = useParams();
     const [progressData, setProgressData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [activeTab, setActiveTab] = useState('progress'); // 'progress' or 'timeRestriction'
-
 
 
     useEffect(() => {
@@ -47,7 +48,7 @@ const LearningProgress = () => {
         try {
             setLoading(true);
             const response = await axios.get(`/api/parent/learning-progress/child/${childId}`);
-            setProgressData(response.data);
+             setProgressData(response.data);
             setError(null);
         } catch (err) {
             setError('Failed to load learning progress data');
@@ -83,36 +84,32 @@ const LearningProgress = () => {
     };
 
     if (loading) {
-        return (
-            <div className={styles.loadingContainer}>
-                <div className={styles.spinner}></div>
-                <p>Loading data...</p>
-            </div>
-        );
+        return (<div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+            <p>Loading data...</p>
+        </div>);
     }
 
     if (error) {
-        return (
-            <div className={styles.errorContainer}>
-                <h2>Error</h2>
-                <p>{error}</p>
-                <button onClick={fetchLearningProgress} className={styles.retryButton}>
-                    Retry
-                </button>
-            </div>
-        );
+        return (<div className={styles.errorContainer}>
+            <h2>Error</h2>
+            <p>{error}</p>
+            <button onClick={fetchLearningProgress} className={styles.retryButton}>
+                Retry
+            </button>
+        </div>);
     }
 
     if (!progressData) {
-        return (
-            <div className={styles.noDataContainer}>
-                <h2>No data</h2>
-                <p>No learning progress information for this child yet.</p>
-            </div>
-        );
+        return (<div className={styles.noDataContainer}>
+            <h2>No data</h2>
+            <p>No learning progress information for this child yet.</p>
+        </div>);
     }
 
-    return (
+    return (<>
+        <Header/>
+
         <div className={styles.container}>
             <div className={styles.sidebarTabs}>
                 <div
@@ -129,138 +126,127 @@ const LearningProgress = () => {
                 </div>
             </div>
             <div className={styles.tabContent}>
-                {activeTab === 'progress' && (
-                    <>
-                        <div className={styles.header}>
-                            <h1>Learning progress of {progressData.childName}</h1>
-                            <div className={styles.overview}>
-                                <div className={styles.overviewCard}>
-                                    <h3>Overview</h3>
-                                    <div className={styles.overviewStats}>
-                                        <div className={styles.stat}>
-                                            <span className={styles.statValue}>{progressData.totalCourses}</span>
-                                            <span className={styles.statLabel}>Courses</span>
-                                        </div>
-                                        <div className={styles.stat}>
-                                            <span className={styles.statValue}>{progressData.completedCourses}</span>
-                                            <span className={styles.statLabel}>Completed</span>
-                                        </div>
+                {activeTab === 'progress' && (<>
+                    <div className={styles.header}>
+                        <h1>Learning progress of {progressData.childName}</h1>
+                        <div className={styles.overview}>
+                            <div className={styles.overviewCard}>
+                                <h3>Overview</h3>
+                                <div className={styles.overviewStats}>
+                                    <div className={styles.stat}>
+                                        <span className={styles.statValue}>{progressData.totalCourses}</span>
+                                        <span className={styles.statLabel}>Courses</span>
+                                    </div>
+                                    <div className={styles.stat}>
+                                                <span
+                                                    className={styles.statValue}>{progressData.completedCourses}</span>
+                                        <span className={styles.statLabel}>Completed</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div className={styles.content}>
-                            <div className={styles.coursesSection}>
-                                <h2>Course list</h2>
-                                <div className={styles.coursesGrid}>
-                                    {progressData.courses.map((course) => (
-                                        <div 
-                                            key={course.courseId} 
-                                            className={`${styles.courseCard} ${selectedCourse?.courseId === course.courseId ? styles.selected : ''}`}
-                                            onClick={() => handleCourseClick(course)}
-                                        >
-                                            <div className={styles.courseImage}>
-                                                <img
-                                                    src={getCourseImageUrl(course.courseImageUrl)}
-                                                    alt={course.courseTitle}
-                                                    onError={e => (e.target.src = '/avaBack.jpg')}
-                                                />
+                    <div className={styles.content}>
+                        <div className={styles.coursesSection}>
+                            <h2>Course list</h2>
+                            <div className={styles.coursesGrid}>
+                                {progressData.courses.map((course) => (<div
+                                    key={course.courseId}
+                                    className={`${styles.courseCard} ${selectedCourse?.courseId === course.courseId ? styles.selected : ''}`}
+                                    onClick={() => handleCourseClick(course)}
+                                >
+                                    <div className={styles.courseImage}>
+                                        <img
+                                            src={getCourseImageUrl(course.courseImageUrl)}
+                                            alt={course.courseTitle}
+                                            onError={e => (e.target.src = '/avaBack.jpg')}
+                                        />
+                                    </div>
+                                    <div className={styles.courseInfo}>
+                                        <h3>{course.courseTitle}</h3>
+                                        <div className={styles.courseProgress}>
+                                            <div className={styles.progressBar}>
+                                                <div
+                                                    className={styles.progressFill}
+                                                    style={{
+                                                        width: `${course.progressPercentage}%`,
+                                                        backgroundColor: getProgressColor(course.progressPercentage)
+                                                    }}
+                                                ></div>
                                             </div>
-                                            <div className={styles.courseInfo}>
-                                                <h3>{course.courseTitle}</h3>
-                                                <div className={styles.courseProgress}>
+                                            <span>{course.progressPercentage.toFixed(1)}%</span>
+                                        </div>
+                                        <div className={styles.courseStats}>
+                                            <span>{course.completedLessons}/{course.totalLessons} lessons</span>
+                                        </div>
+                                    </div>
+                                </div>))}
+                            </div>
+                        </div>
+
+                        {selectedCourse && (<div className={styles.courseDetail}>
+                            <h2>Details: {selectedCourse.courseTitle}</h2>
+                            <div className={styles.detailGrid}>
+                                <div className={styles.detailCard}>
+                                    <h3>Lesson progress</h3>
+                                    <div className={styles.lessonsList}>
+                                        {selectedCourse.lessonProgresses.map((lesson) => (
+                                            <div key={lesson.lessonId} className={styles.lessonItem}>
+                                                <div className={styles.lessonInfo}>
+                                                    <h4>{lesson.lessonTitle}</h4>
+                                                    <span
+                                                        className={`${styles.status} ${styles[lesson.status.toLowerCase()]}`}>
+                                                                {lesson.status === 'COMPLETED' ? 'Completed' : lesson.status === 'IN_PROGRESS' ? 'In progress' : 'Not started'}
+                                                            </span>
+                                                </div>
+                                                <div className={styles.lessonProgress}>
                                                     <div className={styles.progressBar}>
-                                                        <div 
+                                                        <div
                                                             className={styles.progressFill}
-                                                            style={{ 
-                                                                width: `${course.progressPercentage}%`,
-                                                                backgroundColor: getProgressColor(course.progressPercentage)
+                                                            style={{
+                                                                width: `${lesson.watchProgress}%`,
+                                                                backgroundColor: getProgressColor(lesson.watchProgress)
                                                             }}
                                                         ></div>
                                                     </div>
-                                                    <span>{course.progressPercentage.toFixed(1)}%</span>
                                                 </div>
-                                                <div className={styles.courseStats}>
-                                                    <span>{course.completedLessons}/{course.totalLessons} lessons</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+                                            </div>))}
+                                    </div>
                                 </div>
-                            </div>
 
-                            {selectedCourse && (
-                                <div className={styles.courseDetail}>
-                                    <h2>Details: {selectedCourse.courseTitle}</h2>
-                                    <div className={styles.detailGrid}>
-                                        <div className={styles.detailCard}>
-                                            <h3>Lesson progress</h3>
-                                            <div className={styles.lessonsList}>
-                                                {selectedCourse.lessonProgresses.map((lesson) => (
-                                                    <div key={lesson.lessonId} className={styles.lessonItem}>
-                                                        <div className={styles.lessonInfo}>
-                                                            <h4>{lesson.lessonTitle}</h4>
-                                                            <span className={`${styles.status} ${styles[lesson.status.toLowerCase()]}`}>
-                                                                {lesson.status === 'COMPLETED' ? 'Completed' :
-                                                                 lesson.status === 'IN_PROGRESS' ? 'In progress' : 'Not started'}
-                                                            </span>
-                                                        </div>
-                                                        <div className={styles.lessonProgress}>
-                                                            <div className={styles.progressBar}>
-                                                                <div 
-                                                                    className={styles.progressFill}
-                                                                    style={{ 
-                                                                        width: `${lesson.watchProgress}%`,
-                                                                        backgroundColor: getProgressColor(lesson.watchProgress)
-                                                                    }}
-                                                                ></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        <div className={styles.detailCard}>
-                                            <h3>Quiz results</h3>
-                                            <div className={styles.quizList}>
-                                                {selectedCourse.quizResults.length > 0 ? (
-                                                    selectedCourse.quizResults.map((quiz) => (
-                                                        <div key={quiz.quizId} className={styles.quizItem}>
-                                                            <div className={styles.quizInfo}>
-                                                                <h4>{quiz.quizTitle}</h4>
-                                                                <span className={styles.quizDate}>
+                                <div className={styles.detailCard}>
+                                    <h3>Quiz results</h3>
+                                    <div className={styles.quizList}>
+                                        {selectedCourse.quizResults.length > 0 ? (selectedCourse.quizResults.map((quiz) => (
+                                            <div key={quiz.quizId} className={styles.quizItem}>
+                                                <div className={styles.quizInfo}>
+                                                    <h4>{quiz.quizTitle}</h4>
+                                                    <span className={styles.quizDate}>
                                                                     {new Date(quiz.attemptDate).toLocaleDateString('vi-VN')}
                                                                 </span>
-                                                            </div>
-                                                            <div className={styles.quizScore}>
+                                                </div>
+                                                <div className={styles.quizScore}>
                                                                 <span className={styles.score}>
                                                                     {quiz.correctAnswers}/{quiz.totalQuestions} correct answers
                                                                 </span>
-                                                                <span className={styles.score} style={{marginLeft: 12}}>
+                                                    <span className={styles.score}
+                                                          style={{marginLeft: 12}}>
                                                                     {quiz.score}/{quiz.maxScore} points
                                                                 </span>
-                                                            </div>
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <p>No quiz results yet</p>
-                                                )}
-                                            </div>
-                                        </div>
+                                                </div>
+                                            </div>))) : (<p>No quiz results yet</p>)}
                                     </div>
                                 </div>
-                            )}
-                        </div>
-                    </>
-                )}
-                {activeTab === 'timeRestriction' && (
-                    <TimeRestrictionPage childId={childId} />
-                )}
+                            </div>
+                        </div>)}
+                    </div>
+                </>)}
+                {activeTab === 'timeRestriction' && (<TimeRestrictionPage childId={childId}/>)}
             </div>
         </div>
-    );
+        <Footer/>
+    </>);
 };
 
 export default LearningProgress; 

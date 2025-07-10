@@ -1,0 +1,422 @@
+
+/* Provided styles */
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.tutorPageContainer {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.tutorContainer {
+    flex: 3;
+    padding: 20px;
+}
+
+.tutorContainer h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tutorGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.tutorGridItem {
+    display: flex;
+}
+
+.tutorCard {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.cardHover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tutorCardTitle {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.tutorCardTitle:hover {
+    color: var(--primary-color);
+}
+
+.tutorCardText {
+    margin: 5px 0;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.tutorBtnGroup {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.errorMessage {
+    text-align: center;
+    padding: 20px;
+    background-color: #f2dede;
+    color: #a94442;
+    border-radius: 4px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tutorProfileContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.tutorTitle {
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.tutorBadge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.approved {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badgePulse {
+    display: inline-block;
+    animation: pulse 1.5s ease-in-out;
+}
+
+.tutorCardAvatar {
+    flex: 0 0 150px; /* Fixed width for avatar */
+}
+
+.avatarImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.avatarZoom:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tutorCardContent {
+    flex: 1;
+}
+
+/* Added styles for compatibility and Back button */
+.loadingMessage {
+    text-align: center;
+    padding: 20px;
+    background-color: #e6f3ff;
+    color: #31708f;
+    border-radius: 4px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.backButtonContainer {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: #6c757d; /* Gray to distinguish from other buttons */
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.buttonHover:hover {
+    transform: scale(1.05);
+    background-color: #5a6268;
+}
+
+/* Styles for PublicTutorList compatibility */
+.searchContainer {
+    flex: 1;
+    min-width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateX(-50px);
+    opacity: 0;
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+.searchContainer h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.formGroup label:hover {
+    color: var(--primary-color);
+}
+
+.inputField {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputField:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none;
+}
+
+.searchButton {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.searchButton:hover {
+    transform: scale(1.05);
+    background-color: #0056b3;
+}
+
+.tutorBtn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: white;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.tutorBtn:hover {
+    transform: scale(1.05);
+    background-color: #0056b3;
+}
+
+.noResults {
+    color: #e53935;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Keyframe Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tutorPageContainer {
+        flex-direction: column;
+    }
+
+    .searchContainer {
+        min-width: 100%;
+        animation: slideIn 0.5s ease-out forwards;
+    }
+
+    .tutorGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tutorCard {
+        flex-direction: column;
+        align-items: center;
+        animation: none; /* Disable AOS animations on mobile for performance */
+    }
+
+    .tutorCardAvatar {
+        flex: 0 0 auto;
+        margin-bottom: 15px;
+    }
+
+    .avatarImage {
+        width: 120px;
+        height: 120px;
+    }
+
+    .tutorProfileContainer {
+        padding: 10px;
+    }
+
+    .backButtonContainer {
+        text-align: center;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .searchContainer,
+    .tutorCard,
+    .noResults,
+    .loadingMessage,
+    .errorMessage,
+    .tutorTitle,
+    .tutorBadge,
+    .avatarImage,
+    .backButton,
+    .searchButton,
+    .tutorBtn {
+        animation: none;
+        transform: none;
+        opacity: 1;
+    }
+    .tutorBtn,
+    .searchButton,
+    .tutorCard,
+    .tutorCardTitle,
+    .inputField,
+    .tutorBadge,
+    .avatarImage,
+    .backButton {
+        transition: none;
+    }
+}

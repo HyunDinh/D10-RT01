@@ -432,6 +432,7 @@
     border-radius: 12px;
     max-width: 600px;
     width: 100%;
+    padding: 1rem;
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);

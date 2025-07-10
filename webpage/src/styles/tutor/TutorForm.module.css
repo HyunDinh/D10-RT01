@@ -1,0 +1,252 @@
+/* Define primary and text color variables */
+:root {
+    --error-color: #a94442;
+    --success-color: #155724;
+}
+
+/* Container chính của form */
+.tutorContainer {
+    max-width: 600px;
+    max-height: 800px;
+    margin: 30px auto;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Tiêu đề của form */
+.tutorTitle {
+    font-size: 2rem;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 600;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Form chính */
+.tutorForm {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Kiểu cho label */
+.tutorForm label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+}
+
+.tutorForm label:hover {
+    color: #d1752d;
+}
+
+/* Kiểu cho input, select, textarea */
+.tutorForm input,
+.tutorForm select,
+.tutorForm textarea {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-color);
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.tutorForm input:focus,
+.tutorForm select:focus,
+.tutorForm textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.2);
+    outline: none;
+    transform: scale(1.02);
+}
+
+/* Kiểu cụ thể cho textarea */
+.tutorForm textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Kiểu cho nút submit */
+.tutorBtn {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 150px;
+}
+
+.tutorBtn:hover:not(:disabled) {
+    transform: scale(1.05);
+    background-color: #d1752d;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tutorBtn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Kiểu cho thông báo lỗi và thành công */
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 10px;
+    animation: slideIn 0.5s ease-out;
+}
+
+.alertDanger {
+    background-color: #f8d7da;
+    color: var(--error-color);
+}
+
+.alertSuccess {
+    background-color: #d4edda;
+    color: var(--success-color);
+}
+
+/* Kiểu cho container chứa các nút */
+.buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+/* Kiểu cho nút Back */
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: #6c757d; /* Màu xám để phân biệt */
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.backButton:hover {
+    transform: scale(1.05);
+    background-color: #5a6268; /* Màu hover xám đậm */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Kiểu cho nút Teacher Dashboard */
+.teacherButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: #28a745; /* Màu xanh lá để phân biệt */
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.teacherButton:hover {
+    transform: scale(1.05);
+    background-color: #218838; /* Màu hover xanh lá đậm */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tutorContainer {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    .tutorTitle {
+        font-size: 1.75rem;
+    }
+
+    .tutorForm input,
+    .tutorForm select,
+    .tutorForm textarea {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+
+    .tutorBtn,
+    .backButton,
+    .teacherButton {
+        font-size: 0.95rem;
+        padding: 10px 15px;
+        min-width: 120px;
+    }
+
+    .buttonContainer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .tutorContainer,
+    .tutorTitle,
+    .tutorForm,
+    .tutorBtn,
+    .backButton,
+    .teacherButton,
+    .alert {
+        animation: none;
+        transform: none;
+        opacity: 1;
+    }
+    .tutorForm input,
+    .tutorForm select,
+    .tutorForm textarea,
+    .tutorBtn,
+    .backButton,
+    .teacherButton,
+    .tutorForm label {
+        transition: none;
+    }
+}

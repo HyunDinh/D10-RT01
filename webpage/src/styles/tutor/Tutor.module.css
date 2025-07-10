@@ -1,121 +1,320 @@
-.tutorContainer {
-  max-width: 900px;
-  margin: 40px auto 0 auto;
-  padding: 24px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+/* Provided styles */
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.tutorTitle {
-  color: #f39f5f;
-  font-size: 2.2rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 32px;
-  letter-spacing: 1px;
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+.tutorPageContainer {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+.searchContainer {
+    flex: 1;
+    margin-top: 20px;
+    min-width: 250px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform: translateX(-50px);
+    opacity: 0;
+    animation: slideIn 0.5s ease-out forwards;
+}
+
+.searchContainer h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.searchForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.formGroup label:hover {
+    color: #d1752d;
+}
+
+.inputField {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputField:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px #EC9047FF;
+    outline: none;
+}
+
+.searchButton {
+    background-color: var(--primary-color);
+    color: #fafafa;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.buttonHover:hover {
+    transform: scale(1.05);
+    background-color: #d1752d;
+}
+
+.tutorContainer {
+    flex: 3;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.tutorContainer h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tutorGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.tutorGridItem {
+    display: flex;
 }
 
 .tutorCard {
-  background: #f8fafc;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 28px 24px;
-  margin-bottom: 24px;
-  transition: box-shadow 0.2s, transform 0.2s;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.tutorCard:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
-  transform: translateY(-3px) scale(1.01);
+
+.cardHover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .tutorCardTitle {
-  color: #385469;
-  font-size: 1.4rem;
-  font-weight: 600;
-  margin-bottom: 10px;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: 10px;
+    transition: color 0.3s ease;
+}
+
+.tutorCardTitle:hover {
+    color: #d1752d;
 }
 
 .tutorCardText {
-  color: #666;
-  font-size: 1.08rem;
-  margin-bottom: 7px;
+    margin: 5px 0;
+    color: var(--text-color);
+    transition: color 0.3s ease;
 }
-
-.tutorBadge {
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 0.98rem;
-  font-weight: 500;
-  margin-left: 8px;
-}
-.tutorBadge.approved { background: #4caf50; color: #fff; }
-.tutorBadge.rejected { background: #e53935; color: #fff; }
-.tutorBadge.pending { background: #ffb300; color: #333; }
 
 .tutorBtnGroup {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
 }
+
 .tutorBtn {
-  background: #f39f5f;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 7px 18px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
-}
-.tutorBtn:hover {
-  background: #ff7f2a;
-  transform: scale(1.04);
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
-.tutorForm {
-  background: #f8fafc;
-  border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-  padding: 32px 24px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.tutorForm label {
-  font-weight: 600;
-  color: #385469;
-  margin-bottom: 6px;
-}
-.tutorForm input, .tutorForm select, .tutorForm textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1.5px solid #e0e0e0;
-  margin-bottom: 18px;
-  font-size: 1rem;
-  background: #fff;
-  color: #385469;
-  transition: border 0.2s;
-}
-.tutorForm input:focus, .tutorForm select:focus, .tutorForm textarea:focus {
-  border: 1.5px solid #f39f5f;
-  outline: none;
-}
-.tutorForm .tutorBtn {
-  width: 100%;
-  margin-top: 10px;
+.noResults {
+    color: #e53935;
+    font-style: italic;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
-@media (max-width: 700px) {
-  .tutorContainer {
-    padding: 8px;
-  }
-  .tutorForm {
-    padding: 16px 5px;
-  }
-  .tutorCard {
-    padding: 16px 8px;
-  }
-} 
+.loadingMessage {
+    text-align: center;
+    padding: 20px;
+    background-color: #e6f3ff;
+    color: var(--primary-color);
+    border-radius: 4px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.errorMessage {
+    text-align: center;
+    padding: 20px;
+    background-color: #f2dede;
+    color: #a94442;
+    border-radius: 4px;
+    margin: 20px 0;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* New styles for Teacher Dashboard button */
+.teacherButtonContainer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-bottom: 20px;
+}
+
+.teacherButton {
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background-color: var(--primary-color);
+    color: #fafafa;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.teacherButton:hover {
+    transform: scale(1.05);
+    background-color: #d1752d;
+}
+
+/* Keyframe Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tutorPageContainer {
+        flex-direction: column;
+    }
+
+    .searchContainer {
+        min-width: 100%;
+        animation: slideIn 0.5s ease-out forwards;
+    }
+
+    .tutorGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tutorCard {
+        animation: none; /* Disable AOS animations on mobile for performance */
+    }
+
+    .teacherButtonContainer {
+        text-align: center;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .searchContainer,
+    .tutorCard,
+    .noResults,
+    .loadingMessage,
+    .errorMessage,
+    .teacherButton {
+        animation: none;
+        transform: none;
+        opacity: 1;
+    }
+
+    .tutorBtn,
+    .searchButton,
+    .tutorCard,
+    .tutorCardTitle,
+    .inputField,
+    .teacherButton {
+        transition: none;
+    }
+}

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Input, message, Modal, Select, Spin, Table, Typography} from 'antd';
+import {Button, Card, Input, message, Modal, Spin, Table,} from 'antd';
 import axios from 'axios';
 import styles from "../../styles/TimeRestriction.module.css";
 
