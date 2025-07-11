@@ -183,11 +183,13 @@ const App = () => {
             {/*done*/}
             <Route path="/hocho/parent/monitor" element={<ProtectedRoute
                 allowedRoles={['ROLE_PARENT']}><ParentLearningMonitor/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/parent/cart"
                    element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><ParentCart/></ProtectedRoute>}/>
             {/*done*/}
             <Route path="/hocho/parent/learning-progress/:childId"
                    element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><LearningProgress/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/payment/history"
                    element={<ProtectedRoute allowedRoles={['ROLE_PARENT']}><PaymentHistoryPage/></ProtectedRoute>}/>
 

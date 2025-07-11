@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
-import { Document, Page, pdfjs } from 'react-pdf';
+import {Document, Page, pdfjs} from 'react-pdf';
 import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
 import EditLessonContentPage from './EditLessonContentPage.jsx';
 import AddLessonContentPage from './AddLessonContentPage.jsx';
 import styles from '../../styles/lesson/LessonContent.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faChevronRight, faEdit, faPlus, faTrash} from '@fortawesome/free-solid-svg-icons';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const LessonContentPage = () => {
-    const { courseId, lessonId } = useParams();
+    const {courseId, lessonId} = useParams();
     const navigate = useNavigate();
     const [contents, setContents] = useState([]);
     const [selectedContentId, setSelectedContentId] = useState(null);
@@ -37,7 +37,7 @@ const LessonContentPage = () => {
         const fetchContents = async () => {
             try {
                 setLoadingContents(true);
-                const response = await axios.get(`/api/lesson-contents/${lessonId}`, { withCredentials: true });
+                const response = await axios.get(`/api/lesson-contents/${lessonId}`, {withCredentials: true});
                 setContents(response.data);
                 setLoadingContents(false);
                 if (response.data.length > 0) {
@@ -58,7 +58,7 @@ const LessonContentPage = () => {
         const fetchContent = async () => {
             try {
                 setLoadingPlayer(true);
-                const response = await axios.get(`/api/lesson-contents/content/${selectedContentId}`, { withCredentials: true });
+                const response = await axios.get(`/api/lesson-contents/content/${selectedContentId}`, {withCredentials: true});
                 const fetchedContent = response.data;
                 setSelectedContent(fetchedContent);
 
@@ -90,7 +90,7 @@ const LessonContentPage = () => {
         return bytes.buffer;
     };
 
-    const onDocumentLoadSuccess = ({ numPages }) => {
+    const onDocumentLoadSuccess = ({numPages}) => {
         setNumPages(numPages);
         setPageNumber(1);
     };
@@ -122,10 +122,10 @@ const LessonContentPage = () => {
 
     const handleDeleteConfirm = async () => {
         try {
-            await axios.delete(`/api/lesson-contents/${deleteContentId}`, { withCredentials: true });
+            await axios.delete(`/api/lesson-contents/${deleteContentId}`, {withCredentials: true});
             setShowDeleteConfirm(false);
             setDeleteContentId(null);
-            const response = await axios.get(`/api/lesson-contents/${lessonId}`, { withCredentials: true });
+            const response = await axios.get(`/api/lesson-contents/${lessonId}`, {withCredentials: true});
             setContents(response.data);
             if (selectedContentId === deleteContentId) {
                 setSelectedContentId(response.data.length > 0 ? response.data[0].contentId : null);
@@ -179,7 +179,7 @@ const LessonContentPage = () => {
     };
 
     const handleContentUpdated = async () => {
-        const response = await axios.get(`/api/lesson-contents/${lessonId}`, { withCredentials: true });
+        const response = await axios.get(`/api/lesson-contents/${lessonId}`, {withCredentials: true});
         setContents(response.data);
         if (!contents.some((content) => content.contentId === selectedContentId)) {
             setSelectedContentId(response.data.length > 0 ? response.data[0].contentId : null);
@@ -187,7 +187,7 @@ const LessonContentPage = () => {
     };
 
     const handleContentAdded = async () => {
-        const response = await axios.get(`/api/lesson-contents/${lessonId}`, { withCredentials: true });
+        const response = await axios.get(`/api/lesson-contents/${lessonId}`, {withCredentials: true});
         setContents(response.data);
         setSelectedContentId(response.data.length > 0 ? response.data[0].contentId : null);
     };
@@ -198,19 +198,16 @@ const LessonContentPage = () => {
         }
         switch (selectedContent.contentType) {
             case 'VIDEO':
-                return (
-                    <div className={styles.playerContainer}>
+                return (<div className={styles.playerContainer}>
                         <ReactPlayer
-                            url={URL.createObjectURL(new Blob([fileBuffer], { type: 'video/mp4' }))}
+                            url={URL.createObjectURL(new Blob([fileBuffer], {type: 'video/mp4'}))}
                             controls
                             width="100%"
                             height="auto"
                         />
-                    </div>
-                );
+                    </div>);
             case 'PDF':
-                return (
-                    <div className={styles.playerContainer}>
+                return (<div className={styles.playerContainer}>
                         <Document
                             key={selectedContentId}
                             file={fileBuffer}
@@ -220,7 +217,11 @@ const LessonContentPage = () => {
                                 alert('Failed to load PDF document.');
                             }}
                         >
-                            <Page pageNumber={pageNumber} width={600} />
+                            <Page pageNumber={pageNumber}
+                                  width={Math.min(800, window.innerWidth - 40)}
+                                  scale={1}
+                                  renderAnnotationLayer={true}
+                                  renderTextLayer={true}/>
                         </Document>
                         <div className={styles.pdfControls}>
                             <button
@@ -231,8 +232,8 @@ const LessonContentPage = () => {
                                 Previous
                             </button>
                             <span>
-                Page {pageNumber} of {numPages || 1}
-              </span>
+                            Page {pageNumber} of {numPages || 1}
+                          </span>
                             <button
                                 className={`${styles.btn} ${styles.btnSecondary}`}
                                 disabled={pageNumber >= numPages}
@@ -241,39 +242,36 @@ const LessonContentPage = () => {
                                 Next
                             </button>
                         </div>
-                    </div>
-                );
+                    </div>);
             default:
                 return <div className={styles.noLessons}>Unsupported content type.</div>;
         }
     };
 
     if (error) {
-        return (
-            <div className={styles.container}>
+        return (<div className={styles.container}>
                 <div className={styles.alertDanger}>{error}</div>
-            </div>
-        );
+            </div>);
     }
 
-    return (
-        <>
-            <Header />
-            <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
+    return (<>
+            <Header/>
+            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
                     <p>Lesson Content</p>
-                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
+                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+                        data-aos-delay="500">
                         <li>
                             <a href="/hocho/home">Home</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
                         <li>
                             <a href={`/hocho/teacher/course/${courseId}/lesson`}>Course Detail</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
                         <li>Lesson Content</li>
                     </ul>
@@ -288,7 +286,7 @@ const LessonContentPage = () => {
                             className={`${styles.btn} ${styles.btnSuccess}`}
                             onClick={handleAddClick}
                         >
-                            <FontAwesomeIcon icon={faPlus} /> Add New Content
+                            <FontAwesomeIcon icon={faPlus}/> Add New Content
                         </button>
                         <button
                             className={`${styles.btn} ${styles.btnSecondary}`}
@@ -304,13 +302,10 @@ const LessonContentPage = () => {
                     <div className={styles.contentList}>
                         <h3 className={styles.contentListTitle}>Content List</h3>
                         {loadingContents ? (
-                            <div className={styles.loading}>Loading contents...</div>
-                        ) : contents.length === 0 ? (
-                            <div className={styles.noLessons}>No content available. Add new content to get started!</div>
-                        ) : (
-                            <ul className={styles.contentItems}>
-                                {contents.map((content) => (
-                                    <li
+                            <div className={styles.loading}>Loading contents...</div>) : contents.length === 0 ? (
+                            <div className={styles.noLessons}>No content available. Add new content to get
+                                started!</div>) : (<ul className={styles.contentItems}>
+                                {contents.map((content) => (<li
                                         key={content.contentId}
                                         className={`${styles.contentItem} ${selectedContentId === content.contentId ? styles.contentItemActive : ''}`}
                                         onClick={() => handleContentClick(content.contentId)}
@@ -324,21 +319,19 @@ const LessonContentPage = () => {
                                                     onClick={() => handleEditClick(content.contentId)}
                                                     aria-label={`Edit content ${content.title}`}
                                                 >
-                                                    <FontAwesomeIcon icon={faEdit} />
+                                                    <FontAwesomeIcon icon={faEdit}/>
                                                 </button>
                                                 <button
                                                     className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
                                                     onClick={() => handleDeleteClick(content.contentId)}
                                                     aria-label={`Delete content ${content.title}`}
                                                 >
-                                                    <FontAwesomeIcon icon={faTrash} />
+                                                    <FontAwesomeIcon icon={faTrash}/>
                                                 </button>
                                             </div>
                                         </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                                    </li>))}
+                            </ul>)}
                     </div>
 
                     {/* Right Side: Content Player */}
@@ -346,18 +339,13 @@ const LessonContentPage = () => {
                         <h3 className={styles.contentListTitle}>
                             {selectedContent ? selectedContent.title : 'Select a Content'}
                         </h3>
-                        {loadingPlayer ? (
-                            <div className={styles.loading}>Loading content...</div>
-                        ) : selectedContentId ? (
-                            renderContent()
-                        ) : (
-                            <div className={styles.noLessons}>Select a content to view.</div>
-                        )}
+                        {loadingPlayer ? (<div className={styles.loading}>Loading
+                                content...</div>) : selectedContentId ? (renderContent()) : (
+                            <div className={styles.noLessons}>Select a content to view.</div>)}
                     </div>
                 </div>
 
-                {showDeleteConfirm && (
-                    <div className={styles.modal}>
+                {showDeleteConfirm && (<div className={styles.modal}>
                         <div className={styles.modalContent}>
                             <div className={styles.modalHeader}>
                                 <h5>Xác nhận xóa nội dung</h5>
@@ -377,11 +365,9 @@ const LessonContentPage = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
-                )}
+                    </div>)}
 
-                {showEditModal && (
-                    <div className={styles.modal} onClick={closeEditModal}>
+                {showEditModal && (<div className={styles.modal} onClick={closeEditModal}>
                         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                             <EditLessonContentPage
                                 showModal={showEditModal}
@@ -392,11 +378,9 @@ const LessonContentPage = () => {
                                 onContentUpdated={handleContentUpdated}
                             />
                         </div>
-                    </div>
-                )}
+                    </div>)}
 
-                {showAddModal && (
-                    <div className={styles.modal} onClick={closeAddModal}>
+                {showAddModal && (<div className={styles.modal} onClick={closeAddModal}>
                         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
                             <AddLessonContentPage
                                 showModal={showAddModal}
@@ -406,12 +390,10 @@ const LessonContentPage = () => {
                                 onContentAdded={handleContentAdded}
                             />
                         </div>
-                    </div>
-                )}
+                    </div>)}
             </main>
-            <Footer />
-        </>
-    );
+            <Footer/>
+        </>);
 };
 
 export default LessonContentPage;

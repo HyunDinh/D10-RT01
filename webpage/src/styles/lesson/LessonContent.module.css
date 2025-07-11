@@ -155,7 +155,8 @@
 .playerContainer {
     width: 100%;
     border-radius: 8px;
-    overflow-y: auto;
+    background-color: #f9fafb;
+    padding: 1rem;
 }
 
 /* PDF controls */

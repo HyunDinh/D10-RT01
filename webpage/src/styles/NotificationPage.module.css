@@ -1,166 +1,413 @@
+/* NotificationPage.module.css */
 .notificationPage {
-  max-width: 700px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px #0001;
-  padding: 32px 24px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
 }
+
+/* QuizList.module.css - Style hiện đại cho danh sách quiz */
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
 
 .headerRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
-.headerRow h2 {
-  margin: 0;
+.pageTitle {
+    font-size: 1.75rem;
+    color: #1f2937;
+    font-weight: 600;
+    transition: color 0.3s ease;
 }
 
-.filterBar {
-  display: flex;
-  gap: 18px;
-  align-items: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
+.pageTitle:hover {
+    color: #3b82f6;
 }
 
-.filterBar label {
-  font-size: 15px;
-  color: #385469;
+.filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-.filterBar select, .filterBar input[type="date"] {
-  margin-left: 6px;
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
+.filterSelect {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #4b5563;
+    transition: border-color 0.3s ease;
 }
 
-.deleteAllBtn {
-  background: #ff3b3b;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 7px 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.deleteAllBtn:hover {
-  background: #d32f2f;
+.filterSelect:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-.deleteOneBtn {
-  background: #ff3b3b;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 3px 12px;
-  font-size: 13px;
-  margin-left: 12px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.deleteOneBtn:hover {
-  background: #d32f2f;
+.dateRange {
+    display: flex;
+    gap: 0.5rem;
 }
 
-.notificationList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.dateInput {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #4b5563;
+    transition: border-color 0.3s ease;
 }
 
-.notificationList li {
-  border-bottom: 1px solid #eee;
-  padding: 16px 0 10px 0;
-  transition: background 0.2s;
-}
-
-.unread {
-  background: #f7faff;
-  font-weight: bold;
-}
-.read {
-  background: #fff;
-  color: #888;
-}
-.title {
-  font-size: 16px;
-  color: #385469;
-  margin-bottom: 4px;
-}
-.content {
-  font-size: 15px;
-  margin-bottom: 4px;
-}
-.time {
-  font-size: 13px;
-  color: #888;
-}
-.error {
-  color: #d32f2f;
-  margin: 12px 0;
+.dateInput:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .notificationInfo {
-  margin-bottom: 16px;
-  padding: 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
-  border-left: 4px solid #007bff;
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
-.notificationInfo p {
-  margin: 0;
-  color: #6c757d;
-  font-size: 14px;
+.notificationList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.7s ease-out;
+}
+
+.notificationItem {
+    padding: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.unread {
+    background-color: #e6f0ff;
+}
+
+.read {
+    background-color: #f9fafb;
+}
+
+.notificationItem:hover {
+    background-color: #f3f4f6;
+}
+
+.title {
+    font-size: 1rem;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.content {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.time {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.noNotifications {
+    padding: 1rem;
+    background-color: #fef3c7;
+    color: #d97706;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.loading {
+    padding: 1rem;
+    background-color: #e6f0ff;
+    color: #3b82f6;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error {
+    padding: 1rem;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnDanger {
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.btnDanger:hover {
+    background-color: #dc2626;
+    color: #ffffff;
+}
+
+.btnSm {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+}
+
+.btn:disabled,
+.btnDanger:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 24px;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
 }
 
 .pageButton {
-  padding: 8px 12px;
-  border: 1px solid #dee2e6;
-  background: #fff;
-  color: #007bff;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s;
-  min-width: 40px;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #6b7280;
+    background-color: #ffffff;
+    color: #6b7280;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.pageButton:hover:not(:disabled) {
-  background: #007bff;
-  color: #fff;
-  border-color: #007bff;
+.pageButton:hover {
+    background-color: #6b7280;
+    color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .pageButton:disabled {
-  background: #f8f9fa;
-  color: #6c757d;
-  cursor: not-allowed;
-  border-color: #dee2e6;
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .activePage {
-  background: #007bff;
-  color: #fff;
-  border-color: #007bff;
+    background-color: #3b82f6;
+    color: #ffffff;
+    border-color: #3b82f6;
+}
+
+.activePage:hover {
+    background-color: #2563eb;
+    color: #ffffff;
 }
 
 .pageEllipsis {
-  padding: 8px 4px;
-  color: #6c757d;
-  font-weight: bold;
-} 
+    font-size: 0.875rem;
+    color: #6b7280;
+    padding: 0 0.5rem;
+}
+
+/* Fix for react-pdf annotation layer */
+.react-pdf__Page__annotations.annotationLayer:empty {
+    display: none;
+}
+
+.react-pdf__Page__annotations.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .notificationPage {
+        padding: 1rem;
+    }
+
+    .headerRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .filters {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterSelect,
+    .dateInput {
+        width: 100%;
+    }
+
+    .dateRange {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .notificationPage {
+        padding: 0.75rem;
+    }
+
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+
+    .notificationInfo {
+        font-size: 0.75rem;
+    }
+
+    .notificationItem {
+        padding: 0.75rem;
+    }
+
+    .title {
+        font-size: 0.875rem;
+    }
+
+    .content {
+        font-size: 0.75rem;
+    }
+
+    .time {
+        font-size: 0.625rem;
+    }
+
+    .noNotifications,
+    .loading,
+    .error {
+        font-size: 0.875rem;
+    }
+
+    .btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .pageButton {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .sectionHeader {
+        padding: 2rem 0.75rem;
+    }
+
+    .headerInfo p {
+        font-size: 1.5rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
