@@ -119,9 +119,10 @@ const App = () => {
                    element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminFeedback/></ProtectedRoute>}/>
 
             // ************************************** TEACHER ONLY ROUTES **************************************
-
+            {/*done*/}
             <Route path="/hocho/teacher/tutors/form"
                    element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TutorForm/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/teacher/tutors/form/:userId"
                    element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><TutorForm/></ProtectedRoute>}/>
             {/*done*/}
@@ -290,6 +291,7 @@ const App = () => {
             <Route path="/hocho/video/:videoId" element={<VideoPlayer/>}/>
             // ************************************** QUIZ ROUTES **************************************
             // ************************************** TIME RESTRICTION ROUTES **************************
+            {/*done*/}
             <Route path="/hocho/parent/time-restriction" element={<ProtectedRoute
                 allowedRoles={['ROLE_PARENT']}><TimeRestrictionPage/></ProtectedRoute>}/>
             // ************************************** GAME ROUTES **************************************

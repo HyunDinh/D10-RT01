@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { paymentService } from './paymentService.jsx';
-import { useNavigate } from 'react-router-dom';
-
+import React, {useEffect, useState} from 'react';
+import {paymentService} from './paymentService.jsx';
+import {useNavigate} from 'react-router-dom';
+import styles from '../../styles/payment/PaymentHistory.module.css';
 const PaymentHistory = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -34,63 +34,75 @@ const PaymentHistory = () => {
     if (error) return <div>{error}</div>;
 
     return (
-        <div>
-            <table border="1" cellPadding="5" cellSpacing="0" style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>PayOS ID</th>
-                        <th>Order ID</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Transaction Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div className={styles.transactionContainer} aria-live="polite">
+            <div className={styles.transactionTable}>
+                <div className={styles.tableHeader}>
+                    <div className={styles.tableCell}>#</div>
+                    <div className={styles.tableCell}>PayOS ID</div>
+                    <div className={styles.tableCell}>Order ID</div>
+                    <div className={styles.tableCell}>Amount</div>
+                    <div className={styles.tableCell}>Status</div>
+                    <div className={styles.tableCell}>Transaction Date</div>
+                    <div className={styles.tableCell}>Action</div>
+                </div>
+                <div className={styles.tableBody}>
                     {transactions.length > 0 ? (
                         transactions.map((transaction, index) => (
                             <React.Fragment key={transaction.transactionId}>
-                                <tr>
-                                    <td>{index + 1}</td>
-                                    <td>{transaction.payosTransactionId}</td>
-                                    <td>{transaction.orderId || 'N/A'}</td>
-                                    <td>{transaction.amount ? transaction.amount.toLocaleString('en-US') + ' VND' : ''}</td>
-                                    <td>{transaction.status}</td>
-                                    <td>{transaction.transactionDate ? new Date(transaction.transactionDate).toLocaleString('vi-VN') : ''}</td>
-                                    <td>
-                                        <button onClick={() => handleToggleDetails(transaction.transactionId)}>
-                                            {expandedRow === transaction.transactionId ? 'Hide details' : 'View Details'}
+                                <div className={styles.tableRow}>
+                                    <div className={styles.tableCell}>{index + 1}</div>
+                                    <div className={styles.tableCell}>{transaction.payosTransactionId}</div>
+                                    <div className={styles.tableCell}>{transaction.orderId || 'N/A'}</div>
+                                    <div className={styles.tableCell}>
+                                        {transaction.amount ? `${transaction.amount.toLocaleString('vi-VN')} VNĐ` : ''}
+                                    </div>
+                                    <div className={styles.tableCell}>{transaction.status}</div>
+                                    <div className={styles.tableCell}>
+                                        {transaction.transactionDate
+                                            ? new Date(transaction.transactionDate).toLocaleString('vi-VN')
+                                            : ''}
+                                    </div>
+                                    <div className={styles.tableCell}>
+                                        <button
+                                            className={`${styles.tableButton} ${styles.actionButton}`}
+                                            onClick={() => handleToggleDetails(transaction.transactionId)}
+                                            aria-label={
+                                                expandedRow === transaction.transactionId
+                                                    ? `Hide details for transaction ${transaction.payosTransactionId}`
+                                                    : `View details for transaction ${transaction.payosTransactionId}`
+                                            }
+                                        >
+                                            {expandedRow === transaction.transactionId ? 'Hide Details' : 'View Details'}
                                         </button>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                                 {expandedRow === transaction.transactionId && (
-                                    <tr>
-                                        <td colSpan="7">
-                                            <div style={{ padding: '10px', backgroundColor: '#f9f9f9' }}>
-                                                <h4>Order Details</h4>
-                                                <ul>
-                                                    {transaction.items && transaction.items.map((item, itemIndex) => (
-                                                        <li key={itemIndex}>
-                                                            <strong>Course:</strong> {item.courseTitle} <br />
-                                                            <strong>Price:</strong> {item.price.toLocaleString('en-US')} VND <br />
+                                    <div className={styles.detailsRow}>
+                                        <div className={styles.detailsContent}>
+                                            <h4 className={styles.detailsTitle}>Order Details</h4>
+                                            <ul className={styles.detailsList}>
+                                                {transaction.items && transaction.items.length > 0 ? (
+                                                    transaction.items.map((item, itemIndex) => (
+                                                        <li key={itemIndex} className={styles.detailsItem}>
+                                                            <strong>Course:</strong> {item.courseTitle} <br/>
+                                                            <strong>Price:</strong> {item.price.toLocaleString('vi-VN')} VNĐ <br/>
                                                             <strong>For child:</strong> {item.childFullName}
                                                         </li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                                    ))
+                                                ) : (
+                                                    <li className={styles.noDetails}>No items in this transaction</li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 )}
                             </React.Fragment>
                         ))
                     ) : (
-                        <tr>
-                            <td colSpan="7">No transaction history.</td>
-                        </tr>
+                        <div className={styles.noTransactions}>No transaction history</div>
                     )}
-                </tbody>
-            </table>
+                </div>
+            </div>
         </div>
     );
 };

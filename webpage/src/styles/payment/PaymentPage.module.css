@@ -1,0 +1,204 @@
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+/* Existing styles from ParentCart and PaymentHistory (abridged) */
+.historyLayout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.historyCard {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    animation: fadeInUp 0.7s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.historyCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+}
+
+.historyTitle {
+    font-size: 1.75rem;
+    color: #1f2937;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.historyTitle:hover {
+    color: var(--primary-color);
+}
+
+.historyBody {
+    padding: 1rem;
+}
+
+.loginPrompt {
+    padding: 1rem;
+    background-color: #fef3c7;
+    color: #d97706;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.cartBtn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cartBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* New styles for back button */
+.historyHeader {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.backButton {
+    border-color: #6b7280;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.backButton:hover {
+    background-color: #6b7280;
+    color: #ffffff;
+}
+
+.backIcon {
+    font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .historyLayout {
+        padding: 1rem;
+    }
+
+    .historyCard {
+        width: 100%;
+    }
+
+    .historyHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .backButton {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .historyTitle,
+    .loginPrompt {
+        text-align: left;
+    }
+}
+
+@media (max-width: 768px) {
+    .historyTitle {
+        font-size: 1.5rem;
+    }
+
+    .loginPrompt {
+        font-size: 0.875rem;
+    }
+
+    .backButton {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .backIcon {
+        font-size: 0.75rem;
+    }
+
+    .sectionHeader {
+        padding: 2rem 1rem;
+    }
+
+    .headerInfo p {
+        font-size: 1.5rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation keyframes (shared) */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

@@ -1,0 +1,111 @@
+/* Existing styles from ParentCart (abridged for brevity) */
+.cartLayout {
+    display: flex;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+/* History layout (replaces container) */
+.historyLayout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* History card (replaces card shadow-sm) */
+.historyCard {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    animation: fadeInUp 0.7s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.historyCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+}
+
+/* History title (replaces card-header bg-primary text-white) */
+.historyTitle {
+    font-size: 1.75rem;
+    color: #1f2937;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    transition: color 0.3s ease;
+}
+
+.historyTitle:hover {
+    color: var(--primary-color);
+}
+
+/* History body (replaces card-body) */
+.historyBody {
+    padding: 1rem;
+}
+
+/* Login prompt (replaces alert alert-warning) */
+.loginPrompt {
+    padding: 1rem;
+    background-color: #fef3c7;
+    color: #d97706;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .historyLayout {
+        padding: 1rem;
+    }
+
+    .historyCard {
+        width: 100%;
+    }
+
+    .historyTitle,
+    .loginPrompt {
+        text-align: left;
+    }
+}
+
+@media (max-width: 768px) {
+    .historyTitle {
+        font-size: 1.5rem;
+    }
+
+    .loginPrompt {
+        font-size: 0.875rem;
+    }
+
+    .sectionHeader {
+        padding: 2rem 1rem;
+    }
+
+    .headerInfo p {
+        font-size: 1.5rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation keyframes (shared with ParentCart) */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
