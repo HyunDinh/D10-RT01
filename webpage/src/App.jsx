@@ -134,6 +134,7 @@ const App = () => {
             {/*done*/}
             <Route path="/hocho/teacher/course/edit"
                    element={<ProtectedRoute allowedRoles={['ROLE_TEACHER']}><EditCoursePage/></ProtectedRoute>}/>
+            {/*done*/}
             <Route path="/hocho/teacher/lesson-content/edit/:contentId" element={<ProtectedRoute
                 allowedRoles={['ROLE_TEACHER']}><EditLessonContentPage/></ProtectedRoute>}/>
             {/*done*/}
@@ -221,7 +222,7 @@ const App = () => {
             {/*done*/}
             <Route path="/hocho/child/course"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><ChildCoursePage/></ProtectedRoute>}/>
-
+            {/*done*/}
             <Route path="/hocho/child/course/:courseId/learning"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage/></ProtectedRoute>}/>
 
@@ -265,7 +266,6 @@ const App = () => {
             <Route path="hocho/tutors" element={<PublicTutorList/>}/>
             {/*done*/}
             <Route path="hocho/tutors/profile/:userId" element={<TutorProfile/>}/>
-
             // ************************************** SHOPPING CART ROUTES *****************************
 
             // ************************************** QUESTION AND ANSWER ROUTES ***********************
@@ -286,16 +286,19 @@ const App = () => {
             // ************************************** LESSON ROUTES ************************************
             {/*done*/}
             <Route path="/hocho/lesson-content/:contentId" element={<LessonContentPlayer/>}/>
+
             // ************************************** VIDEO ROUTES *************************************
             {/*done*/}
             <Route path="/hocho/video" element={<VideoPage/>}/>
             {/*done*/}
             <Route path="/hocho/video/:videoId" element={<VideoPlayer/>}/>
+
             // ************************************** QUIZ ROUTES **************************************
             // ************************************** TIME RESTRICTION ROUTES **************************
             {/*done*/}
             <Route path="/hocho/parent/time-restriction" element={<ProtectedRoute
                 allowedRoles={['ROLE_PARENT']}><TimeRestrictionPage/></ProtectedRoute>}/>
+
             // ************************************** GAME ROUTES **************************************
             {/*done*/}
             <Route path="/hocho/child/games/dinoRun" element={<PlayDinoRun/>}/>
@@ -311,6 +314,7 @@ const App = () => {
             <Route path="/hocho/messaging" element={<MessagingPage/>}/>
 
             // ************************************** NOTIFICATION ROUTE **************************************
+            {/*done*/}
             <Route path="/hocho/notifications" element={<ProtectedRoute
                 allowedRoles={['ROLE_CHILD', 'ROLE_PARENT', 'ROLE_TEACHER', 'ROLE_ADMIN']}><NotificationPage/></ProtectedRoute>}/>
 

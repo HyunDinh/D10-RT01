@@ -1,126 +1,322 @@
 .sectionHeader {
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  background-position: 50%;
-  height: 400px;
-  margin: 0 -20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 0.5s ease;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
 }
 
 .headerInfo {
-  text-align: center;
+    text-align: center;
 }
 
 .headerInfo ul {
-  list-style: none;
+    list-style: none;
 }
 
 .headerInfo p {
-  font-size: 60px;
-  font-weight: 500;
-  color: #eff5f6;
-  margin-bottom: 20px;
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
 }
 
 
 .breadcrumbItems {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  font-size: 18px;
-  color: #fafafa;
-  padding-left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
 }
 
 .breadcrumbItems li a {
-  color: #fafafa;
-  text-decoration: none;
+    color: #fafafa;
+    text-decoration: none;
 }
 
 .breadcrumbItems li a:hover {
-  text-decoration: underline;
-  transition: all 0.3s ease-in-out;
-  transform: scale(1.05);
-}
-.learningPageContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
 }
 
-.learningTitle {
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-  text-align: center;
-  margin-top: 40px;
-  margin-bottom: 30px;
+/* LearningPage.module.css */
+.learningPageContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.searchWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #4b5563;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.searchIcon {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    color: #6b7280;
+    font-size: 1rem;
 }
 
 .courseGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
 }
 
 .courseCardClickable {
-  background-color: #fafafa;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 2px solid transparent;
+    animation: fadeInUp 0.7s ease-out;
 }
 
 .courseCardClickable:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: var(--primary-color);
 }
 
 .courseCardClickable:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3);
 }
 
 .courseCardImageWrapper {
-  position: relative;
-  width: 60px;
-  height: 60px;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    position: relative;
 }
 
 .courseCardImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.courseCardClickable:hover .courseCardImage {
+    transform: scale(1.1);
 }
 
 .courseCardInfo {
-  padding: 15px;
+    padding: 1.25rem;
 }
 
 .courseCardTitle {
-  font-size: 18px;
-  font-weight: 600;
-  color: #222;
-  margin-bottom: 10px;
-  line-height: 1.3;
+    font-size: 1.25rem;
+    color: #1f2937;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    transition: color 0.3s ease;
+}
+
+.courseCardClickable:hover .courseCardTitle {
+    color: var(--primary-color);
 }
 
 .courseCardDesc {
-  font-size: 14px;
-  color: #555;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    font-size: 0.875rem;
+    color: #4b5563;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.courseCardProgress {
+    font-size: 0.75rem;
+    color: #10b981;
+    margin-top: 0.75rem;
+    font-weight: 500;
+}
+
+.loading {
+    padding: 1.5rem;
+    background-color: #e6f0ff;
+    color: var(--primary-color);
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error {
+    padding: 1.5rem;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.noCourses {
+    padding: 1.5rem;
+    background-color: #fef3c7;
+    color: #d97706;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Fix for react-pdf annotation layer */
+.react-pdf__Page__annotations.annotationLayer:empty {
+    display: none;
+}
+
+.react-pdf__Page__annotations.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .learningPageContainer {
+        padding: 1.5rem 1rem;
+    }
+
+    .courseGrid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .courseCardImageWrapper {
+        height: 130px;
+    }
+
+    .searchWrapper {
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .learningPageContainer {
+        padding: 1rem 0.75rem;
+    }
+
+    .courseGrid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+    }
+
+    .courseCardImageWrapper {
+        height: 110px;
+    }
+
+    .courseCardTitle {
+        font-size: 1.125rem;
+    }
+
+    .courseCardDesc {
+        font-size: 0.75rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .courseCardProgress {
+        font-size: 0.7rem;
+    }
+
+    .loading,
+    .error,
+    .noCourses {
+        font-size: 0.875rem;
+        padding: 1rem;
+    }
+
+    .sectionHeader {
+        padding: 2.5rem 0.75rem;
+    }
+
+    .headerInfo p {
+        font-size: 1.75rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.875rem;
+    }
+
+    .searchWrapper {
+        max-width: 100%;
+    }
+
+    .searchInput {
+        padding: 0.6rem 1rem 0.6rem 2.25rem;
+        font-size: 0.75rem;
+    }
+
+    .searchIcon {
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .courseGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .courseCardImageWrapper {
+        height: 140px;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

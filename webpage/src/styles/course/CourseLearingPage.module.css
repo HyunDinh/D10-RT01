@@ -1,0 +1,554 @@
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease, all 0.3s ease;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    transform: scale(1.05);
+}
+
+/* CourseLearningPage.module.css */
+.learningPageContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.courseLessonsPageContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    animation: fadeInUp 0.6s ease-out;
+    transition: all 0.3s ease;
+}
+
+.courseLessonsTabs {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.tabButton {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.activeTab {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inactiveTab {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+.inactiveTab:hover {
+    background-color: #d1d5db;
+}
+
+.courseLessonsMain {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.courseLessonsLeft {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.courseLessonsLeft:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.lessonAccordion {
+    margin-bottom: 1rem;
+}
+
+.lessonAccordionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f9fafb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%;
+    text-align: left;
+    border: none;
+}
+
+.lessonAccordionHeader:hover {
+    background-color: #e6f0ff;
+    color: var(--text-color);
+}
+
+.lessonAccordionArrow {
+    font-size: 0.875rem;
+}
+
+.lessonAccordionContent {
+    padding: 1rem;
+    background-color: #f3f4f6;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    animation: slideDown 0.3s ease-out;
+}
+
+.lessonContentLink {
+    display: block;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 0.375rem;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.lessonContentLink:hover {
+    color: #C5671DFF;
+    background-color: #e6f0ff;
+}
+
+.selectedContent {
+    color: var(--text-color);
+    font-weight: 600;
+    background-color: #e6f0ff;
+}
+
+.lessonContentEmpty {
+    font-size: 0.875rem;
+    color: #d97706;
+    font-style: italic;
+    padding: 0.75rem;
+    background-color: #fef3c7;
+    border-radius: 0.375rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.quizList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quizItem {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.875rem;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.quizItem:hover {
+    background-color: #e6f0ff;
+    color: #d97706;
+}
+
+.selectedQuiz {
+    background-color: #e6f7ff;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.courseLessonsRight {
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.courseLessonsRight:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.lessonContentTitle {
+    font-size: 1.25rem;
+    color: #1f2937;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.currentLessonInfo {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #f0f8ff;
+    border-radius: 0.375rem;
+    border: 1px solid #b3d9ff;
+    font-size: 0.875rem;
+    color: #1f2937;
+    transition: all 0.3s ease;
+}
+
+.videoContainer {
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.videoPlayer {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.pdfContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.pdfNavigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.navButton {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #6b7280;
+    background-color: #ffffff;
+    color: #6b7280;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.navButton:hover {
+    background-color: #6b7280;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.navButton.btnDisabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pageInfo {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.downloadButtonContainer {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.downloadLink {
+    text-decoration: none;
+}
+
+.btn {
+    font-size: 0.875rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btnPrimary {
+    background-color: var(--primary-color);
+    color: #fafafa;
+}
+
+.btnPrimary:hover {
+    background-color: #C5671DFF;
+}
+
+.btnSuccess {
+    background-color: #28a745;
+    color: #ffffff;
+}
+
+.btnSuccess:hover {
+    background-color: #218838;
+}
+
+.btnDisabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.completeLessonContainer {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.completeLessonNote {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.quizInfo {
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: #1f2937;
+}
+
+.quizHistory {
+    margin-top: 1.5rem;
+}
+
+.quizHistoryTitle {
+    font-size: 1rem;
+    color: #1f2937;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.quizHistoryList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quizHistoryItem {
+    background-color: #f5f7fa;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+    color: #1f2937;
+}
+
+.loading {
+    padding: 1.5rem;
+    background-color: #e6f0ff;
+    color: var(--primary-color);
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error {
+    padding: 1.5rem;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.noContent {
+    padding: 1.5rem;
+    background-color: #fef3c7;
+    color: #d97706;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    font-style: italic;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Fix for react-pdf annotation layer */
+.react-pdf__Page__annotations.annotationLayer:empty {
+    display: none;
+}
+
+.react-pdf__Page__annotations.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .courseLessonsPageContainer,
+    .learningPageContainer {
+        padding: 1.5rem 1rem;
+    }
+
+    .courseLessonsMain {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .courseLessonsRight {
+        padding: 1rem;
+    }
+
+    .videoContainer {
+        max-width: 100%;
+    }
+
+    .pdfContainer {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .courseLessonsPageContainer,
+    .learningPageContainer {
+        padding: 1rem 0.75rem;
+    }
+
+    .courseLessonsTitle {
+        font-size: 1.5rem;
+    }
+
+    .tabButton {
+        font-size: 0.875rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .lessonAccordionHeader {
+        font-size: 0.875rem;
+        padding: 0.75rem;
+    }
+
+    .lessonContentLink {
+        font-size: 0.75rem;
+        padding: 0.6rem 0.75rem;
+    }
+
+    .lessonContentTitle {
+        font-size: 1.125rem;
+    }
+
+    .currentLessonInfo,
+    .quizInfo,
+    .quizHistoryItem {
+        font-size: 0.75rem;
+    }
+
+    .btn {
+        font-size: 0.75rem;
+        padding: 0.6rem 1rem;
+    }
+
+    .navButton {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .pageInfo {
+        font-size: 0.75rem;
+    }
+
+    .completeLessonNote {
+        font-size: 0.75rem;
+    }
+
+    .loading,
+    .error,
+    .noContent {
+        font-size: 0.875rem;
+        padding: 1rem;
+    }
+
+    .sectionHeader {
+        padding: 2.5rem 0.75rem;
+    }
+
+    .headerInfo p {
+        font-size: 1.75rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+    to {
+        height: auto;
+        opacity: 1;
+    }
+}

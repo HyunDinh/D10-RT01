@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
-import styles from '../styles/BackToTop.module.css'; // File CSS module riêng
+import styles from '../styles/BackToTop.module.css'; // Dedicated CSS module file
 
 function BackToTop() {
     const [showBackToTop, setShowBackToTop] = useState(false);
 
-    // Theo dõi cuộn để hiển thị/ẩn nút
+    // Track scrolling to show/hide button
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 300) { // Hiển thị nút khi cuộn xuống hơn 300px
+            if (window.scrollY > 300) { // Show button when scrolled more than 300px
                 setShowBackToTop(true);
             } else {
                 setShowBackToTop(false);
@@ -20,11 +20,11 @@ function BackToTop() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Hàm cuộn về đầu trang
+    // Function to scroll to top
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
-            behavior: 'smooth', // Cuộn mượt mà
+            behavior: 'smooth', // Smooth scrolling
         });
     };
 

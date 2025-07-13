@@ -1,0 +1,258 @@
+/* ReviewSubmission.module.css */
+.reviewSubmissionContainer {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 32px;
+    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.reviewSubmissionHeader {
+    margin-bottom: 24px;
+}
+
+.reviewSubmissionTitle {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+}
+
+.reviewSubmissionBody {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.reviewSubmissionInfoRow {
+    display: flex;
+    gap: 32px;
+    margin-bottom: 24px;
+}
+
+.reviewSubmissionInfoCol {
+    flex: 1;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.reviewSubmissionInfoTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.reviewSubmissionInfoText {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 8px 12px 8px 0;
+}
+
+.reviewSubmissionInfoText strong {
+    color: #1e293b;
+}
+
+.progressBarContainer {
+    background: #e2e8f0;
+    border-radius: 8px;
+    height: 36px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progressBar {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    background: #38a169;
+    border-radius: 8px;
+    transition: width 0.4s ease;
+}
+
+.progressBar.progressBarLow {
+    background: #e53e3e;
+}
+
+.reviewSubmissionQuestionListTitle {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 24px 0 16px;
+}
+
+.reviewSubmissionQuestionCard {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.2s ease;
+}
+
+.reviewSubmissionQuestionCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.reviewSubmissionQuestionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 12px;
+}
+
+.reviewSubmissionQuestionImage {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.reviewSubmissionOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.reviewSubmissionOption {
+    font-size: 1.1rem;
+    color: #1e293b;
+    padding: 12px;
+    border-radius: 8px;
+    background: #f8fafc;
+}
+
+.reviewSubmissionOption.correct {
+    background: #ecfdf5;
+    border-left: 4px solid #059669;
+}
+
+.reviewSubmissionOption.incorrect {
+    background: #fee2e2;
+    border-left: 4px solid #dc2626;
+}
+
+.reviewSubmissionQuestionFooter {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.reviewSubmissionBadge {
+    display: inline-block;
+    background: #059669;
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.reviewSubmissionBadge.secondary {
+    background: #dc2626;
+}
+
+.correctAnswerText {
+    font-size: 0.95rem;
+    color: #dc2626;
+}
+
+.reviewSubmissionFooter {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 32px;
+}
+
+.reviewSubmissionBtn {
+    background: #2563eb;
+    color: #ffffff;
+    padding: 12px 32px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reviewSubmissionBtn:hover {
+    background: #1e40af;
+    transform: translateY(-2px);
+}
+
+.reviewSubmissionAlert {
+    font-size: 1.25rem;
+    color: #dc2626;
+    text-align: center;
+    padding: 20px;
+    background: #fee2e2;
+    border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .reviewSubmissionContainer {
+        padding: 16px;
+        margin: 16px;
+    }
+
+    .reviewSubmissionInfoRow {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .reviewSubmissionInfoCol {
+        padding: 16px;
+    }
+
+    .reviewSubmissionTitle {
+        font-size: 1.75rem;
+    }
+
+    .reviewSubmissionQuestionListTitle {
+        font-size: 1.5rem;
+    }
+
+    .reviewSubmissionQuestionTitle {
+        font-size: 1.1rem;
+    }
+
+    .reviewSubmissionBtn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .reviewSubmissionTitle {
+        font-size: 1.5rem;
+    }
+
+    .reviewSubmissionQuestionTitle {
+        font-size: 1rem;
+    }
+
+    .reviewSubmissionOption {
+        font-size: 1rem;
+    }
+
+    .reviewSubmissionBadge {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+
+    .correctAnswerText {
+        font-size: 0.9rem;
+    }
+}
