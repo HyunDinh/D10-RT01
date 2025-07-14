@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import styles from '../../styles/quiz/QuizDetail.module.css';
+import styles from '../../styles/quiz/QuizDetailTeacher.module.css';
 import addLessonStyles from '../../styles/lesson/AddLesson.module.css';
+import Footer from "../../components/Footer.jsx";
+import Header from "../../components/Header.jsx";
 
 const QuizDetailTeacher = () => {
     const {id} = useParams();
@@ -26,9 +28,7 @@ const QuizDetailTeacher = () => {
                 withCredentials: true,
             });
             setQuiz({
-                ...res.data,
-                questions: res.data.questions || [],
-                results: res.data.results || [],
+                ...res.data, questions: res.data.questions || [], results: res.data.results || [],
             });
             setLoading(false);
             // Select the first question by default if available
@@ -36,7 +36,7 @@ const QuizDetailTeacher = () => {
                 setSelectedQuestionId(res.data.questions[0].questionId);
             }
         } catch (err) {
-            setError('Không thể tải thông tin quiz');
+            setError('Unable to load quiz information');
             setLoading(false);
         }
     };
@@ -69,9 +69,9 @@ const QuizDetailTeacher = () => {
             navigate(`/hocho/teacher/quizzes?courseId=${courseId}`);
         } catch (err) {
             if (err.response?.status === 409) {
-                setError('Không thể xóa quiz này vì đã có học sinh làm bài. Vui lòng xóa kết quả bài làm trước.');
+                setError('Cannot delete this quiz because students have already taken it. Please delete the quiz results first.');
             } else {
-                setError('Không thể xóa quiz');
+                setError('Unable to delete quiz');
             }
             setShowDeleteQuizModal(false);
             setDeleting(false);
@@ -105,7 +105,7 @@ const QuizDetailTeacher = () => {
             setShowDeleteResultsModal(false);
             setDeletingResults(false);
         } catch (err) {
-            setError('Không thể xóa kết quả bài làm');
+            setError('Unable to delete quiz results');
             setShowDeleteResultsModal(false);
             setDeletingResults(false);
         }
@@ -128,19 +128,19 @@ const QuizDetailTeacher = () => {
 
     const renderQuestionDetails = () => {
         if (!selectedQuestionId || !quiz) {
-            return <div className={styles.noQuestion}>Vui lòng chọn một câu hỏi để xem chi tiết.</div>;
+            return <div className={styles.noQuestion}>Please select a question to view details.</div>;
         }
         const question = quiz.questions.find((q) => q.questionId === selectedQuestionId);
         if (!question) {
-            return <div className={styles.noQuestion}>Câu hỏi không tồn tại.</div>;
+            return <div className={styles.noQuestion}>Question does not exist.</div>;
         }
         return (<div className={styles.questionDetail}>
             <div className={styles.quizDetailQuestionTitle}>
-                Câu {quiz.questions.findIndex((q) => q.questionId === selectedQuestionId) + 1}: {question.questionText}
+                Question {quiz.questions.findIndex((q) => q.questionId === selectedQuestionId) + 1}: {question.questionText}
             </div>
             <img
                 src={getQuizImageUrl(question.questionImageUrl)}
-                alt="Ảnh minh họa"
+                alt="Illustration image"
                 className={styles.quizDetailQuestionImage}
                 onError={(e) => (e.target.src = '/images/default-quiz.jpg')}
                 style={{display: question.questionImageUrl && question.questionImageUrl !== 'none' ? 'block' : 'none'}}
@@ -151,17 +151,17 @@ const QuizDetailTeacher = () => {
                     className={option.optionKey === question.correctOptionId ? `${styles.quizDetailOption} ${styles.correct}` : styles.quizDetailOption}
                 >
                     {option.optionKey}. {option.optionText}{' '}
-                    {option.optionKey === question.correctOptionId && <strong>(Đáp án đúng)</strong>}
+                    {option.optionKey === question.correctOptionId && <strong>(Correct answer)</strong>}
                 </div>))}
             </div>
             <div style={{marginTop: 8}}>
-                <span className={styles.quizDetailBadge}>Điểm: {question.points} điểm</span>
+                <span className={styles.quizDetailBadge}>Points: {question.points}</span>
             </div>
         </div>);
     };
 
     if (loading) {
-        return <div className={styles.quizDetailAlert}>Đang tải...</div>;
+        return <div className={styles.quizDetailAlert}>Loading...</div>;
     }
 
     if (error) {
@@ -172,141 +172,148 @@ const QuizDetailTeacher = () => {
         return null;
     }
 
-    return (<main className={styles.quizDetailContainer}>
-        <div className={styles.quizDetailHeader}>
-            <div className={styles.quizDetailTitle}>{quiz.title}</div>
-            <div className={styles.quizDetailHeaderActions}>
-                <button
-                    className={styles.quizDetailBtn}
-                    onClick={() => navigate(`/hocho/teacher/quizzes/${id}/edit`)}
-                >
-                    Chỉnh sửa
-                </button>
-                {(quiz.results?.length || 0) > 0 && (<button
-                    className={`${styles.quizDetailBtn} ${styles.warning}`}
-                    onClick={handleDeleteResultsClick}
-                    disabled={deletingResults}
-                >
-                    {deletingResults ? 'Đang xóa...' : 'Xóa kết quả bài làm'}
-                </button>)}
-                <button
-                    className={`${styles.quizDetailBtn} ${styles.danger}`}
-                    onClick={handleDeleteQuizClick}
-                    disabled={deleting}
-                >
-                    {deleting ? 'Đang xóa...' : 'Xóa'}
-                </button>
-                <button
-                    className={styles.quizDetailBtn}
-                    onClick={() => navigate(`/hocho/teacher/quizzes?courseId=${courseId}`)}
-                >
-                    Quay lại
-                </button>
-            </div>
-        </div>
-        <div className={styles.quizDetailInfoRow}>
-            <div className={styles.quizDetailInfoCol}>
-                <div className={styles.quizDetailInfoTitle}>Thông tin cơ bản</div>
-                <div className={styles.quizDetailInfoText}><strong>Mô tả:</strong> {quiz.description}</div>
-                <div className={styles.quizDetailInfoText}><strong>Thời gian làm bài:</strong> {quiz.timeLimit} phút
-                </div>
-                <div className={styles.quizDetailInfoText}><strong>Tổng điểm:</strong> {quiz.totalPoints} điểm</div>
-                <div className={styles.quizDetailInfoText}><strong>Số câu hỏi:</strong> {(quiz.questions?.length || 0)} câu
-                </div>
-            </div>
-        </div>
+    return (<>
+        <Header/>
 
-        <div className={styles.splitContainer}>
-            {/* Left Side: Question List */}
-            <div className={styles.questionList}>
-                <h3 className={styles.questionListTitle}>Danh sách câu hỏi</h3>
-                {quiz.questions.length === 0 ? (<div className={styles.noQuestion}>Không có câu hỏi nào.</div>) : (
-                    <ul className={styles.questionItems}>
-                        {quiz.questions.map((question, index) => (<li
-                            key={question.questionId}
-                            className={`${styles.questionItem} ${selectedQuestionId === question.questionId ? styles.questionItemActive : ''}`}
-                            onClick={() => handleQuestionClick(question.questionId)}
-                        >
-                            <div className={styles.quizDetailQuestionTitle}>
-                                Câu {index + 1}: {question.questionText}
-                            </div>
-                        </li>))}
-                    </ul>)}
-            </div>
-
-            {/* Right Side: Question Details */}
-            <div className={styles.questionDetailContainer}>
-                <h3 className={styles.questionListTitle}>Chi tiết câu hỏi</h3>
-                {renderQuestionDetails()}
-            </div>
-        </div>
-
-        {showDeleteQuizModal && (<div className={addLessonStyles.modal}>
-            <div className={addLessonStyles.modalContent}>
-                <div className={addLessonStyles.modalHeader}>
-                    <h5>Xác nhận xóa quiz</h5>
+        <main className={styles.quizDetailContainer}>
+            <div className={styles.quizDetailHeader}>
+                <div className={styles.quizDetailTitle}>{quiz.title}</div>
+                <div className={styles.quizDetailHeaderActions}>
                     <button
-                        className={addLessonStyles.modalClose}
-                        onClick={handleDeleteQuizCancel}
-                        aria-label="Close"
+                        className={styles.quizDetailBtn}
+                        onClick={() => navigate(`/hocho/teacher/quizzes/${id}/edit`)}
                     >
-                        ×
+                        Edit
                     </button>
-                </div>
-                <div className={addLessonStyles.modalBody}>
-                    <p>Bạn có chắc chắn muốn xóa quiz này không?</p>
-                </div>
-                <div className={addLessonStyles.modalFooter}>
-                    <button
-                        className={`${addLessonStyles.btn} ${addLessonStyles.btnSecondary}`}
-                        onClick={handleDeleteQuizCancel}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        className={`${addLessonStyles.btn} ${addLessonStyles.btnSuccess}`}
-                        onClick={handleDeleteQuizConfirm}
-                        disabled={deleting}
-                    >
-                        {deleting ? 'Đang xóa...' : 'Xác nhận'}
-                    </button>
-                </div>
-            </div>
-        </div>)}
-
-        {showDeleteResultsModal && (<div className={addLessonStyles.modal}>
-            <div className={addLessonStyles.modalContent}>
-                <div className={addLessonStyles.modalHeader}>
-                    <h5>Xác nhận xóa kết quả bài làm</h5>
-                    <button
-                        className={addLessonStyles.modalClose}
-                        onClick={handleDeleteResultsCancel}
-                        aria-label="Close"
-                    >
-                        ×
-                    </button>
-                </div>
-                <div className={addLessonStyles.modalBody}>
-                    <p>Bạn có chắc chắn muốn xóa tất cả kết quả bài làm của quiz này?</p>
-                </div>
-                <div className={addLessonStyles.modalFooter}>
-                    <button
-                        className={`${addLessonStyles.btn} ${addLessonStyles.btnSecondary}`}
-                        onClick={handleDeleteResultsCancel}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        className={`${addLessonStyles.btn} ${addLessonStyles.btnSuccess}`}
-                        onClick={handleDeleteResultsConfirm}
+                    {(quiz.results?.length || 0) > 0 && (<button
+                        className={`${styles.quizDetailBtn} ${styles.warning}`}
+                        onClick={handleDeleteResultsClick}
                         disabled={deletingResults}
                     >
-                        {deletingResults ? 'Đang xóa...' : 'Xác nhận'}
+                        {deletingResults ? 'Deleting...' : 'Delete quiz results'}
+                    </button>)}
+                    <button
+                        className={`${styles.quizDetailBtn} ${styles.danger}`}
+                        onClick={handleDeleteQuizClick}
+                        disabled={deleting}
+                    >
+                        {deleting ? 'Deleting...' : 'Delete'}
+                    </button>
+                    <button
+                        className={styles.quizDetailBtn}
+                        onClick={() => navigate(`/hocho/teacher/quizzes?courseId=${courseId}`)}
+                    >
+                        Back
                     </button>
                 </div>
             </div>
-        </div>)}
-    </main>);
+            <div className={styles.quizDetailInfoRow}>
+                <div className={styles.quizDetailInfoCol}>
+                    <div className={styles.quizDetailInfoTitle}>Basic Information</div>
+                    <div className={styles.quizDetailInfoText}><strong>Description:</strong> {quiz.description}
+                    </div>
+                    <div className={styles.quizDetailInfoText}><strong>Time limit:</strong> {quiz.timeLimit} minutes
+                    </div>
+                    <div className={styles.quizDetailInfoText}><strong>Total points:</strong> {quiz.totalPoints}
+                    </div>
+                    <div className={styles.quizDetailInfoText}><strong>Number of
+                        questions:</strong> {(quiz.questions?.length || 0)}</div>
+                </div>
+            </div>
+
+            <div className={styles.splitContainer}>
+                {/* Left Side: Question List */}
+                <div className={styles.questionList}>
+                    <h3 className={styles.questionListTitle}>Question list</h3>
+                    {quiz.questions.length === 0 ? (<div className={styles.noQuestion}>No questions.</div>) : (
+                        <ul className={styles.questionItems}>
+                            {quiz.questions.map((question, index) => (<li
+                                key={question.questionId}
+                                className={`${styles.questionItem} ${selectedQuestionId === question.questionId ? styles.questionItemActive : ''}`}
+                                onClick={() => handleQuestionClick(question.questionId)}
+                            >
+                                <div className={styles.quizDetailQuestionTitle}>
+                                    Question {index + 1}: {question.questionText}
+                                </div>
+                            </li>))}
+                        </ul>)}
+                </div>
+
+                {/* Right Side: Question Details */}
+                <div className={styles.questionDetailContainer}>
+                    <h3 className={styles.questionListTitle}>Question details</h3>
+                    {renderQuestionDetails()}
+                </div>
+            </div>
+
+            {showDeleteQuizModal && (<div className={addLessonStyles.modal}>
+                <div className={addLessonStyles.modalContent}>
+                    <div className={addLessonStyles.modalHeader}>
+                        <h5>Confirm delete quiz</h5>
+                        <button
+                            className={addLessonStyles.modalClose}
+                            onClick={handleDeleteQuizCancel}
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div className={addLessonStyles.modalBody}>
+                        <p>Are you sure you want to delete this quiz?</p>
+                    </div>
+                    <div className={addLessonStyles.modalFooter}>
+                        <button
+                            className={`${addLessonStyles.btn} ${addLessonStyles.btnSecondary}`}
+                            onClick={handleDeleteQuizCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className={`${addLessonStyles.btn} ${addLessonStyles.btnSuccess}`}
+                            onClick={handleDeleteQuizConfirm}
+                            disabled={deleting}
+                        >
+                            {deleting ? 'Deleting...' : 'Confirm'}
+                        </button>
+                    </div>
+                </div>
+            </div>)}
+
+            {showDeleteResultsModal && (<div className={addLessonStyles.modal}>
+                <div className={addLessonStyles.modalContent}>
+                    <div className={addLessonStyles.modalHeader}>
+                        <h5>Confirm delete quiz results</h5>
+                        <button
+                            className={addLessonStyles.modalClose}
+                            onClick={handleDeleteResultsCancel}
+                            aria-label="Close"
+                        >
+                            ×
+                        </button>
+                    </div>
+                    <div className={addLessonStyles.modalBody}>
+                        <p>Are you sure you want to delete all quiz results for this quiz?</p>
+                    </div>
+                    <div className={addLessonStyles.modalFooter}>
+                        <button
+                            className={`${addLessonStyles.btn} ${addLessonStyles.btnSecondary}`}
+                            onClick={handleDeleteResultsCancel}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className={`${addLessonStyles.btn} ${addLessonStyles.btnSuccess}`}
+                            onClick={handleDeleteResultsConfirm}
+                            disabled={deletingResults}
+                        >
+                            {deletingResults ? 'Deleting...' : 'Confirm'}
+                        </button>
+                    </div>
+                </div>
+            </div>)}
+        </main>
+        <Footer/>
+    </>);
 };
 
 export default QuizDetailTeacher;

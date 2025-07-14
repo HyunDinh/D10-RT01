@@ -1,0 +1,234 @@
+/* QuizDetail.module.css */
+
+/* Container for the page */
+.quizDetailContainer {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.quizDetailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.quizDetailTitle {
+    font-size: 28px;
+    font-weight: 500;
+    color: #333;
+}
+
+.quizDetailHeaderActions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Info row */
+.quizDetailInfoRow {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.quizDetailInfoCol {
+    flex: 1;
+    background: #faf5ff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.quizDetailInfoTitle {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.quizDetailInfoText {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+/* Split container for question list and details */
+.splitContainer {
+    display: flex;
+    gap: 24px;
+    height: 100%;
+}
+
+/* Question list (left side) */
+.questionList {
+    width: 30%;
+    background: #faf5ff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.questionListTitle {
+    font-size: 20px;
+    font-weight: 500;
+    margin: 0 0 16px;
+    color: #333;
+}
+
+.questionItems {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.questionItem {
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.questionItem:hover {
+    background: rgba(223, 138, 73, 0.1);
+    transform: translateY(-2px);
+}
+
+.questionItemActive {
+    background: var(--primary-color); /* #f28c38 */
+    color: #faf5ff;
+}
+
+.questionItemActive:hover {
+    background: #df8039;
+}
+
+/* Question details (right side) */
+.questionDetailContainer {
+    width: 70%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    overflow-y: auto;
+}
+
+.quizDetailQuestionTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.quizDetailQuestionImage {
+    max-width: 70%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.quizDetailOption {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.quizDetailOption.correct {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.quizDetailBadge {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 12px;
+    background: #e9ecef;
+    color: #333;
+    margin-right: 8px;
+}
+
+.quizDetailBadge.secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* No question message */
+.noQuestion {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #666;
+}
+
+/* Button styles */
+.quizDetailBtn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    background: #007bff;
+    color: #fff;
+}
+
+.quizDetailBtn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.quizDetailBtn.warning {
+    background: #ffc107;
+    color: #212529;
+}
+
+.quizDetailBtn.warning:hover {
+    background: #e0a800;
+}
+
+.quizDetailBtn.danger {
+    background: #e3342f;
+    color: #fff;
+}
+
+.quizDetailBtn.danger:hover {
+    background: #c5302b;
+}
+
+/* Alert styles */
+.quizDetailAlert {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .splitContainer {
+        flex-direction: column;
+    }
+
+    .questionList, .questionDetailContainer {
+        width: 100%;
+    }
+
+    .quizDetailBtn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .quizDetailInfoRow {
+        flex-direction: column;
+    }
+
+    .quizDetailInfoCol {
+        width: 100%;
+    }
+}
