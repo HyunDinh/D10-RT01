@@ -110,13 +110,15 @@ const PublicTutorList = () => {
 
             <div className={styles.tutorPageContainer}>
                 <div className={styles.teacherButtonContainer}>
-                    <button
-                        className={`${styles.teacherButton} ${styles.buttonHover} ${styles.fadeIn}`}
-                        onClick={handleTeacherDashboard}
-                        title="Go to Teacher Dashboard"
-                    >
-                        <FontAwesomeIcon icon={faChalkboardTeacher}/> Teacher Dashboard
-                    </button>
+                    {currentUser && currentUser.role && currentUser.role.toLowerCase() === 'teacher' && (
+                        <button
+                            className={`${styles.teacherButton} ${styles.buttonHover} ${styles.fadeIn}`}
+                            onClick={handleTeacherDashboard}
+                            title="Go to Teacher Dashboard"
+                        >
+                            <FontAwesomeIcon icon={faChalkboardTeacher}/> Teacher Dashboard
+                        </button>
+                    )}
                 </div>
                 <div className={`${styles.searchContainer} ${styles.animateSlideIn}`}>
                     <h3>Search Tutors</h3>
