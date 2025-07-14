@@ -23,7 +23,7 @@ export default function VideoPlayer() {
     const [maxVideoTime, setMaxVideoTime] = useState(null); // in seconds
     const [remainingTime, setRemainingTime] = useState(null); // in seconds
     const [pageSuspended] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(true); // NEW: track playing state
+    const [isPlaying, setIsPlaying] = useState(false); // Timer should not start until play is clicked
     const timerRef = useRef(null); // NEW: timer interval ref
 
 
@@ -112,7 +112,7 @@ export default function VideoPlayer() {
                     // Time's up
                     setIsPlaying(false);
                     clearInterval(timerRef.current);
-                    // Optionally, call updateTimeSpent() here
+                    updateTimeSpent(); // Update backend when time runs out
                     return 0;
                 });
             }, 1000);
@@ -208,8 +208,14 @@ export default function VideoPlayer() {
                                     controls
                                     playing={isPlaying && remainingTime > 0}
                                     onPlay={() => setIsPlaying(true)}
-                                    onPause={() => setIsPlaying(false)}
+                                    onPause={() => {
+                                        setIsPlaying(false);
+                                        updateTimeSpent(); // Update backend when paused
+                                    }}
                                     onEnded={() => setIsPlaying(false)}
+                                    onProgress={({ playedSeconds }) => {
+                                        playedSecondsRef.current = playedSeconds;
+                                    }}
                                     className={styles.videoDetailPlayer}
                                     width="100%"
                                     height="100%"
