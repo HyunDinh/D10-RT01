@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import styles from '../../styles/tutor/TutorProfile.module.css';
 import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faArrowLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 
 const TutorProfile = () => {
-    const { userId } = useParams();
+    const {userId} = useParams();
     const [tutor, setTutor] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -25,6 +25,7 @@ const TutorProfile = () => {
             });
             setTutor(response.data);
             setLoading(false);
+            console.log('Fetched user data:', response.data);
         } catch (err) {
             setError('Cannot load tutor information');
             setLoading(false);
@@ -35,28 +36,36 @@ const TutorProfile = () => {
         navigate('/hocho/tutors');
     };
 
+    const getAvatarUrl = (avatarUrl) => {
+        const baseUrl = 'http://localhost:8080';
+        if (!avatarUrl || avatarUrl === 'none') {
+            return `/default.jpg?t=${new Date().getTime()}`;
+        }
+        return `${baseUrl}/api/tutors/avatar/${avatarUrl}?t=${new Date().getTime()}`;
+    };
+
     if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>Loading tutor information...</div>;
     if (error) return <div className={`${styles.errorMessage} ${styles.fadeIn}`}>{error}</div>;
     if (!tutor) return null;
 
-    return (
-        <>
-            <Header />
-            <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
+    return (<>
+            <Header/>
+            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
                     <p>Tutor Profile</p>
-                    <ul className={styles.breadcrumbItems} data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
+                    <ul className={styles.breadcrumbItems} data-aos="fade-up" data-aos-duration="800"
+                        data-aos-delay="500">
                         <li>
                             <a href="/hocho/home">Home</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
                         <li>
                             <a href="/hocho/tutors">Tutors</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
                         <li>Profile</li>
                     </ul>
@@ -69,16 +78,21 @@ const TutorProfile = () => {
                         onClick={handleBack}
                         title="Back to Tutors"
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} /> Back
+                        <FontAwesomeIcon icon={faArrowLeft}/> Back
                     </button>
                 </div>
                 <h2 className={`${styles.tutorTitle} ${styles.fadeIn}`}>Tutor Information</h2>
                 <div className={`${styles.tutorCard} ${styles.cardHover} ${styles.animateSlideIn}`}>
                     <div className={styles.tutorCardAvatar}>
                         <img
-                            src={tutor.user.avatarUrl || '/avatar.png'}
+                            src={getAvatarUrl(tutor.user.avatarUrl)}
                             alt={`${tutor.user.fullName}'s avatar`}
                             className={`${styles.avatarImage} ${styles.avatarZoom}`}
+                            onError={e => {
+                                console.log('Image load error:', e);
+                                e.target.onerror = null;
+                                e.target.src = '/default.jpg';
+                            }}
                         />
                     </div>
                     <div className={styles.tutorCardContent}>
@@ -91,20 +105,18 @@ const TutorProfile = () => {
                         <p className={styles.tutorCardText}><b>Introduction:</b> {tutor.introduction}</p>
                         <p className={styles.tutorCardText}>
                             <b>Status:</b>{' '}
-                            {tutor.status === 'APPROVED' ? (
-                                <span className={`${styles.tutorBadge} ${styles.approved} ${styles.badgePulse}`}>Approved</span>
-                            ) : tutor.status === 'REJECTED' ? (
-                                <span className={`${styles.tutorBadge} ${styles.rejected} ${styles.badgePulse}`}>Rejected</span>
-                            ) : (
-                                <span className={`${styles.tutorBadge} ${styles.pending} ${styles.badgePulse}`}>Pending</span>
-                            )}
+                            {tutor.status === 'APPROVED' ? (<span
+                                    className={`${styles.tutorBadge} ${styles.approved} ${styles.badgePulse}`}>Approved</span>) : tutor.status === 'REJECTED' ? (
+                                <span
+                                    className={`${styles.tutorBadge} ${styles.rejected} ${styles.badgePulse}`}>Rejected</span>) : (
+                                <span
+                                    className={`${styles.tutorBadge} ${styles.pending} ${styles.badgePulse}`}>Pending</span>)}
                         </p>
                     </div>
                 </div>
             </div>
-            <Footer />
-        </>
-    );
+            <Footer/>
+        </>);
 };
 
 export default TutorProfile;
