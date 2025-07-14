@@ -458,7 +458,7 @@ export default function CourseLearningPage() {
                                             </div>
                                         </div>
                                         <button className={`${styles.btn} ${styles.btnPrimary}`}
-                                                onClick={() => navigate(`/hocho/quizzes/${id}/review`)}
+                                                onClick={() => navigate(`/hocho/quizzes/${selectedQuiz.quizId}/review`)}
                                         >View Details
                                         </button>
                                     </li>))}

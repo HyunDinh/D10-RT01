@@ -60,6 +60,13 @@ const QuizReview = () => {
 
     return (<div className={styles.reviewSubmissionContainer}>
         <div className={styles.reviewSubmissionHeader}>
+            <button
+                className={styles.reviewSubmissionBtn}
+                style={{marginBottom: 16, background: '#f3f4f6', color: '#1e293b'}}
+                onClick={() => navigate(`/hocho/child/course/${result.quiz.course.courseId}/learning`)}
+            >
+                ← Quay lại khóa học
+            </button>
             <h1 className={styles.reviewSubmissionTitle}>Xem lại bài nộp</h1>
         </div>
         <div className={styles.reviewSubmissionBody}>
@@ -103,28 +110,32 @@ const QuizReview = () => {
                     />)}
                     <div className={styles.reviewSubmissionOptions}>
                         {answer.question.options.map((option) => {
-                            const isSelected = option.optionId === answer.selectedOptionId;
-                            const isCorrect = option.optionId === answer.question.correctOptionId;
-                            const optionClass = `${styles.reviewSubmissionOption} ${isSelected ? (isCorrect ? styles.correct : styles.incorrect) : isCorrect ? styles.correct : ''}`;
-                            return (<div key={option.optionId} className={optionClass}>
-                                {option.optionKey}. {option.optionText}
-                            </div>);
+                            const isSelected = option.optionKey === answer.selectedOptionId;
+                            let optionClass = styles.reviewSubmissionOption;
+                            if (isSelected) {
+                              optionClass += ` ${styles.selectedOption}`;
+                            }
+                            return (
+                                <div key={option.optionId} className={optionClass}>
+                                    {option.optionKey}. {option.optionText}
+                                </div>
+                            );
                         })}
                     </div>
                     <div className={styles.reviewSubmissionQuestionFooter}>
-              <span
-                  className={`${styles.reviewSubmissionBadge} ${answer.isCorrect ? '' : styles.secondary}`}
-                  aria-label={answer.isCorrect ? 'Đáp án đúng' : 'Đáp án sai'}
-              >
-                {answer.isCorrect ? 'Đúng' : 'Sai'}
-              </span>
                         <span className={styles.reviewSubmissionInfoText}>
                 Điểm: {answer.isCorrect ? answer.question.points : 0}/{answer.question.points}
               </span>
-                        {!answer.isCorrect && (<small className={styles.correctAnswerText}>
-                            Đáp án
-                            đúng: {answer.question.options.find((opt) => opt.optionId === answer.question.correctOptionId)?.optionKey}
-                        </small>)}
+                        {!answer.isCorrect && (
+                            <small className={styles.correctAnswerText}>
+                                Đáp án đúng: {
+                                    (() => {
+                                        const correct = answer.question.options.find(opt => opt.optionKey === answer.question.correctOptionId);
+                                        return correct ? `${correct.optionKey}. ${correct.optionText}` : '';
+                                    })()
+                                }
+                            </small>
+                        )}
                     </div>
                 </div>))}
 

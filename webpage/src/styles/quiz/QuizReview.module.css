@@ -142,6 +142,11 @@
     border-left: 4px solid #dc2626;
 }
 
+.selectedOption {
+    background: #fff9db;
+    border-left: 4px solid #facc15;
+}
+
 .reviewSubmissionQuestionFooter {
     display: flex;
     align-items: center;

@@ -34,7 +34,7 @@ const ParentCart = () => {
                 const fetchedCartItems = cartResponse.data;
                 setCartItems(fetchedCartItems);
 
-                const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'DIRECTLY_ADDED'));
+                const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'DIRECTLY_ADDED' || item.statusByParent.trim() === 'ADDED_DIRECTLY'));
                 const totalAmount = payableItems.reduce((sum, item) => sum + (item.course.price || 0), 0);
                 setCalculatedPayableItems(payableItems);
                 setCalculatedTotalAmount(totalAmount);
@@ -74,7 +74,7 @@ const ParentCart = () => {
             });
             const fetchedCartItems = cartResponse.data;
             setCartItems(fetchedCartItems);
-            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'DIRECTLY_ADDED'));
+            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' ||  item.statusByParent.trim() === 'ADDED_DIRECTLY'));
             const totalAmount = payableItems.reduce((sum, item) => sum + (item.course.price || 0), 0);
             setCalculatedPayableItems(payableItems);
             setCalculatedTotalAmount(totalAmount);
@@ -124,7 +124,7 @@ const ParentCart = () => {
             });
             const fetchedCartItems = cartResponse.data;
             setCartItems(fetchedCartItems);
-            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'DIRECTLY_ADDED'));
+            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'ADDED_DIRECTLY'));
             const totalAmount = payableItems.reduce((sum, item) => sum + (item.course.price || 0), 0);
             setCalculatedPayableItems(payableItems);
             setCalculatedTotalAmount(totalAmount);
