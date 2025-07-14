@@ -1,0 +1,422 @@
+/* LessonContentStudentPage.module.css */
+.lessonContainer {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 32px;
+    background: linear-gradient(145deg, #ffffff, #f1f5f9);
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s, background 0.3s, transform 0.3s;
+}
+.sectionHeader {
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    background-position: 50%;
+    height: 400px;
+    margin: 0 -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headerInfo {
+    text-align: center;
+}
+
+.headerInfo ul {
+    list-style: none;
+}
+
+.headerInfo p {
+    font-size: 60px;
+    font-weight: 500;
+    color: #eff5f6;
+    margin-bottom: 20px;
+}
+
+.breadcrumbItems {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: #fafafa;
+    padding-left: 0;
+}
+
+.breadcrumbItems li a {
+    color: #fafafa;
+    text-decoration: none;
+    transition: color 0.3s, text-decoration 0.3s, transform 0.3s;
+}
+
+.breadcrumbItems li a:hover {
+    text-decoration: underline;
+    transform: scale(1.05);
+}
+
+.noContent {
+    font-size: 1.1rem;
+    color: #64748b;
+    text-align: center;
+    padding: 20px;
+}
+
+.contentLayout {
+    display: flex;
+    gap: 32px;
+    min-height: 500px;
+}
+
+.contentList {
+    flex: 1;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.contentItem {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contentItem:hover {
+    background: #e68940;
+    transform: translateY(-2px);
+}
+
+.contentItemActive {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+.contentItemActive .contentItemTitle,
+.contentItemActive .contentItemText {
+    color: #fafafa;
+}
+
+.contentItemNumber {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-right: 12px;
+    width: 30px;
+    text-align: center;
+}
+
+.contentItemDetails {
+    flex: 1;
+}
+
+.contentItemTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px;
+}
+
+.contentItemText {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.contentDetails {
+    flex: 3;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.contentDetailsTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 16px;
+}
+
+.playerContainer {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.videoPlayer {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.pdfContainer {
+    width: 100%;
+    max-width: 800px;
+    max-height: 600px;
+    margin: 0 auto;
+    overflow: auto;
+    animation: fadeIn 0.6s ease;
+}
+
+.pdfPage {
+    margin: 0 auto;
+}
+
+.pdfControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.pdfButton {
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e293b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pdfButton:hover:not(.disabled) {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.pdfButton.disabled {
+    background: #e5e7eb;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+.pdfPageInfo {
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.lessonFooter {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}
+
+.backButton {
+    background: #6b7280;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.backButton:hover {
+    background: #4b5563;
+    transform: translateY(-2px);
+}
+
+.loading {
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    text-align: center;
+    padding: 20px;
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+.error {
+    font-size: 1.25rem;
+    color: #dc2626;
+    text-align: center;
+    padding: 20px;
+    background: #fee2e2;
+    border-radius: 10px;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 24px 0;
+}
+
+.paginationButton {
+    padding: 8px 16px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1e293b;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(.disabled) {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+}
+
+.paginationButtonActive {
+    background: var(--primary-color);
+    color: #fafafa;
+    border-color: var(--primary-color);
+}
+
+.paginationButton.disabled {
+    background: #e5e7eb;
+    color: #6b7280;
+    cursor: not-allowed;
+}
+
+/* Animation Classes */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 0.7s ease-in;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.slideUp {
+    animation: slideUp 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Example: Add transition to buttons and cards */
+.button, .paginationButton, .card {
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.button:hover, .paginationButton:hover, .card:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .lessonContainer {
+        padding: 16px;
+        margin: 16px;
+    }
+
+    .sectionHeader {
+        padding: 40px 16px;
+    }
+
+    .headerText {
+        font-size: 1.5rem;
+    }
+
+    .contentLayout {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .contentList {
+        max-width: 100%;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+    }
+
+    .contentItem {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+    }
+
+    .contentItemNumber {
+        margin-bottom: 8px;
+    }
+
+    .contentDetails {
+        padding: 16px;
+    }
+
+    .contentDetailsTitle {
+        font-size: 1.25rem;
+    }
+
+    .backButton,
+    .pdfButton {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .paginationButton {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .headerText {
+        font-size: 1.25rem;
+    }
+
+    .breadcrumbItems li {
+        font-size: 0.9rem;
+    }
+
+    .contentItemTitle {
+        font-size: 1rem;
+    }
+
+    .contentItemText {
+        font-size: 0.85rem;
+    }
+
+    .noContent {
+        font-size: 1rem;
+    }
+
+    .contentDetailsTitle {
+        font-size: 1.1rem;
+    }
+
+    .pdfPageInfo {
+        font-size: 0.9rem;
+    }
+
+    .paginationButton,
+    .pdfButton {
+        padding: 6px 10px;
+        font-size: 0.85rem;
+    }
+}

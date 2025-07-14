@@ -130,6 +130,13 @@ const QuizResult = () => {
                 <div className={styles.quizResultFooter}>
                     <button
                         className={styles.quizResultBtn}
+                        onClick={() => navigate(`/hocho/quizzes/${id}/review`)}
+                        aria-label="Review quiz"
+                    >
+                        Review Quiz
+                    </button>
+                    <button
+                        className={styles.quizResultBtn}
                         onClick={() => navigate(`/hocho/quizzes/${id}/do`)}
                         aria-label="Retake quiz"
                     >

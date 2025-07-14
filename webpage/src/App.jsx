@@ -225,9 +225,9 @@ const App = () => {
             {/*done*/}
             <Route path="/hocho/child/course/:courseId/learning"
                    element={<ProtectedRoute allowedRoles={['ROLE_CHILD']}><CourseLearningPage/></ProtectedRoute>}/>
-
+            {/*done*/}
             <Route path="/hocho/lesson/:lessonId/content-student" element={<LessonContentStudentPage/>}/>
-
+            {/*done*/}
             <Route path="/hocho/child/learning-history" element={<ProtectedRoute
                 allowedRoles={['ROLE_CHILD']}><ChildLearningHistory/></ProtectedRoute>}/>
 

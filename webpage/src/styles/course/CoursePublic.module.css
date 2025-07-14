@@ -51,9 +51,9 @@
 
 .mainContainer {
     display: flex;
-    gap: 20px;
+    justify-content: space-around;
     padding: 40px 20px;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
@@ -342,8 +342,9 @@
 
 .courseDetailBox {
     display: flex;
-    gap: 32px;
-    background: #fff;
+    flex-direction: column;
+    gap: 16px;
+    background: #fafafa;
     border-radius: 16px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.07);
     padding: 32px;
@@ -381,11 +382,12 @@
 .lessonQuizSection {
     display: flex;
     gap: 32px;
+    width: 60%;
     flex-wrap: wrap;
 }
 
 .lessonBox, .quizBox {
-    flex: 1 1 320px;
+    flex: 1 1 300px;
     background: #f8fafc;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.04);
@@ -765,6 +767,7 @@
     border-radius: 5px;
     border: none;
     cursor: pointer;
+    text-decoration: none;
     transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
     color: #faf5ff;
 }

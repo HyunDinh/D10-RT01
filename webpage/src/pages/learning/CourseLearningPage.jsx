@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../styles/course/CourseLearingPage.module.css';
 import ReactPlayer from 'react-player';
@@ -449,18 +449,17 @@ export default function CourseLearningPage() {
                                     {quizHistory.map((attempt, idx) => (<li key={attempt.resultId || idx}
                                                                             className={styles.quizHistoryItem}>
                                         <div>
-                                            <strong>Score:</strong> {attempt.score}
+                                            <div>
+                                                <strong>Score:</strong> {attempt.score}
+                                            </div>
+                                            <div>
+                                                <strong>Date:</strong>{' '}
+                                                {attempt.submittedAt ? new Date(attempt.submittedAt).toLocaleString() : 'N/A'}
+                                            </div>
                                         </div>
-                                        <div>
-                                            <strong>Date:</strong>{' '}
-                                            {attempt.submittedAt ? new Date(attempt.submittedAt).toLocaleString() : 'N/A'}
-                                        </div>
-                                        <button>
-                                            <Link
-                                                className={`${styles.btn} ${styles.btnPrimary}`}
-                                                to={`/hocho/quizzes/${selectedQuiz.quizId}/results/${attempt.resultId}`}>
-                                                View Details
-                                            </Link>
+                                        <button className={`${styles.btn} ${styles.btnPrimary}`}
+                                                onClick={() => navigate(`/hocho/quizzes/${id}/review`)}
+                                        >View Details
                                         </button>
                                     </li>))}
                                 </ul>)}

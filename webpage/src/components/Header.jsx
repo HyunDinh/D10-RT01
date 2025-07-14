@@ -141,7 +141,7 @@ function Header() {
             },],
             ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}, {
                 path: '/hocho/child/course', name: 'My Learning'
-            }, {path: '/hocho/child/learning-history', name: 'Learning History'},],
+            }, ],
         };
 
         return (<div className={styles.navAdminWrapper}>
@@ -362,6 +362,11 @@ function Header() {
                                     {role === 'ROLE_TEACHER' && (<li>
                                         <a href="/hocho/teacher/track-revenue" onClick={closeMobileMenu}>
                                             <FontAwesomeIcon icon={faUniversalAccess}/> Orchestration
+                                        </a>
+                                    </li>)}
+                                    {role === 'ROLE_CHILD' && (<li>
+                                        <a href="/hocho/child/learning-history" onClick={closeMobileMenu}>
+                                            <FontAwesomeIcon icon={faUniversalAccess}/> Learning History
                                         </a>
                                     </li>)}
                                     <li className={styles.messagesNotification}>

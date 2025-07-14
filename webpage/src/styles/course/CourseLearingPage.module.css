@@ -387,6 +387,9 @@
     margin-bottom: 0.75rem;
     font-size: 0.875rem;
     color: #1f2937;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .loading {

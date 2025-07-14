@@ -99,7 +99,7 @@ const QuizReview = () => {
                         src={getQuizImageUrl(answer.question.questionImageUrl)}
                         alt={`Ảnh minh họa cho câu hỏi ${index + 1}`}
                         className={styles.reviewSubmissionQuestionImage}
-                        onError={(e) => (e.target.src = '/images/default-quiz.jpg')}
+                        onError={(e) => (e.target.src = '/default.jpg')}
                     />)}
                     <div className={styles.reviewSubmissionOptions}>
                         {answer.question.options.map((option) => {
