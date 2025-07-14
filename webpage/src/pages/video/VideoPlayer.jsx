@@ -23,6 +23,8 @@ export default function VideoPlayer() {
     const [maxVideoTime, setMaxVideoTime] = useState(null); // in seconds
     const [remainingTime, setRemainingTime] = useState(null); // in seconds
     const [pageSuspended] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true); // NEW: track playing state
+    const timerRef = useRef(null); // NEW: timer interval ref
 
 
     const videoUrl = useMemo(() => {
@@ -101,6 +103,40 @@ export default function VideoPlayer() {
         };
     }, [videoUrl]);
 
+    // Timer effect: decrement remainingTime every second when playing
+    useEffect(() => {
+        if (isPlaying && maxVideoTime !== null && remainingTime > 0) {
+            timerRef.current = setInterval(() => {
+                setRemainingTime(prev => {
+                    if (prev > 1) return prev - 1;
+                    // Time's up
+                    setIsPlaying(false);
+                    clearInterval(timerRef.current);
+                    // Optionally, call updateTimeSpent() here
+                    return 0;
+                });
+            }, 1000);
+        } else {
+            clearInterval(timerRef.current);
+        }
+        return () => clearInterval(timerRef.current);
+    }, [isPlaying, maxVideoTime]);
+
+    // If time runs out, show suspension message
+    if (remainingTime === 0) {
+        return (
+            <>
+                <Header/>
+                <div className={styles.videoDetailContainer}>
+                    <div className={styles.videoDetailError}>
+                        Video time limit reached. Please contact your parents.
+                    </div>
+                </div>
+                <Footer/>
+            </>
+        );
+    }
+
     // Function to update the backend with the time spent
     const updateTimeSpent = () => {
         const timeSpent = playedSecondsRef.current;
@@ -170,7 +206,10 @@ export default function VideoPlayer() {
                                     ref={playerRef}
                                     url={videoUrl}
                                     controls
-                                    playing
+                                    playing={isPlaying && remainingTime > 0}
+                                    onPlay={() => setIsPlaying(true)}
+                                    onPause={() => setIsPlaying(false)}
+                                    onEnded={() => setIsPlaying(false)}
                                     className={styles.videoDetailPlayer}
                                     width="100%"
                                     height="100%"
