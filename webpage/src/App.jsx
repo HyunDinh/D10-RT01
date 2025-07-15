@@ -98,10 +98,13 @@ import AdminFeedback from './pages/admin/AdminFeedback';
 import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 
 import NotificationPage from './pages/notification/NotificationPage';
+import AboutUs from "./components/AboutUs.jsx";
 
 const App = () => {
     return (<Router>
         <Routes>
+
+            <Route path="/hocho/about" element={<AboutUs/>}/>
             // ************************************** ADMIN ONLY ROUTES **************************************
             <Route path="hocho/admin"
                    element={<ProtectedRoute allowedRoles={['ROLE_ADMIN']}><AdminHome/></ProtectedRoute>}/>

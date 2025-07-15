@@ -48,7 +48,7 @@ const Verify = () => {
             <style>{styles}</style>
             <div className="verify-container">
                 <h2 className="verify-heading">Verify account</h2>
-                <p className={message.includes('thành công') ? 'verify-success' : 'verify-error'}>
+                <p className={message.includes('succes') ? 'verify-success' : 'verify-error'}>
                     {message}
                 </p>
             </div>

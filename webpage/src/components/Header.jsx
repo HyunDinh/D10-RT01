@@ -233,7 +233,7 @@ function Header() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/about" onClick={closeMobileMenu}>
+                                    <a href="/hocho/about" onClick={closeMobileMenu}>
                                         About Us
                                     </a>
                                 </li>

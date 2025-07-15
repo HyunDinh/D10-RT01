@@ -35,12 +35,12 @@ const TutorProfile = () => {
         navigate('/hocho/tutors');
     };
 
-    const getAvatarUrl = (avatarUrl) => {
+    const getTutorAvatarUrl = () => {
         const baseUrl = 'http://localhost:8080';
-        if (!avatarUrl || avatarUrl === 'none') {
-            return `/default.jpg?t=${new Date().getTime()}`;
+        if (!tutor.user.avatarUrl || tutor.user.avatarUrl === 'none') {
+            return `${baseUrl}/api/hocho/profile/default.png?t=${new Date().getTime()}`;
         }
-        return `${baseUrl}/api/tutors/avatar/${avatarUrl}?t=${new Date().getTime()}`;
+        return `${baseUrl}/api/hocho/profile/${tutor.user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
     if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>Loading tutor information...</div>;
@@ -84,9 +84,10 @@ const TutorProfile = () => {
                 <div className={`${styles.tutorCard} ${styles.cardHover} ${styles.animateSlideIn}`}>
                     <div className={styles.tutorCardAvatar}>
                         <img
-                            src={tutor.user.avatarUrl || '/avatar.png'}
+                            src={getTutorAvatarUrl()}
                             alt={`${tutor.user.fullName}'s avatar`}
                             className={`${styles.avatarImage} ${styles.avatarZoom}`}
+                            onError={e => { e.target.src = 'http://localhost:8080/api/hocho/profile/default.png'; }}
                         />
                     </div>
                     <div className={styles.tutorCardContent}>

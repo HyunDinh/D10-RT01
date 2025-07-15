@@ -1,0 +1,85 @@
+.aboutus-container {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.aboutus-container h1 {
+  font-size: 2.5rem;
+  color: #2d4e89;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.aboutus-intro {
+  font-size: 1.15rem;
+  color: #444;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.aboutus-mission {
+  background: #f0f4fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+.aboutus-mission h2 {
+  color: #2d4e89;
+  margin-bottom: 10px;
+}
+
+.aboutus-team {
+  margin-top: 32px;
+}
+
+.aboutus-team h2 {
+  color: #2d4e89;
+  margin-bottom: 18px;
+}
+
+.aboutus-team-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.aboutus-team-member {
+  background: #f9fafc;
+  border: 1px solid #e2e6ed;
+  border-radius: 10px;
+  padding: 18px 24px;
+  min-width: 220px;
+  max-width: 260px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  transition: transform 0.18s;
+}
+
+.aboutus-team-member:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(45,78,137,0.12);
+}
+
+.aboutus-team-member h3 {
+  color: #2d4e89;
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+}
+
+.aboutus-team-member h4 {
+  color: #3e6fb6;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.aboutus-team-member p {
+  color: #555;
+  font-size: 0.98rem;
+}
