@@ -14,7 +14,7 @@ const CoursesList = () => {
     const [children, setChildren] = useState([]);
     const [loadingStates, setLoadingStates] = useState({}); // State to track loading for each course
     const [error, setError] = useState(null);
-    const coursesPerPage = 12;
+    const coursesPerPage = 6;
     const navigate = useNavigate();
     const [filters, setFilters] = useState({
         category: '',

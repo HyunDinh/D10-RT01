@@ -51,9 +51,10 @@
 
 .mainContainer {
     display: flex;
+    gap: 20px;
     justify-content: space-around;
     padding: 40px 20px;
-    max-width: 1600px;
+    max-width: 1500px;
     margin: 0 auto;
 }
 
@@ -260,7 +261,7 @@
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    color: #007bff;
+    color: var(--text-color);
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -458,11 +459,11 @@
 }
 
 .courseImageUpload:hover {
-    border-color: #007bff;
+    border-color: var(--primary-color);
 }
 
 .courseImageUpload.dragover {
-    border-color: #007bff;
+    border-color: #d68441;
     background-color: #f8f9fa;
 }
 

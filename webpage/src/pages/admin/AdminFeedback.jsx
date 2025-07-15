@@ -29,11 +29,17 @@ const AdminFeedback = () => {
         response: '',
         status: 'IN_PROGRESS'
     });
+    const [currentPage, setCurrentPage] = useState(1);
+    const feedbacksPerPage = 3;
 
     useEffect(() => {
         fetchFeedbacks();
         fetchStats();
     }, []);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filterStatus]);
 
     const fetchFeedbacks = async () => {
         try {
@@ -229,6 +235,15 @@ const AdminFeedback = () => {
         return feedback.status === filterStatus;
     });
 
+    const indexOfLastFeedback = currentPage * feedbacksPerPage;
+    const indexOfFirstFeedback = indexOfLastFeedback - feedbacksPerPage;
+    const currentFeedbacks = filteredFeedbacks.slice(indexOfFirstFeedback, indexOfLastFeedback);
+    const totalPages = Math.ceil(filteredFeedbacks.length / feedbacksPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     if (loading) {
         return (
             <>
@@ -330,104 +345,133 @@ const AdminFeedback = () => {
                             <p>No feedbacks with the selected status.</p>
                         </div>
                     ) : (
-                        <div className={styles.feedbackList}>
-                            {filteredFeedbacks.map(feedback => (
-                                <div key={feedback.feedbackId} className={styles.feedbackCard}>
-                                    <div className={styles.feedbackHeader}>
-                                        <div className={styles.feedbackTitle}>
-                                            <h3>{feedback.subject}</h3>
-                                            <div className={styles.feedbackMeta}>
-                                                <span className={styles.userInfo}>
-                                                    <strong>Sender:</strong> {feedback.user?.fullName || feedback.user?.username}
-                                                </span>
-                                                <span className={styles.feedbackDate}>
-                                                    {formatDate(feedback.createdAt)}
-                                                </span>
+                        <>
+                            <div className={styles.feedbackList}>
+                                {currentFeedbacks.map(feedback => (
+                                    <div key={feedback.feedbackId} className={styles.feedbackCard}>
+                                        <div className={styles.feedbackHeader}>
+                                            <div className={styles.feedbackTitle}>
+                                                <h3>{feedback.subject}</h3>
+                                                <div className={styles.feedbackMeta}>
+                                                    <span className={styles.userInfo}>
+                                                        <strong>Sender:</strong> {feedback.user?.fullName || feedback.user?.username}
+                                                    </span>
+                                                    <span className={styles.feedbackDate}>
+                                                        {formatDate(feedback.createdAt)}
+                                                    </span>
+                                                    <span 
+                                                        className={styles.priorityBadge}
+                                                        style={{ backgroundColor: getPriorityColor(feedback.priority) }}
+                                                    >
+                                                        {getPriorityLabel(feedback.priority)}
+                                                    </span>
+                                                    <span className={styles.categoryBadge}>
+                                                        {getCategoryLabel(feedback.category)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className={styles.feedbackStatus}>
+                                                {getStatusIcon(feedback.status)}
                                                 <span 
-                                                    className={styles.priorityBadge}
-                                                    style={{ backgroundColor: getPriorityColor(feedback.priority) }}
+                                                    className={styles.statusLabel}
+                                                    style={{ color: getStatusColor(feedback.status) }}
                                                 >
-                                                    {getPriorityLabel(feedback.priority)}
-                                                </span>
-                                                <span className={styles.categoryBadge}>
-                                                    {getCategoryLabel(feedback.category)}
+                                                    {getStatusLabel(feedback.status)}
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className={styles.feedbackStatus}>
-                                            {getStatusIcon(feedback.status)}
-                                            <span 
-                                                className={styles.statusLabel}
-                                                style={{ color: getStatusColor(feedback.status) }}
-                                            >
-                                                {getStatusLabel(feedback.status)}
-                                            </span>
+                                        
+                                        <div className={styles.feedbackContent}>
+                                            <p className={styles.feedbackPreview}>
+                                                {feedback.content.length > 150 
+                                                    ? `${feedback.content.substring(0, 150)}...` 
+                                                    : feedback.content
+                                                }
+                                            </p>
                                         </div>
-                                    </div>
-                                    
-                                    <div className={styles.feedbackContent}>
-                                        <p className={styles.feedbackPreview}>
-                                            {feedback.content.length > 150 
-                                                ? `${feedback.content.substring(0, 150)}...` 
-                                                : feedback.content
-                                            }
-                                        </p>
-                                    </div>
 
-                                    {feedback.adminResponse && (
-                                        <div className={styles.adminResponse}>
-                                            <h4>Admin response:</h4>
-                                            <p>{feedback.adminResponse}</p>
-                                            {feedback.responseDate && (
-                                                <small className={styles.responseDate}>
-                                                    Responded at: {formatDate(feedback.responseDate)}
-                                                </small>
+                                        {feedback.adminResponse && (
+                                            <div className={styles.adminResponse}>
+                                                <h4>Admin response:</h4>
+                                                <p>{feedback.adminResponse}</p>
+                                                {feedback.responseDate && (
+                                                    <small className={styles.responseDate}>
+                                                        Responded at: {formatDate(feedback.responseDate)}
+                                                    </small>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        <div className={styles.feedbackActions}>
+                                            <button
+                                                onClick={() => handleViewFeedback(feedback)}
+                                                className={styles.viewButton}
+                                            >
+                                                <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
+                                                View details
+                                            </button>
+                                            {feedback.status === 'PENDING' && (
+                                                <button
+                                                    onClick={() => handleStatusChange(feedback.feedbackId, 'IN_PROGRESS')}
+                                                    className={styles.actionButton}
+                                                    style={{ backgroundColor: '#17a2b8' }}
+                                                >
+                                                    <FontAwesomeIcon icon={faSpinner} />
+                                                    Start processing
+                                                </button>
+                                            )}
+                                            {feedback.status === 'IN_PROGRESS' && (
+                                                <button
+                                                    onClick={() => handleStatusChange(feedback.feedbackId, 'RESOLVED')}
+                                                    className={styles.actionButton}
+                                                    style={{ backgroundColor: '#28a745' }}
+                                                >
+                                                    <FontAwesomeIcon icon={faCheckCircle} />
+                                                    Mark as resolved
+                                                </button>
+                                            )}
+                                            {feedback.status !== 'CLOSED' && (
+                                                <button
+                                                    onClick={() => handleStatusChange(feedback.feedbackId, 'CLOSED')}
+                                                    className={styles.actionButton}
+                                                    style={{ backgroundColor: '#6c757d' }}
+                                                >
+                                                    <FontAwesomeIcon icon={faTimesCircle} />
+                                                    Close
+                                                </button>
                                             )}
                                         </div>
-                                    )}
-
-                                    <div className={styles.feedbackActions}>
-                                        <button
-                                            onClick={() => handleViewFeedback(feedback)}
-                                            className={styles.viewButton}
-                                        >
-                                            <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
-                                            View details
-                                        </button>
-                                        {feedback.status === 'PENDING' && (
-                                            <button
-                                                onClick={() => handleStatusChange(feedback.feedbackId, 'IN_PROGRESS')}
-                                                className={styles.actionButton}
-                                                style={{ backgroundColor: '#17a2b8' }}
-                                            >
-                                                <FontAwesomeIcon icon={faSpinner} />
-                                                Start processing
-                                            </button>
-                                        )}
-                                        {feedback.status === 'IN_PROGRESS' && (
-                                            <button
-                                                onClick={() => handleStatusChange(feedback.feedbackId, 'RESOLVED')}
-                                                className={styles.actionButton}
-                                                style={{ backgroundColor: '#28a745' }}
-                                            >
-                                                <FontAwesomeIcon icon={faCheckCircle} />
-                                                Mark as resolved
-                                            </button>
-                                        )}
-                                        {feedback.status !== 'CLOSED' && (
-                                            <button
-                                                onClick={() => handleStatusChange(feedback.feedbackId, 'CLOSED')}
-                                                className={styles.actionButton}
-                                                style={{ backgroundColor: '#6c757d' }}
-                                            >
-                                                <FontAwesomeIcon icon={faTimesCircle} />
-                                                Close
-                                            </button>
-                                        )}
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                            {/* Pagination Controls */}
+                            <div className={styles.paginationContainer} style={{ marginTop: '24px', display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                                <button
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                    className={styles.paginationButton}
+                                >
+                                    Prev
+                                </button>
+                                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageChange(page)}
+                                        className={styles.paginationButton + (currentPage === page ? ' ' + styles.activePage : '')}
+                                        style={{ fontWeight: currentPage === page ? 'bold' : 'normal' }}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                    className={styles.paginationButton}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        </>
                     )}
                 </div>
             </main>

@@ -207,6 +207,7 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
     border: 1px solid var(--primary-color);
 }
+
 /* Inner layout for cart card */
 .cartCardInner {
     display: flex;
@@ -510,6 +511,15 @@
     text-align: center;
 }
 
+.historyPayment {
+    font-size: 0.875rem;
+    color: var(--text-color);
+    text-decoration: underline;
+    text-align: center;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
 /* Course grid */
 .courseGrid {
     display: flex;
@@ -719,7 +729,7 @@
     }
 }
 
-.backLink{
+.backLink {
     font-size: 1.2rem;
     font-weight: 600;
     transition: color 0.3s ease;

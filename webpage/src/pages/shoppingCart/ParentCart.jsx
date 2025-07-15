@@ -74,7 +74,7 @@ const ParentCart = () => {
             });
             const fetchedCartItems = cartResponse.data;
             setCartItems(fetchedCartItems);
-            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' ||  item.statusByParent.trim() === 'ADDED_DIRECTLY'));
+            const payableItems = fetchedCartItems.filter(item => item.statusByParent && (item.statusByParent.trim() === 'ACCEPTED' || item.statusByParent.trim() === 'ADDED_DIRECTLY'));
             const totalAmount = payableItems.reduce((sum, item) => sum + (item.course.price || 0), 0);
             setCalculatedPayableItems(payableItems);
             setCalculatedTotalAmount(totalAmount);
@@ -290,7 +290,7 @@ const ParentCart = () => {
                         >
                             {paymentLoading ? 'Processing payment...' : 'Checkout cart'}
                         </button>
-                        <button  className={`${styles.cartBtn}`}
+                        <button className={`${styles.cartBtn}`}
                         >
                             <Link to='/hocho/payment/history' className={styles.backLink}>
                                 <FontAwesomeIcon icon={faFileInvoice}/>
@@ -300,22 +300,32 @@ const ParentCart = () => {
                 </div>)}
                 <div className={styles.courseList} aria-label='List of courses in cart'>
                     <h4 className={styles.courseListTitle}>Courses in Cart</h4>
-                    {cartItems.length === 0 ? (<p className={styles.noCourses}>No courses in cart</p>) : (
-                        <div className={styles.courseGrid}>
-                            {cartItems.map(item => (<div key={item.cartId} className={styles.courseItem}>
-                                <div className={styles.courseCard}>
-                                    <img
-                                        src={getCourseImageUrl(item.course.courseImageUrl)}
-                                        alt={item.course.title}
-                                        className={styles.courseImage}
-                                    />
-                                    <div className={styles.courseBody}>
-                                        <h5 className={styles.courseTitle}>{item.course.title}</h5>
-                                        <p className={styles.coursePrice}>{item.course.price.toLocaleString('vi-VN')} VNĐ</p>
-                                    </div>
+                    {cartItems.length === 0 ? (< >
+                        <p className={styles.noCourses}>No courses in cart</p>
+                        <div style={{display:'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%'}}>
+                            <p className={styles.historyPayment}>Click right to check history payment</p>
+                            <button className={`${styles.cartBtn}`}
+                            >
+                                <Link to='/hocho/payment/history' className={styles.backLink}>
+                                    <FontAwesomeIcon icon={faFileInvoice}/>
+                                </Link>
+                            </button>
+                        </div>
+                    </>) : (<div className={styles.courseGrid}>
+                        {cartItems.map(item => (<div key={item.cartId} className={styles.courseItem}>
+                            <div className={styles.courseCard}>
+                                <img
+                                    src={getCourseImageUrl(item.course.courseImageUrl)}
+                                    alt={item.course.title}
+                                    className={styles.courseImage}
+                                />
+                                <div className={styles.courseBody}>
+                                    <h5 className={styles.courseTitle}>{item.course.title}</h5>
+                                    <p className={styles.coursePrice}>{item.course.price.toLocaleString('vi-VN')} VNĐ</p>
                                 </div>
-                            </div>))}
-                        </div>)}
+                            </div>
+                        </div>))}
+                    </div>)}
                 </div>
             </div>
         </div>

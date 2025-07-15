@@ -24,9 +24,6 @@ function Home() {
     return (<> {/* Wrap in div to ensure min-height */}
             <Header/>
             <BannerHeader/>
-            <div style={{background: '#f0f0f0'}}>
-                Long content for scroll testing
-            </div>
             <Footer/>
             <BackToTop/>
         </>);
