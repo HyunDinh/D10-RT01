@@ -141,7 +141,7 @@ function Header() {
             },],
             ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}, {
                 path: '/hocho/child/course', name: 'My Learning'
-            }, ],
+            },],
         };
 
         return (<div className={styles.navAdminWrapper}>
@@ -385,14 +385,15 @@ function Header() {
                                         </span>)}
                                         </a>
                                     </li>
-                                    <li className={styles.messagesNotification}>
-                                        <a href="/hocho/feedback" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faComment}/> Feedbacks
-                                            {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
-                                            {unreadNotifications > 99 ? '99+' : unreadNotifications}
-                                        </span>)}
-                                        </a>
-                                    </li>
+                                    {['ROLE_PARENT', 'ROLE_CHILD', 'ROLE_TEACHER'].includes(role) && (
+                                        <li className={styles.messagesNotification}>
+                                            <a href="/hocho/feedback" onClick={closeMobileMenu}>
+                                                <FontAwesomeIcon icon={faComment}/> Feedbacks
+                                                {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
+                                                        {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                                                    </span>)}
+                                            </a>
+                                        </li>)}
                                     <li>
                                         <a
                                             className={styles.logoutLink}
