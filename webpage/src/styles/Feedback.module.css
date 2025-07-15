@@ -224,6 +224,16 @@
     100% { transform: rotate(360deg); }
 }
 
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.statusIconInProgress {
+  animation: spin 1s linear infinite;
+}
+
 .feedbackList {
     display: grid;
     gap: 1.5rem;
@@ -294,6 +304,7 @@
 
 .statusIconPending, .statusIconInProgress, .statusIconResolved, .statusIconClosed, .statusIconDefault {
     font-size: 1rem;
+    animation: spin 2s infinite;
 }
 
 .statusIconPending { color: #ffc107; }
@@ -524,6 +535,36 @@
     color: #555;
     line-height: 1.6;
     margin: 0 0 0.5rem 0;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0 1rem 0;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background: #fafafa;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 6px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination button:hover:not(:disabled),
+.pagination .activePage {
+  background: var(--primary-color);
+  color: #fafafa;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

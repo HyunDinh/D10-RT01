@@ -1,4 +1,4 @@
-# Getting Started with the Hocho frontend workspace
+d# Getting Started with the Hocho frontend workspace
 
 ## — RUN THE FRONTEND APPLICATION
 ### `npm run dev`

@@ -23,6 +23,8 @@ const MyFeedbacks = () => {
     const [error, setError] = useState('');
     const [selectedFeedback, setSelectedFeedback] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 3; // Số feedback mỗi trang
 
     useEffect(() => {
         fetchFeedbacks();
@@ -129,6 +131,15 @@ const MyFeedbacks = () => {
         });
     };
 
+    const totalPages = Math.ceil(feedbacks.length / pageSize);
+    const paginatedFeedbacks = feedbacks.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
     if (loading) {
         return (
             <>
@@ -183,71 +194,90 @@ const MyFeedbacks = () => {
                             </button>
                         </div>
                     ) : (
-                        <div className={styles.feedbackList}>
-                            {feedbacks.map(feedback => (
-                                <div key={feedback.feedbackId} className={styles.feedbackCard}>
-                                    <div className={styles.feedbackHeader}>
-                                        <div className={styles.feedbackTitle}>
-                                            <h3>{feedback.subject}</h3>
-                                            <div className={styles.feedbackMeta}>
-                                                <span className={styles.feedbackDate}>
-                                                    {formatDate(feedback.createdAt)}
-                                                </span>
+                        <>
+                            <div className={styles.feedbackList}>
+                                {paginatedFeedbacks.map(feedback => (
+                                    <div key={feedback.feedbackId} className={styles.feedbackCard}>
+                                        <div className={styles.feedbackHeader}>
+                                            <div className={styles.feedbackTitle}>
+                                                <h3>{feedback.subject}</h3>
+                                                <div className={styles.feedbackMeta}>
+                                                    <span className={styles.feedbackDate}>
+                                                        {formatDate(feedback.createdAt)}
+                                                    </span>
+                                                    <span 
+                                                        className={styles.priorityBadge}
+                                                        style={{ backgroundColor: getPriorityColor(feedback.priority) }}
+                                                    >
+                                                        {getPriorityLabel(feedback.priority)}
+                                                    </span>
+                                                    <span className={styles.categoryBadge}>
+                                                        {getCategoryLabel(feedback.category)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div className={styles.feedbackStatus}>
+                                                {getStatusIcon(feedback.status)}
                                                 <span 
-                                                    className={styles.priorityBadge}
-                                                    style={{ backgroundColor: getPriorityColor(feedback.priority) }}
+                                                    className={styles.statusLabel}
+                                                    style={{ color: getStatusColor(feedback.status) }}
                                                 >
-                                                    {getPriorityLabel(feedback.priority)}
-                                                </span>
-                                                <span className={styles.categoryBadge}>
-                                                    {getCategoryLabel(feedback.category)}
+                                                    {getStatusLabel(feedback.status)}
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className={styles.feedbackStatus}>
-                                            {getStatusIcon(feedback.status)}
-                                            <span 
-                                                className={styles.statusLabel}
-                                                style={{ color: getStatusColor(feedback.status) }}
+                                        
+                                        <div className={styles.feedbackContent}>
+                                            <p className={styles.feedbackPreview}>
+                                                {feedback.content.length > 150 
+                                                    ? `${feedback.content.substring(0, 150)}...` 
+                                                    : feedback.content
+                                                }
+                                            </p>
+                                        </div>
+
+                                        {feedback.adminResponse && (
+                                            <div className={styles.adminResponse}>
+                                                <h4>Admin's response:</h4>
+                                                <p>{feedback.adminResponse}</p>
+                                                {feedback.responseDate && (
+                                                    <small className={styles.responseDate}>
+                                                        Reply time: {formatDate(feedback.responseDate)}
+                                                    </small>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        <div className={styles.feedbackActions}>
+                                            <button
+                                                onClick={() => handleViewFeedback(feedback)}
+                                                className={styles.viewButton}
                                             >
-                                                {getStatusLabel(feedback.status)}
-                                            </span>
+                                                <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
+                                                View details
+                                            </button>
                                         </div>
                                     </div>
-                                    
-                                    <div className={styles.feedbackContent}>
-                                        <p className={styles.feedbackPreview}>
-                                            {feedback.content.length > 150 
-                                                ? `${feedback.content.substring(0, 150)}...` 
-                                                : feedback.content
-                                            }
-                                        </p>
-                                    </div>
-
-                                    {feedback.adminResponse && (
-                                        <div className={styles.adminResponse}>
-                                            <h4>Admin's response:</h4>
-                                            <p>{feedback.adminResponse}</p>
-                                            {feedback.responseDate && (
-                                                <small className={styles.responseDate}>
-                                                    Reply time: {formatDate(feedback.responseDate)}
-                                                </small>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    <div className={styles.feedbackActions}>
-                                        <button
-                                            onClick={() => handleViewFeedback(feedback)}
-                                            className={styles.viewButton}
-                                        >
-                                            <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
-                                            View details
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                            <div className={styles.pagination}>
+                                <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                                    Previous
+                                </button>
+                                {Array.from({ length: totalPages }, (_, i) => (
+                                    <button
+                                        key={i + 1}
+                                        onClick={() => handlePageChange(i + 1)}
+                                        className={currentPage === i + 1 ? styles.activePage : ''}
+                                    >
+                                        {i + 1}
+                                    </button>
+                                ))}
+                                <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                                    Next
+                                </button>
+                            </div>
+                        </>
                     )}
                 </div>
             </main>
