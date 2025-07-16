@@ -360,12 +360,12 @@
     position: absolute;
     top: 100%;
     right: 0;
+    width: max-content;
     background: #fafafa;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     list-style: none;
     padding: 10px 0;
     margin: 5px 0 0 0;
-    min-width: 100px;
     border-radius: 4px;
     opacity: 0;
     visibility: hidden;
@@ -744,5 +744,45 @@
     .applyButton .icon {
         width: 12px;
         height: 12px;
+    }
+}
+.languageSelectWrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.languageSelect {
+    padding: 4px ;
+    border-radius: 10px;
+    border: none;
+    background: #fafafa;
+    color: #333;
+    font-size: 14px;
+    margin-right: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.3s, transform 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    animation: popIn 0.3s cubic-bezier(.57,1.59,.63,.67);
+}
+
+.languageSelect:focus, .languageSelect:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+    transform: scale(1.04);
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    80% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
     }
 }

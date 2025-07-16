@@ -2,43 +2,64 @@ import React from "react";
 import "../styles/AboutUs.css";
 import Footer from "./Footer.jsx";
 import Header from "./Header.jsx";
+import {useTranslation} from 'react-i18next';
+import styles from "../styles/AnswerQuestion/QuestionList.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 
 const teamMembers = [{
-    name: "Nguyen Van A", role: "Founder & CEO", bio: "Passionate about education and technology.",
+    name: "Dinh Hung", role: "Founder & CEO", bio: "Passionate about education and technology.",
 }, {
-    name: "Tran Thi B", role: "Lead Developer", bio: "Loves building impactful web applications.",
+    name: "Vu Binh Minh", role: "Lead Developer", bio: "Loves building impactful web applications.",
 }, {
-    name: "Le Van C", role: "UI/UX Designer", bio: "Designs beautiful and user-friendly interfaces.",
+    name: "Nguyen Chon Phuoc", role: "UI/UX Designer", bio: "Designs beautiful and user-friendly interfaces.",
+}, {
+    name: "Nguyen Thanh Dat", role: "UI/UX Designer", bio: "Designs beautiful and user-friendly interfaces.",
+}, {
+    name: "Pham Hung Thinh", role: "UI/UX Designer", bio: "Designs beautiful and user-friendly interfaces.",
 },];
 
 const AboutUs = () => {
+    const {t} = useTranslation();
     return (<><Header/>
-            <div className="aboutus-container">
-                <h1>About Us</h1>
-                <p className="aboutus-intro">
-                    Welcome to our platform! We are dedicated to connecting tutors and learners, making education
-                    accessible and effective for everyone.
-                </p>
-                <section className="aboutus-mission">
-                    <h2>Our Mission</h2>
-                    <p>
-                        To empower students and tutors through technology, providing a seamless and supportive
-                        environment for teaching and learning.
-                    </p>
-                </section>
-                <section className="aboutus-team">
-                    <h2>Meet the Team</h2>
-                    <div className="aboutus-team-list">
-                        {teamMembers.map((member, idx) => (<div className="aboutus-team-member" key={idx}>
-                                <h3>{member.name}</h3>
-                                <h4>{member.role}</h4>
-                                <p>{member.bio}</p>
-                            </div>))}
-                    </div>
-                </section>
+        <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
+            <div className={styles.headerInfo}>
+                <p>{t('about_title')}</p>
+                <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
+                    <li>
+                        <a href="/hocho/home">Home</a>
+                    </li>
+                    <li>
+                        <FontAwesomeIcon icon={faChevronRight}/>
+                    </li>
+                    <li>{t('about_title')}</li>
+                </ul>
             </div>
-            <Footer/>
-        </>);
+        </section>
+
+        <div className="aboutus-container">
+            <p className="aboutus-intro">
+                {t('about_intro')}
+            </p>
+            <section className="aboutus-mission">
+                <h2>{t('about_mission_title')}</h2>
+                <p>
+                    {t('about_mission_content')}
+                </p>
+            </section>
+            <section className="aboutus-team">
+                <h2>{t('about_team_title')}</h2>
+                <div className="aboutus-team-list">
+                    {teamMembers.map((member, idx) => (<div className="aboutus-team-member" key={idx}>
+                        <h3>{member.name}</h3>
+                        <h4>{t(`role_${member.role.replace(/\s|&/g, '_').toLowerCase()}`)}</h4>
+                        <p>{t(`bio_${member.name.replace(/\s/g, '_').toLowerCase()}`)}</p>
+                    </div>))}
+                </div>
+            </section>
+        </div>
+        <Footer/>
+    </>);
 };
 
 export default AboutUs;

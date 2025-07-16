@@ -94,11 +94,11 @@ import CourseLearningPage from "./pages/learning/CourseLearningPage.jsx";
 import FeedbackForm from './pages/feedback/FeedbackForm';
 import MyFeedbacks from './pages/feedback/MyFeedbacks';
 import AdminFeedback from './pages/admin/AdminFeedback';
-
 import ChildLearningHistory from "./pages/learning/ChildLearningHistory.jsx";
 
 import NotificationPage from './pages/notification/NotificationPage';
 import AboutUs from "./components/AboutUs.jsx";
+import './i18n.js';
 
 const App = () => {
     return (<Router>

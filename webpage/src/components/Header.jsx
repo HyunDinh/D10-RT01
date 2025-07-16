@@ -19,6 +19,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {faEnvelope} from '@fortawesome/free-regular-svg-icons';
 import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free-brands-svg-icons';
+import {useTranslation} from "react-i18next";
+import ReactCountryFlag from "react-country-flag";
+
+const LANGUAGES = [{code: "vi", labelKey: "lang_vi", defaultLabel: "Tiếng Việt", flag: "VN"}, {
+    code: "en", labelKey: "lang_en", defaultLabel: "English", flag: "US"
+},];
 
 function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +37,7 @@ function Header() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const {t, i18n} = useTranslation();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -132,18 +139,16 @@ function Header() {
         if (!isLoggedIn || !role) return null;
 
         const menuItems = {
-            ROLE_ADMIN: [{path: '/hocho/questions', name: 'Forum'}],
-            ROLE_TEACHER: [{path: '/hocho/teacher/course', name: 'Course Manager'}, {
-                path: '/hocho/questions', name: 'Forum'
-            }, {path: '/hocho/teacher/video', name: 'Entertainment'},],
-            ROLE_PARENT: [{path: '/hocho/questions', name: 'Forum'}, {
-                path: '/hocho/parent/monitor', name: 'Learning Progress'
-            },],
-            ROLE_CHILD: [{path: '/hocho/questions', name: 'Forum'}, {
-                path: '/hocho/child/course', name: 'My Learning'
-            },],
+            ROLE_ADMIN: [{path: '/hocho/questions', name: t('menu_forum', 'Forum')}], ROLE_TEACHER: [{
+                path: '/hocho/teacher/course', name: t('menu_course_manager', 'Course Manager')
+            }, {path: '/hocho/questions', name: t('menu_forum', 'Forum')}, {
+                path: '/hocho/teacher/video', name: t('menu_entertainment', 'Entertainment')
+            }], ROLE_PARENT: [{path: '/hocho/questions', name: t('menu_forum', 'Forum')}, {
+                path: '/hocho/parent/monitor', name: t('menu_learning_progress', 'Learning Progress')
+            }], ROLE_CHILD: [{path: '/hocho/questions', name: t('menu_forum', 'Forum')}, {
+                path: '/hocho/child/course', name: t('menu_my_learning', 'My Learning')
+            }],
         };
-
         return (<div className={styles.navAdminWrapper}>
             <ul className={styles.navAdmin}>
                 {menuItems[role]?.map((item, index) => (<li className={styles.navItem} key={index}>
@@ -177,18 +182,36 @@ function Header() {
                         <ul className={styles.contactList}>
                             <li>
                                 <FontAwesomeIcon icon={faMapMarkerAlt} className={styles.contactListicon}/>
-                                FPT University FUDA
+                                {t('header_address', 'FPT University FUDA')}
                             </li>
                             <li>
                                 <FontAwesomeIcon icon={faEnvelope} className={styles.contactListicon}/>
                                 <a className={styles.link} href="mailto:hocho@gmail.com"
                                    aria-label="Email hocho@gmail.com">
-                                    hocho@gmail.com
+                                    {t('header_email', 'hocho@gmail.com')}
                                 </a>
                             </li>
                         </ul>
                         <div className={styles.socialIcon}>
-                            <span>Follow Us On:</span>
+                            <div className={styles.languageSelectWrap}
+                                 style={{display: "flex", alignItems: "center"}}>
+                                <ReactCountryFlag
+                                    countryCode={LANGUAGES.find(l => l.code === i18n.language)?.flag || "US"}
+                                    svg
+                                    style={{width: "1.5em", height: "1.5em"}}
+                                    title={i18n.language}
+                                />
+                                <select
+                                    className={styles.languageSelect}
+                                    value={i18n.language}
+                                    onChange={e => i18n.changeLanguage(e.target.value)}
+                                >
+                                    {LANGUAGES.map(lang => (<option value={lang.code} key={lang.code}>
+                                      {t(lang.labelKey, lang.defaultLabel)}
+                                    </option>))}
+                                </select>
+                            </div>
+                            <span>{t('header_follow_us', 'Follow Us On:')}</span>
                             <a href="https://facebook.com" aria-label="Follow on Facebook">
                                 <FontAwesomeIcon icon={faFacebookF} className={styles.socialIconLink}/>
                             </a>
@@ -229,43 +252,43 @@ function Header() {
                             <ul>
                                 <li className={`${styles.hasDropdown} ${location.pathname === '/hocho/home' ? styles.active : ''}`}>
                                     <a href="/hocho/home" onClick={closeMobileMenu}>
-                                        Home
+                                        {t('menu_home', 'Home')}
                                     </a>
                                 </li>
                                 <li>
                                     <a href="/hocho/about" onClick={closeMobileMenu}>
-                                        About Us
+                                        {t('menu_about_us', 'About Us')}
                                     </a>
                                 </li>
                                 <li className={styles.hasDropdown}>
                                     <a href="#" onClick={(e) => {
                                         e.preventDefault();
                                     }}>
-                                        Courses <FontAwesomeIcon icon={faAngleDown}
-                                                                 className={styles.mainMenuIcon}/>
+                                        {t('menu_courses', 'Courses')} <FontAwesomeIcon icon={faAngleDown}
+                                                                                        className={styles.mainMenuIcon}/>
                                     </a>
                                     <ul className={styles.submenu}>
                                         <li className={styles.hasDropdown}>
                                             <a href="/hocho/course"
                                                 // onClick={(e) => {e.preventDefault();}}
                                             >
-                                                Subject <FontAwesomeIcon icon={faAngleDown}
-                                                                         className={styles.mainMenuIcon}/>
+                                                {t('menu_subject', 'Subject')} <FontAwesomeIcon icon={faAngleDown}
+                                                                                                className={styles.mainMenuIcon}/>
                                             </a>
                                             <ul className={styles.submenu}>
                                                 <li>
                                                     <a href="/hocho/teacher/course" onClick={closeMobileMenu}>
-                                                        Course
+                                                        {t('menu_course', 'Course')}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="/event-carousel" onClick={closeMobileMenu}>
-                                                        Event Carousel
+                                                        {t('menu_event_carousel', 'Event Carousel')}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="/event-details" onClick={closeMobileMenu}>
-                                                        Event Details
+                                                        {t('menu_event_details', 'Event Details')}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -274,23 +297,23 @@ function Header() {
                                             <a href="#" onClick={(e) => {
                                                 e.preventDefault();
                                             }}>
-                                                Teacher <FontAwesomeIcon icon={faAngleDown}
-                                                                         className={styles.mainMenuIcon}/>
+                                                {t('menu_teacher', 'Teacher')} <FontAwesomeIcon icon={faAngleDown}
+                                                                                                className={styles.mainMenuIcon}/>
                                             </a>
                                             <ul className={styles.submenu}>
                                                 <li>
                                                     <a href="/team" onClick={closeMobileMenu}>
-                                                        Our Teacher
+                                                        {t('menu_our_teacher', 'Our Teacher')}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="/team-carousel" onClick={closeMobileMenu}>
-                                                        Teacher Carousel
+                                                        {t('menu_teacher_carousel', 'Teacher Carousel')}
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="/team-details" onClick={closeMobileMenu}>
-                                                        Teacher Details
+                                                        {t('menu_teacher_details', 'Teacher Details')}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -301,25 +324,26 @@ function Header() {
                                     <a href="#" onClick={(e) => {
                                         e.preventDefault();
                                     }}>
-                                        Entertainment <FontAwesomeIcon icon={faAngleDown}
-                                                                       className={styles.mainMenuIcon}/>
+                                        {t('menu_entertainment', 'Entertainment')} <FontAwesomeIcon
+                                        icon={faAngleDown}
+                                        className={styles.mainMenuIcon}/>
                                     </a>
                                     <ul className={styles.submenu}>
                                         <li>
                                             <a href="/hocho/video" onClick={closeMobileMenu}>
-                                                Video
+                                                {t('menu_video', 'Video')}
                                             </a>
                                         </li>
                                         <li>
                                             <a href="/hocho/games" onClick={closeMobileMenu}>
-                                                Games
+                                                {t('menu_games', 'Games')}
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
                                     <a href="/hocho/tutors" onClick={closeMobileMenu}>
-                                        Tutor
+                                        {t('menu_tutor', 'Tutor')}
                                     </a>
                                 </li>
                                 {renderMenu()}
@@ -334,9 +358,9 @@ function Header() {
                         </a>
                         {!isLoggedIn ? (<div className={styles.headerButton}>
                             <a className={styles.themeBtn} href="/hocho/login">
-                    <span>
-                      Login <FontAwesomeIcon icon={faArrowRightLong}/>
-                    </span>
+                                    <span>
+                                        {t('button_login', 'Login')} <FontAwesomeIcon icon={faArrowRightLong}/>
+                                    </span>
                             </a>
                         </div>) : (<div className={styles.userProfile}>
                             <div className={styles.avatarContainer}>
@@ -351,44 +375,49 @@ function Header() {
                                 <ul className={styles.profileDropdown}>
                                     <li>
                                         <a href="/hocho/profile" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faIdBadge}/> Profile
+                                            <FontAwesomeIcon icon={faIdBadge}/> {t('menu_profile', 'Profile')}
                                         </a>
                                     </li>
                                     {role === 'ROLE_ADMIN' && (<li>
                                         <a href="/hocho/admin" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faUniversalAccess}/> Administration
+                                            <FontAwesomeIcon
+                                                icon={faUniversalAccess}/> {t('menu_administration', 'Administration')}
                                         </a>
                                     </li>)}
                                     {role === 'ROLE_TEACHER' && (<li>
                                         <a href="/hocho/teacher/track-revenue" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faUniversalAccess}/> Orchestration
+                                            <FontAwesomeIcon
+                                                icon={faUniversalAccess}/> {t('menu_orchestration', 'Orchestration')}
                                         </a>
                                     </li>)}
                                     {role === 'ROLE_CHILD' && (<li>
                                         <a href="/hocho/child/learning-history" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faUniversalAccess}/> Learning History
+                                            <FontAwesomeIcon
+                                                icon={faUniversalAccess}/> {t('menu_learning_history', 'Learning History')}
                                         </a>
                                     </li>)}
                                     <li className={styles.messagesNotification}>
                                         <a href="/hocho/messaging" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faComments}/> Messages
+                                            <FontAwesomeIcon icon={faComments}/> {t('menu_messages', 'Messages')}
                                             {unreadCount > 0 && (<span className={styles.unreadBadge}>
-                                            {unreadCount > 99 ? '99+' : unreadCount}
+                                                    {unreadCount > 99 ? '99+' : unreadCount}
                                                 </span>)}
                                         </a>
                                     </li>
                                     <li className={styles.messagesNotification}>
                                         <a href="/hocho/notifications" onClick={closeMobileMenu}>
-                                            <FontAwesomeIcon icon={faBell}/> Notifications
+                                            <FontAwesomeIcon
+                                                icon={faBell}/> {t('menu_notifications', 'Notifications')}
                                             {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
-                                            {unreadNotifications > 99 ? '99+' : unreadNotifications}
-                                        </span>)}
+                                                    {unreadNotifications > 99 ? '99+' : unreadNotifications}
+                                                </span>)}
                                         </a>
                                     </li>
                                     {['ROLE_PARENT', 'ROLE_CHILD', 'ROLE_TEACHER'].includes(role) && (
                                         <li className={styles.messagesNotification}>
                                             <a href="/hocho/feedback" onClick={closeMobileMenu}>
-                                                <FontAwesomeIcon icon={faComment}/> Feedbacks
+                                                <FontAwesomeIcon
+                                                    icon={faComment}/> {t('menu_feedbacks', 'Feedbacks')}
                                                 {unreadNotifications > 0 && (<span className={styles.unreadBadge}>
                                                         {unreadNotifications > 99 ? '99+' : unreadNotifications}
                                                     </span>)}
@@ -403,7 +432,7 @@ function Header() {
                                                 closeMobileMenu();
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faDoorOpen}/> Logout
+                                            <FontAwesomeIcon icon={faDoorOpen}/> {t('button_logout', 'Logout')}
                                         </a>
                                     </li>
                                 </ul>

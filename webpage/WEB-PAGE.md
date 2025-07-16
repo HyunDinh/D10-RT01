@@ -1,13 +1,15 @@
-d# Getting Started with the Hocho frontend workspace
+   d# Getting Started with the Hocho frontend workspace
 
 ## — RUN THE FRONTEND APPLICATION
-### `npm run dev`
-
+### `npm run dev`'
 ## — CREATE THE REACT PROJECT
 ### `npm create vite@latest webpage --template react .`
 
 ## — KILL PORT
 ### `npx kill-port 3000`
+### `npm install react-i18next i18next`
+### `npm install react-country-flag`
+
 
 ## — DOWNLOAD NECESSARY RESOURCES
 ```
@@ -25,4 +27,6 @@ npm install swiper
 npm install recharts
 npm install sockjs-client stompjs
 npm install lodash
+npm install react-country-flag
+
 ```
