@@ -8,7 +8,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
-
+import {useTranslation} from 'react-i18next';
 
 const {Title} = Typography;
 
@@ -19,6 +19,13 @@ export default function VideoApprovalPage() {
     const [error, setError] = useState(null);
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [selectedVideo, setSelectedVideo] = useState(null);
+    const {t} = useTranslation();
+
+    const statusLabels = {
+        PENDING: t('video_status_pending'),
+        APPROVED: t('video_status_approved'),
+        REJECTED: t('video_status_rejected'),
+    };
 
     useEffect(() => {
         fetchVideos();
@@ -32,7 +39,7 @@ export default function VideoApprovalPage() {
             setLoading(false);
         } catch (err) {
             console.error('Error fetching videos:', err);
-            setError('Failed to load videos. Please try again later.');
+            setError(t('video_fetch_error'));
             setLoading(false);
         }
     };
@@ -40,11 +47,11 @@ export default function VideoApprovalPage() {
     const handleApprove = async (videoId) => {
         try {
             await axios.put(`/api/videos/admin/${videoId}/status?status=APPROVED`, {}, {withCredentials: true});
-            message.success('Video approved successfully');
+            message.success(t('video_approve_success'));
             fetchVideos();
         } catch (error) {
             console.error('Error approving video:', error);
-            message.error('Failed to approve video');
+            message.error(t('video_approve_error'));
         }
     };
 
@@ -56,12 +63,12 @@ export default function VideoApprovalPage() {
     const handleReject = async () => {
         try {
             await axios.put(`/api/videos/admin/${selectedVideo.videoId}/status?status=REJECTED`, {}, {withCredentials: true});
-            message.success('Video rejected successfully');
+            message.success(t('video_reject_success'));
             setRejectModalVisible(false);
             fetchVideos();
         } catch (error) {
             console.error('Error rejecting video:', error);
-            message.error('Failed to reject video');
+            message.error(t('video_reject_error'));
         }
     };
 
@@ -79,22 +86,22 @@ export default function VideoApprovalPage() {
             <Header/>
             <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
-                    <p>Approval Video</p>
+                    <p>{t('video_approval_title')}</p>
                     <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                         data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('home_link')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
-                        <li>Approval Video</li>
+                        <li>{t('video_approval_title')}</li>
                     </ul>
                 </div>
             </section>
             <div className={styles.videoApprovalContainer}>
                 <Title level={2} className={styles.videoApprovalTitle}>
-                    Video Approval
+                    {t('video_approval_title')}
                 </Title>
 
                 <List
@@ -114,9 +121,9 @@ export default function VideoApprovalPage() {
                                             icon={<CheckOutlined/>}
                                             className={styles.videoApprovalApproveButton}
                                             onClick={() => handleApprove(video.videoId)}
-                                            aria-label={`Approve video ${video.title}`}
+                                            aria-label={t('video_approve_aria_label', {title: video.title})}
                                         >
-                                            Approve
+                                            {t('video_approve_btn')}
                                         </Button>
                                     ),
                                     video.status === 'PENDING' && (
@@ -125,48 +132,48 @@ export default function VideoApprovalPage() {
                                             icon={<CloseOutlined/>}
                                             className={styles.videoApprovalRejectButton}
                                             onClick={() => showRejectModal(video)}
-                                            aria-label={`Reject video ${video.title}`}
+                                            aria-label={t('video_reject_aria_label', {title: video.title})}
                                         >
-                                            Reject
+                                            {t('video_reject_btn')}
                                         </Button>
                                     ),
                                     <Button
                                         className={styles.videoApprovalViewButton}
                                         onClick={() => navigate(`/hocho/teacher/video/${video.videoId}`)}
-                                        aria-label={`View video ${video.title}`}
+                                        aria-label={t('video_view_aria_label', {title: video.title})}
                                     >
-                                        View Video
+                                        {t('video_view_btn')}
                                     </Button>,
                                 ]}
                             >
                                 <p className={styles.videoApprovalCardInfo}>
-                                    Uploaded by: {video.createdBy.fullName}
+                                    {t('video_uploaded_by')}: {video.createdBy.fullName}
                                 </p>
                                 <p className={styles.videoApprovalCardInfo}>
-                                    Created: {new Date(video.createdAt).toLocaleDateString()}
+                                    {t('video_created_at')}: {new Date(video.createdAt).toLocaleDateString()}
                                 </p>
-                                <p className={styles.videoApprovalCardInfo}>Status: {video.status}</p>
+                                <p className={styles.videoApprovalCardInfo}>{t('video_status')}: {statusLabels[video.status]}</p>
                             </Card>
                         </List.Item>
                     )}
                 />
 
                 <Modal
-                    title="Reject Video"
+                    title={t('video_reject_modal_title')}
                     open={rejectModalVisible}
                     onOk={handleReject}
                     onCancel={() => setRejectModalVisible(false)}
                     className={styles.videoApprovalModal}
-                    okText="Confirm Reject"
-                    cancelText="Cancel"
+                    okText={t('video_reject_modal_ok')}
+                    cancelText={t('video_reject_modal_cancel')}
                     aria-labelledby="reject-video-modal-title"
                     aria-describedby="reject-video-modal-description"
                 >
                     <div id="reject-video-modal-description" className={styles.videoApprovalModalDescription}>
-                        Confirmation to reject the selected video.
+                        {t('video_reject_modal_description')}
                     </div>
                     <p className={styles.videoApprovalModalText}>
-                        Are you sure you want to reject this video?
+                        {t('video_reject_modal_text')}
                     </p>
                 </Modal>
             </div>

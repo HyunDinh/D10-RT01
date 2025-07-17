@@ -5,11 +5,12 @@ import ReactPlayer from 'react-player';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from '../../styles/video/TeacherVideo.module.css';
+import { useTranslation } from 'react-i18next';
 
 const statusMap = {
-  PENDING: 'Pending',
-  APPROVED: 'Approved',
-  REJECTED: 'Rejected',
+  PENDING: 'video_status_pending',
+  APPROVED: 'video_status_approved',
+  REJECTED: 'video_status_rejected',
 };
 
 export default function TeacherVideoDetail() {
@@ -19,6 +20,7 @@ export default function TeacherVideoDetail() {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
   const videoUrl = useMemo(() => {
     if (video?.contentData) {
@@ -50,14 +52,16 @@ export default function TeacherVideoDetail() {
     };
   }, [videoId, videoUrl]);
 
+  const getStatusText = (status) => t(statusMap[status] || status);
+
   if (loading) {
-    return <div className={styles.myVideosLoading}>Loading...</div>;
+    return <div className={styles.myVideosLoading}>{t('video_detail_loading')}</div>;
   }
   if (error) {
-    return <div className={styles.myVideosError}>{error}</div>;
+    return <div className={styles.myVideosError}>{t('video_detail_error')}</div>;
   }
   if (!video) {
-    return <div className={styles.myVideosError}>Video not found.</div>;
+    return <div className={styles.myVideosError}>{t('video_detail_not_found')}</div>;
   }
 
   return (
@@ -66,7 +70,7 @@ export default function TeacherVideoDetail() {
       <div className={styles.teacherVideoDetailContainer}>
         <div className={styles.teacherVideoDetailMain}>
           <button className={styles.teacherVideoDetailBackBtn} onClick={() => navigate(-1)}>
-            <span style={{marginRight: 6}}>←</span> Back
+            <span style={{marginRight: 6}}>←</span> {t('video_back_btn')}
           </button>
           <h2 className={styles.teacherVideoDetailTitle}>{video.title}</h2>
           <div className={styles.teacherVideoDetailPlayerWrapper}>
@@ -80,14 +84,14 @@ export default function TeacherVideoDetail() {
                 className={styles.teacherVideoDetailPlayer}
               />
             ) : (
-              <div>No video data available</div>
+              <div>{t('video_no_data_available')}</div>
             )}
           </div>
           <div className={styles.teacherVideoDetailInfo}>
-            <p><b>Description:</b> {video.description || 'No description'}</p>
-            <p><b>Status:</b> {statusMap[video.status] || video.status}</p>
-            <p><b>Uploaded by:</b> {video.createdBy?.fullName || 'Unknown'}</p>
-            <p><b>Created at:</b> {new Date(video.createdAt).toLocaleDateString()}</p>
+            <p><b>{t('video_description')}:</b> {video.description || t('video_no_description')}</p>
+            <p><b>{t('video_status')}:</b> {getStatusText(video.status)}</p>
+            <p><b>{t('video_uploaded_by')}:</b> {video.createdBy?.fullName || t('video_uploaded_by_unknown')}</p>
+            <p><b>{t('video_created_at')}:</b> {new Date(video.createdAt).toLocaleDateString()}</p>
           </div>
         </div>
       </div>

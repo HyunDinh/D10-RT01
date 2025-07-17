@@ -9,8 +9,10 @@ import suggestedStyles from '../../styles/video/SuggestedVideos.module.css';
 import CommentSection from './CommentSection';
 import ListVideo from './ListVideo';
 import {base64ToArrayBuffer} from '../../components/videoUtils'; // Move function to util file
+import { useTranslation } from 'react-i18next';
 
 export default function VideoPlayer() {
+    const { t } = useTranslation();
     const {videoId} = useParams();
     const navigate = useNavigate();
     const playerRef = useRef(null);
@@ -54,7 +56,7 @@ export default function VideoPlayer() {
                 setLoading(false);
             } catch (err) {
                 console.error('Error fetching video or suggestions:', err);
-                setError('Cannot load video. Please try again later.');
+                setError(t('cannot_load_video'));
                 setLoading(false);
             }
         };
@@ -129,7 +131,7 @@ export default function VideoPlayer() {
                 <Header/>
                 <div className={styles.videoDetailContainer}>
                     <div className={styles.videoDetailError}>
-                        Video time limit reached. Please contact your parents.
+                        {t('video_time_limit_reached')}
                     </div>
                 </div>
                 <Footer/>
@@ -170,7 +172,7 @@ export default function VideoPlayer() {
 
     if (loading) {
         return (<div className={styles.videoDetailContainer}>
-                <div className={styles.videoDetailLoading}></div>
+                <div className={styles.videoDetailLoading}>{t('loading')}</div>
             </div>);
     }
 
@@ -179,7 +181,7 @@ export default function VideoPlayer() {
                 <Header/>
                 <div className={styles.videoDetailContainer}>
                     <div className={styles.videoDetailError}>
-                        Video time limit reached. Please contact your parents.
+                        {t('video_time_limit_reached')}
                     </div>
                 </div>
                 <Footer/>
@@ -196,10 +198,11 @@ export default function VideoPlayer() {
                                 <div className={styles.videoDetailPlayerPlaceholder} aria-live="polite">
                                     {video.thumbnailUrl ? (<img
                                             src={video.thumbnailUrl}
-                                            alt={`Thumbnail for ${video.title}`}
+                                            alt={t('video_player_alt')}
+                                            aria-label={t('video_player_aria')}
                                             className={styles.videoDetailPlaceholderThumbnail}
                                         />) : (<div className={styles.videoDetailPlaceholderNoThumbnail}>
-                                            Loading...
+                                            {t('loading')}
                                         </div>)}
                                     <div className={styles.videoDetailSpinner}></div>
                                 </div>) : (<ReactPlayer
@@ -219,23 +222,23 @@ export default function VideoPlayer() {
                                     className={styles.videoDetailPlayer}
                                     width="100%"
                                     height="100%"
-                                    aria-label={`Video: ${video.title}`}
+                                    aria-label={t('video_player_aria')}
                                     config={{
                                         attributes: {
                                             controlsList: 'nodownload',
                                         },
                                     }}
                                 />)) : (<div className={styles.videoDetailNoVideo} aria-live="polite">
-                                No video data available
+                                {t('no_video_data_available')}
                             </div>)}
                     </div>
                     <h2 className={styles.videoDetailTitle}>{video.title}</h2>
-                    <p className={styles.videoDetailUploadedBy}>Uploaded by: {video.createdBy.fullName}</p>
+                    <p className={styles.videoDetailUploadedBy}>{t('uploaded_by')} {video.createdBy.fullName}</p>
                     <CommentSection videoId={videoId} playerRef={playerRef} playedSecondsRef={playedSecondsRef}/>
                 </div>
 
                 <aside className={styles.videoDetailSuggested}>
-                    <h3 className={styles.videoDetailSuggestedTitle}>Suggested Videos</h3>
+                    <h3 className={styles.videoDetailSuggestedTitle}>{t('suggested_videos')}</h3>
                     <ListVideo
                         videos={suggestedVideos}
                         onCardClick={handleSuggestedVideoClick}

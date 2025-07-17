@@ -2,11 +2,13 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import ReactPlayer from 'react-player';
 import styles from '../../styles/video/VideoPage.module.css';
 import {base64ToArrayBuffer} from '../../components/videoUtils';
+import { useTranslation } from 'react-i18next';
 
 const ListVideo = ({videos = [], onCardClick, className = ''}) => {
     const [playingVideoId, setPlayingVideoId] = useState(null); // ID of the currently playing video
     const [hoveredVideoId, setHoveredVideoId] = useState(null); // ID of the currently hovered video
     const playerRefs = useRef({}); // Store reference to ReactPlayer
+    const { t } = useTranslation();
 
     // Tạo danh sách video URLs một lần duy nhất
     const videoUrls = useMemo(() => {
@@ -63,7 +65,7 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
     if (!videos.length) {
         return (
             <div className={styles.videoPageContainer}>
-                <p className={styles.videoPageNoVideo}>No videos to display.</p>
+                <p className={styles.videoPageNoVideo}>{t('video_list_no_videos')}</p>
             </div>
         );
     }
@@ -80,7 +82,7 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                     tabIndex={0}
                     onKeyDown={(e) => handleKeyDown(e, video.videoId)}
                     role="button"
-                    aria-label={`Watch video ${video.title}`}
+                    aria-label={t('video_list_watch_video', { title: video.title })}
                 >
                     <div className={styles.videoPageCardBody}>
                         <div className={styles.videoPagePlayerWrapper}>
@@ -93,7 +95,7 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                                 height="100%"
                                 playing={playingVideoId === video.videoId} // Play on hover
                                 muted={true}
-                                aria-label={`Video: ${video.title}`}
+                                aria-label={t('video_list_video', { title: video.title })}
                                 config={{
                                     attributes: {controlsList: 'nodownload'},
                                 }}
@@ -105,14 +107,14 @@ const ListVideo = ({videos = [], onCardClick, className = ''}) => {
                             src={video.createdBy?.avatarUrl && video.createdBy.avatarUrl !== 'none'
                                 ? `http://localhost:8080/api/hocho/profile/${video.createdBy.avatarUrl}`
                                 : '/images/default-avatar.png'}
-                            alt="Teacher Avatar"
+                            alt={t('video_list_teacher_avatar')}
                             className={styles.userAvatar}
                             onError={e => { e.target.src = '/images/default-avatar.png'; }}
                         />
                         <div className={styles.bottomVideoTitle}>
                             <h3 className={styles.videoPageCardTitle}>{video.title}</h3>
                             <p className={styles.videoPageUploadedBy}>
-                                Uploaded by: {video.createdBy?.fullName || 'Unknown'}
+                                {t('video_list_uploaded_by', { fullName: video.createdBy?.fullName || t('video_list_unknown') })}
                             </p>
                         </div>
                     </div>

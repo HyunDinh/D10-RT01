@@ -3,6 +3,7 @@ import { Form, Input, Button, Upload, message, Select, Modal, Spin } from 'antd'
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import styles from '../../styles/video/TeacherVideo.module.css';
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -11,6 +12,7 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (open && videoId) {
@@ -27,7 +29,7 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
                     setLoading(false);
                 } catch (error) {
                     console.error('Error fetching video for edit:', error);
-                    message.error('Failed to load video data.');
+                    message.error(t('video_edit_load_error'));
                     setLoading(false);
                 }
             };
@@ -51,13 +53,13 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
                 withCredentials: true,
             });
 
-            message.success('Video updated successfully');
+            message.success(t('video_edit_success'));
             form.resetFields();
             refreshVideos();
             onCancel();
         } catch (error) {
             console.error('Error updating video:', error);
-            message.error('Failed to update video');
+            message.error(t('video_edit_error'));
         } finally {
             setSubmitting(false);
         }
@@ -71,7 +73,7 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
     return (
         <Modal
             open={open}
-            title="Edit Video"
+            title={t('video_edit_title')}
             onCancel={handleCancel}
             footer={null}
             className={styles.addVideoModal}
@@ -90,26 +92,26 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
                     >
                         <Form.Item
                             name="title"
-                            label="Title"
-                            rules={[{ required: true, message: 'Please input the title!' }]}
+                            label={t('video_form_label_title')}
+                            rules={[{ required: true, message: t('video_form_validation_title') }]}
                         >
                             <Input className={styles.addVideoInput} />
                         </Form.Item>
 
                         <Form.Item
                             name="description"
-                            label="Description"
-                            rules={[{ required: true, message: 'Please input the description!' }]}
+                            label={t('video_form_label_description')}
+                            rules={[{ required: true, message: t('video_form_validation_description') }]}
                         >
                             <TextArea rows={4} className={styles.addVideoTextArea} />
                         </Form.Item>
 
                         <Form.Item
                             name="ageGroup"
-                            label="Age Group"
-                            rules={[{ required: true, message: 'Please select an age group!' }]}
+                            label={t('video_form_label_age_group')}
+                            rules={[{ required: true, message: t('video_form_validation_age_group') }]}
                         >
-                            <Select placeholder="Select an age group" className={styles.addVideoSelect}>
+                            <Select className={styles.addVideoSelect} placeholder={t('video_form_label_age_group')}>
                                 <Option value="AGE_4_6">4-6 years</Option>
                                 <Option value="AGE_7_9">7-9 years</Option>
                                 <Option value="AGE_10_12">10-12 years</Option>
@@ -117,16 +119,15 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
                             </Select>
                         </Form.Item>
 
-                        <Form.Item name="file" label="Replace Video File (Optional)">
-                            <Upload
-                                beforeUpload={() => false}
-                                maxCount={1}
-                                accept="video/*"
-                                className={styles.addVideoUpload}
-                            >
-                                <Button icon={<UploadOutlined />} className={styles.addVideoUploadButton}>
-                                    Select New Video
-                                </Button>
+                        <Form.Item
+                            name="file"
+                            label={t('video_form_label_file')}
+                            valuePropName="fileList"
+                            getValueFromEvent={e => Array.isArray(e) ? e : e && e.fileList}
+                            rules={[{ required: false }]}
+                        >
+                            <Upload beforeUpload={() => false} maxCount={1} accept="video/*">
+                                <Button icon={<UploadOutlined />}>{t('video_form_upload_btn')}</Button>
                             </Upload>
                         </Form.Item>
 
@@ -137,10 +138,10 @@ const EditVideoModal = ({ open, onCancel, videoId, refreshVideos }) => {
                                 loading={submitting}
                                 className={styles.addVideoSubmitButton}
                             >
-                                Update Video
+                                {t('video_form_submit_btn')}
                             </Button>
                             <Button onClick={handleCancel} className={styles.addVideoCancelButton}>
-                                Cancel
+                                {t('video_form_cancel_btn')}
                             </Button>
                         </Form.Item>
                     </Form>

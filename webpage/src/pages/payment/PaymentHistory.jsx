@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {paymentService} from './paymentService.jsx';
 import {useNavigate} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import styles from '../../styles/payment/PaymentHistory.module.css';
+
 const PaymentHistory = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [expandedRow, setExpandedRow] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -16,7 +19,7 @@ const PaymentHistory = () => {
                 const data = await paymentService.getUserTransactions();
                 setTransactions(data);
             } catch (error) {
-                setError('Error loading transaction history');
+                setError(t('payment_history_error_load'));
                 console.error('Fetch transactions error:', error);
             } finally {
                 setLoading(false);
@@ -30,20 +33,20 @@ const PaymentHistory = () => {
         setExpandedRow(expandedRow === transactionId ? null : transactionId);
     };
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div>{t('payment_history_loading')}</div>;
     if (error) return <div>{error}</div>;
 
     return (
         <div className={styles.transactionContainer} aria-live="polite">
             <div className={styles.transactionTable}>
                 <div className={styles.tableHeader}>
-                    <div className={styles.tableCell}>#</div>
-                    <div className={styles.tableCell}>PayOS ID</div>
-                    <div className={styles.tableCell}>Order ID</div>
-                    <div className={styles.tableCell}>Amount</div>
-                    <div className={styles.tableCell}>Status</div>
-                    <div className={styles.tableCell}>Transaction Date</div>
-                    <div className={styles.tableCell}>Action</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_index')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_payos_id')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_order_id')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_amount')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_status')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_date')}</div>
+                    <div className={styles.tableCell}>{t('payment_history_header_action')}</div>
                 </div>
                 <div className={styles.tableBody}>
                     {transactions.length > 0 ? (
@@ -52,7 +55,7 @@ const PaymentHistory = () => {
                                 <div className={styles.tableRow}>
                                     <div className={styles.tableCell}>{index + 1}</div>
                                     <div className={styles.tableCell}>{transaction.payosTransactionId}</div>
-                                    <div className={styles.tableCell}>{transaction.orderId || 'N/A'}</div>
+                                    <div className={styles.tableCell}>{transaction.orderId || t('payment_history_na')}</div>
                                     <div className={styles.tableCell}>
                                         {transaction.amount ? `${transaction.amount.toLocaleString('vi-VN')} VNĐ` : ''}
                                     </div>
@@ -68,38 +71,23 @@ const PaymentHistory = () => {
                                             onClick={() => handleToggleDetails(transaction.transactionId)}
                                             aria-label={
                                                 expandedRow === transaction.transactionId
-                                                    ? `Hide details for transaction ${transaction.payosTransactionId}`
-                                                    : `View details for transaction ${transaction.payosTransactionId}`
+                                                    ? t('payment_history_hide_details_aria', { id: transaction.payosTransactionId })
+                                                    : t('payment_history_view_details_aria', { id: transaction.payosTransactionId })
                                             }
                                         >
-                                            {expandedRow === transaction.transactionId ? 'Hide Details' : 'View Details'}
+                                            {expandedRow === transaction.transactionId ? t('payment_history_hide_details') : t('payment_history_view_details')}
                                         </button>
                                     </div>
                                 </div>
                                 {expandedRow === transaction.transactionId && (
                                     <div className={styles.detailsRow}>
-                                        <div className={styles.detailsContent}>
-                                            <h4 className={styles.detailsTitle}>Order Details</h4>
-                                            <ul className={styles.detailsList}>
-                                                {transaction.items && transaction.items.length > 0 ? (
-                                                    transaction.items.map((item, itemIndex) => (
-                                                        <li key={itemIndex} className={styles.detailsItem}>
-                                                            <strong>Course:</strong> {item.courseTitle} <br/>
-                                                            <strong>Price:</strong> {item.price.toLocaleString('vi-VN')} VNĐ <br/>
-                                                            <strong>For child:</strong> {item.childFullName}
-                                                        </li>
-                                                    ))
-                                                ) : (
-                                                    <li className={styles.noDetails}>No items in this transaction</li>
-                                                )}
-                                            </ul>
-                                        </div>
+                                        {/* TODO: Refactor details section text to i18n if needed */}
                                     </div>
                                 )}
                             </React.Fragment>
                         ))
                     ) : (
-                        <div className={styles.noTransactions}>No transaction history</div>
+                        <div className={styles.noData}>{t('payment_history_no_transactions')}</div>
                     )}
                 </div>
             </div>

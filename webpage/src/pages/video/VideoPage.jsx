@@ -7,8 +7,10 @@ import Footer from "../../components/Footer";
 import ListVideo from "./ListVideo";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import { useTranslation } from 'react-i18next';
 
 export default function VideoPage() {
+    const { t } = useTranslation();
     const [videos, setVideos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -28,7 +30,7 @@ export default function VideoPage() {
                 setLoading(false);
             } catch (err) {
                 console.error('Error fetching videos:', err);
-                setError('Cannot load video. Please try again later.');
+                setError(t('video_detail_error'));
                 setLoading(false);
             }
         };
@@ -42,7 +44,7 @@ export default function VideoPage() {
     if (error) {
         return (
             <div className={styles.videoPageContainer}>
-                <div className="alert alert-danger">{error}</div>
+                <div className="alert alert-danger">{t('video_detail_error')}</div>
             </div>
         );
     }
@@ -50,7 +52,7 @@ export default function VideoPage() {
     if (loading) {
         return (
             <div className={styles.videoPageContainer}>
-                <div className={styles.videoPageLoading}>Loading...</div>
+                <div className={styles.videoPageLoading}>{t('video_detail_loading')}</div>
             </div>
         );
     }
@@ -59,35 +61,35 @@ export default function VideoPage() {
             <Header/>
             <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
-                    <p>Video</p>
+                    <p>{t('Video')}</p>
                     <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                         data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('home')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
-                        <li>Video</li>
+                        <li>{t('Video')}</li>
                     </ul>
                 </div>
             </section>
             <section className={styles.videoPageContainer}>
                 <header className={styles.videoPageHeader}>
-                    <h2 className={styles.videoPageTitle}>Videos for Children</h2>
+                    <h2 className={styles.videoPageTitle}>{t('video_for_children')}</h2>
                     <div className={styles.videoPageFilterWrapper}>
                         <select
                             id="ageGroupFilter"
                             value={ageGroupFilter}
                             className={styles.videoPageFilter}
                             onChange={(e) => setAgeGroupFilter(e.target.value)}
-                            aria-label="Filter videos by age group"
+                            aria-label={t('filter_videos_by_age_group')}
                         >
-                            <option value="ALL">All</option>
-                            <option value="AGE_4_6">4-6 years old</option>
-                            <option value="AGE_7_9">7-9 years old</option>
-                            <option value="AGE_10_12">10-12 years old</option>
-                            <option value="AGE_13_15">13-15 years old</option>
+                            <option value="ALL">{t('all')}</option>
+                            <option value="AGE_4_6">{t('age_4_6')}</option>
+                            <option value="AGE_7_9">{t('age_7_9')}</option>
+                            <option value="AGE_10_12">{t('age_10_12')}</option>
+                            <option value="AGE_13_15">{t('age_13_15')}</option>
                         </select>
                     </div>
                 </header>

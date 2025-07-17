@@ -3,8 +3,10 @@ import axios from 'axios';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from '../../styles/ChildLearningHistory.module.css';
+import { useTranslation } from 'react-i18next';
 
 export default function ChildLearningHistory() {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [learningHistory, setLearningHistory] = useState(null);
@@ -18,7 +20,7 @@ export default function ChildLearningHistory() {
                 const response = await axios.get('/api/hocho/profile', { withCredentials: true });
                 setChildId(response.data.id);
             } catch (err) {
-                setError('Failed to get user information');
+                setError(t('learning_childhistory_error_user'));
                 setLoading(false);
             }
         };
@@ -35,7 +37,7 @@ export default function ChildLearningHistory() {
             const response = await axios.get(`/api/child/learning-history`, { withCredentials: true });
             setLearningHistory(response.data);
         } catch (err) {
-            setError('Failed to load learning history');
+            setError(t('learning_childhistory_error_load'));
         } finally {
             setLoading(false);
         }
@@ -67,7 +69,7 @@ export default function ChildLearningHistory() {
                 <Header />
                 <div className={styles.loadingContainer}>
                     <div className={styles.spinner}></div>
-                    <p>Loading learning history...</p>
+                    <p>{t('learning_childhistory_loading')}</p>
                 </div>
                 <Footer />
             </>
@@ -79,9 +81,9 @@ export default function ChildLearningHistory() {
             <>
                 <Header />
                 <div className={styles.errorContainer}>
-                    <p>Error: {error}</p>
+                    <p>{t('learning_childhistory_error_prefix', { error })} {error}</p>
                     <button className={styles.retryButton} onClick={fetchLearningHistory}>
-                        Retry
+                        {t('learning_childhistory_retry_btn')}
                     </button>
                 </div>
                 <Footer />
@@ -94,7 +96,7 @@ export default function ChildLearningHistory() {
             <Header />
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <h1>📚 Learning History</h1>
+                    <h1>📚 {t('learning_childhistory_title')}</h1>
                 </div>
 
                 {/* Overview stats */}
@@ -102,26 +104,26 @@ export default function ChildLearningHistory() {
                     <div className={styles.statCard}>
                         <div className={styles.statInfo}>
                             <div className={styles.statNumber}>{learningHistory?.totalCourses || 0}</div>
-                            <div className={styles.statLabel}>Courses Enrolled</div>
+                            <div className={styles.statLabel}>{t('learning_childhistory_stat_enrolled')}</div>
                         </div>
                     </div>
                     <div className={styles.statCard}>
                         <div className={styles.statInfo}>
                             <div className={styles.statNumber}>{learningHistory?.completedCourses || 0}</div>
-                            <div className={styles.statLabel}>Courses Completed</div>
+                            <div className={styles.statLabel}>{t('learning_childhistory_stat_completed')}</div>
                         </div>
                     </div>
                     <div className={styles.statCard}>
                         <div className={styles.statInfo}>
                             <div className={styles.statNumber}>{Math.round(learningHistory?.overallProgress || 0)}%</div>
-                            <div className={styles.statLabel}>Overall Progress</div>
+                            <div className={styles.statLabel}>{t('learning_childhistory_stat_progress')}</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Courses list */}
                 <div className={styles.section}>
-                    <h2>🎓 Courses Enrolled ({learningHistory?.courses?.length || 0})</h2>
+                    <h2>🎓 {t('learning_childhistory_courses_title', { count: learningHistory?.courses?.length || 0 })}</h2>
                     {learningHistory?.courses && learningHistory.courses.length > 0 ? (
                         <div className={styles.courseList}>
                             {learningHistory.courses.map((course) => (
@@ -134,12 +136,10 @@ export default function ChildLearningHistory() {
                                     <div className={styles.courseHeader}>
                                         <h3>{course.courseTitle}</h3>
                                         <div className={styles.courseProgress}>
-                                            <div className={styles.progressBar}>
-                                                <div 
-                                                    className={styles.progressFill} 
-                                                    style={{ width: `${course.progressPercentage}%` }}
-                                                ></div>
-                                            </div>
+                                            <div 
+                                                className={styles.progressBar}
+                                                style={{ width: `${course.progressPercentage}%` }}
+                                            ></div>
                                             <span>{Math.round(course.progressPercentage)}%</span>
                                         </div>
                                     </div>
@@ -156,7 +156,7 @@ export default function ChildLearningHistory() {
                         </div>
                     ) : (
                         <div className={styles.noData}>
-                            <p>No courses enrolled yet.</p>
+                            <p>{t('learning_childhistory_no_courses')}</p>
                         </div>
                     )}
                 </div>
@@ -166,7 +166,7 @@ export default function ChildLearningHistory() {
                     <>
                         {/* Lessons */}
                         <div className={styles.section}>
-                            <h2>📖 Lessons</h2>
+                            <h2>📖 {t('learning_childhistory_lessons_title')}</h2>
                             {selectedCourse.lessonProgresses && selectedCourse.lessonProgresses.length > 0 ? (
                                 <div className={styles.lessonList}>
                                     {selectedCourse.lessonProgresses.map((lesson, index) => (
@@ -178,8 +178,8 @@ export default function ChildLearningHistory() {
                                                 <h4>{lesson.lessonTitle}</h4>
                                                 <span className={styles.lessonDate}>
                                                     {lesson.status === 'COMPLETED'
-                                                        ? `Completed: ${formatDateTime(lesson.completionDate)}`
-                                                        : `Last studied: ${formatDateTime(lesson.lastStudyDate)}`}
+                                                        ? `${t('learning_childhistory_lesson_completed')}: ${formatDateTime(lesson.completionDate)}`
+                                                        : `${t('learning_childhistory_lesson_last_studied')}: ${formatDateTime(lesson.lastStudyDate)}`}
                                                 </span>
                                             </div>
                                         </div>
@@ -187,14 +187,14 @@ export default function ChildLearningHistory() {
                                 </div>
                             ) : (
                                 <div className={styles.noData}>
-                                    <p>No lessons found.</p>
+                                    <p>{t('learning_childhistory_no_lessons')}</p>
                                 </div>
                             )}
                         </div>
 
                         {/* Quizzes */}
                         <div className={styles.section}>
-                            <h2>🧠 Quizzes Taken</h2>
+                            <h2>🧠 {t('learning_childhistory_quizzes_title')}</h2>
                             {selectedCourse.quizResults && selectedCourse.quizResults.length > 0 ? (
                                 <div className={styles.quizList}>
                                     {selectedCourse.quizResults.map((quiz, index) => (
@@ -205,7 +205,7 @@ export default function ChildLearningHistory() {
                                             <div className={styles.quizInfo}>
                                                 <h4>{quiz.quizTitle}</h4>
                                                 <span className={styles.quizDate}>
-                                                    Taken: {formatDateTime(quiz.attemptDate)}
+                                                    {t('learning_childhistory_quiz_taken')}: {formatDateTime(quiz.attemptDate)}
                                                 </span>
                                             </div>
                                             <div className={styles.quizScore}>
@@ -216,7 +216,7 @@ export default function ChildLearningHistory() {
                                 </div>
                             ) : (
                                 <div className={styles.noData}>
-                                    <p>No quizzes found.</p>
+                                    <p>{t('learning_childhistory_no_quizzes')}</p>
                                 </div>
                             )}
                         </div>
@@ -226,4 +226,4 @@ export default function ChildLearningHistory() {
             <Footer />
         </>
     );
-} 
+}

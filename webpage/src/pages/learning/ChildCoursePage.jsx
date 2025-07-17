@@ -6,6 +6,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 export default function ChildCoursePage() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ export default function ChildCoursePage() {
   const [enrollments, setEnrollments] = useState([]);
   const [childId, setChildId] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +27,7 @@ export default function ChildCoursePage() {
         const enrollmentsRes = await axios.get(`/api/enrollments/child/${id}`);
         setEnrollments(enrollmentsRes.data);
       } catch (err) {
-        setError('Failed to load learning data.');
+        setError(t('learning_childcourse_error_load'));
       } finally {
         setLoading(false);
       }
@@ -43,13 +45,13 @@ export default function ChildCoursePage() {
   };
 
   if (loading) {
-    return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>Loading...</div></div>;
+    return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>{t('learning_childcourse_loading')}</div></div>;
   }
   if (error) {
     return <div className={styles.learningPageContainer}><div style={{padding: 32, color: 'red', textAlign: 'center'}}>{error}</div></div>;
   }
   if (!enrollments.length) {
-    return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>No enrolled courses found.</div></div>;
+    return <div className={styles.learningPageContainer}><div style={{padding: 32, textAlign: 'center'}}>{t('learning_childcourse_no_enrollments')}</div></div>;
   }
 
   return (
@@ -57,16 +59,16 @@ export default function ChildCoursePage() {
       <Header />
       <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
         <div className={styles.headerInfo}>
-          <p>My Learning</p>
+          <p>{t('learning_childcourse_title')}</p>
           <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
               data-aos-delay="500">
             <li>
-              <a href="/hocho/home">Home</a>
+              <a href="/hocho/home">{t('learning_breadcrumb_home')}</a>
             </li>
             <li>
               <FontAwesomeIcon icon={faChevronRight}/>
             </li>
-            <li>My Learning</li>
+            <li>{t('learning_childcourse_title')}</li>
           </ul>
         </div>
       </section>
@@ -92,7 +94,7 @@ export default function ChildCoursePage() {
               </div>
               <div className={styles.courseCardInfo}>
                 <div className={styles.courseCardTitle}>{enrollment.course.title}</div>
-                <div className={styles.courseCardDesc}>{enrollment.course.description || 'No description.'}</div>
+                <div className={styles.courseCardDesc}>{enrollment.course.description || t('learning_childcourse_no_description')}</div>
               </div>
             </div>
           ))}

@@ -3,6 +3,7 @@ import {Button, Form, Input, message, Modal, Select, Upload} from 'antd';
 import {UploadOutlined} from '@ant-design/icons';
 import axios from 'axios';
 import styles from '../../styles/video/TeacherVideo.module.css';
+import { useTranslation } from 'react-i18next';
 
 const {Option} = Select;
 const {TextArea} = Input;
@@ -10,6 +11,7 @@ const {TextArea} = Input;
 const AddVideoModal = ({open, onCancel, refreshVideos}) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation();
 
     const handleSubmit = async (values) => {
         try {
@@ -25,13 +27,13 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
                 withCredentials: true,
             });
 
-            message.success('Video uploaded successfully');
+            message.success(t('video_add_success'));
             form.resetFields();
             refreshVideos(); // Refresh video list
             onCancel(); // Close modal
         } catch (error) {
             console.error('Error uploading video:', error);
-            message.error('Failed to upload video');
+            message.error(t('video_add_error'));
         } finally {
             setLoading(false);
         }
@@ -45,7 +47,7 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
     return (
         <Modal
             open={open}
-            title="Add New Video"
+            title={t('video_add_title')}
             onCancel={handleCancel}
             footer={null}
             className={styles.addVideoModal}
@@ -61,26 +63,23 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
                 >
                     <Form.Item
                         name="title"
-                        label="Title"
-                        rules={[{required: true, message: 'Please input the title!'}]}
-                    >
+                        label={t('video_form_label_title')}
+                        rules={[{required: true, message: t('video_form_validation_title')}]}>
                         <Input className={styles.addVideoInput}/>
                     </Form.Item>
 
                     <Form.Item
                         name="description"
-                        label="Description"
-                        rules={[{required: true, message: 'Please input the description!'}]}
-                    >
+                        label={t('video_form_label_description')}
+                        rules={[{required: true, message: t('video_form_validation_description')}]}>
                         <TextArea rows={4} className={styles.addVideoTextArea}/>
                     </Form.Item>
 
                     <Form.Item
                         name="ageGroup"
-                        label="Age Group"
-                        rules={[{required: true, message: 'Please select an age group!'}]}
-                    >
-                        <Select placeholder="Select an age group" className={styles.addVideoSelect}>
+                        label={t('video_form_label_age_group')}
+                        rules={[{required: true, message: t('video_form_validation_age_group')}]}>
+                        <Select placeholder={t('video_form_label_age_group')} className={styles.addVideoSelect}>
                             <Option value="AGE_4_6">4-6 years</Option>
                             <Option value="AGE_7_9">7-9 years</Option>
                             <Option value="AGE_10_12">10-12 years</Option>
@@ -90,11 +89,10 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
 
                     <Form.Item
                         name="file"
-                        label="Video File"
-                        rules={[{required: true, message: 'Please upload a video!'}]}
+                        label={t('video_form_label_file')}
                         valuePropName="fileList"
                         getValueFromEvent={(e) => (Array.isArray(e.fileList) ? e.fileList : e && e.fileList)}
-                    >
+                        rules={[{required: true, message: t('video_form_select_file')}]}>
                         <Upload
                             beforeUpload={() => false}
                             maxCount={1}
@@ -102,7 +100,7 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
                             className={styles.addVideoUpload}
                         >
                             <Button icon={<UploadOutlined/>} className={styles.addVideoUploadButton}>
-                                Select Video
+                                {t('video_form_upload_btn')}
                             </Button>
                         </Upload>
                     </Form.Item>
@@ -114,10 +112,10 @@ const AddVideoModal = ({open, onCancel, refreshVideos}) => {
                             loading={loading}
                             className={styles.addVideoSubmitButton}
                         >
-                            Upload Video
+                            {t('video_form_submit_btn')}
                         </Button>
                         <Button onClick={handleCancel} className={styles.addVideoCancelButton}>
-                            Cancel
+                            {t('video_form_cancel_btn')}
                         </Button>
                     </Form.Item>
                 </Form>

@@ -2,8 +2,10 @@ import React, {useEffect, useRef, useState} from "react";
 import {message} from "antd";
 import styles from "../../styles/video/VideoPlayer.module.css";
 import DeleteConfirmDialog from "../../components/DeleteConfirmDialog.jsx";
+import { useTranslation } from 'react-i18next';
 
 const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
+    const { t } = useTranslation();
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -12,7 +14,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
     const handleCommentSubmit = (e) => {
         e.preventDefault();
         if (!newComment.trim()) {
-            message.warning('Please enter a comment.');
+            message.warning(t('video_comments_submit_empty'));
             return;
         }
         const mockComment = {
@@ -24,7 +26,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
         };
         setComments([...comments, mockComment]);
         setNewComment('');
-        message.success('Comment has been added (sample).');
+        message.success(t('video_comments_add_success'));
         setIsTyping(false); // Resume video after submission
         if (typingTimeoutRef.current) {
             clearTimeout(typingTimeoutRef.current);
@@ -69,19 +71,19 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
 
     return (
         <div className={styles.videoDetailComments}>
-            <h3 className={styles.videoDetailCommentsTitle}>Comments</h3>
+            <h3 className={styles.videoDetailCommentsTitle}>{t('video_comments_title')}</h3>
             <form className={styles.videoDetailCommentForm} onSubmit={handleCommentSubmit}>
-        <textarea
-            className={styles.videoDetailCommentInput}
-            value={newComment}
-            onChange={handleCommentChange}
-            onBlur={handleCommentBlur}
-            placeholder="Write your comment..."
-            aria-label="Write your comment"
-            rows="4"
-        />
+                <textarea
+                    className={styles.videoDetailCommentInput}
+                    value={newComment}
+                    onChange={handleCommentChange}
+                    onBlur={handleCommentBlur}
+                    placeholder={t('video_comments_placeholder')}
+                    aria-label={t('video_comments_aria')}
+                    rows="4"
+                />
                 <button type="submit" className={styles.videoDetailCommentButton}>
-                    Send
+                    {t('video_comments_send_button')}
                 </button>
             </form>
             <ul className={styles.videoDetailCommentList}>
@@ -97,7 +99,7 @@ const CommentSection = ({videoId, playerRef, playedSecondsRef}) => {
                     ))
                 ) : (
                     <p className={styles.videoDetailNoComments} aria-live="polite">
-                        No comments yet.
+                        {t('video_comments_no_comments')}
                     </p>
                 )}
             </ul>

@@ -8,10 +8,12 @@ import Header from '../../components/Header';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faAngleDown, faAngleUp, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import Footer from "../../components/Footer.jsx";
+import { useTranslation } from 'react-i18next';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 export default function CourseLearningPage() {
+    const { t } = useTranslation();
     const {courseId} = useParams();
     const navigate = useNavigate();
     const pdfContainerRef = useRef(null);
@@ -51,13 +53,13 @@ export default function CourseLearningPage() {
                 const lessonsRes = await axios.get(`/api/lessons/course/${courseId}`, {withCredentials: true});
                 setLessons(lessonsRes.data);
             } catch (err) {
-                setError('Failed to load course or lessons.');
+                setError(t('learning_course_error_load'));
             } finally {
                 setLoading(false);
             }
         };
         fetchData();
-    }, [courseId]);
+    }, [courseId, t]);
 
     useEffect(() => {
         function updatePdfWidth() {
@@ -123,13 +125,13 @@ export default function CourseLearningPage() {
                 setPdfKey((prev) => prev + 1);
             } catch (err) {
                 console.error('Error recreating PDF buffer:', err);
-                setPdfError('Failed to load PDF file.');
+                setPdfError(t('learning_course_pdf_error'));
                 setFileBuffer(null);
             } finally {
                 setPdfLoading(false);
             }
         }
-    }, [activeTab, selectedContent]);
+    }, [activeTab, selectedContent, t]);
 
     const handleToggleLesson = async (lessonId) => {
         setOpenLesson(openLesson === lessonId ? null : lessonId);
@@ -159,7 +161,7 @@ export default function CourseLearningPage() {
                 setPdfKey((prev) => prev + 1);
             } catch (err) {
                 console.error('Error creating PDF buffer:', err);
-                setPdfError('Failed to load PDF file.');
+                setPdfError(t('learning_course_pdf_error'));
                 setFileBuffer(null);
             } finally {
                 setPdfLoading(false);
@@ -172,16 +174,16 @@ export default function CourseLearningPage() {
 
     const handleCompleteLesson = async () => {
         if (!currentLesson || !childId) {
-            alert('Failed to complete lesson. Please try again.');
+            alert(t('learning_course_complete_error'));
             return;
         }
         setCompletingLesson(true);
         try {
             await axios.post(`/api/parent/learning-progress/child/${childId}/lesson/${currentLesson.lessonId}/complete`, {}, {withCredentials: true});
-            alert('Congratulations! You have completed this lesson.');
+            alert(t('learning_course_complete_success'));
         } catch (error) {
             console.error('Error completing lesson:', error);
-            alert('An error occurred while completing the lesson. Please try again.');
+            alert(t('learning_course_complete_error'));
         } finally {
             setCompletingLesson(false);
         }
@@ -199,7 +201,7 @@ export default function CourseLearningPage() {
 
     const onDocumentLoadError = (error) => {
         console.error('PDF load error:', error);
-        setPdfError('Failed to load PDF file.');
+        setPdfError(t('learning_course_pdf_error'));
         setPdfLoading(false);
     };
 
@@ -233,7 +235,7 @@ export default function CourseLearningPage() {
 
     if (loading) {
         return (<div className={styles.learningPageContainer}>
-            <div className={styles.loading}>Loading...</div>
+            <div className={styles.loading}>{t('learning_course_loading')}</div>
         </div>);
     }
     if (error) {
@@ -246,22 +248,22 @@ export default function CourseLearningPage() {
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
             <div className={styles.headerInfo}>
-                <p>Course Content</p>
+                <p>{t('learning_course_title')}</p>
                 <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                     data-aos-delay="500">
                     <li>
-                        <a href="/hocho/home">Home</a>
+                        <a href="/hocho/home">{t('learning_breadcrumb_home')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
                     <li>
-                        <a href="/hocho/child/course">My Courses</a>
+                        <a href="/hocho/child/course">{t('learning_course_breadcrumb_my_courses')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>Lessons</li>
+                    <li>{t('learning_course_breadcrumb_lessons')}</li>
                 </ul>
             </div>
         </section>
@@ -270,16 +272,16 @@ export default function CourseLearningPage() {
                 <button
                     className={`${styles.tabButton} ${activeTab === 'lessons' ? styles.activeTab : styles.inactiveTab}`}
                     onClick={() => setActiveTab('lessons')}
-                    aria-label="View lessons"
+                    aria-label={t('learning_course_tab_lessons_aria')}
                 >
-                    Lessons
+                    {t('learning_course_tab_lessons')}
                 </button>
                 <button
                     className={`${styles.tabButton} ${activeTab === 'quiz' ? styles.activeTab : styles.inactiveTab}`}
                     onClick={() => setActiveTab('quiz')}
-                    aria-label="View quizzes"
+                    aria-label={t('learning_course_tab_quizzes_aria')}
                 >
-                    Quizzes
+                    {t('learning_course_tab_quizzes')}
                 </button>
             </div>
             <div className={styles.courseLessonsMain}>
@@ -308,13 +310,13 @@ export default function CourseLearningPage() {
                                 {content.title} ({content.contentType})
                             </button>))}
                             {lessonContents[lesson.lessonId]?.length === 0 && (
-                                <div className={styles.lessonContentEmpty}>No content.</div>)}
+                                <div className={styles.lessonContentEmpty}>{t('learning_course_no_content')}</div>)}
                         </div>)}
                     </div>))}
                 </div>) : (<div className={styles.courseLessonsLeft}>
-                    {quizLoading ? (<div className={styles.loading}>Loading quizzes...</div>) : quizError ? (
+                    {quizLoading ? (<div className={styles.loading}>{t('learning_course_loading_quizzes')}</div>) : quizError ? (
                         <div className={styles.error}>{quizError}</div>) : quizzes.length === 0 ? (
-                        <div className={styles.noContent}>No quizzes for this course.</div>) : (
+                        <div className={styles.noContent}>{t('learning_course_no_quizzes')}</div>) : (
                         <ul className={styles.quizList}>
                             {quizzes.map((quiz) => (<li
                                 key={quiz.quizId}
@@ -340,7 +342,7 @@ export default function CourseLearningPage() {
                             {selectedContent.title} ({selectedContent.contentType})
                         </div>
                         {currentLesson && (<div className={styles.currentLessonInfo}>
-                            <strong>Lesson:</strong> {currentLesson.title}
+                            <strong>{t('learning_course_lesson')}</strong> {currentLesson.title}
                         </div>)}
                         {selectedContent.contentType === 'VIDEO' && selectedContent.contentData && (
                             <div className={styles.videoContainer}>
@@ -356,7 +358,7 @@ export default function CourseLearningPage() {
                           <div className={styles.pdfPresentationContainer}>
                             <div className={styles.pdfSlide}>
                               {pdfLoading ? (
-                                <div className={styles.loading}>Loading PDF...</div>
+                                <div className={styles.loading}>{t('learning_course_loading_pdf')}</div>
                               ) : pdfError ? (
                                 <div className={styles.error}>{pdfError}</div>
                               ) : fileBuffer ? (
@@ -365,21 +367,21 @@ export default function CourseLearningPage() {
                                   file={fileBuffer}
                                   onLoadSuccess={onDocumentLoadSuccess}
                                   onLoadError={onDocumentLoadError}
-                                  loading={<div className={styles.loading}>Loading PDF...</div>}
-                                  error={<div className={styles.error}>Failed to load PDF file.</div>}
-                                  noData={<div className={styles.error}>No PDF file.</div>}
+                                  loading={<div className={styles.loading}>{t('learning_course_loading_pdf')}</div>}
+                                  error={<div className={styles.error}>{t('learning_course_pdf_error')}</div>}
+                                  noData={<div className={styles.error}>{t('learning_course_no_pdf')}</div>}
                                 >
                                   <Page
                                     pageNumber={pageNumber}
                                     width={pdfWidth - 64}
-                                    loading={<div className={styles.loading}>Loading page...</div>}
-                                    error={<div className={styles.error}>Failed to load page.</div>}
+                                    loading={<div className={styles.loading}>{t('learning_course_loading_page')}</div>}
+                                    error={<div className={styles.error}>{t('learning_course_page_error')}</div>}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                   />
                                 </Document>
                               ) : (
-                                <div className={styles.error}>No PDF file.</div>
+                                <div className={styles.error}>{t('learning_course_no_pdf')}</div>
                               )}
                             </div>
                             <div className={styles.pdfNavigation}>
@@ -387,20 +389,20 @@ export default function CourseLearningPage() {
                                 className={`${styles.navButton} ${pageNumber <= 1 ? styles.btnDisabled : ''}`}
                                 disabled={pageNumber <= 1}
                                 onClick={() => setPageNumber(pageNumber - 1)}
-                                aria-label="Previous PDF page"
+                                aria-label={t('learning_course_pdf_prev_aria')}
                               >
-                                Previous
+                                {t('learning_course_pdf_prev')}
                               </button>
                               <span className={styles.pageInfo}>
-                                Page {pageNumber} / {numPages || '?'}
+                                {t('learning_course_pdf_page')} {pageNumber} / {numPages || '?'}
                               </span>
                               <button
                                 className={`${styles.navButton} ${pageNumber >= (numPages || 1) ? styles.btnDisabled : ''}`}
                                 disabled={pageNumber >= (numPages || 1)}
                                 onClick={() => setPageNumber(pageNumber + 1)}
-                                aria-label="Next PDF page"
+                                aria-label={t('learning_course_pdf_next_aria')}
                               >
-                                Next
+                                {t('learning_course_pdf_next')}
                               </button>
                             </div>
                           </div>
@@ -411,72 +413,72 @@ export default function CourseLearningPage() {
                                 <a href={download.url} download={download.filename}
                                    className={styles.downloadLink}>
                                     <button className={`${styles.btn} ${styles.btnPrimary}`}>
-                                        Download {selectedContent.contentType === 'VIDEO' ? 'Video' : 'PDF'}
+                                        {t('learning_course_download', { type: selectedContent.contentType === 'VIDEO' ? t('learning_course_video') : t('learning_course_pdf') })}
                                     </button>
                                 </a>
                             </div>) : null;
                         })())}
                         {selectedContent.contentType !== 'VIDEO' && selectedContent.contentType !== 'PDF' && (
-                            <div className={styles.noContent}>Unsupported content type.</div>)}
+                            <div className={styles.noContent}>{t('learning_course_unsupported_content')}</div>)}
                         {currentLesson && (<div className={styles.completeLessonContainer}>
                             <button
                                 className={`${styles.btn} ${styles.btnSuccess} ${completingLesson ? styles.btnDisabled : ''}`}
                                 onClick={handleCompleteLesson}
                                 disabled={completingLesson}
-                                aria-label={`Mark lesson ${currentLesson.title} as completed`}
+                                aria-label={t('learning_course_complete_lesson_aria', { lesson: currentLesson.title })}
                             >
-                                {completingLesson ? 'Processing...' : 'Complete Lesson'}
+                                {completingLesson ? t('learning_course_processing') : t('learning_course_complete_lesson_btn')}
                             </button>
                             <p className={styles.completeLessonNote}>
-                                Click to mark lesson "{currentLesson.title}" as completed.
+                                {t('learning_course_complete_lesson_note', { lesson: currentLesson.title })}
                             </p>
                         </div>)}
                     </div>) : (<div className={styles.lessonContentDisplayBox}>
-                        <div className={styles.noContent}>Select a lesson to view.</div>
+                        <div className={styles.noContent}>{t('learning_course_select_lesson')}</div>
                     </div>)) : (selectedQuiz ? (<div className={styles.lessonContentDisplayBox}>
                         <div className={styles.lessonContentTitle}>{selectedQuiz.title}</div>
                         <div className={styles.quizInfo}>
                             <div>
-                                <strong>Maximum Score:</strong> {selectedQuiz.totalPoints}
+                                <strong>{t('learning_course_max_score')}</strong> {selectedQuiz.totalPoints}
                             </div>
                             <div>
-                                <strong>Time Limit:</strong> {selectedQuiz.timeLimit} minutes
+                                <strong>{t('learning_course_time_limit')}</strong> {selectedQuiz.timeLimit} {t('learning_course_minutes')}
                             </div>
                         </div>
                         <button
                             className={`${styles.btn} ${styles.btnPrimary}`}
                             onClick={() => navigate(`/hocho/quizzes/${selectedQuiz.quizId}/do`)}
-                            aria-label={`Take quiz ${selectedQuiz.title}`}
+                            aria-label={t('learning_course_take_quiz_aria', { quiz: selectedQuiz.title })}
                         >
-                            Take Quiz
+                            {t('learning_course_take_quiz_btn')}
                         </button>
                         <div className={styles.quizHistory}>
-                            <h4 className={styles.quizHistoryTitle}>Quiz History</h4>
+                            <h4 className={styles.quizHistoryTitle}>{t('learning_course_quiz_history_title')}</h4>
                             {quizHistoryLoading ? (
-                                <div className={styles.loading}>Loading history...</div>) : quizHistoryError ? (<div
+                                <div className={styles.loading}>{t('learning_course_loading_history')}</div>) : quizHistoryError ? (<div
                                 className={styles.error}>{quizHistoryError}</div>) : quizHistory.length === 0 ? (
-                                <div className={styles.noContent}>No attempts yet.</div>) : (
+                                <div className={styles.noContent}>{t('learning_course_no_attempts')}</div>) : (
                                 <ul className={styles.quizHistoryList}>
                                     {quizHistory.map((attempt, idx) => (<li key={attempt.resultId || idx}
                                                                             className={styles.quizHistoryItem}>
                                         <div>
                                             <div>
-                                                <strong>Score:</strong> {attempt.score}
+                                                <strong>{t('learning_course_score')}</strong> {attempt.score}
                                             </div>
                                             <div>
-                                                <strong>Date:</strong>{' '}
+                                                <strong>{t('learning_course_date')}</strong>{' '}
                                                 {attempt.submittedAt ? new Date(attempt.submittedAt).toLocaleString() : 'N/A'}
                                             </div>
                                         </div>
                                         <button className={`${styles.btn} ${styles.btnPrimary}`}
                                                 onClick={() => navigate(`/hocho/quizzes/${selectedQuiz.quizId}/review`)}
-                                        >View Details
+                                        >{t('learning_course_view_details_btn')}
                                         </button>
                                     </li>))}
                                 </ul>)}
                         </div>
                     </div>) : (<div className={styles.lessonContentDisplayBox}>
-                        <div className={styles.noContent}>Select a quiz to view.</div>
+                        <div className={styles.noContent}>{t('learning_course_select_quiz')}</div>
                     </div>))}
                 </div>
             </div>
