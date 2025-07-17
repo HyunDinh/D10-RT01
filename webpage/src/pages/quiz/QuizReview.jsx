@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import styles from '../../styles/quiz/QuizReview.module.css';
+import { askGemini } from '../../api/gemini';
 
 const QuizReview = () => {
     const {id} = useParams();
@@ -10,6 +11,10 @@ const QuizReview = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [userId, setUserId] = useState(null);
+    // Thêm state lưu giải thích AI cho từng câu
+    const [aiExplanations, setAiExplanations] = useState({});
+    const [aiLoading, setAiLoading] = useState({});
+    const [aiError, setAiError] = useState({});
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -52,6 +57,42 @@ const QuizReview = () => {
         // Extract filename from questionImageUrl (e.g., "/quiz/filename.jpg" -> "filename.jpg")
         const fileName = questionImageUrl.split('/').pop();
         return `${baseUrl}/api/quizzes/image/${fileName}?t=${new Date().getTime()}`;
+    };
+
+    // Hàm hỏi AI giải thích cho 1 câu hỏi
+    const handleAskAI = async (answer, index) => {
+        const q = answer.question;
+        // Gửi cả nội dung câu hỏi và các đáp án lên AI, yêu cầu KHÔNG dùng markdown, ký tự đặc biệt
+        let prompt = `Hãy giải thích và trả lời cho câu hỏi sau bằng tiếng Việt, trình bày ngắn gọn, rõ ràng, KHÔNG sử dụng định dạng markdown, không dùng ký tự đặc biệt như *, #, hoặc các ký hiệu đầu dòng. Chỉ trả về văn bản thuần túy.\nCâu hỏi: ${q.questionText}\nCác lựa chọn:\n`;
+        q.options.forEach(opt => {
+            prompt += `${opt.optionKey}. ${opt.optionText}\n`;
+        });
+        if (q.correctOptionId) {
+            const correct = q.options.find(opt => opt.optionKey === q.correctOptionId);
+            if (correct) prompt += `\nĐáp án đúng: ${correct.optionKey}. ${correct.optionText}`;
+        }
+        setAiLoading(prev => ({ ...prev, [index]: true }));
+        setAiError(prev => ({ ...prev, [index]: '' }));
+        setAiExplanations(prev => ({ ...prev, [index]: '' }));
+        try {
+            const res = await askGemini(prompt);
+            let text = '';
+            try {
+                const obj = JSON.parse(res);
+                if (obj.candidates && obj.candidates[0] && obj.candidates[0].content && obj.candidates[0].content.parts && obj.candidates[0].content.parts[0].text) {
+                    text = obj.candidates[0].content.parts[0].text;
+                } else {
+                    text = '[Không tìm thấy giải thích phù hợp từ AI]';
+                }
+            } catch (e) {
+                text = '[Không thể phân tích kết quả từ AI]';
+            }
+            setAiExplanations(prev => ({ ...prev, [index]: text }));
+        } catch (e) {
+            setAiError(prev => ({ ...prev, [index]: e.message }));
+        } finally {
+            setAiLoading(prev => ({ ...prev, [index]: false }));
+        }
     };
 
     if (loading) return <div className={styles.quizDetailAlert}>Loading...</div>;
@@ -135,6 +176,38 @@ const QuizReview = () => {
                                     })()
                                 }
                             </small>
+                        )}
+                    </div>
+                    <div style={{ marginTop: 8 }}>
+                        <button
+                            onClick={() => handleAskAI(answer, index)}
+                            disabled={aiLoading[index]}
+                            style={{
+                                padding: '6px 18px',
+                                borderRadius: 20,
+                                background: aiLoading[index] ? '#a5b4fc' : '#2563eb',
+                                color: '#fff',
+                                border: 'none',
+                                cursor: aiLoading[index] ? 'not-allowed' : 'pointer',
+                                fontWeight: 600,
+                                fontSize: 16,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 8,
+                                boxShadow: '0 2px 8px rgba(37,99,235,0.08)',
+                                transition: 'background 0.2s',
+                            }}
+                            onMouseOver={e => { if (!aiLoading[index]) e.currentTarget.style.background = '#1d4ed8'; }}
+                            onMouseOut={e => { if (!aiLoading[index]) e.currentTarget.style.background = '#2563eb'; }}
+                        >
+                            <span style={{ fontSize: 20 }}>🤖</span>
+                            {aiLoading[index] ? 'Đang hỏi AI...' : 'Hỏi AI giải thích'}
+                        </button>
+                        {aiError[index] && <div style={{ color: 'red', marginTop: 4 }}>{aiError[index]}</div>}
+                        {aiExplanations[index] && (
+                            <div style={{ background: '#f7f7f7', marginTop: 8, padding: 12, borderRadius: 4, whiteSpace: 'pre-wrap' }}>
+                                <b>AI giải thích:</b><br />{aiExplanations[index]}
+                            </div>
                         )}
                     </div>
                 </div>))}
