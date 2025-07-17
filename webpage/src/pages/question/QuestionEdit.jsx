@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import styles from '../../styles/FormEdit.module.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 const SUBJECTS = ['Toán', 'Văn', 'Tiếng Anh', 'Lý', 'Hóa', 'Sinh', 'Sử', 'Địa', 'Tin học', 'Khác'];
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -23,6 +24,7 @@ const QuestionEdit = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchData();
@@ -44,11 +46,11 @@ const QuestionEdit = () => {
       });
       setUserId(userRes.data.id);
       if (!q.user || q.user.id !== userRes.data.id) {
-        setError('Bạn không có quyền chỉnh sửa câu hỏi này!');
+        setError(t('question_edit_error_permission'));
       }
       setLoading(false);
     } catch (err) {
-      setError('Không thể tải dữ liệu câu hỏi');
+      setError(t('question_edit_error_fetch'));
       setLoading(false);
     }
   };
@@ -69,7 +71,7 @@ const QuestionEdit = () => {
       });
       setForm({ ...form, imageUrl: res.data.imageUrl });
     } catch (err) {
-      setError('Upload ảnh thất bại!');
+      setError(t('question_edit_error_upload'));
     }
   };
 
@@ -86,15 +88,15 @@ const QuestionEdit = () => {
         grade: form.grade,
         imageUrl: form.imageUrl || null,
       }, { withCredentials: true });
-      setSuccess('Cập nhật câu hỏi thành công!');
+      setSuccess(t('question_edit_success_update'));
       setTimeout(() => navigate('/hocho/questions'), 1200);
     } catch (err) {
-      setError(err.response?.data?.message || 'Không thể cập nhật câu hỏi');
+      setError(err.response?.data?.message || t('question_edit_error_update'));
     }
     setLoading(false);
   };
 
-  if (loading) return <div className={styles.alertInfo}>Đang tải dữ liệu...</div>;
+  if (loading) return <div className={styles.alertInfo}>{t('question_edit_loading')}</div>;
   if (error) return <div className={styles.alertDanger}>{error}</div>;
 
   return (
@@ -102,28 +104,28 @@ const QuestionEdit = () => {
         <Header />
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
           <div className={styles.headerInfo}>
-            <p>Edit Question</p>
+            <p>{t('question_edit_title')}</p>
             <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                 data-aos-delay="500">
               <li>
-                <a href="/hocho/home">Home</a>
+                <a href="/hocho/home">{t('question_edit_breadcrumb_home')}</a>
               </li>
               <li>
                 <FontAwesomeIcon icon={faChevronRight}/>
               </li>
-              <li><a href="/hocho/questions"> Forum</a></li>
+              <li><a href="/hocho/questions">{t('question_edit_breadcrumb_forum')}</a></li>
               <li>
                 <FontAwesomeIcon icon={faChevronRight}/>
               </li>
-              <li>Edit Question</li>
+              <li>{t('question_edit_title')}</li>
             </ul>
           </div>
         </section>
         <div className={styles.container}>
-          <h2 className={styles.heading}>Chỉnh sửa câu hỏi</h2>
+          <h2 className={styles.heading}>{t('question_edit_heading')}</h2>
           <form className={styles.card} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Nội dung câu hỏi</label>
+              <label className={styles.formLabel}>{t('question_edit_content')}</label>
               <textarea
                   className={styles.formControl}
                   name="content"
@@ -134,7 +136,7 @@ const QuestionEdit = () => {
               />
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Môn học</label>
+              <label className={styles.formLabel}>{t('question_edit_subject')}</label>
               <select
                   className={styles.formSelect}
                   name="subject"
@@ -142,14 +144,14 @@ const QuestionEdit = () => {
                   onChange={handleChange}
                   required
               >
-                <option value="">-- Chọn môn học --</option>
+                <option value="">-- {t('question_edit_select_subject')} --</option>
                 {SUBJECTS.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>{t(`subject_${s.toLowerCase()}`)}</option>
                 ))}
               </select>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Lớp</label>
+              <label className={styles.formLabel}>{t('question_edit_grade')}</label>
               <select
                   className={styles.formSelect}
                   name="grade"
@@ -157,14 +159,14 @@ const QuestionEdit = () => {
                   onChange={handleChange}
                   required
               >
-                <option value="">-- Chọn lớp --</option>
+                <option value="">-- {t('question_edit_select_grade')} --</option>
                 {GRADES.map((g) => (
-                    <option key={g} value={g}>{g}</option>
+                    <option key={g} value={g}>{t('grade_value', { grade: g })}</option>
                 ))}
               </select>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>Ảnh minh họa (tùy chọn, chỉ chọn file)</label>
+              <label className={styles.formLabel}>{t('question_edit_image_label')}</label>
               <input
                   type="file"
                   className={styles.formControl}
@@ -180,7 +182,7 @@ const QuestionEdit = () => {
                   className={`${styles.btn} ${styles.btnPrimary}`}
                   disabled={loading || !userId}
               >
-                {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
+                {loading ? t('question_edit_saving') : t('question_edit_save_btn')}
               </button>
             </div>
           </form>

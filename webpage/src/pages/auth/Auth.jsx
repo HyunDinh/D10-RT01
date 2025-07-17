@@ -5,8 +5,10 @@ import styles from '../../styles/Auth.module.css';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCaretDown, faEyeSlash, faUpload} from '@fortawesome/free-solid-svg-icons';
 import {faFacebookF, faGithub, faGoogle, faTwitter} from '@fortawesome/free-brands-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 const Auth = () => {
+    const { t } = useTranslation();
     const [userRole, setUserRole] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
@@ -87,13 +89,13 @@ const Auth = () => {
 
         if (file) {
             if (!allowedTypes.includes(file.type)) {
-                setError('Vui lòng chọn tệp PNG hoặc JPG.');
+                setError(t('auth_error_file_type'));
                 setFileName('');
                 setRegisterData((prev) => ({ ...prev, teacherImage: null }));
                 return;
             }
             if (file.size > maxSize) {
-                setError('Kích thước tệp không được vượt quá 5MB.');
+                setError(t('auth_error_file_size'));
                 setFileName('');
                 setRegisterData((prev) => ({ ...prev, teacherImage: null }));
                 return;
@@ -113,7 +115,7 @@ const Auth = () => {
 
         // Kiểm tra client-side
         if (registerData.role === 'teacher' && !registerData.teacherImage) {
-            setError('Ảnh xác thực giáo viên là bắt buộc.');
+            setError(t('auth_error_teacher_image_required'));
             return;
         }
 
@@ -137,10 +139,10 @@ const Auth = () => {
                 withCredentials: true,
             });
 
-            setMessage(response.data.message || 'Đăng ký thành công!');
+            setMessage(response.data.message || t('auth_register_success'));
             setError('');
         } catch (error) {
-            const errorMessage = error.response?.data?.error || 'Đăng ký thất bại. Vui lòng thử lại.';
+            const errorMessage = error.response?.data?.error || t('auth_register_failed');
             setError(errorMessage);
             setMessage('');
         }
@@ -162,7 +164,7 @@ const Auth = () => {
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault();
-        setMessage('Login ...');
+        setMessage(t('auth_login_loading'));
 
         try {
             const response = await fetch('http://localhost:8080/api/auth/login', {
@@ -197,7 +199,7 @@ const Auth = () => {
             }
         } catch (err) {
             console.error('Login error:', err);
-            setMessage('An error occurred during login. Please try again.');
+            setMessage(t('auth_login_error'));
         }
     };
 
@@ -222,14 +224,14 @@ const Auth = () => {
     return (
         <div className={styles.body}>
             <a href='/hocho/home'>
-                <img src='/Logo1.png' alt='Logo' width={80} height={80} className={styles.logo}/>
+                <img src='/Logo1.png' alt={t('auth_logo_alt')} width={80} height={80} className={styles.logo}/>
             </a>
             <div className={styles.container}>
                 {isRegistering ? (
                     <div className={styles.formContainer}>
                         <div className={styles.formHeader}>
-                            <h4>Adventure starts here 🚀</h4>
-                            <p>Make your app management easy and fun!</p>
+                            <h4>{t('auth_register_title')}</h4>
+                            <p>{t('auth_register_subtitle')}</p>
                             {message && <div className={`${styles.alert} ${styles.alertSuccess}`}>{message}</div>}
                             {error && <div className={`${styles.alert} ${styles.alertDanger}`}>{error}</div>}
                         </div>
@@ -244,7 +246,7 @@ const Auth = () => {
                                         onChange={handleRegisterChange}
                                         required
                                     />
-                                    <label htmlFor="username">Username</label>
+                                    <label htmlFor="username">{t('auth_username')}</label>
                                     <span className={styles.notch}></span>
                                 </div>
                             </div>
@@ -258,7 +260,7 @@ const Auth = () => {
                                             onChange={handleRegisterChange}
                                             required
                                         />
-                                        <label htmlFor="email">Email</label>
+                                        <label htmlFor="email">{t('auth_email')}</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -273,7 +275,7 @@ const Auth = () => {
                                             onChange={handleRegisterChange}
                                             required
                                         />
-                                        <label htmlFor="email">Parent Email</label>
+                                        <label htmlFor="email">{t('auth_parent_email')}</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -288,14 +290,14 @@ const Auth = () => {
                                         onChange={handleRegisterChange}
                                         required
                                     />
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="password">{t('auth_password')}</label>
                                     <span className={styles.notch}></span>
                                     <button
                                         type="button"
                                         className={styles.togglePassword}
                                         onClick={handleTogglePassword}
                                     >
-                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
+                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>} 
                                     </button>
                                 </div>
                             </div>
@@ -310,14 +312,14 @@ const Auth = () => {
                                         disabled={false}
                                         required
                                     />
-                                    <label htmlFor="password">Repeat Password</label>
+                                    <label htmlFor="password">{t('auth_repeat_password')}</label>
                                     <span className={styles.notch}></span>
                                     <button
                                         type="button"
                                         className={styles.togglePassword}
                                         onClick={handleToggleRepeatPassword}
                                     >
-                                        {showRepeatPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
+                                        {showRepeatPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>} 
                                     </button>
                                 </div>
                             </div>
@@ -330,9 +332,9 @@ const Auth = () => {
                                         onChange={handleRegisterChange}
                                         required
                                     >
-                                        <option value="child">Student (Enter mail parent)</option>
-                                        <option value="parent">Parent</option>
-                                        <option value="teacher">Teacher</option>
+                                        <option value="child">{t('auth_role_child')}</option>
+                                        <option value="parent">{t('auth_role_parent')}</option>
+                                        <option value="teacher">{t('auth_role_teacher')}</option>
                                     </select>
                                     <FontAwesomeIcon icon={faCaretDown} className={styles.customArrow}/>
                                     <span className={styles.notch}></span>
@@ -349,7 +351,7 @@ const Auth = () => {
                                             onChange={handleRegisterChange}
                                             required
                                         />
-                                        <label htmlFor="phone">Phone number (09)</label>
+                                        <label htmlFor="phone">{t('auth_phone')}</label>
                                         <span className={styles.notch}></span>
                                     </div>
                                 </div>
@@ -366,7 +368,7 @@ const Auth = () => {
                                             required={registerData.role === 'teacher'}
                                         />
                                         <label htmlFor="teacherImage">
-                                            {fileName || 'Teacher Verification Image (PNG/JPG)'}
+                                            {fileName || t('auth_teacher_image')}
                                         </label>
                                         <span className={styles.notch}></span>
                                         <FontAwesomeIcon icon={faUpload} className={styles.customArrow} />
@@ -382,7 +384,7 @@ const Auth = () => {
                                         onChange={handleRegisterChange}
                                     />
                                     <span>
-                                        I agree to <a href="#" className={styles.termsLink}>privacy policy & terms</a>
+                                        {t('auth_agree')} <a href="#" className={styles.termsLink}>{t('auth_privacy_policy')}</a>
                                     </span>
                                 </label>
                             </div>
@@ -390,18 +392,18 @@ const Auth = () => {
                                 type="submit"
                                 className={styles.submitBtn}
                                 disabled={!registerData.agree}
-                                title={!registerData.agree ? "Please agree to the privacy policy & terms" : ""}
+                                title={!registerData.agree ? t('auth_agree_hint') : ""}
                             >
-                                Sign Up
+                                {t('auth_sign_up')}
                             </button>
                             <div className={styles.registerLink}>
                                 <p>
-                                    Already have an account?
-                                    <a href="#" onClick={() => setIsRegistering(false)}> Sign in instead</a>
+                                    {t('auth_already_have_account')}
+                                    <a href="#" onClick={() => setIsRegistering(false)}> {t('auth_sign_in_instead')}</a>
                                 </p>
                             </div>
                             <div className={styles.divider}>
-                                <span>or</span>
+                                <span>{t('auth_or')}</span>
                             </div>
                             <div className={styles.socialButtons}>
                                 <button type="button" className={`${styles.socialBtn} ${styles.facebook}`}>
@@ -426,13 +428,13 @@ const Auth = () => {
                 ) : (
                     <div className={styles.formContainer}>
                         <div className={styles.formHeader}>
-                            <h4>Welcome to Hocho! 👋🏻</h4>
+                            <h4>{t('auth_login_title')}</h4>
                             {error && <div className={`${styles.alert} ${styles.alertDanger}`}>{error}</div>}
                             {message && <div className={`${styles.alert} ${styles.alertDanger}`}>{message}</div>}
                             {logoutMessage && (
                                 <div className={`${styles.alert} ${styles.alertSuccess}`}>{logoutMessage}</div>
                             )}
-                            <p>Please sign-in to your account and start the adventure</p>
+                            <p>{t('auth_login_subtitle')}</p>
                         </div>
                         <form onSubmit={handleLoginSubmit} className={styles.form}>
                             <div className={styles.formGroup}>
@@ -444,7 +446,7 @@ const Auth = () => {
                                         onChange={handleLoginChange}
                                         required
                                     />
-                                    <label htmlFor="username">Username</label>
+                                    <label htmlFor="username">{t('auth_username')}</label>
                                     <span className={styles.notch}></span>
                                 </div>
                             </div>
@@ -457,13 +459,13 @@ const Auth = () => {
                                         onChange={handleLoginChange}
                                         required
                                     />
-                                    <label htmlFor="password">Password</label>
+                                    <label htmlFor="password">{t('auth_password')}</label>
                                     <button
                                         type="button"
                                         className={styles.togglePassword}
                                         onClick={handleTogglePassword}
                                     >
-                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>}
+                                        {showPassword ? '👁️' : <FontAwesomeIcon icon={faEyeSlash}/>} 
                                     </button>
                                 </div>
                             </div>
@@ -475,25 +477,25 @@ const Auth = () => {
                                         checked={loginData.rememberMe}
                                         onChange={handleLoginChange}
                                     />
-                                    <span>Remember me</span>
+                                    <span>{t('auth_remember_me')}</span>
                                 </label>
                                 <a
                                     href="#"
                                     className={styles.forgotPassword}
                                     onClick={handleForgotPassword}
                                 >
-                                    Forgot password?
+                                    {t('auth_forgot_password')}
                                 </a>
                             </div>
-                            <button type="submit" className={styles.submitBtn}>Log In</button>
+                            <button type="submit" className={styles.submitBtn}>{t('auth_log_in')}</button>
                             <div className={styles.registerLink}>
                                 <p>
-                                    New on our platform?
-                                    <a href="#" onClick={() => setIsRegistering(true)}> Create an account</a>
+                                    {t('auth_new_on_platform')}
+                                    <a href="#" onClick={() => setIsRegistering(true)}> {t('auth_create_account')}</a>
                                 </p>
                             </div>
                             <div className={styles.divider}>
-                                <span>or</span>
+                                <span>{t('auth_or')}</span>
                             </div>
                             <div className={styles.socialButtons}>
                                 <button type="button" className={`${styles.socialBtn} ${styles.facebook}`}>

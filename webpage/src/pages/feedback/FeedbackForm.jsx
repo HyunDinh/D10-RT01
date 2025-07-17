@@ -6,8 +6,10 @@ import { faPaperPlane, faTimes, faCheck } from '@fortawesome/free-solid-svg-icon
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from '../../styles/Feedback.module.css';
+import { useTranslation } from 'react-i18next';
 
 const FeedbackForm = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         subject: '',
@@ -66,22 +68,18 @@ const FeedbackForm = () => {
             const response = await axios.post('http://localhost:8080/api/feedback/submit', formData, {
                 withCredentials: true,
             });
-            
-            setMessage('Feedback submitted successfully! You will be redirected to the feedback list shortly.');
+            setMessage(t('feedback_submit_success', 'Feedback submitted successfully! You will be redirected to the feedback list shortly.'));
             setFormData({
                 subject: '',
                 content: '',
                 category: '',
                 priority: ''
             });
-            
-            // Redirect to feedback list after 2 seconds
             setTimeout(() => {
                 navigate('/hocho/feedback');
             }, 2000);
-            
         } catch (err) {
-            setError(err.response?.data || 'An error occurred while submitting your feedback. Please try again later.');
+            setError(err.response?.data || t('feedback_submit_error', 'An error occurred while submitting your feedback. Please try again later.'));
         } finally {
             setIsSubmitting(false);
         }
@@ -89,20 +87,20 @@ const FeedbackForm = () => {
 
     const getCategoryLabel = (category) => {
         const labels = {
-            'BUG_REPORT': 'Bug report',
-            'FEATURE_REQUEST': 'Feature request',
-            'GENERAL': 'General',
-            'TECHNICAL_SUPPORT': 'Technical support',
+            'BUG_REPORT': t('feedback_category_bug', 'Bug report'),
+            'FEATURE_REQUEST': t('feedback_category_feature', 'Feature request'),
+            'GENERAL': t('feedback_category_general', 'General'),
+            'TECHNICAL_SUPPORT': t('feedback_category_technical', 'Technical support'),
         };
         return labels[category] || category;
     };
 
     const getPriorityLabel = (priority) => {
         const labels = {
-            'LOW': 'Low',
-            'MEDIUM': 'Medium',
-            'HIGH': 'High',
-            'URGENT': 'Urgent'
+            'LOW': t('feedback_priority_low', 'Low'),
+            'MEDIUM': t('feedback_priority_medium', 'Medium'),
+            'HIGH': t('feedback_priority_high', 'High'),
+            'URGENT': t('feedback_priority_urgent', 'Urgent')
         };
         return labels[priority] || priority;
     };
@@ -123,9 +121,9 @@ const FeedbackForm = () => {
             <main className={styles.main}>
                 <div className={styles.container}>
                     <div className={styles.header}>
-                        <h1 className={styles.title}>Send feedback</h1>
+                        <h1 className={styles.title}>{t('feedback_send_title', 'Send feedback')}</h1>
                         <p className={styles.subtitle}>
-                            Please fill out the form below to share your thoughts, suggestions, or issues with us.
+                            {t('feedback_send_subtitle', 'Please fill out the form below to share your thoughts, suggestions, or issues with us.')}
                         </p>
                     </div>
 
@@ -146,7 +144,7 @@ const FeedbackForm = () => {
                     <form onSubmit={handleSubmit} className={styles.form}>
                         <div className={styles.formGroup}>
                             <label htmlFor="subject" className={styles.label}>
-                                Title <span className={styles.required}>*</span>
+                                {t('feedback_subject', 'Title')} <span className={styles.required}>*</span>
                             </label>
                             <input
                                 type="text"
@@ -155,7 +153,7 @@ const FeedbackForm = () => {
                                 value={formData.subject}
                                 onChange={handleInputChange}
                                 className={styles.input}
-                                placeholder="Enter your feedback subject..."
+                                placeholder={t('feedback_subject_placeholder', 'Enter your feedback subject...')}
                                 required
                                 maxLength={200}
                             />
@@ -163,7 +161,7 @@ const FeedbackForm = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="category" className={styles.label}>
-                                Category <span className={styles.required}>*</span>
+                                {t('feedback_category', 'Category')} <span className={styles.required}>*</span>
                             </label>
                             <select
                                 id="category"
@@ -173,7 +171,7 @@ const FeedbackForm = () => {
                                 className={styles.select}
                                 required
                             >
-                                <option value="">Choose a category</option>
+                                <option value="">{t('feedback_category_placeholder', 'Choose a category')}</option>
                                 {categories.map(category => (
                                     <option key={category} value={category}>
                                         {getCategoryLabel(category)}
@@ -184,7 +182,7 @@ const FeedbackForm = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="priority" className={styles.label}>
-                                Priority <span className={styles.required}>*</span>
+                                {t('feedback_priority', 'Priority')} <span className={styles.required}>*</span>
                             </label>
                             <select
                                 id="priority"
@@ -194,7 +192,7 @@ const FeedbackForm = () => {
                                 className={styles.select}
                                 required
                             >
-                                <option value="">Choose a priority</option>
+                                <option value="">{t('feedback_priority_placeholder', 'Choose a priority')}</option>
                                 {priorities.map(priority => (
                                     <option key={priority} value={priority}>
                                         {getPriorityLabel(priority)}
@@ -213,7 +211,7 @@ const FeedbackForm = () => {
 
                         <div className={styles.formGroup}>
                             <label htmlFor="content" className={styles.label}>
-                                Content <span className={styles.required}>*</span>
+                                {t('feedback_content', 'Content')} <span className={styles.required}>*</span>
                             </label>
                             <textarea
                                 id="content"
@@ -221,13 +219,13 @@ const FeedbackForm = () => {
                                 value={formData.content}
                                 onChange={handleInputChange}
                                 className={styles.textarea}
-                                placeholder="Describe your feedback content..."
+                                placeholder={t('feedback_content_placeholder', 'Describe your feedback content...')}
                                 required
                                 rows={8}
                                 maxLength={2000}
                             />
                             <div className={styles.charCount}>
-                                {formData.content.length}/2000 characters
+                                {formData.content.length}/2000 {t('feedback_characters', 'characters')}
                             </div>
                         </div>
 
@@ -238,7 +236,7 @@ const FeedbackForm = () => {
                                 className={styles.cancelButton}
                                 disabled={isSubmitting}
                             >
-                                Cancel
+                                {t('cancel', 'Cancel')}
                             </button>
                             <button
                                 type="submit"
@@ -248,12 +246,12 @@ const FeedbackForm = () => {
                                 {isSubmitting ? (
                                     <>
                                         <div className={styles.spinner}></div>
-                                        Sending...
+                                        {t('feedback_sending', 'Sending...')}
                                     </>
                                 ) : (
                                     <>
                                         <FontAwesomeIcon icon={faPaperPlane} className={styles.submitIcon} />
-                                        Send feedback
+                                        {t('feedback_send_btn', 'Send feedback')}
                                     </>
                                 )}
                             </button>

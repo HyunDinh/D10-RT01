@@ -6,9 +6,10 @@ import Header from "../../components/Header.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight,faClock} from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmDialog from "../../components/DeleteConfirmDialog.jsx";
-
+import { useTranslation } from 'react-i18next';
 
 const AnswerForm = () => {
+    const { t } = useTranslation();
     const {id} = useParams(); // id của câu hỏi
     const [question, setQuestion] = useState(null);
     const [answers, setAnswers] = useState([]);
@@ -60,7 +61,7 @@ const AnswerForm = () => {
             await axios.post(`http://localhost:8080/api/questions/${id}/answers`, formData, {
                 withCredentials: true, headers: {'Content-Type': 'multipart/form-data'}
             });
-            setSuccess('Answer submitted successfully!');
+            setSuccess(t('answer_form_success'));
             setContent('');
             setImageFile(null);
             // Reload lại danh sách câu trả lời
@@ -152,7 +153,7 @@ const AnswerForm = () => {
 
     const closeImageModal = () => setShowImageModal(false);
 
-    if (loading) return <div className="alert alert-info text-center">Loading data...</div>;
+    if (loading) return <div className="alert alert-info text-center">{t('answer_form_loading')}</div>;
     if (error) return <div className="alert alert-danger text-center">{error}</div>;
     if (!question) return null;
 
@@ -160,53 +161,52 @@ const AnswerForm = () => {
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
             <div className={styles.headerInfo}>
-                <p>Answer Question</p>
+                <p>{t('answer_form_title')}</p>
                 <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                     data-aos-delay="500">
                     <li>
-                        <a href="/hocho/home">Home</a>
+                        <a href="/hocho/home">{t('answer_form_breadcrumb_home')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li><a href="/hocho/questions"> Forum</a></li>
+                    <li><a href="/hocho/questions">{t('answer_form_breadcrumb_forum')}</a></li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>Answer Question</li>
-
+                    <li>{t('answer_form_title')}</li>
                 </ul>
             </div>
         </section>
         <div className={styles.container}>
-            <h2 className={styles.heading}>Answer Question</h2>
+            <h2 className={styles.heading}>{t('answer_form_heading')}</h2>
             <div className={styles.card}>
                 <div className={styles.cardBody}>
                     <h4 className={styles.cardTitle}>{question.content}</h4>
                     <p className={styles.cardText}>
-                        <b>Subject:</b> {question.subject} &nbsp; <b>Grade:</b> {question.grade}
+                        <b>{t('answer_form_subject')}:</b> {question.subject} &nbsp; <b>{t('answer_form_grade')}:</b> {question.grade}
                     </p>
                     <p className={styles.cardText}>
-                        <b>Asker:</b>
+                        <b>{t('answer_form_asker')}:</b>
                         <span className={styles.userInfoRow}>
                           <img
                             src={question.user?.avatarUrl && question.user.avatarUrl !== 'none'
                                 ? `http://localhost:8080/api/hocho/profile/${question.user.avatarUrl}`
                                 : '/images/default-avatar.png'}
-                            alt="Asker Avatar"
+                            alt={t('answer_form_asker_avatar_alt')}
                             className={styles.userAvatar}
                             onError={e => { e.target.src = '/images/default-avatar.png'; }}
                           />
-                          <span className={styles.userName}>{question.user?.fullName || 'Anonymous'}</span>
+                          <span className={styles.userName}>{question.user?.fullName || t('answer_form_anonymous')}</span>
                         </span>
                     </p>
                     <p className={styles.cardText}>
-                        <b>Time:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
+                        <b>{t('answer_form_time')}:</b> {question.createdAt ? new Date(question.createdAt).toLocaleString() : ''}
                     </p>
                     {question.imageUrl && (
                         <img
                             src={getQuestionImageUrl(question.imageUrl)}
-                            alt="Illustration image"
+                            alt={t('answer_form_image_alt')}
                             className={styles.questionImage}
                             onError={e => (e.target.src = '/images/default-course.jpg')}
                             onClick={() => openImageModal(getQuestionImageUrl(question.imageUrl))}
@@ -215,13 +215,13 @@ const AnswerForm = () => {
                     )}
                     <div className={styles.line}></div>
                     <form onSubmit={handleSubmit} className={styles.form}>
-                        <label className={styles.formLabel}>Enter your answer</label>
+                        <label className={styles.formLabel}>{t('answer_form_label')}</label>
                         <textarea
                             className={styles.formControl}
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
                             required
-                            placeholder="Enter your answer here..."
+                            placeholder={t('answer_form_placeholder')}
                             rows={3}
                         />
                         <input
@@ -235,12 +235,12 @@ const AnswerForm = () => {
                         <div className={styles.buttonContainer}>
                             <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`}
                                     disabled={submitting || !userId}>
-                                {submitting ? 'Submitting...' : 'Submit answer'}
+                                {submitting ? t('answer_form_submitting') : t('answer_form_submit_btn')}
                             </button>
                         </div>
                     </form>
-                    <h5 className={styles.answerListTitle}>Answer list</h5>
-                    {answers.length === 0 && <div className={styles.noAnswers}>No answers yet.</div>}
+                    <h5 className={styles.answerListTitle}>{t('answer_form_answer_list')}</h5>
+                    {answers.length === 0 && <div className={styles.noAnswers}>{t('answer_form_no_answers')}</div>}
                     {answers.map((a) => {
                         const isOwner = userId && a.user && userId === a.user.id;
                         return (
@@ -251,11 +251,11 @@ const AnswerForm = () => {
                                         src={a.user?.avatarUrl && a.user.avatarUrl !== 'none'
                                             ? `http://localhost:8080/api/hocho/profile/${a.user.avatarUrl}`
                                             : '/images/default-avatar.png'}
-                                        alt="Answer User Avatar"
+                                        alt={t('answer_form_answer_avatar_alt')}
                                         className={styles.userAvatar}
                                         onError={e => { e.target.src = '/images/default-avatar.png'; }}
                                       />
-                                      <span className={styles.userName}>{a.user?.fullName || 'Anonymous'}:</span>
+                                      <span className={styles.userName}>{a.user?.fullName || t('answer_form_anonymous')}:</span>
                                     </span>
                                 </div>
                                 {editingAnswerId === a.answerId ? (<>
@@ -277,14 +277,14 @@ const AnswerForm = () => {
                                             onClick={() => handleEditSave(a.answerId)}
                                             disabled={editLoading}
                                         >
-                                            {editLoading ? 'Saving...' : 'Save'}
+                                            {editLoading ? t('answer_form_saving') : t('answer_form_save_btn')}
                                         </button>
                                         <button
                                             className={`${styles.btn} ${styles.btnSecondary} ${styles.btnSm}`}
                                             onClick={handleEditCancel}
                                             disabled={editLoading}
                                         >
-                                            Cancel
+                                            {t('answer_form_cancel_btn')}
                                         </button>
                                     </div>
                                 </>) : (<>
@@ -292,7 +292,7 @@ const AnswerForm = () => {
                                     {a.imageUrl && (
                                         <img
                                             src={getAnswerImageUrl(a.imageUrl)}
-                                            alt="Answer image"
+                                            alt={t('answer_form_image_alt')}
                                             className={styles.answerImage}
                                             onError={e => (e.target.src = '/images/default-course.jpg')}
                                             onClick={() => openImageModal(getAnswerImageUrl(a.imageUrl))}
@@ -311,14 +311,14 @@ const AnswerForm = () => {
                                                 className={`${styles.btn} ${styles.btnOutlineWarning} ${styles.btnSm}`}
                                                 onClick={() => handleEditClick(a)}
                                             >
-                                                Edit
+                                                {t('answer_form_edit_btn')}
                                             </button>
                                             <button
                                                 className={`${styles.btn} ${styles.btnOutlineDanger} ${styles.btnSm}`}
                                                 onClick={() => handleDelete(a.answerId)}
                                                 disabled={deletingId === a.answerId}
                                             >
-                                                {deletingId === a.answerId ? 'Deleting...' : 'Delete'}
+                                                {deletingId === a.answerId ? t('answer_form_deleting') : t('answer_form_delete_btn')}
                                             </button>
                                         </div>)}
                                 </div>
@@ -333,8 +333,8 @@ const AnswerForm = () => {
             {showImageModal && (
                 <div className={styles.modal} onClick={closeImageModal}>
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <img src={modalImageSrc} alt="Zoomed" style={{ maxWidth: '80vw', maxHeight: '80vh' }} />
-                        <button className={styles.modalClose} onClick={closeImageModal} aria-label="Close">
+                        <img src={modalImageSrc} alt={t('answer_form_zoomed_image_alt')} style={{ maxWidth: '80vw', maxHeight: '80vh' }} />
+                        <button className={styles.modalClose} onClick={closeImageModal} aria-label={t('answer_form_close_aria')}>
                             &times;
                         </button>
                     </div>
@@ -344,4 +344,4 @@ const AnswerForm = () => {
     </>);
 };
 
-export default AnswerForm; 
+export default AnswerForm;

@@ -15,8 +15,10 @@ import {
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import styles from '../../styles/Feedback.module.css';
+import { useTranslation } from 'react-i18next';
 
 const MyFeedbacks = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,7 +40,7 @@ const MyFeedbacks = () => {
             });
             setFeedbacks(response.data);
         } catch (err) {
-            setError('Could not fetch feedbacks. Please try again later.');
+            setError(t('feedback_fetch_error', 'Could not fetch feedbacks. Please try again later.'));
             console.error('Error fetching feedbacks:', err);
         } finally {
             setLoading(false);
@@ -72,10 +74,10 @@ const MyFeedbacks = () => {
 
     const getStatusLabel = (status) => {
         const labels = {
-            'PENDING': 'Pending',
-            'IN_PROGRESS': 'In progres',
-            'RESOLVED': 'Resolved',
-            'CLOSED': 'Closed'
+            'PENDING': t('feedback_status_pending', 'Pending'),
+            'IN_PROGRESS': t('feedback_status_in_progress', 'In progress'),
+            'RESOLVED': t('feedback_status_resolved', 'Resolved'),
+            'CLOSED': t('feedback_status_closed', 'Closed')
         };
         return labels[status] || status;
     };
@@ -92,20 +94,20 @@ const MyFeedbacks = () => {
 
     const getCategoryLabel = (category) => {
         const labels = {
-            'BUG_REPORT': 'Bug report',
-            'FEATURE_REQUEST': 'Feature request',
-            'GENERAL': 'General',
-            'TECHNICAL_SUPPORT': 'Technical support',
+            'BUG_REPORT': t('feedback_category_bug', 'Bug report'),
+            'FEATURE_REQUEST': t('feedback_category_feature', 'Feature request'),
+            'GENERAL': t('feedback_category_general', 'General'),
+            'TECHNICAL_SUPPORT': t('feedback_category_technical', 'Technical support'),
         };
         return labels[category] || category;
     };
 
     const getPriorityLabel = (priority) => {
         const labels = {
-            'LOW': 'LOW',
-            'MEDIUM': 'MEDIUM',
-            'HIGH': 'HIGH',
-            'URGENT': 'URGENT'
+            'LOW': t('feedback_priority_low', 'Low'),
+            'MEDIUM': t('feedback_priority_medium', 'Medium'),
+            'HIGH': t('feedback_priority_high', 'High'),
+            'URGENT': t('feedback_priority_urgent', 'Urgent')
         };
         return labels[priority] || priority;
     };
@@ -147,7 +149,7 @@ const MyFeedbacks = () => {
                 <main className={styles.main}>
                     <div className={styles.loadingContainer}>
                         <div className={styles.spinner}></div>
-                        <p>Loading feedback list...</p>
+                        <p>{t('feedback_loading_list', 'Loading feedback list...')}</p>
                     </div>
                 </main>
                 <Footer />
@@ -161,13 +163,13 @@ const MyFeedbacks = () => {
             <main className={styles.main}>
                 <div className={styles.container}>
                     <div className={styles.header}>
-                        <h1 className={styles.title}>My Feedbacks</h1>
+                        <h1 className={styles.title}>{t('feedback_my_title', 'My Feedbacks')}</h1>
                         <button
                             onClick={() => navigate('/hocho/feedback/submit')}
                             className={styles.newFeedbackButton}
                         >
                             <FontAwesomeIcon icon={faPlus} className={styles.plusIcon} />
-                            Send new feedback
+                            {t('feedback_send_new_btn', 'Send new feedback')}
                         </button>
                     </div>
 
@@ -183,14 +185,14 @@ const MyFeedbacks = () => {
                             <div className={styles.emptyIcon}>
                                 <FontAwesomeIcon icon={faInfoCircle} />
                             </div>
-                            <h3>No feedbacks available</h3>
-                            <p>You have not submitted any comments yet. Start by submitting your first one!</p>
+                            <h3>{t('feedback_empty_title', 'No feedbacks available')}</h3>
+                            <p>{t('feedback_empty_desc', 'You have not submitted any comments yet. Start by submitting your first one!')}</p>
                             <button
                                 onClick={() => navigate('/hocho/feedback/submit')}
                                 className={styles.emptyStateButton}
                             >
                                 <FontAwesomeIcon icon={faPlus} className={styles.plusIcon} />
-                                Send your first feedback
+                                {t('feedback_send_first_btn', 'Send your first feedback')}
                             </button>
                         </div>
                     ) : (
@@ -238,11 +240,11 @@ const MyFeedbacks = () => {
 
                                         {feedback.adminResponse && (
                                             <div className={styles.adminResponse}>
-                                                <h4>Admin's response:</h4>
+                                                <h4>{t('feedback_admin_response_title', "Admin's response:")}</h4>
                                                 <p>{feedback.adminResponse}</p>
                                                 {feedback.responseDate && (
                                                     <small className={styles.responseDate}>
-                                                        Reply time: {formatDate(feedback.responseDate)}
+                                                        {t('feedback_admin_response_time', 'Reply time: {{time}}', { time: formatDate(feedback.responseDate) })}
                                                     </small>
                                                 )}
                                             </div>
@@ -254,7 +256,7 @@ const MyFeedbacks = () => {
                                                 className={styles.viewButton}
                                             >
                                                 <FontAwesomeIcon icon={faEye} className={styles.viewIcon} />
-                                                View details
+                                                {t('feedback_view_details', 'View details')}
                                             </button>
                                         </div>
                                     </div>
@@ -262,7 +264,7 @@ const MyFeedbacks = () => {
                             </div>
                             <div className={styles.pagination}>
                                 <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
-                                    Previous
+                                    {t('previous', 'Previous')}
                                 </button>
                                 {Array.from({ length: totalPages }, (_, i) => (
                                     <button
@@ -274,7 +276,7 @@ const MyFeedbacks = () => {
                                     </button>
                                 ))}
                                 <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-                                    Next
+                                    {t('next', 'Next')}
                                 </button>
                             </div>
                         </>
@@ -296,10 +298,10 @@ const MyFeedbacks = () => {
                         <div className={styles.modalBody}>
                             <div className={styles.modalMeta}>
                                 <div className={styles.metaItem}>
-                                    <strong>Category:</strong> {getCategoryLabel(selectedFeedback.category)}
+                                    <strong>{t('feedback_category', 'Category')}:</strong> {getCategoryLabel(selectedFeedback.category)}
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Priority:</strong>
+                                    <strong>{t('feedback_priority', 'Priority')}:</strong>
                                     <span 
                                         className={styles.priorityBadge}
                                         style={{ backgroundColor: getPriorityColor(selectedFeedback.priority) }}
@@ -308,7 +310,7 @@ const MyFeedbacks = () => {
                                     </span>
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Status:</strong>
+                                    <strong>{t('feedback_status', 'Status')}:</strong>
                                     <span 
                                         className={styles.statusLabel}
                                         style={{ color: getStatusColor(selectedFeedback.status) }}
@@ -318,22 +320,22 @@ const MyFeedbacks = () => {
                                     </span>
                                 </div>
                                 <div className={styles.metaItem}>
-                                    <strong>Send date:</strong> {formatDate(selectedFeedback.createdAt)}
+                                    <strong>{t('feedback_send_date', 'Send date')}:</strong> {formatDate(selectedFeedback.createdAt)}
                                 </div>
                             </div>
 
                             <div className={styles.modalContent}>
-                                <h4>Content:</h4>
+                                <h4>{t('feedback_content', 'Content')}:</h4>
                                 <p>{selectedFeedback.content}</p>
                             </div>
 
                             {selectedFeedback.adminResponse && (
                                 <div className={styles.modalResponse}>
-                                    <h4>Admin's response:</h4>
+                                    <h4>{t('feedback_admin_response_title', "Admin's response:")}</h4>
                                     <p>{selectedFeedback.adminResponse}</p>
                                     {selectedFeedback.responseDate && (
                                         <small className={styles.responseDate}>
-                                            Responded time: {formatDate(selectedFeedback.responseDate)}
+                                            {t('feedback_admin_response_time', 'Responded time: {{time}}', { time: formatDate(selectedFeedback.responseDate) })}
                                         </small>
                                     )}
                                 </div>

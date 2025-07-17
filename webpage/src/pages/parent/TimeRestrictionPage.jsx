@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Card, Input, message, Modal, Spin, Table,} from 'antd';
 import axios from 'axios';
 import styles from "../../styles/TimeRestriction.module.css";
+import { useTranslation } from 'react-i18next';
 
 // Helper to format seconds to hh:mm:ss
 function formatSecondsToHMS(seconds) {
@@ -29,6 +30,7 @@ function parseHMSToSeconds(str) {
 }
 
 export default function TimeRestrictionPage({ childId }) {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [restrictions, setRestrictions] = useState([]);
     const [editing, setEditing] = useState({});
@@ -77,7 +79,7 @@ export default function TimeRestrictionPage({ childId }) {
             setLoading(false);
         } catch (err) {
             console.error('Error fetching restrictions:', err);
-            message.error('Failed to load time restrictions.');
+            message.error(t('time_restriction_error_load'));
             setLoading(false);
         }
     };
@@ -95,12 +97,12 @@ export default function TimeRestrictionPage({ childId }) {
                 withCredentials: true,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}
             });
-            message.success('Restriction saved successfully!');
+            message.success(t('time_restriction_save_success'));
             setEditing((prev) => ({...prev, [childId]: null}));
             fetchRestrictions();
         } catch (err) {
             console.error('Error saving restrictions:', err);
-            message.error('Failed to save restrictions.');
+            message.error(t('time_restriction_save_error'));
         }
     };
 
@@ -112,11 +114,11 @@ export default function TimeRestrictionPage({ childId }) {
     const handleReset = async (childId) => {
         try {
             await axios.post(`/api/time-restriction/reset?childId=${childId}`, {}, {withCredentials: true});
-            message.success("Restriction reset successfully!");
+            message.success(t('time_restriction_reset_success'));
             setDeleteModal({visible: false, childId: null});
             fetchRestrictions();
         } catch (err) {
-            message.error("Failed to reset restriction.");
+            message.error(t('time_restriction_reset_error'));
             setDeleteModal({visible: false, childId: null});
         }
     };
@@ -124,12 +126,12 @@ export default function TimeRestrictionPage({ childId }) {
     // Table columns definition
     const columns = [
         {
-            title: 'Child Name',
+            title: t('time_restriction_child_name'),
             dataIndex: 'childFullName',
             key: 'childFullName',
         },
         {
-            title: 'Max Video Time',
+            title: t('time_restriction_max_video_time'),
             dataIndex: 'videoTimeFormatted',
             key: 'maxVideoTime',
             render: (text, record) => {
@@ -149,7 +151,7 @@ export default function TimeRestrictionPage({ childId }) {
                 return (
                     <Input
                         value={value}
-                        placeholder="hh:mm:ss"
+                        placeholder={t('time_restriction_input_placeholder')}
                         onChange={e => {
                             const val = e.target.value;
                             setEditing(prev => ({
@@ -166,7 +168,7 @@ export default function TimeRestrictionPage({ childId }) {
             }
         },
         {
-            title: 'Actions',
+            title: t('time_restriction_actions'),
             key: 'actions',
             render: (text, record) => {
                 const realChildId = record.childId;
@@ -186,7 +188,7 @@ export default function TimeRestrictionPage({ childId }) {
                             disabled={!editing[realChildId]}
                             style={{marginRight: 8}}
                         >
-                            Save
+                            {t('time_restriction_save')}
                         </Button>
                         <Button
                             danger
@@ -197,7 +199,7 @@ export default function TimeRestrictionPage({ childId }) {
                                 setDeleteModal({visible: true, childId: realChildId});
                             }}
                         >
-                            Reset
+                            {t('time_restriction_reset')}
                         </Button>
                     </>
                 );
@@ -213,35 +215,34 @@ export default function TimeRestrictionPage({ childId }) {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <h1>Time Restriction</h1>
+                <h1>{t('time_restriction_title')}</h1>
             </div>
-                <Card title="About Time Restrictions" style={{marginBottom: 16}}>
-                    <p>Time restrictions limit how long your child can watch videos.</p>
-                    <p>After the time limit is reached, your child will be blocked from accessing that content.</p>
-                </Card>
-
-                {loading ? (
-                    <Spin/>
-                ) : filteredRestrictions.length === 0 ? (
-                    <div>No time restriction data for this child.</div>
-                ) : (
-                    <Table
-                        dataSource={filteredRestrictions}
-                        columns={columns}
-                        rowKey="childId"
-                        pagination={false}
-                    />
-                )}
-                <Modal
-                    title="Confirm Reset"
-                    open={deleteModal.visible}
-                    onOk={() => handleReset(deleteModal.childId)}
-                    onCancel={() => setDeleteModal({visible: false, childId: null})}
-                    okText="Reset"
-                    okButtonProps={{danger: true}}
-                >
-                    Are you sure you want to reset this time restriction?
-                </Modal>
+            <Card title={t('time_restriction_about_title')} style={{marginBottom: 16}}>
+                <p>{t('time_restriction_about_1')}</p>
+                <p>{t('time_restriction_about_2')}</p>
+            </Card>
+            {loading ? (
+                <Spin/>
+            ) : filteredRestrictions.length === 0 ? (
+                <div>{t('time_restriction_empty')}</div>
+            ) : (
+                <Table
+                    dataSource={filteredRestrictions}
+                    columns={columns}
+                    rowKey="childId"
+                    pagination={false}
+                />
+            )}
+            <Modal
+                title={t('time_restriction_confirm_reset_title')}
+                open={deleteModal.visible}
+                onOk={() => handleReset(deleteModal.childId)}
+                onCancel={() => setDeleteModal({visible: false, childId: null})}
+                okText={t('time_restriction_reset')}
+                okButtonProps={{danger: true}}
+            >
+                {t('time_restriction_confirm_reset')}
+            </Modal>
         </div>
     );
 }

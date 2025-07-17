@@ -5,8 +5,10 @@ import styles from '../../styles/ParentDashboard.module.css';
 import Header from '../../components/Header.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 const ParentLearningMonitor = () => {
+    const { t } = useTranslation();
     const [children, setChildren] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -56,16 +58,16 @@ const ParentLearningMonitor = () => {
     if (loading) {
         return (<div className={styles.loadingContainer}>
                 <div className={styles.spinner}></div>
-                <p>Loading...</p>
+                <p>{t('parent_monitor_loading')}</p>
             </div>);
     }
 
     if (error) {
         return (<div className={styles.errorContainer}>
-                <h2>Error</h2>
-                <p>{error}</p>
+                <h2>{t('parent_monitor_error')}</h2>
+                <p>{t('parent_monitor_error_load')}</p>
                 <button onClick={fetchChildren} className={styles.retryButton}>
-                    Retry
+                    {t('parent_monitor_retry')}
                 </button>
             </div>);
     }
@@ -74,66 +76,66 @@ const ParentLearningMonitor = () => {
             <Header/>
             <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
-                    <p>Monitor your child's learning progress</p>
+                    <p>{t('parent_monitor_intro')}</p>
                     <ul className={styles.breadcrumbItems}
                         data-aos-duration="800"
                         data-aos-once="true"
                         data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('parent_monitor_breadcrumb_home')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
-                        <li>Monitor</li>
+                        <li>{t('parent_monitor_breadcrumb_monitor')}</li>
                     </ul>
                 </div>
             </section>
             <div className={styles.container}>
                 <div className={styles.header}>
-                    <p>Select a child to view detailed learning progress</p>
+                    <p>{t('parent_monitor_select_child')}</p>
                 </div>
 
                 <div className={styles.main}>
                     {/* Search Sidebar */}
                     <div className={styles.sidebar}>
-                        <h2>Search Children</h2>
+                        <h2>{t('parent_monitor_search_title')}</h2>
                         <div className={styles.searchForm}>
                             <input
                                 type="text"
-                                placeholder="Search by name..."
+                                placeholder={t('parent_monitor_search_placeholder')}
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 className={styles.searchInput}
-                                aria-label="Search children by name"
+                                aria-label={t('parent_monitor_search_aria')}
                             />
                             <div className={styles.filterGroup}>
-                                <label htmlFor="ageFilter">Age:</label>
+                                <label htmlFor="ageFilter">{t('parent_monitor_filter_age_label')}</label>
                                 <select
                                     id="ageFilter"
                                     value={filterAge}
                                     onChange={(e) => setFilterAge(e.target.value)}
                                     className={styles.filterSelect}
-                                    aria-label="Filter by age"
+                                    aria-label={t('parent_monitor_filter_age_aria')}
                                 >
-                                    <option value="">All Ages</option>
+                                    <option value="">{t('parent_monitor_filter_age_all')}</option>
                                     {[...Array(18).keys()].map((age) => (<option key={age + 1} value={age + 1}>
-                                            {age + 1} years
+                                            {t('parent_monitor_filter_age_value', {age: age + 1})}
                                         </option>))}
                                 </select>
                             </div>
                             <div className={styles.filterGroup}>
-                                <label htmlFor="gradeFilter">Grade:</label>
+                                <label htmlFor="gradeFilter">{t('parent_monitor_filter_grade_label')}</label>
                                 <select
                                     id="gradeFilter"
                                     value={filterGrade}
                                     onChange={(e) => setFilterGrade(e.target.value)}
                                     className={styles.filterSelect}
-                                    aria-label="Filter by grade"
+                                    aria-label={t('parent_monitor_filter_grade_aria')}
                                 >
-                                    <option value="">All Grades</option>
+                                    <option value="">{t('parent_monitor_filter_grade_all')}</option>
                                     {[...Array(12).keys()].map((grade) => (<option key={grade + 1} value={grade + 1}>
-                                            Grade {grade + 1}
+                                            {t('parent_monitor_filter_grade_value', {grade: grade + 1})}
                                         </option>))}
                                 </select>
                             </div>
@@ -143,7 +145,7 @@ const ParentLearningMonitor = () => {
                     {/* Children List */}
                     <div className={styles.content}>
                         <div className={styles.section}>
-                            <h2>Children List</h2>
+                            <h2>{t('parent_monitor_children_list')}</h2>
                             {filteredChildren.length > 0 ? (<div className={styles.childrenGrid}>
                                     {filteredChildren.map((child) => (<div key={child.id} className={styles.childCard}>
                                             <div className={styles.childAvatar}>
@@ -157,26 +159,26 @@ const ParentLearningMonitor = () => {
                                                 <h3>{child.fullName}</h3>
                                                 <p>{child.email}</p>
                                                 <div className={styles.childStats}>
-                                                    <span>{child.age ? `${child.age} years old` : ''}</span>
-                                                    <span>{child.grade ? `Grade ${child.grade}` : ''}</span>
+                                                    <span>{child.age ? t('parent_monitor_child_age', {age: child.age}) : ''}</span>
+                                                    <span>{child.grade ? t('parent_monitor_child_grade', {grade: child.grade}) : ''}</span>
                                                 </div>
                                             </div>
                                             <div className={styles.childActions}>
                                                 <Link
                                                     to={`/hocho/parent/learning-progress/${child.id}`}
                                                     className={styles.progressButton}
-                                                    aria-label={`View learning progress for ${child.fullName}`}
+                                                    aria-label={t('parent_monitor_view_progress_aria', {name: child.fullName})}
                                                 >
-                                                    View learning progress
+                                                    {t('parent_monitor_view_progress')}
                                                 </Link>
                                             </div>
                                         </div>))}
                                 </div>) : (<div className={styles.noChildren}>
                                     <p>
-                                        {searchQuery || filterAge || filterGrade ? 'No children match your search criteria.' : 'You have not registered any children yet.'}
+                                        {searchQuery || filterAge || filterGrade ? t('parent_monitor_no_children_search') : t('parent_monitor_no_children')}
                                     </p>
                                     <Link to="/hocho/register-child" className={styles.addChildButton}>
-                                        Register child
+                                        {t('parent_monitor_register_child')}
                                     </Link>
                                 </div>)}
                         </div>

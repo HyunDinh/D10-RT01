@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from '../../styles/Auth.module.css';
+import { useTranslation } from 'react-i18next';
 
 function ResetPassword() {
+    const { t } = useTranslation();
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -12,16 +14,16 @@ function ResetPassword() {
 
     useEffect(() => {
         if (!token) {
-            setMessage('Invalid link. Please try again.');
+            setMessage(t('reset_password_invalid_link', 'Invalid link. Please try again.'));
         }
-    }, [token]);
+    }, [token, t]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
 
         if (newPassword !== confirmPassword) {
-            setMessage('Confirmation password does not match.');
+            setMessage(t('reset_password_confirm_error', 'Confirmation password does not match.'));
             return;
         }
 
@@ -35,15 +37,15 @@ function ResetPassword() {
             });
 
             if (response.ok) {
-                setMessage('Password has been reset successfully - You can log in.');
+                setMessage(t('reset_password_success', 'Password has been reset successfully - You can log in.'));
                 setTimeout(() => navigate('/hocho/login'), 3000);
             } else {
                 const errorData = await response.text();
-                setMessage(errorData || 'The link is invalid or expired.');
+                setMessage(errorData || t('reset_password_expired', 'The link is invalid or expired.'));
             }
         } catch (err) {
             console.error('Password reset error:', err);
-            setMessage('An error occurred. Please try again.');
+            setMessage(t('reset_password_error', 'An error occurred. Please try again.'));
         }
     };
 
@@ -51,8 +53,8 @@ function ResetPassword() {
         <div className={styles.body}>
             <div className={styles.formContainer}>
                 <div className={styles.formHeader}>
-                    <h4>Reset Password 🔑</h4>
-                    <p>Enter a new password for your account</p>
+                    <h4>{t('reset_password_title', 'Reset Password 🔑')}</h4>
+                    <p>{t('reset_password_subtitle', 'Enter a new password for your account')}</p>
                     {message && (
                         <div className={`${styles.alert} ${message.includes('error') ? styles.alertDanger : styles.alertSuccess}`}>
                             {message}
@@ -70,7 +72,7 @@ function ResetPassword() {
                                 onChange={(e) => setNewPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="newPassword">New Password</label>
+                            <label htmlFor="newPassword">{t('profile_new_password', 'New Password')}</label>
                             <span className={styles.notch}></span>
                         </div>
                     </div>
@@ -84,15 +86,15 @@ function ResetPassword() {
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
                             />
-                            <label htmlFor="confirmPassword">Confirm Password</label>
+                            <label htmlFor="confirmPassword">{t('profile_confirm_password', 'Confirm Password')}</label>
                             <span className={styles.notch}></span>
                         </div>
                     </div>
-                    <button type="submit" className={styles.submitBtn}>Reset Password</button>
+                    <button type="submit" className={styles.submitBtn}>{t('reset_password_btn', 'Reset Password')}</button>
                     <p className={styles.backLink}>
                         <a href="/hocho/login" className={styles.linkFlex}>
                             <i className="ri-arrow-left-s-line"></i>
-                            <span>Return to Login</span>
+                            <span>{t('forgot_password_back_login', 'Return to Login')}</span>
                         </a>
                     </p>
                 </form>

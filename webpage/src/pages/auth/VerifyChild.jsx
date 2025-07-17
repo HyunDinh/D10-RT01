@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const styles = `
     .verify-container {
@@ -23,9 +24,10 @@ const styles = `
 `;
 
 const VerifyChild = () => {
+    const { t } = useTranslation();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const [message, setMessage] = useState('Verifying...');
+    const [message, setMessage] = useState(t('verify_verifying', 'Verifying...'));
 
     useEffect(() => {
         const token = searchParams.get('token');
@@ -33,22 +35,22 @@ const VerifyChild = () => {
             axios.get(`http://localhost:8080/api/auth/verify-child?token=${token}`)
                 .then(response => {
                     setMessage(response.data);
-                    setTimeout(() => navigate('/hocho/login'), 2000); // Chuyển hướng sau 2 giây
+                    setTimeout(() => navigate('/hocho/login'), 2000);
                 })
                 .catch(error => {
-                    setMessage(error.response?.data || 'Verification failed.');
+                    setMessage(error.response?.data || t('verify_failed', 'Verification failed.'));
                 });
         } else {
-            setMessage('Invalid token.');
+            setMessage(t('verify_invalid_token', 'Invalid token.'));
         }
-    }, [searchParams, navigate]);
+    }, [searchParams, navigate, t]);
 
     return (
         <>
             <style>{styles}</style>
             <div className="verify-container">
-                <h2 className="verify-heading">Verify child account</h2>
-                <p className={message.includes('thành công') ? 'verify-success' : 'verify-error'}>
+                <h2 className="verify-heading">{t('verify_child_title', 'Verify child account')}</h2>
+                <p className={message.toLowerCase().includes('success') || message.toLowerCase().includes('thành công') ? 'verify-success' : 'verify-error'}>
                     {message}
                 </p>
             </div>

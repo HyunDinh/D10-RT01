@@ -4,11 +4,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import {faImage} from '@fortawesome/free-regular-svg-icons'; // Added icons
 import styles from '../../styles/AnswerQuestion/QuestionForm.module.css'; // Adjust path
+import { useTranslation } from 'react-i18next';
 
 const SUBJECTS = ['Math', 'Literature', 'English', 'Physics', 'Chemistry', 'Biology', 'History', 'Geography', 'Informatics', 'Other'];
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const QuestionForm = ({show, onClose, onSubmitRequest}) => {
+    const { t } = useTranslation();
     const [form, setForm] = useState({
         content: '',
         subject: '',
@@ -30,7 +32,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                 });
                 setUserId(res.data.id);
             } catch (err) {
-                setError('Cannot get user information');
+                setError(t('question_form_error_fetch_profile'));
             }
         };
         fetchProfile();
@@ -43,7 +45,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file && !file.type.startsWith('image/')) {
-            setError('Please select an image file.');
+            setError(t('question_form_error_image_type'));
             e.target.value = '';
         } else {
             setImageFile(file);
@@ -54,7 +56,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.content || !form.subject || !form.grade) {
-            setError('Please fill in all required information');
+            setError(t('question_form_error_required'));
             return;
         }
         setLoading(true);
@@ -74,7 +76,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            setSuccess('Question submitted successfully!');
+            setSuccess(t('question_form_success_submit'));
             setForm({ content: '', subject: '', grade: '' });
             setImageFile(null);
             if (fileInputRef.current) fileInputRef.current.value = '';
@@ -83,7 +85,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
             }
             setTimeout(() => onClose(), 1500); // Close modal after success
         } catch (err) {
-            setError(err.response?.data?.message || 'Cannot submit question');
+            setError(err.response?.data?.message || t('question_form_error_submit'));
         } finally {
             setLoading(false);
         }
@@ -97,10 +99,10 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
         <span className={styles.closeButton} onClick={onClose}>
           ×
         </span>
-                <h2 className={styles.modalTitle}>Add New Question</h2>
+                <h2 className={styles.modalTitle}>{t('question_form_title')}</h2>
                 <form className={styles.formCard} onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Question Content</label>
+                        <label className={styles.formLabel}>{t('question_form_content')}</label>
                         <textarea
                             className={styles.formTextarea}
                             name="content"
@@ -111,7 +113,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                         />
                     </div>
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Subject</label>
+                        <label className={styles.formLabel}>{t('question_form_subject')}</label>
                         <select
                             className={styles.formSelect}
                             name="subject"
@@ -119,16 +121,16 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Select subject --</option>
+                            <option value="">-- {t('question_form_select_subject')} --</option>
                             {SUBJECTS.map((s) => (
                                 <option key={s} value={s}>
-                                    {s}
+                                    {t(`subject_${s.toLowerCase()}`)}
                                 </option>
                             ))}
                         </select>
                     </div>
                     <div className={styles.formGroup}>
-                        <label className={styles.formLabel}>Grade</label>
+                        <label className={styles.formLabel}>{t('question_form_grade')}</label>
                         <select
                             className={styles.formSelect}
                             name="grade"
@@ -136,17 +138,17 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             onChange={handleChange}
                             required
                         >
-                            <option value="">-- Select grade --</option>
+                            <option value="">-- {t('question_form_select_grade')} --</option>
                             {GRADES.map((g) => (
                                 <option key={g} value={g}>
-                                    {g}
+                                    {t('grade_value', { grade: g })}
                                 </option>
                             ))}
                         </select>
                     </div>
                     <div className={styles.formGroup}>
                         <label className={`${styles.formLabel} ${styles.formLabelIcon}`}>
-                            <FontAwesomeIcon icon={faImage} className={styles.formIcon}/> Illustration image (optional)
+                            <FontAwesomeIcon icon={faImage} className={styles.formIcon}/> {t('question_form_image_label')}
                         </label>
                         <input
                             type="file"
@@ -164,7 +166,7 @@ const QuestionForm = ({show, onClose, onSubmitRequest}) => {
                             className={`${styles.btn} ${styles.btnPrimary}`}
                             disabled={loading || !userId}
                         >
-                            Submit Question <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon}/>
+                            {t('question_form_submit_btn')} <FontAwesomeIcon icon={faChevronRight} className={styles.btnIcon}/>
                         </button>
                     </div>
                 </form>

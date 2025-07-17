@@ -5,6 +5,7 @@ import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChevronRight, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 const NotificationPage = () => {
     const [notifications, setNotifications] = useState([]);
@@ -16,6 +17,8 @@ const NotificationPage = () => {
     const [role, setRole] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [notificationsPerPage] = useState(10);
+
+    const { t } = useTranslation();
 
     // Fetch userId and role
     useEffect(() => {
@@ -63,7 +66,7 @@ const NotificationPage = () => {
                 setCurrentPage(1);
             })
             .catch((err) => {
-                setError('Cannot load notifications.');
+                setError(t('notification_error_load'));
                 setLoading(false);
             });
     }, [userId, role, filter, dateRange]);
@@ -79,18 +82,18 @@ const NotificationPage = () => {
     };
 
     const handleDeleteAll = () => {
-        if (!window.confirm('Do you want to clear all notifications?')) return;
+        if (!window.confirm(t('notification_confirm_clear_all'))) return;
         axios
             .delete(`http://localhost:8080/api/notifications?userId=${userId}&role=${role}`, {withCredentials: true})
             .then(() => {
                 setNotifications([]);
                 setCurrentPage(1);
             })
-            .catch(() => setError('Cannot delete notifications.'));
+            .catch(() => setError(t('notification_error_delete_all')));
     };
 
     const handleDeleteOne = (notificationId) => {
-        if (!window.confirm('Are you sure you want to clear this notification?')) return;
+        if (!window.confirm(t('notification_confirm_clear_one'))) return;
         axios
             .delete(`http://localhost:8080/api/notifications/${notificationId}`, {withCredentials: true})
             .then(() => {
@@ -101,7 +104,7 @@ const NotificationPage = () => {
                     setCurrentPage(newTotalPages);
                 }
             })
-            .catch(() => setError('Không thể xóa thông báo.'));
+            .catch(() => setError(t('notification_error_delete_one')));
     };
 
     const handleFilterChange = (e) => setFilter(e.target.value);
@@ -128,7 +131,7 @@ const NotificationPage = () => {
                 onClick={() => handlePageChange(1)}
                 disabled={currentPage === 1}
                 className={styles.pageButton}
-                aria-label="Go to first page"
+                aria-label={t('pagination_first_page')}
             >
                 « First
             </button>
@@ -136,12 +139,12 @@ const NotificationPage = () => {
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className={styles.pageButton}
-                aria-label="Go to previous page"
+                aria-label={t('pagination_previous_page')}
             >
                 ‹ Previous
             </button>
             {startPage > 1 && (<>
-                <button onClick={() => handlePageChange(1)} className={styles.pageButton} aria-label="Page 1">
+                <button onClick={() => handlePageChange(1)} className={styles.pageButton} aria-label={t('pagination_page_1')}>
                     1
                 </button>
                 {startPage > 2 && <span className={styles.pageEllipsis}>...</span>}
@@ -150,7 +153,7 @@ const NotificationPage = () => {
                 key={number}
                 onClick={() => handlePageChange(number)}
                 className={`${styles.pageButton} ${currentPage === number ? styles.activePage : ''}`}
-                aria-label={`Go to page ${number}`}
+                aria-label={t('pagination_page', {number})}
             >
                 {number}
             </button>))}
@@ -159,7 +162,7 @@ const NotificationPage = () => {
                 <button
                     onClick={() => handlePageChange(totalPages)}
                     className={styles.pageButton}
-                    aria-label={`Go to page ${totalPages}`}
+                    aria-label={t('pagination_last_page', {totalPages})}
                 >
                     {totalPages}
                 </button>
@@ -168,7 +171,7 @@ const NotificationPage = () => {
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className={styles.pageButton}
-                aria-label="Go to next page"
+                aria-label={t('pagination_next_page')}
             >
                 Next ›
             </button>
@@ -176,7 +179,7 @@ const NotificationPage = () => {
                 onClick={() => handlePageChange(totalPages)}
                 disabled={currentPage === totalPages}
                 className={styles.pageButton}
-                aria-label="Go to last page"
+                aria-label={t('pagination_last_page', {totalPages})}
             >
                 Last »
             </button>
@@ -187,27 +190,27 @@ const NotificationPage = () => {
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
             <div className={styles.headerInfo}>
-                <p>Notifications</p>
+                <p>{t('notification_title')}</p>
                 <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                     data-aos-delay="500">
                     <li>
-                        <a href="/hocho/home">Home</a>
+                        <a href="/hocho/home">{t('notification_home')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>Notifications</li>
+                    <li>{t('notification_title')}</li>
                 </ul>
             </div>
         </section>
         <div className={styles.notificationPage}>
             <div className={styles.headerRow}>
-                <h2 className={styles.pageTitle}>Notifications</h2>
+                <h2 className={styles.pageTitle}>{t('notification_title')}</h2>
                 <div className={styles.filters}>
                     <select value={filter} onChange={handleFilterChange} className={styles.filterSelect}
-                            aria-label="Filter notifications">
-                        <option value="all">All</option>
-                        <option value="unread">Unread</option>
+                            aria-label={t('notification_filter_aria')}>
+                        <option value="all">{t('notification_filter_all')}</option>
+                        <option value="unread">{t('notification_filter_unread')}</option>
                     </select>
                     <div className={styles.dateRange}>
                         <input
@@ -216,7 +219,7 @@ const NotificationPage = () => {
                             value={dateRange.from}
                             onChange={handleDateChange}
                             className={styles.dateInput}
-                            aria-label="Select start date"
+                            aria-label={t('notification_date_from')}
                         />
                         <input
                             type="date"
@@ -224,35 +227,32 @@ const NotificationPage = () => {
                             value={dateRange.to}
                             onChange={handleDateChange}
                             className={styles.dateInput}
-                            aria-label="Select end date"
+                            aria-label={t('notification_date_to')}
                         />
                     </div>
                     <button
                         onClick={handleDeleteAll}
                         className={`${styles.btn} ${styles.btnDanger}`}
-                        aria-label="Clear all notifications"
+                        aria-label={t('notification_clear_all_aria')}
                     >
-                        <FontAwesomeIcon icon={faTrash}/> Clear All
+                        <FontAwesomeIcon icon={faTrash}/> {t('notification_clear_all')}
                     </button>
                 </div>
             </div>
-            {loading ? (<div className={styles.loading}>Loading...</div>) : error ? (
+            {loading ? (<div className={styles.loading}>{t('notification_loading')}</div>) : error ? (
                 <div className={styles.error}>{error}</div>) : (<>
                 <div className={styles.notificationInfo}>
                     <p>
-                        Display {indexOfFirstNotification + 1}-{Math.min(indexOfLastNotification, notifications.length)} out
-                        of{' '}
-                        {notifications.length} notifications
+                        {t('notification_display', {from: indexOfFirstNotification + 1, to: Math.min(indexOfLastNotification, notifications.length), total: notifications.length})}
                     </p>
                 </div>
                 <ul className={styles.notificationList}>
-                    {currentNotifications.length === 0 ? (<li className={styles.noNotifications}>No
-                        notifications.</li>) : (currentNotifications.map((n) => (<li
+                    {currentNotifications.length === 0 ? (<li className={styles.noNotifications}>{t('notification_empty')}</li>) : (currentNotifications.map((n) => (<li
                         key={n.notificationId || n.id}
                         className={`${styles.notificationItem} ${n.read ? styles.read : styles.unread}`}
                     >
                         <div>
-                            <div className={styles.title}>{n.title || n.type || 'Notification'}</div>
+                            <div className={styles.title}>{n.title || n.type || t('notification_item_default_title')}</div>
                             <div className={styles.content}>{n.content || n.message}</div>
                             <div className={styles.time}>
                                 {new Date(n.createdAt || n.timestamp || n.date || n.created_date).toLocaleString()}
@@ -262,7 +262,7 @@ const NotificationPage = () => {
                             <button
                                 className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
                                 onClick={() => handleDeleteOne(n.notificationId || n.id)}
-                                aria-label={`Clear notification ${n.title || n.type || 'Notification'}`}
+                                aria-label={t('notification_clear_one_aria', {title: n.title || n.type || t('notification_item_default_title')})}
                             >
                                 <FontAwesomeIcon icon={faTrash}/>
                             </button>

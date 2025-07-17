@@ -9,10 +9,8 @@ const resources = {
 };
 
 const savedLang = localStorage.getItem('i18nextLng') || 'vi';
-
 // Nếu user đổi ngôn ngữ, i18n sẽ tự động update localStorage (từ v21+), nhưng ta sẽ đảm bảo chắc chắn
 // bằng cách lắng nghe sự kiện changeLanguage
-
 i18n
   .use(initReactI18next)
   .init({

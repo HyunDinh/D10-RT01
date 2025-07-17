@@ -6,12 +6,14 @@ import Header from "../../components/Header.jsx";
 import Footer from "../../components/Footer.jsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
+import {useTranslation} from 'react-i18next';
 
 const ChildCart = () => {
     const [cartItems, setCartItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     // Lấy giỏ hàng
     const fetchCart = async () => {
@@ -27,7 +29,7 @@ const ChildCart = () => {
             setCartItems(response.data);
             setLoading(false);
         } catch (err) {
-            setError('Không thể tải giỏ hàng');
+            setError(t('cart_child_error_load'));
             setLoading(false);
         }
     };
@@ -43,10 +45,10 @@ const ChildCart = () => {
             await axios.delete(`http://localhost:8080/api/child-cart/${childId}/remove/${courseId}`, {
                 withCredentials: true,
             });
-            alert('Đã xóa khóa học khỏi giỏ hàng');
+            alert(t('cart_child_remove_success'));
             fetchCart(); // Làm mới giỏ hàng
         } catch (err) {
-            setError('Không thể xóa khóa học khỏi giỏ hàng');
+            setError(t('cart_child_remove_error'));
         }
     };
 
@@ -61,10 +63,10 @@ const ChildCart = () => {
             await axios.post(`http://localhost:8080/api/child-cart/${childId}/send-to-parent`, {}, {
                 withCredentials: true,
             });
-            alert('Đã gửi yêu cầu cho phụ huynh');
+            alert(t('cart_child_send_success'));
             fetchCart(); // Làm mới giỏ hàng
         } catch (err) {
-            setError('Không thể gửi yêu cầu cho phụ huynh');
+            setError(t('cart_child_send_error'));
         }
     };
 
@@ -85,33 +87,33 @@ const ChildCart = () => {
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
             <div className={styles.headerInfo}>
-                <p>Children cart</p>
+                <p>{t('cart_child_title')}</p>
                 <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
                     data-aos-delay="500">
                     <li>
-                        <a href="/hocho/home">Home</a>
+                        <a href="/hocho/home">{t('cart_breadcrumb_home')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>Children cart</li>
+                    <li>{t('cart_child_title')}</li>
                 </ul>
             </div>
         </section>
 
         <div className={styles.cartContainer}>
-            {loading ? (<div className={styles.loading}>Loading cart...</div>) : error ? (
+            {loading ? (<div className={styles.loading}>{t('cart_loading')}</div>) : error ? (
                 <div className={styles.error}>{error}</div>) : cartItems.length === 0 ? (
-                <div className={styles.emptyCart}>Cart is empty</div>) : (<>
+                <div className={styles.emptyCart}>{t('cart_empty')}</div>) : (<>
                     <table className={styles.cartTable}>
                         <thead>
                         <tr>
                             <th className={styles.tableHeader}></th>
-                            <th className={styles.tableHeader}>Title</th>
-                            <th className={styles.tableHeader}>Price</th>
-                            <th className={styles.tableHeader}>Description</th>
-                            <th className={styles.tableHeader}>Status</th>
-                            <th className={styles.tableHeader}>Action</th>
+                            <th className={styles.tableHeader}>{t('cart_table_title')}</th>
+                            <th className={styles.tableHeader}>{t('cart_table_price')}</th>
+                            <th className={styles.tableHeader}>{t('cart_table_description')}</th>
+                            <th className={styles.tableHeader}>{t('cart_table_status')}</th>
+                            <th className={styles.tableHeader}>{t('cart_table_action')}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -130,7 +132,7 @@ const ChildCart = () => {
                                 </td>
                                 <td className={styles.tableCell}>
                                     <p className={styles.cartPrice}>
-                                        {item.course.price.toLocaleString('vi-VN')} VND
+                                        {item.course.price.toLocaleString('vi-VN')} {t('cart_currency')}
                                     </p>
                                 </td>
                                 <td className={styles.tableCell}>
@@ -140,8 +142,8 @@ const ChildCart = () => {
                                     <p className={styles.cartStatus}>
                                         {' '}
                                         <span className={styles.statusBadge}>
-                    {item.status || 'Pending'}
-                  </span>
+                                            {item.status || t('cart_status_pending')}
+                                        </span>
                                     </p>
                                 </td>
                                 <td className={styles.tableCell}>
@@ -150,7 +152,7 @@ const ChildCart = () => {
                                             className={`${styles.cartBtn} ${styles.remove}`}
                                             onClick={() => handleRemoveItem(item.course.courseId)}
                                         >
-                                            <i className="bi bi-trash"></i> Remove
+                                            <i className="bi bi-trash"></i> {t('cart_remove_btn')}
                                         </button>
                                     </div>
                                 </td>
@@ -162,7 +164,7 @@ const ChildCart = () => {
                             className={`${styles.cartBtn} ${styles.checkout}`}
                             onClick={handleSendToParent}
                         >
-                            <i className="bi bi-send"></i> Send request to parent
+                            <i className="bi bi-send"></i> {t('cart_child_send_request_btn')}
                         </button>
                     </div>
                 </>)}

@@ -8,8 +8,10 @@ import DeleteConfirmDialog from '../../components/DeleteConfirmDialog.jsx';
 import styles from '../../styles/AnswerQuestion/QuestionList.module.css';
 import { faChevronRight, faPlus, faUserPen, faEraser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTranslation } from 'react-i18next';
 
 const QuestionList = () => {
+    const { t } = useTranslation();
     const [user, setUser] = useState({});
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -105,35 +107,35 @@ const QuestionList = () => {
         setQuestionToDelete(null);
     };
 
-    if (loading) return <div className="alert alert-info text-center">Loading question</div>;
-    if (error) return <div className="alert alert-danger text-center">{error}</div>;
+    if (loading) return <div className="alert alert-info text-center">{t('question_list_loading')}</div>;
+    if (error) return <div className="alert alert-danger text-center">{t('question_list_error')}</div>;
 
     return (
         <>
             <Header />
             <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
                 <div className={styles.headerInfo}>
-                    <p>Forum</p>
+                    <p>{t('question_list_forum')}</p>
                     <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('question_list_breadcrumb_home')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight} />
                         </li>
-                        <li>Forum</li>
+                        <li>{t('question_list_forum')}</li>
                     </ul>
                 </div>
             </section>
 
             <div className={styles.container}>
-                <h2 className={styles.heading}>List Question</h2>
+                <h2 className={styles.heading}>{t('question_list_heading')}</h2>
                 <button className={styles.buttonAsk} onClick={() => setShowQuestionForm(true)}>
                     <FontAwesomeIcon icon={faPlus} />
-                    Ask Question
+                    {t('question_list_ask_question')}
                 </button>
                 <div className={styles.grid}>
-                    {questions.length === 0 && <div className={styles.noQuestions}>No questions yet.</div>}
+                    {questions.length === 0 && <div className={styles.noQuestions}>{t('question_list_no_questions')}</div>}
                     {questions.map((q) => {
                         const isOwner = currentUser && q.user && currentUser.id === q.user.id;
                         return (
@@ -145,13 +147,13 @@ const QuestionList = () => {
                                             <div className={styles.cardContent}>
                                                 <h5 className={styles.cardTitle}>{q.content}</h5>
                                                 <p className={styles.cardText}>
-                                                    <strong>Subject:</strong>{q.subject} <strong>Grade:</strong>{q.grade}
+                                                    <strong>{t('question_list_subject')}:</strong>{q.subject} <strong>{t('question_list_grade')}:</strong>{q.grade}
                                                 </p>
                                                 <p className={styles.cardText}>
-                                                    <strong>Asker:</strong>{q.user?.fullName || 'Anonymous'}
+                                                    <strong>{t('question_list_asker')}:</strong>{q.user?.fullName || t('question_list_anonymous')}
                                                 </p>
                                                 <p className={styles.cardText}>
-                                                    <strong>Time:</strong>{''}
+                                                    <strong>{t('question_list_time')}:</strong>{''}
                                                     {q.createdAt ? new Date(q.createdAt).toLocaleString() : ''}
                                                 </p>
                                             </div>
@@ -161,7 +163,7 @@ const QuestionList = () => {
                                                 className={`${styles.btn} ${styles.btnPrimary}`}
                                                 onClick={() => navigate(`/hocho/questions/${q.questionId}/answer`)}
                                             >
-                                                Ask for answer
+                                                {t('question_list_ask_for_answer')}
                                             </button>
                                             {isOwner && (
                                                 <>
@@ -171,7 +173,7 @@ const QuestionList = () => {
                                                         disabled={deletingId === q.questionId}
                                                     >
                                                         <FontAwesomeIcon icon={faUserPen} />
-                                                        Edit
+                                                        {t('question_list_edit')}
                                                     </button>
                                                     <button
                                                         className={`${styles.btn} ${styles.btnDanger}`}
@@ -179,7 +181,7 @@ const QuestionList = () => {
                                                         disabled={deletingId === q.questionId}
                                                     >
                                                         <FontAwesomeIcon icon={faEraser} />
-                                                        {deletingId === q.questionId ? 'Deleting...' : 'Delete'}
+                                                        {deletingId === q.questionId ? t('question_list_deleting') : t('question_list_delete')}
                                                     </button>
                                                 </>
                                             )}

@@ -6,8 +6,10 @@ import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { useTranslation } from 'react-i18next';
 
 const TutorProfile = () => {
+    const { t } = useTranslation();
     const { userId } = useParams();
     const [tutor, setTutor] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -26,7 +28,7 @@ const TutorProfile = () => {
             setTutor(response.data);
             setLoading(false);
         } catch (err) {
-            setError('Cannot load tutor information');
+            setError(t('tutor_profile_error_load'));
             setLoading(false);
         }
     };
@@ -43,7 +45,7 @@ const TutorProfile = () => {
         return `${baseUrl}/api/hocho/profile/${tutor.user.avatarUrl}?t=${new Date().getTime()}`;
     };
 
-    if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>Loading tutor information...</div>;
+    if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>{t('tutor_profile_loading')}</div>;
     if (error) return <div className={`${styles.errorMessage} ${styles.fadeIn}`}>{error}</div>;
     if (!tutor) return null;
 
@@ -52,21 +54,21 @@ const TutorProfile = () => {
             <Header />
             <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
                 <div className={styles.headerInfo}>
-                    <p>Tutor Profile</p>
+                    <p>{t('tutor_profile_title')}</p>
                     <ul className={styles.breadcrumbItems} data-aos="fade-up" data-aos-duration="800" data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('tutor_breadcrumb_home')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight} />
                         </li>
                         <li>
-                            <a href="/hocho/tutors">Tutors</a>
+                            <a href="/hocho/tutors">{t('tutor_breadcrumb_list')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight} />
                         </li>
-                        <li>Profile</li>
+                        <li>{t('tutor_profile_breadcrumb')}</li>
                     </ul>
                 </div>
             </section>
@@ -75,12 +77,12 @@ const TutorProfile = () => {
                     <button
                         className={`${styles.backButton} ${styles.buttonHover}`}
                         onClick={handleBack}
-                        title="Back to Tutors"
+                        title={t('tutor_profile_back_title')}
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} /> Back
+                        <FontAwesomeIcon icon={faArrowLeft} /> {t('tutor_profile_back_btn')}
                     </button>
                 </div>
-                <h2 className={`${styles.tutorTitle} ${styles.fadeIn}`}>Tutor Information</h2>
+                <h2 className={`${styles.tutorTitle} ${styles.fadeIn}`}>{t('tutor_profile_heading')}</h2>
                 <div className={`${styles.tutorCard} ${styles.cardHover} ${styles.animateSlideIn}`}>
                     <div className={styles.tutorCardAvatar}>
                         <img
@@ -92,20 +94,20 @@ const TutorProfile = () => {
                     </div>
                     <div className={styles.tutorCardContent}>
                         <h4 className={styles.tutorCardTitle}>{tutor.user.fullName}</h4>
-                        <p className={styles.tutorCardText}><b>Email:</b> {tutor.user.email}</p>
-                        <p className={styles.tutorCardText}><b>Phone Number:</b> {tutor.user.phoneNumber}</p>
-                        <p className={styles.tutorCardText}><b>Specialization:</b> {tutor.specialization}</p>
-                        <p className={styles.tutorCardText}><b>Experience:</b> {tutor.experience} years</p>
-                        <p className={styles.tutorCardText}><b>Education:</b> {tutor.education}</p>
-                        <p className={styles.tutorCardText}><b>Introduction:</b> {tutor.introduction}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_email')}</b> {tutor.user.email}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_phone')}</b> {tutor.user.phoneNumber}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_specialization')}</b> {tutor.specialization}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_experience')}</b> {tutor.experience} {t('tutor_label_years')}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_education')}</b> {tutor.education}</p>
+                        <p className={styles.tutorCardText}><b>{t('tutor_label_introduction')}</b> {tutor.introduction}</p>
                         <p className={styles.tutorCardText}>
-                            <b>Status:</b>{' '}
+                            <b>{t('tutor_label_status')}</b>{' '}
                             {tutor.status === 'APPROVED' ? (
-                                <span className={`${styles.tutorBadge} ${styles.approved} ${styles.badgePulse}`}>Approved</span>
+                                <span className={`${styles.tutorBadge} ${styles.approved} ${styles.badgePulse}`}>{t('tutor_status_approved')}</span>
                             ) : tutor.status === 'REJECTED' ? (
-                                <span className={`${styles.tutorBadge} ${styles.rejected} ${styles.badgePulse}`}>Rejected</span>
+                                <span className={`${styles.tutorBadge} ${styles.rejected} ${styles.badgePulse}`}>{t('tutor_status_rejected')}</span>
                             ) : (
-                                <span className={`${styles.tutorBadge} ${styles.pending} ${styles.badgePulse}`}>Pending</span>
+                                <span className={`${styles.tutorBadge} ${styles.pending} ${styles.badgePulse}`}>{t('tutor_status_pending')}</span>
                             )}
                         </p>
                     </div>

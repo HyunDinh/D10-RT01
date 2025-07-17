@@ -7,8 +7,10 @@ import styles from "../../styles/AnswerQuestion/QuestionList.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import LeaderboardDialog from "./GameLeaderBoard.jsx";
+import { useTranslation } from 'react-i18next';
 
 function GamesPage() {
+    const { t } = useTranslation();
     const [games, setGames] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedAge, setSelectedAge] = useState('');
@@ -68,7 +70,7 @@ function GamesPage() {
     }
 
     const handleOpenLeaderboard = (gameId) => {
-        console.log("🔥 Đã chọn gameId:", gameId);
+        console.log("Đã chọn gameId:", gameId);
         setSelectedGameId(gameId); // Set the selected gameId
         setOpenLeaderboard(true);
     };
@@ -81,15 +83,15 @@ function GamesPage() {
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
             <div className={styles.headerInfo}>
-                <p>Game Library</p>
+                <p>{t('game_library')}</p>
                 <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
                     <li>
-                        <a href="/hocho/home">Home</a>
+                        <a href="/hocho/home">{t('home')}</a>
                     </li>
                     <li>
                         <FontAwesomeIcon icon={faChevronRight}/>
                     </li>
-                    <li>Games</li>
+                    <li>{t('games')}</li>
                 </ul>
             </div>
         </section>
@@ -104,11 +106,11 @@ function GamesPage() {
                 borderRadius: '12px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
             }}>
-                <h3 style={{color: '#f79433', fontSize: '28px', marginBottom: '20px'}}>Search</h3>
+                <h3 style={{color: '#f79433', fontSize: '28px', marginBottom: '20px'}}>{t('search')}</h3>
 
                 <input
                     type="text"
-                    placeholder="Search games..."
+                    placeholder={t('search_games')}
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
                     style={{
@@ -121,28 +123,28 @@ function GamesPage() {
                 />
 
                 <div style={{marginBottom: '16px'}}>
-                    <label><strong>Age</strong></label>
+                    <label><strong>{t('age')}</strong></label>
                     <select
                         value={selectedAge}
                         onChange={e => setSelectedAge(e.target.value)}
                         style={selectStyle}
                     >
-                        <option value="">All age</option>
+                        <option value="">{t('all_age')}</option>
                         {allAges.map(age => (<option key={age} value={age}>{getAgeLabel(age)}</option>))}
                     </select>
 
                 </div>
 
                 <div style={{marginBottom: '16px'}}>
-                    <label><strong>Category</strong></label>
+                    <label><strong>{t('category')}</strong></label>
                     <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)}
                             style={selectStyle}>
-                        <option value="">All categories</option>
+                        <option value="">{t('all_categories')}</option>
                         {allCategories.map(cat => (<option key={cat} value={cat}>{cat}</option>))}
                     </select>
                 </div>
 
-                <button onClick={clearFilters} style={clearBtnStyle}>Clear Filters</button>
+                <button onClick={clearFilters} style={clearBtnStyle}>{t('clear_filters')}</button>
             </div>
 
             {/* Game list */}
@@ -153,22 +155,22 @@ function GamesPage() {
                     {games.map(game => (<div key={game.gameId} style={gameCardStyle}>
                             <img
                                 src={`/${game.gameUrl}`}
-                                alt={game.title}
+                                alt={t('game_poster_alt')}
                                 style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px'}}
                             />
                             <h3>{game.title}</h3>
-                            <p><strong>Độ tuổi:</strong> {game.ageGroup}</p>
-                            <p><strong>Category:</strong> {game.category}</p>
+                            <p><strong>{t('age_group')}:</strong> {game.ageGroup}</p>
+                            <p><strong>{t('category')}:</strong> {game.category}</p>
                             <p style={{minHeight: '60px'}}>{game.description}</p>
                             <div style={btnContainerStyle}>
                                 <button
-                                    onClick={() => handlePlay(game)} style={playBtnStyle}>▶️ Chơi ngay
+                                    onClick={() => handlePlay(game)} style={playBtnStyle}>{t('play_now')} ▶️
                                 </button>
                                 <button
                                     onClick={() => handleOpenLeaderboard(game.gameId)} // ✅ truyền gameId vào
                                     style={leaderBtnStyle}
                                 >
-                                    🏆 Leaderboard
+                                    🏆 {t('leaderboard')}
                                 </button>
 
                             </div>

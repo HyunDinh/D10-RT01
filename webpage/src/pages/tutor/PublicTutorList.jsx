@@ -6,6 +6,7 @@ import Header from '../../components/Header.jsx';
 import Footer from '../../components/Footer.jsx';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faChalkboardTeacher, faChevronRight} from '@fortawesome/free-solid-svg-icons';
+import {useTranslation} from 'react-i18next';
 
 const PublicTutorList = () => {
     const [tutors, setTutors] = useState([]);
@@ -17,6 +18,7 @@ const PublicTutorList = () => {
         name: '', specialization: '', minExperience: '',
     });
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     useEffect(() => {
         fetchTutors();
@@ -42,7 +44,7 @@ const PublicTutorList = () => {
             setFilteredTutors(response.data.filter((tutor) => tutor.status === 'APPROVED'));
             setLoading(false);
         } catch (err) {
-            setError('Unable to load tutor list');
+            setError(t('tutor_list_error_load'));
             setLoading(false);
         }
     };
@@ -52,14 +54,14 @@ const PublicTutorList = () => {
     };
 
     const handleDelete = async (userId) => {
-        if (!window.confirm('Are you sure you want to delete this tutor?')) return;
+        if (!window.confirm(t('tutor_list_confirm_delete'))) return;
         try {
             await axios.delete(`http://localhost:8080/api/tutors/profile/${userId}`, {
                 withCredentials: true,
             });
             fetchTutors();
         } catch (err) {
-            setError('Unable to delete tutor');
+            setError(t('tutor_list_error_delete'));
         }
     };
 
@@ -87,23 +89,23 @@ const PublicTutorList = () => {
         navigate('/hocho/teacher/tutors/form');
     };
 
-    if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>Loading tutor list...</div>;
+    if (loading) return <div className={`${styles.loadingMessage} ${styles.fadeIn}`}>{t('tutor_list_loading')}</div>;
     if (error) return <div className={`${styles.errorMessage} ${styles.fadeIn}`}>{error}</div>;
 
     return (<>
             <Header/>
             <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
-                    <p>Tutor List</p>
+                    <p>{t('tutor_list_title')}</p>
                     <ul className={styles.breadcrumbItems} data-aos="fade-up" data-aos-duration="800"
                         data-aos-delay="500">
                         <li>
-                            <a href="/hocho/home">Home</a>
+                            <a href="/hocho/home">{t('tutor_breadcrumb_home')}</a>
                         </li>
                         <li>
                             <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
-                        <li>Tutors</li>
+                        <li>{t('tutor_breadcrumb_list')}</li>
                     </ul>
                 </div>
             </section>
@@ -114,60 +116,59 @@ const PublicTutorList = () => {
                         <button
                             className={`${styles.teacherButton} ${styles.buttonHover} ${styles.fadeIn}`}
                             onClick={handleTeacherDashboard}
-                            title="Go to Teacher Dashboard"
+                            title={t('tutor_list_teacher_dashboard_title')}
                         >
-                            <FontAwesomeIcon icon={faChalkboardTeacher}/> Teacher Dashboard
+                            <FontAwesomeIcon icon={faChalkboardTeacher}/> {t('tutor_list_teacher_dashboard')}
                         </button>
                     )}
                 </div>
                 <div className={`${styles.searchContainer} ${styles.animateSlideIn}`}>
-                    <h3>Search Tutors</h3>
+                    <h3>{t('tutor_list_search_title')}</h3>
                     <form onSubmit={handleSearchSubmit} className={styles.searchForm}>
                         <div className={styles.formGroup}>
-                            <label htmlFor="name">Tutor Name</label>
+                            <label htmlFor="name">{t('tutor_list_search_name')}</label>
                             <input
                                 type="text"
                                 id="name"
                                 name="name"
                                 value={searchParams.name}
                                 onChange={handleSearchChange}
-                                placeholder="Enter tutor name"
+                                placeholder={t('tutor_list_search_name_placeholder')}
                                 className={styles.inputField}
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <label htmlFor="specialization">Specialization</label>
+                            <label htmlFor="specialization">{t('tutor_list_search_specialization')}</label>
                             <input
                                 type="text"
                                 id="specialization"
                                 name="specialization"
                                 value={searchParams.specialization}
                                 onChange={handleSearchChange}
-                                placeholder="Enter specialization"
+                                placeholder={t('tutor_list_search_specialization_placeholder')}
                                 className={styles.inputField}
                             />
                         </div>
                         <div className={styles.formGroup}>
-                            <label htmlFor="minExperience">Minimum Years of Experience</label>
+                            <label htmlFor="minExperience">{t('tutor_list_search_experience')}</label>
                             <input
                                 type="number"
                                 id="minExperience"
                                 name="minExperience"
                                 value={searchParams.minExperience}
                                 onChange={handleSearchChange}
-                                placeholder="Enter years"
+                                placeholder={t('tutor_list_search_experience_placeholder')}
                                 className={styles.inputField}
                             />
                         </div>
                         <button type="submit" className={`${styles.searchButton} ${styles.buttonHover}`}>
-                            Search
+                            {t('tutor_list_search_btn')}
                         </button>
                     </form>
                 </div>
                 <div className={styles.tutorContainer}>
                     {filteredTutors.length === 0 ? (
-                        <p className={`${styles.noResults} ${styles.fadeIn}`}>No tutors found matching your
-                            criteria.</p>) : (<div className={styles.tutorGrid}>
+                        <p className={`${styles.noResults} ${styles.fadeIn}`}>{t('tutor_list_no_results')}</p>) : (<div className={styles.tutorGrid}>
                             {filteredTutors.map((tutor, index) => (<div
                                     key={tutor.tutorId}
                                     className={styles.tutorGridItem}
@@ -177,22 +178,18 @@ const PublicTutorList = () => {
                                 >
                                     <div className={`${styles.tutorCard} ${styles.cardHover}`}>
                                         <h5 className={styles.tutorCardTitle}>{tutor.user.fullName}</h5>
-                                        <p className={styles.tutorCardText}><b>Email:</b> {tutor.user.email}</p>
-                                        <p className={styles.tutorCardText}><b>Phone
-                                            Number:</b> {tutor.user.phoneNumber}</p>
-                                        <p className={styles.tutorCardText}>
-                                            <b>Specialization:</b> {tutor.specialization}</p>
-                                        <p className={styles.tutorCardText}><b>Experience:</b> {tutor.experience} years
-                                        </p>
-                                        <p className={styles.tutorCardText}><b>Education:</b> {tutor.education}</p>
-                                        <p className={styles.tutorCardText}><b>Introduction:</b> {tutor.introduction}
-                                        </p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_email')}</b> {tutor.user.email}</p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_phone')}</b> {tutor.user.phoneNumber}</p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_specialization')}</b> {tutor.specialization}</p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_experience')}</b> {tutor.experience} {t('tutor_label_years')}</p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_education')}</b> {tutor.education}</p>
+                                        <p className={styles.tutorCardText}><b>{t('tutor_label_introduction')}</b> {tutor.introduction}</p>
                                         <div className={styles.tutorBtnGroup}>
                                             <button
                                                 className={`${styles.tutorBtn} ${styles.buttonHover}`}
                                                 onClick={() => navigate(`/hocho/tutors/profile/${tutor.user.id}`)}
                                             >
-                                                View Details
+                                                {t('tutor_list_view_btn')}
                                             </button>
                                             {currentUser && tutor.user && currentUser.id === tutor.user.id && (<>
                                                     <button
@@ -200,14 +197,14 @@ const PublicTutorList = () => {
                                                         style={{background: '#ffb300', color: '#333'}}
                                                         onClick={() => handleEdit(tutor.user.id)}
                                                     >
-                                                        Edit
+                                                        {t('tutor_list_edit_btn')}
                                                     </button>
                                                     <button
                                                         className={`${styles.tutorBtn} ${styles.buttonHover}`}
                                                         style={{background: '#e53935'}}
                                                         onClick={() => handleDelete(tutor.user.id)}
                                                     >
-                                                        Delete
+                                                        {t('tutor_list_delete_btn')}
                                                     </button>
                                                 </>)}
                                         </div>
