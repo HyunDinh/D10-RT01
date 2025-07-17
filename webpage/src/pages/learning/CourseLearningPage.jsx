@@ -352,48 +352,59 @@ export default function CourseLearningPage() {
                                     className={styles.videoPlayer}
                                 />
                             </div>)}
-                        {selectedContent.contentType === 'PDF' && (<div className={styles.pdfContainer}>
-                            {pdfLoading ? (<div className={styles.loading}>Loading PDF...</div>) : pdfError ? (
-                                <div className={styles.error}>{pdfError}</div>) : fileBuffer ? (<>
+                        {selectedContent.contentType === 'PDF' && (
+                          <div className={styles.pdfPresentationContainer}>
+                            <div className={styles.pdfSlide}>
+                              {pdfLoading ? (
+                                <div className={styles.loading}>Loading PDF...</div>
+                              ) : pdfError ? (
+                                <div className={styles.error}>{pdfError}</div>
+                              ) : fileBuffer ? (
                                 <Document
-                                    key={`pdf-${pdfKey}-${selectedContent.contentId}`}
-                                    file={fileBuffer}
-                                    onLoadSuccess={onDocumentLoadSuccess}
-                                    onLoadError={onDocumentLoadError}
-                                    loading={<div className={styles.loading}>Loading PDF...</div>}
-                                    error={<div className={styles.error}>Failed to load PDF file.</div>}
-                                    noData={<div className={styles.error}>No PDF file.</div>}
+                                  key={`pdf-${pdfKey}-${selectedContent.contentId}`}
+                                  file={fileBuffer}
+                                  onLoadSuccess={onDocumentLoadSuccess}
+                                  onLoadError={onDocumentLoadError}
+                                  loading={<div className={styles.loading}>Loading PDF...</div>}
+                                  error={<div className={styles.error}>Failed to load PDF file.</div>}
+                                  noData={<div className={styles.error}>No PDF file.</div>}
                                 >
-                                    <Page
-                                        pageNumber={pageNumber}
-                                        width={pdfWidth - 32}
-                                        loading={<div className={styles.loading}>Loading page...</div>}
-                                        error={<div className={styles.error}>Failed to load page.</div>}
-                                    />
+                                  <Page
+                                    pageNumber={pageNumber}
+                                    width={pdfWidth - 64}
+                                    loading={<div className={styles.loading}>Loading page...</div>}
+                                    error={<div className={styles.error}>Failed to load page.</div>}
+                                    renderTextLayer={false}
+                                    renderAnnotationLayer={false}
+                                  />
                                 </Document>
-                                <div className={styles.pdfNavigation}>
-                                    <button
-                                        className={`${styles.navButton} ${pageNumber <= 1 ? styles.btnDisabled : ''}`}
-                                        disabled={pageNumber <= 1}
-                                        onClick={() => setPageNumber(pageNumber - 1)}
-                                        aria-label="Previous PDF page"
-                                    >
-                                        Previous
-                                    </button>
-                                    <span className={styles.pageInfo}>
-                              Page {pageNumber} / {numPages || '?'}
-                            </span>
-                                    <button
-                                        className={`${styles.navButton} ${pageNumber >= (numPages || 1) ? styles.btnDisabled : ''}`}
-                                        disabled={pageNumber >= (numPages || 1)}
-                                        onClick={() => setPageNumber(pageNumber + 1)}
-                                        aria-label="Next PDF page"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
-                            </>) : (<div className={styles.error}>No PDF file.</div>)}
-                        </div>)}
+                              ) : (
+                                <div className={styles.error}>No PDF file.</div>
+                              )}
+                            </div>
+                            <div className={styles.pdfNavigation}>
+                              <button
+                                className={`${styles.navButton} ${pageNumber <= 1 ? styles.btnDisabled : ''}`}
+                                disabled={pageNumber <= 1}
+                                onClick={() => setPageNumber(pageNumber - 1)}
+                                aria-label="Previous PDF page"
+                              >
+                                Previous
+                              </button>
+                              <span className={styles.pageInfo}>
+                                Page {pageNumber} / {numPages || '?'}
+                              </span>
+                              <button
+                                className={`${styles.navButton} ${pageNumber >= (numPages || 1) ? styles.btnDisabled : ''}`}
+                                disabled={pageNumber >= (numPages || 1)}
+                                onClick={() => setPageNumber(pageNumber + 1)}
+                                aria-label="Next PDF page"
+                              >
+                                Next
+                              </button>
+                            </div>
+                          </div>
+                        )}
                         {(selectedContent.contentType === 'VIDEO' || selectedContent.contentType === 'PDF') && ((() => {
                             const download = getDownloadUrl(selectedContent);
                             return download ? (<div className={styles.downloadButtonContainer}>
