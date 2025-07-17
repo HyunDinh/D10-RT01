@@ -2,9 +2,10 @@ import React from 'react';
 import styles from '../styles/BannerHeader.module.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay, faStar,faArrowRight} from "@fortawesome/free-solid-svg-icons";
-import {faFacebookF} from "@fortawesome/free-brands-svg-icons";
+import { useTranslation } from 'react-i18next';
 
 const BannerHeader = () => {
+    const { t } = useTranslation();
     return (<section className={styles.banner} aria-labelledby="banner-title">
         <div className={styles.container}>
 
@@ -71,7 +72,7 @@ const BannerHeader = () => {
                             data-aos="fade-up"
                             data-aos-duration="800"
                         >
-                            Studying & PLaying <FontAwesomeIcon icon={faStar}/>
+                            {t('bannerheader_subtitle', 'Studying & PLaying')} <FontAwesomeIcon icon={faStar}/>
                         </h5>
                         <h1
                             id="banner-title"
@@ -79,16 +80,15 @@ const BannerHeader = () => {
                             data-aos-duration="800"
                             data-aos-delay="300"
                         >
-                            Kid's Promising <br/>
-                            <span>Tomorrow</span> Ahead
+                            {t('bannerheader_title_line1', "Kid's Promising")} <br/>
+                            <span>{t('bannerheader_title_line2', 'Tomorrow')}</span> {t('bannerheader_title_line3', 'Ahead')}
                         </h1>
                         <p
                             data-aos="fade-up"
                             data-aos-duration="800"
                             data-aos-delay="500"
                         >
-                            Discover a nurturing environment where your child can grow, learn, and thrive with our
-                            dedicated care and education programs.
+                            {t('bannerheader_desc', 'Discover a nurturing environment where your child can grow, learn, and thrive with our dedicated care and education programs.')}
                         </p>
                         <div className={styles.heroButton}>
                             <a
@@ -98,7 +98,7 @@ const BannerHeader = () => {
                                 data-aos-duration="800"
                                 data-aos-delay="700"
                             >
-                                Apply Today
+                                {t('bannerheader_apply_today', 'Apply Today')}
                                 <FontAwesomeIcon icon={faArrowRight} />
                             </a>
                             <span className={styles.buttonText} data-aos="fade-up" data-aos-duration="800"
@@ -106,7 +106,7 @@ const BannerHeader = () => {
                                  <a href="#" className={`${styles.videoBtn} video-popup`} aria-label="Play video">
                                      <FontAwesomeIcon icon={faPlay}/>
                                  </a>
-                                 <span>Watch Our Story</span>
+                                 <span>{t('bannerheader_watch_our_story', 'Watch Our Story')}</span>
                              </span>
                         </div>
                     </div>
@@ -155,6 +155,6 @@ const BannerHeader = () => {
 
     </section>
     )
-};
+}
 
 export default BannerHeader;

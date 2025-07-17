@@ -204,10 +204,13 @@ function Header() {
                                 <select
                                     className={styles.languageSelect}
                                     value={i18n.language}
-                                    onChange={e => i18n.changeLanguage(e.target.value)}
+                                    onChange={e => {
+                                        i18n.changeLanguage(e.target.value);
+                                        localStorage.setItem('i18nextLng', e.target.value);
+                                    }}
                                 >
                                     {LANGUAGES.map(lang => (<option value={lang.code} key={lang.code}>
-                                      {t(lang.labelKey, lang.defaultLabel)}
+                                        {t(lang.labelKey, lang.defaultLabel)}
                                     </option>))}
                                 </select>
                             </div>
