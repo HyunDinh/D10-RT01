@@ -28,6 +28,9 @@ public class TimeRestriction {
     @Column(name = "max_play_time")
     private Integer maxPlayTime;
 
+    @Column(name = "reward_per_quiz")
+    private Integer rewardPerQuiz = 600;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

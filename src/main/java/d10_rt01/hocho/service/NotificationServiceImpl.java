@@ -87,6 +87,36 @@ public class NotificationServiceImpl implements NotificationService {
         notificationRepository.save(notification);
     }
 
+    @Override
+    public void createVideoTimeRewardLessonNotification(Long childId, String content) {
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RuntimeException("Child not found"));
+        
+        UserNotification notification = new UserNotification();
+        notification.setUser(child);
+        notification.setUserRole(UserRole.CHILD);
+        notification.setNotificationType(NotificationType.VIDEO_TIME_REWARD_LESSON);
+        notification.setContent(content);
+        notification.setIsRead(false);
+        
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void createVideoTimeRewardQuizNotification(Long childId, String content) {
+        User child = userRepository.findById(childId)
+                .orElseThrow(() -> new RuntimeException("Child not found"));
+        
+        UserNotification notification = new UserNotification();
+        notification.setUser(child);
+        notification.setUserRole(UserRole.CHILD);
+        notification.setNotificationType(NotificationType.VIDEO_TIME_REWARD_QUIZ);
+        notification.setContent(content);
+        notification.setIsRead(false);
+        
+        notificationRepository.save(notification);
+    }
+
     // Parent notifications
     @Override
     public void createChildJoinedCourseParentNotification(Long parentId, String childName, String courseName) {

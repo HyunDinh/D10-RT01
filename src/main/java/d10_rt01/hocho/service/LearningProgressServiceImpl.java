@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import d10_rt01.hocho.model.enums.ActivityType;
+import d10_rt01.hocho.repository.TimeRestrictionRepository;
+import d10_rt01.hocho.service.monitoring.TimeRestrictionService;
+import d10_rt01.hocho.service.NotificationService;
 
 @Service
 public class LearningProgressServiceImpl implements LearningProgressService {
@@ -36,6 +39,14 @@ public class LearningProgressServiceImpl implements LearningProgressService {
 
     @Autowired
     private NotificationIntegrationService notificationIntegrationService;
+
+    @Autowired
+    private TimeRestrictionRepository timeRestrictionRepository;
+    @Autowired
+    private TimeRestrictionService timeRestrictionService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public LearningProgressDto getChildLearningProgress(Long childId) {
@@ -255,37 +266,49 @@ public class LearningProgressServiceImpl implements LearningProgressService {
     @Override
     @Transactional
     public void markLessonAsCompleted(Long childId, Long lessonId) {
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.LocalDateTime startOfDay = today.atStartOfDay();
+        java.time.LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
         // Lấy thông tin child và lesson
         User child = userRepository.findById(childId)
             .orElseThrow(() -> new RuntimeException("Child not found"));
-        
         Lesson lesson = lessonRepository.findById(lessonId)
             .orElseThrow(() -> new RuntimeException("Lesson not found"));
-        
+
         // Kiểm tra xem đã có learning history cho lesson này chưa
         List<LearningHistory> existingHistories = learningHistoryRepository.findByChild_IdAndLesson_LessonId(childId, lessonId);
-        
-        LearningHistory history;
-        if (existingHistories.isEmpty()) {
-            // Tạo mới learning history
-            history = new LearningHistory();
-            history.setChild(child);
-            history.setLesson(lesson);
-            history.setActivityType(ActivityType.LESSON);
-            history.setStartTime(LocalDateTime.now());
-            history.setEndTime(LocalDateTime.now());
-        } else {
-            // Cập nhật learning history hiện tại
-            history = existingHistories.stream()
-                .max((h1, h2) -> h1.getStartTime().compareTo(h2.getStartTime()))
-                .orElse(existingHistories.get(0));
-            history.setEndTime(LocalDateTime.now());
+        boolean alreadyCompleted = !existingHistories.isEmpty();
+        if (alreadyCompleted) {
+            // Nếu đã hoàn thành lesson này rồi thì không cho hoàn thành lại
+            throw new RuntimeException("Bài học này đã được hoàn thành trước đó!");
         }
-        
-        // Lưu vào database
+
+        // Tạo mới learning history
+        LearningHistory history = new LearningHistory();
+        history.setChild(child);
+        history.setLesson(lesson);
+        history.setStartTime(LocalDateTime.now());
+        history.setEndTime(LocalDateTime.now());
         learningHistoryRepository.save(history);
-        
-        // Kiểm tra xem khóa học có được hoàn thành không
+
+        // Kiểm tra đã thưởng cho lesson này trong ngày chưa
+        boolean rewardedToday = existingHistories.stream()
+            .anyMatch(h -> h.getEndTime() != null &&
+                !h.getEndTime().isBefore(startOfDay) &&
+                h.getEndTime().isBefore(endOfDay));
+        if (!rewardedToday) {
+            Integer rewardSeconds = 600;
+            var restrictionOpt = timeRestrictionRepository.findByChild_Id(childId);
+            if (restrictionOpt.isPresent() && restrictionOpt.get().getRewardPerQuiz() != null) {
+                rewardSeconds = restrictionOpt.get().getRewardPerQuiz();
+            }
+            timeRestrictionService.addVideoTimeReward(childId, rewardSeconds);
+            // Gửi notification cho trẻ em
+            String content = "You have just been added " + (rewardSeconds / 60) + " minutes watching video after completing lesson: " + lesson.getTitle();
+            notificationService.createVideoTimeRewardLessonNotification(childId, content);
+        }
+
         checkAndNotifyCourseCompletion(childId, lesson.getCourse().getCourseId());
     }
     

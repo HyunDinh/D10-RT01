@@ -12,5 +12,5 @@ import java.util.List;
 public interface QuizResultRepository extends JpaRepository<QuizResult, Long> {
     List<QuizResult> findByQuiz(Quiz quiz);
     List<QuizResult> findByChild(User child);
-    QuizResult findByQuizAndChild(Quiz quiz, User child);
+    List<QuizResult> findByQuizAndChild(Quiz quiz, User child);
 }

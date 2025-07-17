@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import d10_rt01.hocho.model.QuizResult;
+import d10_rt01.hocho.service.monitoring.TimeRestrictionService;
+import d10_rt01.hocho.repository.TimeRestrictionRepository;
+import d10_rt01.hocho.service.NotificationService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,14 @@ public class QuizServiceImpl implements QuizService {
 
     @Autowired
     private NotificationIntegrationService notificationIntegrationService;
+
+    @Autowired
+    private d10_rt01.hocho.service.monitoring.TimeRestrictionService timeRestrictionService;
+    @Autowired
+    private d10_rt01.hocho.repository.TimeRestrictionRepository timeRestrictionRepository;
+
+    @Autowired
+    private d10_rt01.hocho.service.NotificationService notificationService;
 
     @Override
     @Transactional
@@ -273,62 +284,71 @@ public class QuizServiceImpl implements QuizService {
     @Override
     @Transactional
     public QuizResult submitQuiz(Long quizId, Long childId, List<QuizAnswerDto> answers) {
+        // ----------- Thưởng video nếu chưa quá 3 lần/ngày -----------
+        java.time.LocalDate today = java.time.LocalDate.now();
+        java.time.LocalDateTime startOfDay = today.atStartOfDay();
+        java.time.LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+        var quizResults = quizResultRepository.findByChild(userRepository.findById(childId).orElseThrow());
+        System.out.println("--- LOG QUIZ SUBMIT ---");
+        System.out.println("startOfDay: " + startOfDay + ", endOfDay: " + endOfDay);
+        for (var qr : quizResults) {
+            System.out.println("QuizResult submittedAt: " + qr.getSubmittedAt());
+        }
+        int quizCountToday = (int) quizResults.stream()
+            .filter(qr -> qr.getSubmittedAt() != null &&
+                !qr.getSubmittedAt().isBefore(startOfDay) &&
+                qr.getSubmittedAt().isBefore(endOfDay))
+            .count();
+        boolean shouldReward = quizCountToday < 3;
+        System.out.println("Quiz count today for child " + childId + ": " + quizCountToday);
+        System.out.println("Should reward: " + shouldReward);
+        // -----------------------------------------------------------
+
         Quiz quiz = getQuiz(quizId);
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy học sinh"));
 
-        QuizResult existingResult = quizResultRepository.findByQuizAndChild(quiz, child);
-        
-        QuizResult quizResult;
-        if (existingResult != null) {
-            // Nếu học sinh đã nộp bài, xóa các câu trả lời cũ và cập nhật kết quả hiện có
-            quizAnswerRepository.deleteAll(existingResult.getAnswers()); // Xóa câu trả lời cũ khỏi DB
-            existingResult.getAnswers().clear(); // Đảm bảo danh sách trong đối tượng cũng trống
-            quizResult = existingResult;
-        } else {
-            // Nếu đây là lần nộp bài đầu tiên, tạo QuizResult mới
-            quizResult = new QuizResult();
-            quizResult.setAnswers(new ArrayList<>()); // Khởi tạo danh sách answers rỗng
-        }
-
+        // Luôn tạo mới QuizResult mỗi lần nộp quiz
+        QuizResult quizResult = new QuizResult();
         quizResult.setQuiz(quiz);
         quizResult.setChild(child);
-        quizResult.setScore(0); // Khởi tạo hoặc đặt lại điểm là 0
-        // Không cần lưu quizResult ở đây nữa, vì nó sẽ được lưu tự động khi answers được thêm và quizResult được lưu ở cuối
+        quizResult.setScore(0);
+        quizResult.setSubmittedAt(java.time.LocalDateTime.now());
+        quizResult.setAnswers(new ArrayList<>());
 
         int totalScore = 0;
         List<QuizAnswer> quizAnswers = new ArrayList<>();
-
         for (QuizAnswerDto answerDto : answers) {
             Long questionId = answerDto.getQuestionId();
             String selectedOptionKey = answerDto.getSelectedOptionId();
-
             QuizQuestion question = quizQuestionRepository.findById(questionId)
                     .orElseThrow(() -> new RuntimeException("Không tìm thấy câu hỏi"));
-
             boolean isCorrect = selectedOptionKey.equals(question.getCorrectOptionId());
             if (isCorrect) {
                 totalScore += question.getPoints();
             }
-
             QuizAnswer quizAnswer = new QuizAnswer();
             quizAnswer.setQuestion(question);
             quizAnswer.setSelectedOptionId(selectedOptionKey);
             quizAnswer.setIsCorrect(isCorrect);
-            quizAnswer.setResult(quizResult); // Liên kết với QuizResult đã được lưu
+            quizAnswer.setResult(quizResult);
             quizAnswers.add(quizAnswer);
         }
-
-        // 2. Cập nhật điểm cho QuizResult và lưu lại (sẽ cascade các QuizAnswer)
         quizResult.setScore(totalScore);
-        // Thay vì setAnswers, hãy thêm từng câu trả lời vào danh sách của quizResult
-        quizAnswers.forEach(quizResult.getAnswers()::add); // Thêm các câu trả lời mới vào danh sách hiện có/trống
-        
+        quizAnswers.forEach(quizResult.getAnswers()::add);
         QuizResult savedResult = quizResultRepository.save(quizResult);
-        
-        // Tạo notification khi child hoàn thành quiz
         notificationIntegrationService.createQuizCompletionNotifications(childId, quiz.getTitle());
-        
+        if (shouldReward) {
+            Integer rewardSeconds = 600;
+            var restrictionOpt = timeRestrictionRepository.findByChild_Id(childId);
+            if (restrictionOpt.isPresent() && restrictionOpt.get().getRewardPerQuiz() != null) {
+                rewardSeconds = restrictionOpt.get().getRewardPerQuiz();
+            }
+            timeRestrictionService.addVideoTimeReward(childId, rewardSeconds);
+            // Gửi notification cho trẻ em
+            String content = "You have just been added " + (rewardSeconds / 60) + " minutes watching video after completing quiz: " + quiz.getTitle();
+            notificationService.createVideoTimeRewardQuizNotification(childId, content);
+        }
         return savedResult;
     }
 
@@ -350,8 +370,10 @@ public class QuizServiceImpl implements QuizService {
         Quiz quiz = getQuiz(quizId);
         User child = userRepository.findById(childId)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy học sinh"));
-        QuizResult result = quizResultRepository.findByQuizAndChild(quiz, child);
-        return result;
+        List<QuizResult> results = quizResultRepository.findByQuizAndChild(quiz, child);
+        return results.stream()
+            .max(java.util.Comparator.comparing(QuizResult::getSubmittedAt))
+            .orElse(null);
     }
 
     private void validateQuiz(Quiz quiz) {
