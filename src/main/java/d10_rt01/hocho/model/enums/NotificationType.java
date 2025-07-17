@@ -4,6 +4,8 @@ public enum NotificationType {
     // Child notifications
     CHILD_JOINED_COURSE,
     CHILD_COMPLETED_COURSE,
+    VIDEO_TIME_REWARD_LESSON,
+    VIDEO_TIME_REWARD_QUIZ,
     
     // Parent notifications
     CHILD_JOINED_COURSE_PARENT,

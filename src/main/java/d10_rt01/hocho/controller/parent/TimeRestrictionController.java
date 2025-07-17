@@ -41,6 +41,12 @@ public class TimeRestrictionController {
         return ResponseEntity.ok(timeRestriction);
     }
 
+    @PostMapping("/set-reward-per-quiz")
+    public ResponseEntity<?> setRewardPerQuiz(@RequestParam Long childId, @RequestParam Integer rewardPerQuiz) {
+        timeRestrictionService.setRewardPerQuiz(childId, rewardPerQuiz);
+        return ResponseEntity.ok("Đã cập nhật số phút thưởng mỗi lần hoàn thành quiz: " + rewardPerQuiz);
+    }
+
     @GetMapping("/get")
     public ResponseEntity<List<TimeRestriction>> getTimeRestriction(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {

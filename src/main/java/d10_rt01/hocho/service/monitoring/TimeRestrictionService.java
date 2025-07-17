@@ -77,26 +77,23 @@ public class TimeRestrictionService {
         return Optional.of(timeRestrictionRepository.save(restriction));
     }
 
-//    // Check if a child has exceeded play time
-//    public boolean isPlayTimeExceeded(Long childId, Integer usedPlayTime) {
-//        Optional<TimeRestriction> restrictionOptional = timeRestrictionRepository.findByChild_Id(childId);
-//        if (restrictionOptional.isEmpty()) {
-//            return false; // No restriction set for this child
-//        }
-//
-//        TimeRestriction restriction = restrictionOptional.get();
-//        return usedPlayTime > (restriction.getMaxPlayTime() != null ? restriction.getMaxPlayTime() : Integer.MAX_VALUE);
-//    }
-//
-//    // Check if a child has exceeded study time
-//    public boolean isStudyTimeExceeded(Long childId, Integer usedStudyTime) {
-//        Optional<TimeRestriction> restrictionOptional = timeRestrictionRepository.findByChild_Id(childId);
-//        if (restrictionOptional.isEmpty()) {
-//            return false; // No restriction set for this child
-//        }
-//
-//        TimeRestriction restriction = restrictionOptional.get();
-//        return usedStudyTime > (restriction.getMaxVideoTime() != null ? restriction.getMaxVideoTime() : Integer.MAX_VALUE);
-//    }
+    public void setRewardPerQuiz(Long childId, Integer rewardPerQuiz) {
+        Optional<TimeRestriction> restrictionOpt = timeRestrictionRepository.findByChild_Id(childId);
+        if (restrictionOpt.isPresent()) {
+            TimeRestriction restriction = restrictionOpt.get();
+            restriction.setRewardPerQuiz(rewardPerQuiz);
+            timeRestrictionRepository.save(restriction);
+        }
+    }
+
+    public void addVideoTimeReward(Long childId, int rewardMinutes) {
+        Optional<TimeRestriction> restrictionOpt = timeRestrictionRepository.findByChild_Id(childId);
+        if (restrictionOpt.isPresent()) {
+            TimeRestriction restriction = restrictionOpt.get();
+            Integer current = restriction.getMaxVideoTime() != null ? restriction.getMaxVideoTime() : 0;
+            restriction.setMaxVideoTime(current + rewardMinutes);
+            timeRestrictionRepository.save(restriction);
+        }
+    }
 }
 

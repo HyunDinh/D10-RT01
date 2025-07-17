@@ -26,6 +26,8 @@ public interface NotificationService {
     // Tạo notification cho Child
     void createChildJoinedCourseNotification(Long childId, String courseName);
     void createChildCompletedCourseNotification(Long childId, String courseName);
+    void createVideoTimeRewardLessonNotification(Long childId, String content);
+    void createVideoTimeRewardQuizNotification(Long childId, String content);
     
     // Tạo notification cho Parent
     void createChildJoinedCourseParentNotification(Long parentId, String childName, String courseName);
