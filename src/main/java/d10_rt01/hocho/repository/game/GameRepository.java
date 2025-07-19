@@ -12,4 +12,8 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<Game> findByStatus(ContentStatus status);
 
     Game findByTitle(String title);
+
+    boolean existsGameByTitle(String title);
+
+
 }
