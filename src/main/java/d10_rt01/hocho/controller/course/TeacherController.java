@@ -195,7 +195,10 @@ public class TeacherController {
     }
 
     @GetMapping("/courses/top") // danh sach khoa hoc ban chay
-    public ResponseEntity<List<Map<String, Object>>> getTopCoursesByStudentCount(Authentication auth) {
+    public ResponseEntity<List<Map<String, Object>>> getTopCoursesByStudentCount(
+            Authentication auth,
+            @RequestParam(value = "subject", required = false) String subject
+    ) {
         if (auth == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -208,6 +211,13 @@ public class TeacherController {
 
         User teacher = teacherOpt.get();
         List<Course> courses = courseService.getCourseByTeacherId(teacher.getId());
+
+        // Nếu có subject, lọc theo subject
+        if (subject != null && !subject.isEmpty()) {
+            courses = courses.stream()
+                    .filter(c -> subject.equalsIgnoreCase(String.valueOf(c.getSubject())))
+                    .collect(Collectors.toList());
+        }
 
         // Đếm số học sinh cho mỗi khóa học của giáo viên
         List<Map<String, Object>> topCoursesData = new ArrayList<>();

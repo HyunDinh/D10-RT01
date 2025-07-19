@@ -46,13 +46,16 @@ function GamesPage() {
     };
 
     const handlePlay = (game) => {
-        let slug = game.title
-            .toLowerCase()
-            .split(' ')
-            .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
-            .join('');
-
-        navigate(`/hocho/child/games/${slug}`, {state: {game}});
+        if (game.title === "Dino Run" || game.title === "Clumsy Bird") {
+            let slug = game.title
+                .toLowerCase()
+                .split(' ')
+                .map((word, index) => index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1))
+                .join('');
+            navigate(`/hocho/child/games/${slug}`, {state: {game}});
+        } else {
+            alert("Game đang trong quá trình phát triển.");
+        }
     };
 
     const clearFilters = () => {
@@ -70,9 +73,13 @@ function GamesPage() {
     }
 
     const handleOpenLeaderboard = (gameId) => {
-        console.log("Đã chọn gameId:", gameId);
-        setSelectedGameId(gameId); // Set the selected gameId
-        setOpenLeaderboard(true);
+        const game = games.find(g => g.gameId === gameId);
+        if (game && (game.title === "Dino Run" || game.title === "Clumsy Bird")) {
+            setSelectedGameId(gameId);
+            setOpenLeaderboard(true);
+        } else {
+            alert("Trò chơi này đang trong quá trình phát triển.");
+        }
     };
 
     const handleCloseLeaderboard = () => {

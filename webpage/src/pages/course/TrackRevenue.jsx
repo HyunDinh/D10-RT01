@@ -33,6 +33,8 @@ function TrackRevenue() {
     const [dailyRevenueData, setDailyRevenueData] = useState([]);
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [subjectList, setSubjectList] = useState([]);
+    const [selectedSubject, setSelectedSubject] = useState('');
 
     useEffect(() => {
         axios.get('/api/teacher/revenue/total', {withCredentials: true})
@@ -71,7 +73,18 @@ function TrackRevenue() {
         axios.get('/api/teacher/revenue/daily', {withCredentials: true})
             .then(res => setDailyRevenueData(res.data))
             .catch(err => console.error("Error fetching daily revenue data", err));
-    }, [teacherId]);
+
+        // Lấy danh sách subject (có thể hardcode nếu chưa có API)
+        axios.get('/api/teacher/courses/subjects', {withCredentials: true})
+            .then(res => setSubjectList(res.data))
+            .catch(err => {
+                // Nếu chưa có API, hardcode danh sách subject
+                setSubjectList([
+                    'MATHEMATICS', 'LITERATURE', 'ENGLISH', 'PHYSICS', 'CHEMISTRY',
+                    'BIOLOGY', 'HISTORY', 'GEOGRAPHY', 'CIVICS', 'PHYSICAL_EDUCATION', 'TECHNOLOGY'
+                ]);
+            });
+    }, []);
 
     const pieData = [{name: 'Today', value: totalStudentsToday}, {
         name: 'Before',
@@ -92,6 +105,22 @@ function TrackRevenue() {
         })
             .then(res => setDailyRevenueData(res.data))
             .catch(err => console.error("Error fetching filtered daily revenue", err));
+    };
+
+    // Hàm lấy top courses theo subject
+    const fetchTopCourses = (subject = '') => {
+        axios.get('/api/teacher/courses/top', {
+            params: subject ? { subject } : {},
+            withCredentials: true
+        })
+            .then(res => setTopCourses(res.data))
+            .catch(err => console.error("Error fetching top courses", err));
+    };
+
+    // Khi chọn subject và submit
+    const handleTopCourseFilter = (e) => {
+        e.preventDefault();
+        fetchTopCourses(selectedSubject);
     };
 
     return (<>
@@ -132,6 +161,21 @@ function TrackRevenue() {
                             <Tooltip/>
                             <Bar dataKey="students" fill="#8884d8"/>
                         </BarChart>
+                        {/* Chú thích màu sắc cho BarChart */}
+                        <div style={{marginTop: 12, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, marginLeft: 32}}>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <span style={{
+                                    display: 'inline-block',
+                                    width: 16,
+                                    height: 16,
+                                    background: '#8884d8',
+                                    borderRadius: '50%',
+                                    marginRight: 8,
+                                    verticalAlign: 'middle'
+                                }}></span>
+                                <span>Số lượng học sinh theo nhóm tuổi</span>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Stat Cards Middle */}
@@ -163,6 +207,33 @@ function TrackRevenue() {
                             </Pie>
                             <Tooltip/>
                         </PieChart>
+                        {/* Chú thích màu sắc */}
+                        <div style={{marginTop: 12, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 12, marginLeft: 32}}>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <span style={{
+                                    display: 'inline-block',
+                                    width: 16,
+                                    height: 16,
+                                    background: COLORS[0],
+                                    borderRadius: '50%',
+                                    marginRight: 8,
+                                    verticalAlign: 'middle'
+                                }}></span>
+                                <span>Số lượng học sinh đăng ký hôm nay</span>
+                            </div>
+                            <div style={{display: 'flex', alignItems: 'center'}}>
+                                <span style={{
+                                    display: 'inline-block',
+                                    width: 16,
+                                    height: 16,
+                                    background: COLORS[1],
+                                    borderRadius: '50%',
+                                    marginRight: 8,
+                                    verticalAlign: 'middle'
+                                }}></span>
+                                <span>Số lượng học sinh cũ</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -199,6 +270,23 @@ function TrackRevenue() {
                 {/* Top Purchased Courses */}
                 <div className={`${styles.tableContainer} ${styles.sectionSpacing}`}>
                     <h2 className="text-xl font-semibold mb-4">Top Purchased Courses</h2>
+                    <form onSubmit={handleTopCourseFilter} style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 16 }}>
+                        <label htmlFor="subject-select">Subject:</label>
+                        <select
+                            id="subject-select"
+                            value={selectedSubject}
+                            onChange={e => setSelectedSubject(e.target.value)}
+                            style={{ padding: 8, borderRadius: 6 }}
+                        >
+                            <option value="">All subjects</option>
+                            {subjectList.map(subject => (
+                                <option key={subject} value={subject}>{subject.replaceAll('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</option>
+                            ))}
+                        </select>
+                        <button type="submit" style={{ padding: '8px 16px', borderRadius: 6, background: '#007bff', color: '#fff', border: 'none' }}>
+                            Filter
+                        </button>
+                    </form>
                     <table>
                         <thead>
                         <tr>
