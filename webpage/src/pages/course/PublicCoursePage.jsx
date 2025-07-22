@@ -80,7 +80,9 @@ const CoursesList = () => {
             if (filters.search) params.search = filters.search;
 
             const response = await axios.get(url, {params, withCredentials: true});
-            setCourses(response.data);
+            // Lọc chỉ lấy các khóa học đã được phê duyệt
+            const approvedCourses = response.data.filter(course => course.status === 'APPROVED');
+            setCourses(approvedCourses);
         } catch (error) {
             console.error('Failed to fetch courses:', error);
             setError('Cannot load course list.');
