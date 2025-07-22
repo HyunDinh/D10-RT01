@@ -134,7 +134,7 @@ const AdminHome = () => {
                 });
             } catch (err) {
                 console.error('Error fetching statistics:', err);
-                setError('Lỗi khi tải dữ liệu thống kê. Vui lòng thử lại sau.');
+                setError('Error loading statistics. Please try again later.');
             } finally {
                 setLoading(false);
             }
@@ -146,27 +146,27 @@ const AdminHome = () => {
     // Helper functions to prepare data for charts
     const prepareUserData = () => {
         return [
-            { name: 'Quản trị viên', value: statistics.users.admin, color: '#2D3748' },
-            { name: 'Giáo viên', value: statistics.users.teacher, color: '#38A169' },
-            { name: 'Phụ huynh', value: statistics.users.parent, color: '#DD6B20' },
-            { name: 'Học sinh', value: statistics.users.child, color: '#3182CE' }
+            { name: 'Administrator', value: statistics.users.admin, color: '#2D3748' },
+            { name: 'Teacher', value: statistics.users.teacher, color: '#38A169' },
+            { name: 'Parent', value: statistics.users.parent, color: '#DD6B20' },
+            { name: 'Student', value: statistics.users.child, color: '#3182CE' }
         ];
     };
 
     const prepareContentData = () => {
         return [
-            { name: 'Khóa học', total: statistics.courses.total, pending: statistics.courses.pending, approved: statistics.courses.approved },
+            { name: 'Course', total: statistics.courses.total, pending: statistics.courses.pending, approved: statistics.courses.approved },
             { name: 'Video', total: statistics.videos.total, pending: statistics.videos.pending, approved: statistics.videos.approved },
-            { name: 'Bài kiểm tra', total: statistics.quizzes.total, pending: 0, approved: statistics.quizzes.total }
+            { name: 'Quiz', total: statistics.quizzes.total, pending: 0, approved: statistics.quizzes.total }
         ];
     };
 
     const prepareFeedbackData = () => {
         return [
-            { name: 'Đang chờ', value: statistics.feedbacks.pending, color: '#E53E3E' },
-            { name: 'Đang xử lý', value: statistics.feedbacks.inProgress, color: '#DD6B20' },
-            { name: 'Đã giải quyết', value: statistics.feedbacks.resolved, color: '#38A169' },
-            { name: 'Đã đóng', value: statistics.feedbacks.closed, color: '#718096' }
+            { name: 'Pending', value: statistics.feedbacks.pending, color: '#E53E3E' },
+            { name: 'In Progress', value: statistics.feedbacks.inProgress, color: '#DD6B20' },
+            { name: 'Resolved', value: statistics.feedbacks.resolved, color: '#38A169' },
+            { name: 'Closed', value: statistics.feedbacks.closed, color: '#718096' }
         ];
     };
 
@@ -188,8 +188,8 @@ const AdminHome = () => {
             <main className={styles.container}>
                 <div className={styles.header}>
                     <div className={styles.headerContent}>
-                        <h1 className={styles.headerTitle}>Trang chủ quản trị</h1>
-                        <p className={styles.headerDescription}>Chào mừng đến với bảng điều khiển quản trị Hocho - Nơi quản lý nội dung học tập cho trẻ em</p>
+                        <h1 className={styles.headerTitle}>Admin Dashboard</h1>
+                        <p className={styles.headerDescription}>Welcome to Hocho Admin Dashboard - Manage educational content for children</p>
                     </div>
                     <div className={styles.headerIcon}>
                         <FontAwesomeIcon icon={faChild} />
@@ -208,18 +208,18 @@ const AdminHome = () => {
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
                                 <FontAwesomeIcon icon={faChartPie} className={styles.sectionIcon} />
-                                <h2 className={styles.sectionTitle}>Thống kê người dùng</h2>
+                                <h2 className={styles.sectionTitle}>User Statistics</h2>
                             </div>
                             <div className={styles.sectionContent}>
                                 <div>
                                     <div className={styles.cardGrid}>
-                                        <StatCard title="Tổng người dùng" value={statistics.users.total} icon={faUsers} color="#4C51BF" />
-                                        <StatCard title="Giáo viên" value={statistics.users.teacher} icon={faUserTie} color="#38A169" />
-                                        <StatCard title="Học sinh" value={statistics.users.child} icon={faChild} color="#3182CE" />
+                                        <StatCard title="Total Users" value={statistics.users.total} icon={faUsers} color="#4C51BF" />
+                                        <StatCard title="Teacher" value={statistics.users.teacher} icon={faUserTie} color="#38A169" />
+                                        <StatCard title="Student" value={statistics.users.child} icon={faChild} color="#3182CE" />
                                     </div>
                                     <div className={styles.cardGrid2}>
-                                        <StatCard title="Quản trị viên" value={statistics.users.admin} icon={faUsers} color="#2D3748" />
-                                        <StatCard title="Phụ huynh" value={statistics.users.parent} icon={faUsers} color="#DD6B20" />
+                                        <StatCard title="Administrator" value={statistics.users.admin} icon={faUsers} color="#2D3748" />
+                                        <StatCard title="Parent" value={statistics.users.parent} icon={faUsers} color="#DD6B20" />
                                     </div>
                                 </div>
                                 <div className={styles.chartContainer}>
@@ -239,7 +239,7 @@ const AdminHome = () => {
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
-                                            <Tooltip formatter={(value) => [`${value} người dùng`, 'Số lượng']} />
+                                            <Tooltip formatter={(value) => [`${value} users`, 'Amount']} />
                                             <Legend />
                                         </PieChart>
                                     </ResponsiveContainer>
@@ -251,22 +251,22 @@ const AdminHome = () => {
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
                                 <FontAwesomeIcon icon={faChartBar} className={styles.sectionIcon} />
-                                <h2 className={styles.sectionTitle}>Thống kê nội dung</h2>
+                                <h2 className={styles.sectionTitle}>Content Statistics</h2>
                             </div>
                             <div className={styles.sectionContent}>
                                 <div>
                                     <div className={styles.cardGrid}>
-                                        <StatCard title="Tổng khóa học" value={statistics.courses.total} icon={faBook} color="#805AD5" />
-                                        <StatCard title="Khóa học chờ duyệt" value={statistics.courses.pending} icon={faBook} color="#D53F8C" />
-                                        <StatCard title="Khóa học đã duyệt" value={statistics.courses.approved} icon={faBook} color="#319795" />
+                                        <StatCard title="Total Courses" value={statistics.courses.total} icon={faBook} color="#805AD5" />
+                                        <StatCard title="Pending Courses" value={statistics.courses.pending} icon={faBook} color="#D53F8C" />
+                                        <StatCard title="Approved Courses" value={statistics.courses.approved} icon={faBook} color="#319795" />
                                     </div>
                                     <div className={styles.cardGrid}>
-                                        <StatCard title="Tổng video" value={statistics.videos.total} icon={faVideo} color="#3182CE" />
-                                        <StatCard title="Video chờ duyệt" value={statistics.videos.pending} icon={faVideo} color="#E53E3E" />
-                                        <StatCard title="Video đã duyệt" value={statistics.videos.approved} icon={faVideo} color="#38A169" />
+                                        <StatCard title="Total Videos" value={statistics.videos.total} icon={faVideo} color="#3182CE" />
+                                        <StatCard title="Pending Videos" value={statistics.videos.pending} icon={faVideo} color="#E53E3E" />
+                                        <StatCard title="Approved Videos" value={statistics.videos.approved} icon={faVideo} color="#38A169" />
                                     </div>
                                     <div>
-                                        <StatCard title="Tổng bài kiểm tra" value={statistics.quizzes.total} icon={faQuestionCircle} color="#DD6B20" />
+                                        <StatCard title="Total Quizzes" value={statistics.quizzes.total} icon={faQuestionCircle} color="#DD6B20" />
                                     </div>
                                 </div>
                                 <div className={styles.chartContainer}>
@@ -280,9 +280,9 @@ const AdminHome = () => {
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
-                                            <Bar dataKey="total" name="Tổng" fill="#8884d8" />
-                                            <Bar dataKey="pending" name="Chờ duyệt" fill="#ff8042" />
-                                            <Bar dataKey="approved" name="Đã duyệt" fill="#82ca9d" />
+                                            <Bar dataKey="total" name="Total" fill="#8884d8" />
+                                            <Bar dataKey="pending" name="Pending" fill="#ff8042" />
+                                            <Bar dataKey="approved" name="Approved" fill="#82ca9d" />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -293,18 +293,18 @@ const AdminHome = () => {
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
                                 <FontAwesomeIcon icon={faChartLine} className={styles.sectionIcon} />
-                                <h2 className={styles.sectionTitle}>Thống kê phản hồi</h2>
+                                <h2 className={styles.sectionTitle}>Feedback Statistics</h2>
                             </div>
                             <div className={styles.sectionContent}>
                                 <div>
                                     <div className={styles.cardGrid}>
-                                        <StatCard title="Tổng phản hồi" value={statistics.feedbacks.total} icon={faComments} color="#4C51BF" />
-                                        <StatCard title="Đang chờ" value={statistics.feedbacks.pending} icon={faComments} color="#E53E3E" />
-                                        <StatCard title="Đang xử lý" value={statistics.feedbacks.inProgress} icon={faComments} color="#DD6B20" />
+                                        <StatCard title="Total Feedback" value={statistics.feedbacks.total} icon={faComments} color="#4C51BF" />
+                                        <StatCard title="Pending" value={statistics.feedbacks.pending} icon={faComments} color="#E53E3E" />
+                                        <StatCard title="In Progress" value={statistics.feedbacks.inProgress} icon={faComments} color="#DD6B20" />
                                     </div>
                                     <div className={styles.cardGrid2}>
-                                        <StatCard title="Đã giải quyết" value={statistics.feedbacks.resolved} icon={faComments} color="#38A169" />
-                                        <StatCard title="Đã đóng" value={statistics.feedbacks.closed} icon={faComments} color="#718096" />
+                                        <StatCard title="Resolved" value={statistics.feedbacks.resolved} icon={faComments} color="#38A169" />
+                                        <StatCard title="Closed" value={statistics.feedbacks.closed} icon={faComments} color="#718096" />
                                     </div>
                                 </div>
                                 <div className={styles.chartContainer}>
@@ -324,7 +324,7 @@ const AdminHome = () => {
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
-                                            <Tooltip formatter={(value) => [`${value} phản hồi`, 'Số lượng']} />
+                                            <Tooltip formatter={(value) => [`${value} feedback`, 'Amount']} />
                                             <Legend />
                                         </PieChart>
                                     </ResponsiveContainer>
@@ -336,7 +336,7 @@ const AdminHome = () => {
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
                                 <FontAwesomeIcon icon={faTable} className={styles.sectionIcon} />
-                                <h2 className={styles.sectionTitle}>Quản lý hệ thống</h2>
+                                <h2 className={styles.sectionTitle}>System Management</h2>
                             </div>
                             <div className={styles.managementGrid}>
                                 <a href="/hocho/admin/accounts" className={`${styles.managementCard} ${styles.blueCard}`}>
@@ -344,54 +344,54 @@ const AdminHome = () => {
                                         <div className={`${styles.cardIconContainer} ${styles.blueCardIcon}`}>
                                             <FontAwesomeIcon icon={faUsers} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.blueCardTitle}`}>Quản lý tài khoản</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.blueCardTitle}`}>Account Management</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Quản lý tất cả tài khoản người dùng trong hệ thống</p>
+                                    <p className={styles.cardDescription}>Manage all user accounts in the system</p>
                                 </a>
                                 <a href="/hocho/admin/tutors" className={`${styles.managementCard} ${styles.greenCard}`}>
                                     <div className={styles.cardHeader}>
                                         <div className={`${styles.cardIconContainer} ${styles.greenCardIcon}`}>
                                             <FontAwesomeIcon icon={faUserTie} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.greenCardTitle}`}>Quản lý gia sư</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.greenCardTitle}`}>Tutor Management</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Quản lý thông tin và hồ sơ gia sư</p>
+                                    <p className={styles.cardDescription}>Manage tutor information and profiles</p>
                                 </a>
                                 <a href="/hocho/admin/feedbacks" className={`${styles.managementCard} ${styles.purpleCard}`}>
                                     <div className={styles.cardHeader}>
                                         <div className={`${styles.cardIconContainer} ${styles.purpleCardIcon}`}>
                                             <FontAwesomeIcon icon={faComments} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.purpleCardTitle}`}>Quản lý phản hồi</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.purpleCardTitle}`}>Feedback Management</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Xem và phản hồi các góp ý từ người dùng</p>
+                                    <p className={styles.cardDescription}>View and respond to user feedback</p>
                                 </a>
                                 <a href="/hocho/admin/course/approval" className={`${styles.managementCard} ${styles.yellowCard}`}>
                                     <div className={styles.cardHeader}>
                                         <div className={`${styles.cardIconContainer} ${styles.yellowCardIcon}`}>
                                             <FontAwesomeIcon icon={faBook} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.yellowCardTitle}`}>Duyệt khóa học</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.yellowCardTitle}`}>Course Approval</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Xem xét và phê duyệt các khóa học mới</p>
+                                    <p className={styles.cardDescription}>Review and approve new courses</p>
                                 </a>
                                 <a href="/hocho/admin/video/approval" className={`${styles.managementCard} ${styles.redCard}`}>
                                     <div className={styles.cardHeader}>
                                         <div className={`${styles.cardIconContainer} ${styles.redCardIcon}`}>
                                             <FontAwesomeIcon icon={faVideo} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.redCardTitle}`}>Duyệt video</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.redCardTitle}`}>Video Approval</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Xem xét và phê duyệt các video mới</p>
+                                    <p className={styles.cardDescription}>Review and approve new videos</p>
                                 </a>
                                 <a href="/hocho/admin/games/storage" className={`${styles.managementCard} ${styles.indigoCard}`}>
                                     <div className={styles.cardHeader}>
                                         <div className={`${styles.cardIconContainer} ${styles.indigoCardIcon}`}>
                                             <FontAwesomeIcon icon={faChild} />
                                         </div>
-                                        <h3 className={`${styles.cardTitle} ${styles.indigoCardTitle}`}>Quản lý trò chơi</h3>
+                                        <h3 className={`${styles.cardTitle} ${styles.indigoCardTitle}`}>Game Management</h3>
                                     </div>
-                                    <p className={styles.cardDescription}>Quản lý các trò chơi giáo dục trong hệ thống</p>
+                                    <p className={styles.cardDescription}>Manage educational games in the system</p>
                                 </a>
                             </div>
                         </section>

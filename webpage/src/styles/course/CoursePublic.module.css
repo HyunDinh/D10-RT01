@@ -347,7 +347,7 @@
     gap: 16px;
     background: #fafafa;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
     padding: 32px;
     margin-bottom: 32px;
     align-items: flex-start;
@@ -358,7 +358,7 @@
     height: 180px;
     object-fit: cover;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .courseInfo {
@@ -391,7 +391,7 @@
     flex: 1 1 300px;
     background: #f8fafc;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     padding: 24px 20px;
     min-width: 320px;
 }
@@ -425,16 +425,19 @@
         flex-direction: column;
         padding: 20px 5px;
     }
+
     .courseDetailBox {
         flex-direction: column;
         align-items: stretch;
         padding: 20px 10px;
     }
+
     .lessonQuizSection {
         flex-direction: column;
         gap: 20px;
     }
 }
+
 .addToCartBtn {
     background-color: #28a745 !important;
     color: white !important;
@@ -548,7 +551,7 @@
     background-color: #fafafa;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
     animation: fadeIn 0.5s ease-in;
 }
 
@@ -584,18 +587,36 @@
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideInRight {
-    from { transform: translateX(100px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 @keyframes slideInUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .fade-in {
@@ -653,6 +674,7 @@
     font-weight: 600;
 
 }
+
 /* Responsive button spacing */
 @media (max-width: 576px) {
     .customBtn {
@@ -662,6 +684,7 @@
         text-align: center;
     }
 }
+
 .chip {
     display: inline-block;
     background-color: #f1f1f1;
@@ -675,7 +698,7 @@
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     white-space: nowrap;
 }
 
@@ -683,7 +706,7 @@
     background-color: var(--primary-color);
     transform: scale(1.05);
     color: #fafafa;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .courseListContainer {
@@ -850,8 +873,14 @@
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive adjustments */
@@ -876,4 +905,12 @@
         padding: 8px;
         font-size: 13px;
     }
+}
+
+
+.courseGridSingle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, calc(100% / 4)));
+    gap: 20px;
+    justify-content: flex-start; /* Centers the single card */
 }

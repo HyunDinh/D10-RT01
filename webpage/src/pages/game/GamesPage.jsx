@@ -7,10 +7,10 @@ import styles from "../../styles/AnswerQuestion/QuestionList.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import LeaderboardDialog from "./GameLeaderBoard.jsx";
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 function GamesPage() {
-    const { t } = useTranslation();
+    const {t} = useTranslation();
     const [games, setGames] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedAge, setSelectedAge] = useState('');
@@ -156,34 +156,47 @@ function GamesPage() {
 
             {/* Game list */}
             <div style={{flex: 1}}>
-                <div style={{
-                    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px'
-                }}>
-                    {games.map(game => (<div key={game.gameId} style={gameCardStyle}>
+                <div
+                    style={{
+                        display: 'grid', gridTemplateColumns: games.length === 1 ? 'minmax(300px, calc(100% / 3))' // Single card takes 1/3 width
+                            : 'repeat(3, minmax(300px, 1fr))', // 3 cards per row by default
+                        gap: '20px',
+                    }}
+                >
+                    {games.map((game) => (<div key={game.gameId} style={gameCardStyle}>
                             <img
                                 src={`/${game.gameUrl}`}
                                 alt={t('game_poster_alt')}
-                                style={{width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px'}}
+                                style={{
+                                    width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px',
+                                }}
                             />
                             <h3>{game.title}</h3>
-                            <p><strong>{t('age_group')}:</strong> {game.ageGroup}</p>
-                            <p><strong>{t('category')}:</strong> {game.category}</p>
+                            <p>
+                                <strong>{t('age_group')}:</strong> {game.ageGroup}
+                            </p>
+                            <p>
+                                <strong>{t('category')}:</strong> {game.category}
+                            </p>
                             <p style={{minHeight: '60px'}}>{game.description}</p>
                             <div style={btnContainerStyle}>
                                 <button
-                                    onClick={() => handlePlay(game)} style={playBtnStyle}>{t('play_now')} ▶️
+                                    onClick={() => handlePlay(game)}
+                                    style={playBtnStyle}
+                                >
+                                    {t('play_now')} ▶️
                                 </button>
                                 <button
-                                    onClick={() => handleOpenLeaderboard(game.gameId)} // ✅ truyền gameId vào
+                                    onClick={() => handleOpenLeaderboard(game.gameId)}
                                     style={leaderBtnStyle}
                                 >
                                     🏆 {t('leaderboard')}
                                 </button>
-
                             </div>
                         </div>))}
                 </div>
             </div>
+
         </div>
         <LeaderboardDialog
             open={openLeaderboard}

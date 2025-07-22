@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Header from '../../components/Header';
 import styles from '../../styles/course/CoursePublic.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown, faCartPlus, faChevronRight, faSearch, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCaretDown, faCartPlus, faChevronRight, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {useNavigate} from 'react-router-dom';
 
 const CoursesList = () => {
     const [courses, setCourses] = useState([]);
@@ -79,7 +79,7 @@ const CoursesList = () => {
             if (filters.level) params.level = filters.level;
             if (filters.search) params.search = filters.search;
 
-            const response = await axios.get(url, { params, withCredentials: true });
+            const response = await axios.get(url, {params, withCredentials: true});
             setCourses(response.data);
         } catch (error) {
             console.error('Failed to fetch courses:', error);
@@ -103,20 +103,20 @@ const CoursesList = () => {
                 const res = await axios.post(
                     `/api/child-cart/${user.id}/add/${courseId}`,
                     {},
-                    { withCredentials: true }
+                    {withCredentials: true}
                 );
                 alert('Course added to cart!');
                 navigate('/hocho/child/cart');
-            } else if (user.role === "parent" ) {
+            } else if (user.role === "parent") {
                 if (!childId) {
                     alert('Please select a child to add the course!');
-                    setLoadingStates((prev) => ({ ...prev, [courseId]: false }));
+                    setLoadingStates((prev) => ({...prev, [courseId]: false}));
                     return;
                 }
                 await axios.post(
                     `http://localhost:8080/api/parent-cart/${user.id}/add-course/${childId}/${courseId}`,
                     {},
-                    { withCredentials: true }
+                    {withCredentials: true}
                 );
                 alert('Course added to cart!');
                 navigate('/hocho/parent/cart');
@@ -137,7 +137,7 @@ const CoursesList = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleFilterChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFilters((prev) => ({
             ...prev,
             [name]: value,
@@ -164,16 +164,17 @@ const CoursesList = () => {
 
     return (
         <>
-            <Header />
-            <section className={styles.sectionHeader} style={{ backgroundImage: `url(/background.png)` }}>
+            <Header/>
+            <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
                 <div className={styles.headerInfo}>
                     <p>Course List</p>
-                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up" data-aos-delay="500">
+                    <ul className={styles.breadcrumbItems} data-aos-duration="800" data-aos="fade-up"
+                        data-aos-delay="500">
                         <li>
                             <a href="/hocho/home">Home</a>
                         </li>
                         <li>
-                            <FontAwesomeIcon icon={faChevronRight} />
+                            <FontAwesomeIcon icon={faChevronRight}/>
                         </li>
                         <li>Course List</li>
                     </ul>
@@ -195,7 +196,7 @@ const CoursesList = () => {
                                 className={styles.searchInput}
                             />
                             <button type="submit" className={styles.searchBtn}>
-                                <FontAwesomeIcon icon={faSearch} />
+                                <FontAwesomeIcon icon={faSearch}/>
                             </button>
                         </form>
                     </div>
@@ -215,7 +216,7 @@ const CoursesList = () => {
                                 <option value="13-15">13-15 years old</option>
                             </select>
                             <span className={styles.dropdownIcon}>
-                <FontAwesomeIcon icon={faCaretDown} />
+                <FontAwesomeIcon icon={faCaretDown}/>
               </span>
                         </div>
                     </div>
@@ -234,7 +235,7 @@ const CoursesList = () => {
                                 <option value="1000000+">1,000,000+ VND</option>
                             </select>
                             <span className={styles.dropdownIcon}>
-                <FontAwesomeIcon icon={faCaretDown} />
+                <FontAwesomeIcon icon={faCaretDown}/>
               </span>
                         </div>
                     </div>
@@ -261,7 +262,7 @@ const CoursesList = () => {
                                 <option value="TECHNOLOGY">Technology</option>
                             </select>
                             <span className={styles.dropdownIcon}>
-                <FontAwesomeIcon icon={faCaretDown} />
+                <FontAwesomeIcon icon={faCaretDown}/>
               </span>
                         </div>
                     </div>
@@ -282,20 +283,20 @@ const CoursesList = () => {
                                     ))}
                                 </select>
                                 <span className={styles.dropdownIcon}>
-                  <FontAwesomeIcon icon={faCaretDown} />
+                  <FontAwesomeIcon icon={faCaretDown}/>
                 </span>
                             </div>
                         </div>
                     )}
                     <button
                         className={styles.clearBtn}
-                        onClick={() => setFilters({ category: '', priceRange: '', level: '', search: '' })}
+                        onClick={() => setFilters({category: '', priceRange: '', level: '', search: ''})}
                     >
                         Clear Filters
                     </button>
                 </aside>
                 <div className={styles.courseSection}>
-                    <div className={styles.courseGrid}>
+                    <div className={currentCourses.length <= 3 ? styles.courseGridSingle : styles.courseGrid}>
                         {currentCourses.map((course, idx) => (
                             <div key={course.courseId || idx} className={styles.courseCard}>
                                 <div className={styles.cardImage}>
@@ -315,7 +316,8 @@ const CoursesList = () => {
                                         <b>Price:</b> {course.price.toLocaleString('vi-VN')} VND
                                     </p>
                                     <p className={styles.cardText}>
-                                        <b>Subject:</b> {course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
+                                        <b>Subject:</b>{' '}
+                                        {course.subject ? course.subject.replaceAll('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase()) : 'N/A'}
                                     </p>
                                     {/* Avatar + tên giáo viên + nút nhắn tin khi hover avatar/tên/nút */}
                                     <div
@@ -327,23 +329,42 @@ const CoursesList = () => {
                                             position: 'relative',
                                             minHeight: 60,
                                             padding: '4px 0',
-                                            zIndex: 1
+                                            zIndex: 1,
                                         }}
                                         onMouseEnter={() => setHoveredTeacherCard(course.courseId)}
                                         onMouseLeave={() => setHoveredTeacherCard(null)}
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
                                             <img
-                                                src={course.teacherAvatarUrl ? `http://localhost:8080/api/hocho/profile/${course.teacherAvatarUrl}` : '/images/default-avatar.png'}
+                                                src={
+                                                    course.teacherAvatarUrl
+                                                        ? `http://localhost:8080/api/hocho/profile/${course.teacherAvatarUrl}`
+                                                        : '/images/default-avatar.png'
+                                                }
                                                 alt={course.teacherName}
-                                                style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', marginRight: 8, border: '1px solid #eee', cursor: 'pointer' }}
-                                                onError={e => { e.target.src = '/images/default-avatar.png'; }}
+                                                style={{
+                                                    width: 32,
+                                                    height: 32,
+                                                    borderRadius: '50%',
+                                                    objectFit: 'cover',
+                                                    marginRight: 8,
+                                                    border: '1px solid #eee',
+                                                    cursor: 'pointer',
+                                                }}
+                                                onError={(e) => {
+                                                    e.target.src = '/images/default-avatar.png';
+                                                }}
                                             />
                                             <span
-                                                style={{ fontWeight: 'bold', color: '#2d6cdf', fontSize: '1rem', cursor: 'pointer' }}
+                                                style={{
+                                                    fontWeight: 'bold',
+                                                    color: '#2d6cdf',
+                                                    fontSize: '1rem',
+                                                    cursor: 'pointer',
+                                                }}
                                             >
-                                                {course.teacherName}
-                                            </span>
+              {course.teacherName}
+            </span>
                                         </div>
                                     </div>
                                     <div style={{ textAlign: 'end' }}>
@@ -355,7 +376,9 @@ const CoursesList = () => {
                                         </button>
                                         <button
                                             className={`${styles.detailsBtn} ${styles.addToCartBtn}`}
-                                            onClick={() => { handleAddToCart(course.courseId); }}
+                                            onClick={() => {
+                                                handleAddToCart(course.courseId);
+                                            }}
                                             style={{ marginLeft: '10px' }}
                                         >
                                             <FontAwesomeIcon icon={faCartPlus} /> Add to cart
@@ -365,6 +388,7 @@ const CoursesList = () => {
                             </div>
                         ))}
                     </div>
+
                     <nav className={styles.paginationNav}>
                         <ul className={styles.pagination}>
                             {[...Array(totalPages).keys()].map((page) => (
@@ -379,19 +403,29 @@ const CoursesList = () => {
                         </ul>
                     </nav>
                 </div>
+
             </div>
             {/* Modal select child for parent */}
             {showChildModal && (
                 <div style={{
-                    position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.3)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100vw',
+                    height: '100vh',
+                    background: 'rgba(0,0,0,0.3)',
+                    zIndex: 9999,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                 }}>
-                    <div style={{ background: '#fff', padding: 32, borderRadius: 8, minWidth: 320 }}>
+                    <div style={{background: '#fff', padding: 32, borderRadius: 8, minWidth: 320}}>
                         <h4>Select child to add course</h4>
                         <select
                             id="child-select"
                             value={childId || ''}
                             onChange={handleChildChange}
-                            style={{ width: '100%', padding: 8, margin: '16px 0' }}
+                            style={{width: '100%', padding: 8, margin: '16px 0'}}
                         >
                             <option value="">Select child</option>
                             {children.map((child) => (
@@ -400,7 +434,7 @@ const CoursesList = () => {
                                 </option>
                             ))}
                         </select>
-                        <div style={{ marginTop: 16, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+                        <div style={{marginTop: 16, display: 'flex', justifyContent: 'flex-end', gap: 8}}>
                             <button
                                 className={styles.detailsBtn}
                                 onClick={() => {
@@ -411,7 +445,7 @@ const CoursesList = () => {
                                         axios.post(
                                             `/api/parent-cart/${user.id}/add-course/${selectedChildId}/${pendingCourseId}`,
                                             {},
-                                            { withCredentials: true }
+                                            {withCredentials: true}
                                         ).then(() => {
                                             alert('Course added to cart!');
                                             navigate('/hocho/parent/cart');
@@ -435,7 +469,10 @@ const CoursesList = () => {
                             </button>
                             <button
                                 className={styles.detailsBtn}
-                                onClick={() => { setShowChildModal(false); setPendingCourseId(null); }}
+                                onClick={() => {
+                                    setShowChildModal(false);
+                                    setPendingCourseId(null);
+                                }}
                             >
                                 Cancel
                             </button>

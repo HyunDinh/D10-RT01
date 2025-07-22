@@ -752,5 +752,21 @@
   "Video": "Video",
   "video_for_children": "Video dành cho trẻ em",
   "video_comments_send_button": "Gửi",
-  "video_comments_no_comments": "Không có ai bình luận cả"
+  "video_comments_no_comments": "Không có ai bình luận cả",
+  "video_approval_title": "Duyệt Video",
+  "video_fetch_error": "Lỗi khi tải video. Vui lòng thử lại sau.",
+  "video_approve_success": "Duyệt video thành công!",
+  "video_approve_error": "Duyệt video thất bại. Vui lòng thử lại.",
+  "video_reject_success": "Từ chối video thành công!",
+  "video_reject_error": "Từ chối video thất bại. Vui lòng thử lại.",
+  "video_approve_btn": "Duyệt",
+  "video_reject_btn": "Từ chối",
+  "video_approve_aria_label": "Duyệt video: {title}",
+  "video_reject_aria_label": "Từ chối video: {title}",
+  "video_view_aria_label": "Xem video: {title}",
+  "video_reject_modal_title": "Xác nhận từ chối",
+  "video_reject_modal_ok": "Từ chối",
+  "video_reject_modal_cancel": "Hủy",
+  "video_reject_modal_description": "Bạn có chắc chắn muốn từ chối video này?",
+  "video_reject_modal_text": "Hành động này không thể hoàn tác."
 }

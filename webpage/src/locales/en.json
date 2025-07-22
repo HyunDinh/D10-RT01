@@ -743,5 +743,21 @@
   "Video": "Video",
   "video_for_children": "Video for children",
   "video_comments_send_button": "Send",
-  "video_comments_no_comments": "No one comments"
+  "video_comments_no_comments": "No one comments",
+  "video_approval_title": "Video Approval",
+  "video_fetch_error": "Error loading videos. Please try again later.",
+  "video_approve_success": "Video approved successfully!",
+  "video_approve_error": "Failed to approve video. Please try again.",
+  "video_reject_success": "Video rejected successfully!",
+  "video_reject_error": "Failed to reject video. Please try again.",
+  "video_approve_btn": "Approve",
+  "video_reject_btn": "Reject",
+  "video_approve_aria_label": "Approve video: {title}",
+  "video_reject_aria_label": "Reject video: {title}",
+  "video_view_aria_label": "View video: {title}",
+  "video_reject_modal_title": "Confirm Rejection",
+  "video_reject_modal_ok": "Reject",
+  "video_reject_modal_cancel": "Cancel",
+  "video_reject_modal_description": "Are you sure you want to reject this video?",
+  "video_reject_modal_text": "This action cannot be undone."
 }
