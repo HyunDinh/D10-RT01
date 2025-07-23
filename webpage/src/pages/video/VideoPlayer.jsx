@@ -8,7 +8,7 @@ import styles from '../../styles/video/VideoPlayer.module.css';
 import suggestedStyles from '../../styles/video/SuggestedVideos.module.css';
 import CommentSection from './CommentSection';
 import ListVideo from './ListVideo';
-import {base64ToArrayBuffer} from '../../components/videoUtils'; // Move function to util file
+import {base64ToArrayBuffer} from '../../components/VideoUtils.jsx';
 import { useTranslation } from 'react-i18next';
 
 export default function VideoPlayer() {

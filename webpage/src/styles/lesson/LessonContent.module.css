@@ -47,6 +47,7 @@
     transition: all 0.3s ease-in-out;
     transform: scale(1.05);
 }
+
 /* Container for the page */
 .container {
     max-width: 1200px;
@@ -153,10 +154,25 @@
 
 /* Content player (right side) */
 .playerContainer {
+    border-radius: 24px;
     width: 100%;
-    border-radius: 8px;
-    background-color: #f9fafb;
-    padding: 1rem;
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+.react-pdf__Page__annotations.annotationLayer:empty {
+    display: none;
+}
+
+.react-pdf__Page__annotations.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
 }
 
 /* PDF controls */
@@ -400,5 +416,153 @@
 
     .playerContainer {
         max-height: 400px;
+    }
+}
+
+/* PDF-related styles */
+.pdfContainer {
+    width: 100%;
+    margin: 0 auto 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.pdfPresentationContainer {
+    border-radius: 24px;
+    min-height: 650px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+.pdfSlide {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 450px;
+    max-width: 100%;
+    transition: box-shadow 0.3s, border 0.3s;
+}
+
+.pdfNavigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.navButton {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    border: 1px solid #6b7280;
+    background-color: #ffffff;
+    color: #6b7280;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.navButton:hover {
+    background-color: #6b7280;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+.navButton.btnDisabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pageInfo {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.pdfFrameHeader {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #6366f1;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Fix for react-pdf annotation layer */
+.react-pdf__Page__annotations.annotationLayer:empty {
+    display: none;
+}
+
+.react-pdf__Page__annotations.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: auto;
+}
+
+/* Loading and error states */
+.loading {
+    padding: 1.5rem;
+    background-color: #f3f4f6;
+    color: #6b7280;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.error {
+    padding: 1.5rem;
+    background-color: #fee2e2;
+    color: #dc2626;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 0.75rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive adjustments for PDF */
+@media (max-width: 1024px) {
+    .pdfContainer {
+        max-width: 100%;
+    }
+    
+    .pdfPresentationContainer {
+        max-width: 100%;
+        min-height: 500px;
+    }
+    
+    .pdfSlide {
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pdfNavigation {
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .navButton {
+        font-size: 0.75rem;
+        padding: 0.375rem 0.75rem;
+    }
+    
+    .pageInfo {
+        font-size: 0.75rem;
+    }
+    
+    .pdfPresentationContainer {
+        min-height: 400px;
+        border-radius: 16px;
+    }
+    
+    .pdfSlide {
+        min-height: 300px;
     }
 }

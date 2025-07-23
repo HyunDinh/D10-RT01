@@ -264,64 +264,9 @@ function Header() {
                                     </a>
                                 </li>
                                 <li className={styles.hasDropdown}>
-                                    <a href="#" onClick={(e) => {
-                                        e.preventDefault();
-                                    }}>
-                                        {t('menu_courses', 'Courses')} <FontAwesomeIcon icon={faAngleDown}
-                                                                                        className={styles.mainMenuIcon}/>
+                                    <a href="/hocho/course">
+                                        {t('menu_courses', 'Courses')}
                                     </a>
-                                    <ul className={styles.submenu}>
-                                        <li className={styles.hasDropdown}>
-                                            <a href="/hocho/course"
-                                                // onClick={(e) => {e.preventDefault();}}
-                                            >
-                                                {t('menu_subject', 'Subject')} <FontAwesomeIcon icon={faAngleDown}
-                                                                                                className={styles.mainMenuIcon}/>
-                                            </a>
-                                            <ul className={styles.submenu}>
-                                                <li>
-                                                    <a href="/hocho/teacher/course" onClick={closeMobileMenu}>
-                                                        {t('menu_course', 'Course')}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/event-carousel" onClick={closeMobileMenu}>
-                                                        {t('menu_event_carousel', 'Event Carousel')}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/event-details" onClick={closeMobileMenu}>
-                                                        {t('menu_event_details', 'Event Details')}
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li className={styles.hasDropdown}>
-                                            <a href="#" onClick={(e) => {
-                                                e.preventDefault();
-                                            }}>
-                                                {t('menu_teacher', 'Teacher')} <FontAwesomeIcon icon={faAngleDown}
-                                                                                                className={styles.mainMenuIcon}/>
-                                            </a>
-                                            <ul className={styles.submenu}>
-                                                <li>
-                                                    <a href="/team" onClick={closeMobileMenu}>
-                                                        {t('menu_our_teacher', 'Our Teacher')}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/team-carousel" onClick={closeMobileMenu}>
-                                                        {t('menu_teacher_carousel', 'Teacher Carousel')}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="/team-details" onClick={closeMobileMenu}>
-                                                        {t('menu_teacher_details', 'Teacher Details')}
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
                                 </li>
                                 <li className={styles.hasDropdown}>
                                     <a href="#" onClick={(e) => {

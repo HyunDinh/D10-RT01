@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
@@ -17,6 +17,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 const LessonContentPage = () => {
     const {courseId, lessonId} = useParams();
     const navigate = useNavigate();
+    const pdfContainerRef = useRef(null);
     const [contents, setContents] = useState([]);
     const [selectedContentId, setSelectedContentId] = useState(null);
     const [selectedContent, setSelectedContent] = useState(null);
@@ -31,6 +32,10 @@ const LessonContentPage = () => {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
     const [fileBuffer, setFileBuffer] = useState(null);
+    const [pdfWidth, setPdfWidth] = useState(600);
+    const [pdfLoading, setPdfLoading] = useState(false);
+    const [pdfError, setPdfError] = useState(null);
+    const [pdfKey, setPdfKey] = useState(0);
 
     // Fetch all contents for the lesson
     useEffect(() => {
@@ -58,6 +63,8 @@ const LessonContentPage = () => {
         const fetchContent = async () => {
             try {
                 setLoadingPlayer(true);
+                setPdfLoading(true);
+                setPdfError(null);
                 const response = await axios.get(`/api/lesson-contents/content/${selectedContentId}`, {withCredentials: true});
                 const fetchedContent = response.data;
                 setSelectedContent(fetchedContent);
@@ -65,20 +72,38 @@ const LessonContentPage = () => {
                 if (fetchedContent && fetchedContent.contentData) {
                     const arrayBuffer = base64ToArrayBuffer(fetchedContent.contentData);
                     setFileBuffer(arrayBuffer);
+                    setPdfKey(prev => prev + 1);
                 } else {
                     setError('Content data is missing or invalid.');
+                    setPdfError('Content data is missing or invalid.');
                     setFileBuffer(null);
                 }
                 setLoadingPlayer(false);
+                setPdfLoading(false);
             } catch (error) {
                 console.error('Error fetching content:', error);
                 setError('Failed to load content.');
+                setPdfError('Failed to load content.');
                 setLoadingPlayer(false);
+                setPdfLoading(false);
                 setFileBuffer(null);
             }
         };
         fetchContent();
     }, [selectedContentId]);
+
+    // Update PDF width when container size changes
+    useEffect(() => {
+        function updatePdfWidth() {
+            if (pdfContainerRef.current) {
+                setPdfWidth(pdfContainerRef.current.offsetWidth);
+            }
+        }
+
+        updatePdfWidth();
+        window.addEventListener('resize', updatePdfWidth);
+        return () => window.removeEventListener('resize', updatePdfWidth);
+    }, [selectedContent]);
 
     const base64ToArrayBuffer = (base64) => {
         const binaryString = window.atob(base64);
@@ -93,6 +118,14 @@ const LessonContentPage = () => {
     const onDocumentLoadSuccess = ({numPages}) => {
         setNumPages(numPages);
         setPageNumber(1);
+        setPdfLoading(false);
+        setPdfError(null);
+    };
+
+    const onDocumentLoadError = (error) => {
+        console.error('PDF load error:', error);
+        setPdfError('Failed to load PDF document.');
+        setPdfLoading(false);
     };
 
     const handleContentClick = (contentId) => {
@@ -207,42 +240,59 @@ const LessonContentPage = () => {
                         />
                     </div>);
             case 'PDF':
-                return (<div className={styles.playerContainer}>
-                        <Document
-                            key={selectedContentId}
-                            file={fileBuffer}
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            onError={(error) => {
-                                console.error('Error loading PDF:', error);
-                                alert('Failed to load PDF document.');
-                            }}
-                        >
-                            <Page pageNumber={pageNumber}
-                                  width={Math.min(800, window.innerWidth - 40)}
-                                  scale={1}
-                                  renderAnnotationLayer={true}
-                                  renderTextLayer={true}/>
-                        </Document>
-                        <div className={styles.pdfControls}>
+                return (
+                    <div className={styles.pdfPresentationContainer}>
+                        <div className={styles.pdfSlide}>
+                            {pdfLoading ? (
+                                <div className={styles.loading}>Loading PDF...</div>
+                            ) : pdfError ? (
+                                <div className={styles.error}>{pdfError}</div>
+                            ) : fileBuffer ? (
+                                <Document
+                                    key={`pdf-${pdfKey}-${selectedContentId}`}
+                                    file={fileBuffer}
+                                    onLoadSuccess={onDocumentLoadSuccess}
+                                    onLoadError={onDocumentLoadError}
+                                    loading={<div className={styles.loading}>Loading PDF...</div>}
+                                    error={<div className={styles.error}>Failed to load PDF document.</div>}
+                                    noData={<div className={styles.error}>No PDF data available.</div>}
+                                >
+                                    <Page
+                                        pageNumber={pageNumber}
+                                        width={pdfWidth - 64}
+                                        loading={<div className={styles.loading}>Loading page...</div>}
+                                        error={<div className={styles.error}>Failed to load page.</div>}
+                                        renderTextLayer={false}
+                                        renderAnnotationLayer={false}
+                                    />
+                                </Document>
+                            ) : (
+                                <div className={styles.error}>No PDF data available.</div>
+                            )}
+                        </div>
+                        <div className={styles.pdfNavigation}>
                             <button
-                                className={`${styles.btn} ${styles.btnSecondary}`}
+                                className={`${styles.navButton} ${pageNumber <= 1 ? styles.btnDisabled : ''}`}
                                 disabled={pageNumber <= 1}
                                 onClick={() => setPageNumber(pageNumber - 1)}
+                                aria-label="Previous page"
                             >
                                 Previous
                             </button>
-                            <span>
-                            Page {pageNumber} of {numPages || 1}
-                          </span>
+                            <span className={styles.pageInfo}>
+                                Page {pageNumber} / {numPages || '?'}
+                            </span>
                             <button
-                                className={`${styles.btn} ${styles.btnSecondary}`}
-                                disabled={pageNumber >= numPages}
+                                className={`${styles.navButton} ${pageNumber >= (numPages || 1) ? styles.btnDisabled : ''}`}
+                                disabled={pageNumber >= (numPages || 1)}
                                 onClick={() => setPageNumber(pageNumber + 1)}
+                                aria-label="Next page"
                             >
                                 Next
                             </button>
                         </div>
-                    </div>);
+                    </div>
+                );
             default:
                 return <div className={styles.noLessons}>Unsupported content type.</div>;
         }
