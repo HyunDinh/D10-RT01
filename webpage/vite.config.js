@@ -8,21 +8,21 @@ export default defineConfig({
     global: 'window', // Polyfill để ánh xạ global thành window
   },
   server: {
-    port: 3000,
-    strictPort: true,
-    open: true,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/ws': {
-        target: 'http://localhost:8080',
-        ws: true,
-        changeOrigin: true,
-        secure: false
-      }
-    },
+    // port: 3000,
+    // strictPort: true,
+    // open: true,
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://localhost:8080',
+    //     changeOrigin: true,
+    //     secure: false,
+    //   },
+    //   '/ws': {
+    //     target: 'http://localhost:8080',
+    //     ws: true,
+    //     changeOrigin: true,
+    //     secure: false
+    //   }
+    // },
   }
 });
