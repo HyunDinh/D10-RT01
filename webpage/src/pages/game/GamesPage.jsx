@@ -7,6 +7,7 @@ import styles from "../../styles/AnswerQuestion/QuestionList.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronRight} from "@fortawesome/free-solid-svg-icons";
 import LeaderboardDialog from "./GameLeaderBoard.jsx";
+import Dialog from '../../components/Dialog.jsx';
 import {useTranslation} from 'react-i18next';
 
 function GamesPage() {
@@ -20,6 +21,8 @@ function GamesPage() {
     const navigate = useNavigate();
     const [openLeaderboard, setOpenLeaderboard] = useState(false);
     const [selectedGameId, setSelectedGameId] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogGame, setDialogGame] = useState(null);
 
     useEffect(() => {
         axios.get('/api/games/filters/options')
@@ -86,6 +89,16 @@ function GamesPage() {
         setOpenLeaderboard(false);
         setTimeout(() => setSelectedGameId(null), 300);  // Clear the selected gameId
     };
+
+    const openDialog = (game) => {
+        setDialogGame(game);
+        setDialogOpen(true);
+    };
+    const closeDialog = () => {
+        setDialogOpen(false);
+        setDialogGame(null);
+    };
+
     return (<>
         <Header/>
         <section className={styles.sectionHeader} style={{backgroundImage: `url(/background.png)`}}>
@@ -187,6 +200,12 @@ function GamesPage() {
                                     {t('play_now')} ▶️
                                 </button>
                                 <button
+                                    onClick={() => openDialog(game)}
+                                    style={leaderBtnStyle}
+                                >
+                                    {t('game_view_details')}
+                                </button>
+                                <button
                                     onClick={() => handleOpenLeaderboard(game.gameId)}
                                     style={leaderBtnStyle}
                                 >
@@ -198,6 +217,18 @@ function GamesPage() {
             </div>
 
         </div>
+        {dialogOpen && dialogGame && (
+            <Dialog onClose={closeDialog}>
+                <h3>{dialogGame.title}</h3>
+                <p><strong>{t('game_id')}:</strong> {dialogGame.gameId}</p>
+                <p><strong>{t('game_status')}:</strong> {t(`game_status_${dialogGame.status.toLowerCase()}`)}</p>
+                <p><strong>{t('game_category')}:</strong> {dialogGame.category || 'N/A'}</p>
+                <p><strong>{t('game_age_group')}:</strong> {dialogGame.ageGroup || 'N/A'}</p>
+                <p><strong>{t('game_description')}:</strong> {dialogGame.description || t('game_no_description')}</p>
+                <p><strong>{t('game_created_at')}:</strong> {new Date(dialogGame.createdAt).toLocaleString()}</p>
+                <p><strong>{t('game_updated_at')}:</strong> {new Date(dialogGame.updatedAt).toLocaleString()}</p>
+            </Dialog>
+        )}
         <LeaderboardDialog
             open={openLeaderboard}
             onClose={handleCloseLeaderboard}
