@@ -1,0 +1,156 @@
+.sidebar {
+    width: max-content;
+    background-color: var(--bg-color);
+    color: #fafafa;
+    min-height: 100vh;
+    padding-top: 2rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 16px rgba(0,0,0,0.06);
+    animation: sidebarFadeIn 0.45s cubic-bezier(.4,0,.2,1);
+    transition: background 0.3s;
+    gap:  1rem;
+}
+@keyframes sidebarFadeIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+.sidebarTitle {
+    padding-left: 1rem;
+    transition: color 0.25s;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem
+}
+.sidebarTitle a img{
+    boder-radius: 50%;
+}
+.sidebarList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}
+.sidebarList li {
+    margin-bottom: 1.2rem;
+    transition: margin 0.2s;
+}
+.sidebarBtn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    text-align: left;
+    width: 100%;
+    font-size: 1.07rem;
+    padding: 0.7rem 1.3rem;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
+    transition: background 0.18s, border-color 0.18s, color 0.18s, box-shadow 0.2s;
+    gap: 12px;
+    cursor: pointer;
+    border-radius: 0 1.5rem 1.5rem 0;
+    position: relative;
+    overflow: hidden;
+    outline: none;
+}
+.sidebarBtn:hover,
+.sidebarBtn:focus {
+    background: var(--text-color);
+    color: #fafafa;
+    border-left: 4px solid var(--primary-color);
+    box-shadow: 0 4px 24px rgba(255,215,0,0.09);
+    animation: btnPulse 0.22s;
+}
+@keyframes btnPulse {
+    0% { filter: brightness(1.2); }
+    100% { filter: brightness(1); }
+}
+.sidebarList a {
+    color: #fafafa;
+    text-decoration: none;
+    font-size: 1.07rem;
+    padding: 0.7rem 2rem;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    gap: 12px;
+}
+
+.sidebarBottom {
+    margin-top: auto;
+    padding: 1.5rem 0.7rem 1.2rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    border-top: 1px solid #e5e7eb33;
+    background: var(--bg-color);
+    animation: sidebarFadeIn 0.45s cubic-bezier(.4,0,.2,1);
+}
+.languageSwitch {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 1rem;
+    color: var(--text-color);
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(255,255,255,0.02);
+    transition: background 0.2s;
+}
+.languageSelect {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-left: 0.3rem;
+    outline: none;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.languageSelect:focus {
+    color: var(--text-color);
+}
+.authBtnWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+.authBtnWrap .sidebarBtn {
+    background: linear-gradient(90deg, #DF9962FF 0%, #ffe066 100%);
+    color: #23272f;
+    font-weight: 600;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 8px rgba(255,215,0,0.09);
+    border: none;
+    padding: 0.6rem 1.3rem;
+    margin: 0;
+    transition: background 0.18s, color 0.18s, box-shadow 0.2s;
+}
+.authBtnWrap .sidebarBtn:hover,
+.authBtnWrap .sidebarBtn:focus {
+    background: linear-gradient(100deg, #ffe066 0%, #DF9962FF 100%);
+    color: #23272f;
+    box-shadow: 0 4px 24px rgba(255,215,0,0.18);
+}
+@media (max-width: 900px) {
+    .sidebar {
+        width: 100vw;
+        min-height: unset;
+        position: relative;
+        padding-top: 1rem;
+    }
+    .sidebarBtn {
+        padding: 0.7rem 1rem;
+    }
+}
