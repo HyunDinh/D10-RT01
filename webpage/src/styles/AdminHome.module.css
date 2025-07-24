@@ -288,6 +288,27 @@
   color: #4c51bf;
 }
 
+/* Admin layout styles */
+.adminLayout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fa;
+}
+
+.adminContent {
+  flex: 1;
+  margin-left: 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 900px) {
+  .adminContent {
+    margin-left: 0;
+  }
+}
+
 /* Loading spinner */
 .loadingContainer {
   display: flex;

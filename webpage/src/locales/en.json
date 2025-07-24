@@ -764,5 +764,7 @@
   "video_reject_modal_ok": "Reject",
   "video_reject_modal_cancel": "Cancel",
   "video_reject_modal_description": "Are you sure you want to reject this video?",
-  "video_reject_modal_text": "This action cannot be undone."
+  "video_reject_modal_text": "This action cannot be undone.",
+  "admin_sidebar_title": "Administration",
+  "tutor_admin" : "Approve Tutor"
 }

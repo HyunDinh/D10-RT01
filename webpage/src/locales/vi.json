@@ -773,5 +773,7 @@
   "video_reject_modal_ok": "Từ chối",
   "video_reject_modal_cancel": "Hủy",
   "video_reject_modal_description": "Bạn có chắc chắn muốn từ chối video này?",
-  "video_reject_modal_text": "Hành động này không thể hoàn tác."
+  "video_reject_modal_text": "Hành động này không thể hoàn tác.",
+  "admin_sidebar_title": "Quản Trị",
+  "tutor_admin" : "Duyệt gia sư"
 }
