@@ -233,7 +233,7 @@ export default function VideoPlayer() {
                             </div>)}
                     </div>
                     <h2 className={styles.videoDetailTitle}>{video.title}</h2>
-                    <p className={styles.videoDetailUploadedBy}>{t('uploaded_by')} {video.createdBy.fullName}</p>
+                    <p className={styles.videoDetailUploadedBy}>{t('video_uploaded_by')} {video.createdBy.fullName}</p>
                     <CommentSection videoId={videoId} playerRef={playerRef} playedSecondsRef={playedSecondsRef}/>
                 </div>
 

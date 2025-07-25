@@ -199,12 +199,7 @@ function GamesPage() {
                                 >
                                     {t('play_now')} ▶️
                                 </button>
-                                <button
-                                    onClick={() => openDialog(game)}
-                                    style={leaderBtnStyle}
-                                >
-                                    {t('game_view_details')}
-                                </button>
+
                                 <button
                                     onClick={() => handleOpenLeaderboard(game.gameId)}
                                     style={leaderBtnStyle}
@@ -217,18 +212,7 @@ function GamesPage() {
             </div>
 
         </div>
-        {dialogOpen && dialogGame && (
-            <Dialog onClose={closeDialog}>
-                <h3>{dialogGame.title}</h3>
-                <p><strong>{t('game_id')}:</strong> {dialogGame.gameId}</p>
-                <p><strong>{t('game_status')}:</strong> {t(`game_status_${dialogGame.status.toLowerCase()}`)}</p>
-                <p><strong>{t('game_category')}:</strong> {dialogGame.category || 'N/A'}</p>
-                <p><strong>{t('game_age_group')}:</strong> {dialogGame.ageGroup || 'N/A'}</p>
-                <p><strong>{t('game_description')}:</strong> {dialogGame.description || t('game_no_description')}</p>
-                <p><strong>{t('game_created_at')}:</strong> {new Date(dialogGame.createdAt).toLocaleString()}</p>
-                <p><strong>{t('game_updated_at')}:</strong> {new Date(dialogGame.updatedAt).toLocaleString()}</p>
-            </Dialog>
-        )}
+
         <LeaderboardDialog
             open={openLeaderboard}
             onClose={handleCloseLeaderboard}

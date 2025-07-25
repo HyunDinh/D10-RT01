@@ -1,5 +1,7 @@
-import { useEffect, useState, useRef } from 'react';
+import {useEffect, useState, useRef} from 'react';
 import axios from 'axios';
+import Header from "../../components/Header.jsx";
+import Footer from "../../components/Footer.jsx";
 
 function PlayDinoRun() {
     const [userId, setUserId] = useState(null);
@@ -11,9 +13,9 @@ function PlayDinoRun() {
 
     // ✅ B1: Lấy userId và gameId khi mở trang
     useEffect(() => {
-        axios.get('/api/games/userInfo?titleGame=Dino Run', { withCredentials: true })
+        axios.get('/api/games/userInfo?titleGame=Dino Run', {withCredentials: true})
             .then(res => {
-                const { userId, gameId } = res.data;
+                const {userId, gameId} = res.data;
                 setUserId(userId);
                 setGameId(gameId);
 
@@ -42,11 +44,8 @@ function PlayDinoRun() {
                 if (userId && gameId && (highScore === null || newScore > highScore)) {
                     axios.post('/api/games/saveScore', null, {
                         params: {
-                            userId,
-                            gameId,
-                            score: newScore
-                        },
-                        withCredentials: true
+                            userId, gameId, score: newScore
+                        }, withCredentials: true
                     }).then(() => {
                         setHighScore(newScore); // ✅ Cập nhật highScore trong UI
                     }).catch(err => {
@@ -60,38 +59,41 @@ function PlayDinoRun() {
         return () => window.removeEventListener("message", handleMessage);
     }, [userId, gameId, highScore]); // 👈 cần để phản ứng đúng với mỗi lần thay đổi
 
-    return (
-        <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
-            <iframe
-                ref={iframeRef}
-                src="/game/dino/index.html"
-                width="100%"
-                height="100%"
-                style={{ border: 'none' }}
-                title="Dino Game"
-                allowFullScreen
-            />
+    return (<>
+            <Header/>
 
-            <div
-                style={{
-                    position: 'absolute',
-                    top: 20,
-                    right: 20,
-                    background: '#000',
-                    color: '#fff',
-                    padding: '10px 16px',
-                    borderRadius: 8,
-                    fontSize: '18px',
-                    fontWeight: 'bold',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                    lineHeight: '1.6',
-                }}
-            >
-                {highScore !== null && <div>🥇 Highest Score: {highScore}</div>}
-                {gameStarted && score !== null && <div>🏁 Your Score: {score}</div>}
+            <div style={{width: '100vw', height: '100vh', position: 'relative'}}>
+                <iframe
+                    ref={iframeRef}
+                    src="/game/dino/index.html"
+                    width="100%"
+                    height="100%"
+                    style={{border: 'none'}}
+                    title="Dino Game"
+                    allowFullScreen
+                />
+
+                <div
+                    style={{
+                        position: 'absolute',
+                        top: 20,
+                        right: 20,
+                        background: '#000',
+                        color: '#fff',
+                        padding: '10px 16px',
+                        borderRadius: 8,
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                        lineHeight: '1.6',
+                    }}
+                >
+                    {highScore !== null && <div>🥇 Highest Score: {highScore}</div>}
+                    {gameStarted && score !== null && <div>🏁 Your Score: {score}</div>}
+                </div>
             </div>
-        </div>
-    );
+            <Footer/>
+        </>);
 }
 
 export default PlayDinoRun;
