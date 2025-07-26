@@ -207,6 +207,7 @@
 
 .cardBody {
     padding: 15px;
+    height: 100%;
 }
 
 .cardTitle {
@@ -913,4 +914,13 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, calc(100% / 4)));
     gap: 20px;
     justify-content: flex-start; /* Centers the single card */
+}
+
+.cardDescription {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* số dòng tối đa */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
 }

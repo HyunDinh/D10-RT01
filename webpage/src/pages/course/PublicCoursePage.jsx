@@ -14,7 +14,7 @@ const CoursesList = () => {
     const [children, setChildren] = useState([]);
     const [loadingStates, setLoadingStates] = useState({}); // State to track loading for each course
     const [error, setError] = useState(null);
-    const coursesPerPage = 6;
+    const coursesPerPage = 8;
     const navigate = useNavigate();
     const [filters, setFilters] = useState({
         category: '',
@@ -311,8 +311,8 @@ const CoursesList = () => {
                                 </div>
                                 <div className={styles.cardBody}>
                                     <h5 className={styles.cardTitle}>{course.title}</h5>
-                                    <p className={styles.cardText}>
-                                        <b>Description</b> {course.description.substring(0, 100)}...
+                                    <p className={styles.cardDescription}>
+                                        <b>Description</b> {course.description}
                                     </p>
                                     <p className={styles.cardText}>
                                         <b>Price:</b> {course.price.toLocaleString('vi-VN')} VND
