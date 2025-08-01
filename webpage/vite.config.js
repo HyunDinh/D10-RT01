@@ -7,4 +7,22 @@ export default defineConfig({
   define: {
     global: 'window', // Polyfill để ánh xạ global thành window
   },
+  server: {
+    port: 3000,
+    strictPort: true,
+    open: true,
+    proxy: {
+      '/api': {
+        target: 'http://54.206.70.171:8080/',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/ws': {
+        target: 'http://54.206.70.171:8080/',
+        ws: true,
+        changeOrigin: true,
+        secure: false
+      }
+    },
+  }
 });
