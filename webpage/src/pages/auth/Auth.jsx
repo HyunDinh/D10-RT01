@@ -37,7 +37,7 @@ const Auth = () => {
             setMessage(decodeURIComponent(loginError));
         }
 
-        fetch('http://localhost:8080/api/auth/user', {
+        fetch('http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/user', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -134,7 +134,7 @@ const Auth = () => {
                 formData.append('teacherImage', registerData.teacherImage);
             }
 
-            const response = await axios.post('http://localhost:8080/api/auth/register', formData, {
+            const response = await axios.post('http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/register', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
             });
@@ -167,7 +167,7 @@ const Auth = () => {
         setMessage(t('auth_login_loading'));
 
         try {
-            const response = await fetch('http://localhost:8080/api/auth/login', {
+            const response = await fetch('http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ const Auth = () => {
             });
 
             if (response.ok) {
-                const userResponse = await fetch('http://localhost:8080/api/auth/user', {
+                const userResponse = await fetch('http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/user', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {
@@ -204,7 +204,7 @@ const Auth = () => {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+        window.location.href = 'http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/oauth2/authorization/google';
     };
 
     const [showPassword, setShowPassword] = useState(false);
