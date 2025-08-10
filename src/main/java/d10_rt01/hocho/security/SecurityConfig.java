@@ -59,7 +59,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // Make ALL auth endpoints public (register, login, verify, reset, logout, etc.)
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").authenticated()
+                        .requestMatchers(
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/verify",
+                                "/api/auth/verify-child",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password",
+                                "/api/auth/logout" // usually OK public
+                        ).permitAll()
                         // Public resources if needed
                         .requestMatchers("/", "/api/courses/**", "/ws/**", "/error").permitAll()
                         // Fix missing leading slashes
