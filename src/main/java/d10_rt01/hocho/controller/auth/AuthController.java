@@ -181,19 +181,19 @@ public class AuthController {
                 session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
                 logger.info("Google login successful for email: {} - Username founded : {}", email, user.getUsername());
                 return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/hocho/home")
+                        .header("Location", "http://localhost:3000/hocho/home")
                         .body(null);
             } else {
                 logger.error("Email not found in database: {}", email);
                 return ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", "https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/hocho/login?oauthError=" +
+                        .header("Location", "http://localhost:3000/hocho/login?oauthError=" +
                                 java.net.URLEncoder.encode("Chưa liên kết tài khoản", StandardCharsets.UTF_8))
                         .body(null);
             }
         }
         logger.error("No authenticated user found after Google login");
         return ResponseEntity.status(HttpStatus.FOUND)
-                .header("Location", "https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/hocho/login?oauthError=" +
+                .header("Location", "http://localhost:3000/hocho/login?oauthError=" +
                         java.net.URLEncoder.encode("Đăng nhập Google thất bại", StandardCharsets.UTF_8))
                 .body(null);
     }
