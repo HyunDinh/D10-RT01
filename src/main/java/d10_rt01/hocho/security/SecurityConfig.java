@@ -46,33 +46,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
                                                    SessionRegistry sessionRegistry,
-                                                   CorsConfig corsConfig,
                                                    GoogleAuthConfig googleAuthConfig,
                                                    UserDetailsService userDetailsService) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfig.corsConfigurationSource()))
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
-                                HttpMethod.OPTIONS,
                                 "/",
                                 "/api/courses/**",
-                                "/api/auth/register",
-                                "/api/auth/verify",
-                                "/api/auth/verify-child",
-                                "/api/auth/login",
-                                "/api/auth/logout",
-                                "/api/auth/forgot-password",
-                                "/api/auth/reset-password",
-                                "/ws/**")
-                        .permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                "/api/auth/**",
+                                "/ws/**").permitAll()
                         .requestMatchers(
                                 "/api/auth/user",
                                 "/api/time-restriction/**",
-                                "api/teacher/course",
-                                "api/parent-child",
+                                "/api/teacher/course",
+                                "/api/parent-child",
                                 "/api/messages/**").authenticated()
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
