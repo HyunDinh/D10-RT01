@@ -43,7 +43,9 @@ function Header() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const [profileResponse, roleResponse] = await Promise.all([axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile', {withCredentials: true}), axios.get('http://localhost:8080/api/hocho/role', {withCredentials: true}),]);
+                const [profileResponse, roleResponse] = await Promise.all([
+                    axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile', {withCredentials: true}),
+                    axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/role', {withCredentials: true}),]);
                 setUser(profileResponse.data);
                 setIsLoggedIn(true);
                 const userRole = roleResponse.data?.role || localStorage.getItem('userRole') || null;
