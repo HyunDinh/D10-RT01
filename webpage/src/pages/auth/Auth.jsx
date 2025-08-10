@@ -134,7 +134,7 @@ const Auth = () => {
                 formData.append('teacherImage', registerData.teacherImage);
             }
 
-            const response = await axios.post('/api/auth/register', formData, {
+            const response = await axios.post('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/register', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
             });
@@ -167,7 +167,7 @@ const Auth = () => {
         setMessage(t('auth_login_loading'));
 
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,7 +177,7 @@ const Auth = () => {
             });
 
             if (response.ok) {
-                const userResponse = await fetch('/api/auth/user', {
+                const userResponse = await fetch('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/user', {
                     method: 'GET',
                     credentials: 'include',
                     headers: {

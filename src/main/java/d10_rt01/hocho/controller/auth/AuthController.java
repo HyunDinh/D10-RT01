@@ -12,7 +12,6 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -132,19 +131,18 @@ public class AuthController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
-            return ResponseEntity.status(401).body("Chưa đăng nhập.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            User user = userService.findByUsername(username);
+            if (user != null) {
+                UserResponse userResponse = getUserResponse(user);
+                logger.info("Retrieved user info for username: {}", username);
+                return ResponseEntity.ok(userResponse);
+            }
         }
-
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            return ResponseEntity.status(401).body("Chưa đăng nhập.");
-        }
-
-        UserResponse dto = getUserResponse(user);
-        return ResponseEntity.ok(dto);
+        logger.warn("No authenticated user found");
+        return ResponseEntity.status(401).body("Chưa đăng nhập.");
     }
 
     private static UserResponse getUserResponse(User user) {
