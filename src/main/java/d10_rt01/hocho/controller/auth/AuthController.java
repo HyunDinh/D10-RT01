@@ -131,19 +131,18 @@ public class AuthController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated() || auth instanceof AnonymousAuthenticationToken) {
-            return ResponseEntity.status(401).body("Chưa đăng nhập.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            User user = userService.findByUsername(username);
+            if (user != null) {
+                UserResponse userResponse = getUserResponse(user);
+                logger.info("Retrieved user info for username: {}", username);
+                return ResponseEntity.ok(userResponse);
+            }
         }
-
-        String username = auth.getName();
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            return ResponseEntity.status(401).body("Chưa đăng nhập.");
-        }
-
-        UserResponse dto = getUserResponse(user);
-        return ResponseEntity.ok(dto);
+        logger.warn("No authenticated user found");
+        return ResponseEntity.status(401).body("Chưa đăng nhập.");
     }
 
 

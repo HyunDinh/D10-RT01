@@ -22,7 +22,8 @@ import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free
 import {useTranslation} from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
 
-const LANGUAGES = [{code: "vi", labelKey: "lang_vi", defaultLabel: "Tiếng Việt", flag: "VN"}, {
+const LANGUAGES = [{
+    code: "vi", labelKey: "lang_vi", defaultLabel: "Tiếng Việt", flag: "VN"}, {
     code: "en", labelKey: "lang_en", defaultLabel: "English", flag: "US"
 },];
 
