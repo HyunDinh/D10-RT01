@@ -23,7 +23,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/hocho")
-@CrossOrigin(origins = "https://www.hocho.me", allowCredentials = "true")
 public class UserController {
 
     @Autowired
