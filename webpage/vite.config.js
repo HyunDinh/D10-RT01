@@ -7,21 +7,4 @@ export default defineConfig({
   define: {
     global: 'window', // Polyfill để ánh xạ global thành window
   },
-  server: {
-    strictPort: true,
-    open: true,
-    proxy: {
-      '/api': {
-        target: 'hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net',
-        changeOrigin: true,
-        secure: false,
-      },
-      '/ws': {
-        target: 'hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net',
-        ws: true,
-        changeOrigin: true,
-        secure: false
-      }
-    },
-  }
 });

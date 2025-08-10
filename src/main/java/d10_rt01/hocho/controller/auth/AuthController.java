@@ -31,6 +31,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "https://www.hocho.me", allowCredentials = "true")
 public class AuthController {
 
     public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(AuthController.class), DebugModeConfig.CONTROLLER_LAYER);
