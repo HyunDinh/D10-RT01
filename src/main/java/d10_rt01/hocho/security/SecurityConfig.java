@@ -77,11 +77,11 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(googleAuthConfig.oidcUserService()))
                         .successHandler((request, response, authentication) -> {
-                            response.sendRedirect("http://localhost:8080/api/auth/oauth2/success");
+                            response.sendRedirect("http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/oauth2/success");
                         })
                         .failureHandler((request, response, exception) -> {
                             String errorMessage = "Lỗi đăng nhập Google: " + exception.getMessage();
-                            response.sendRedirect("http://localhost:3000/hocho/login?oauthError=" +
+                            response.sendRedirect("http://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/hocho/login?oauthError=" +
                                     java.net.URLEncoder.encode(errorMessage, StandardCharsets.UTF_8));
                         })
                 )
@@ -111,7 +111,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+                            response.setHeader("Access-Control-Allow-Origin", "https://www.hocho.me");
                             response.setHeader("Access-Control-Allow-Credentials", "true");
                             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Chưa đăng nhập.");
                         })
