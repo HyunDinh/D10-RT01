@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import ReactPlayer from 'react-player';
 import styles from '../../styles/video/VideoPage.module.css';
-import {base64ToArrayBuffer} from '../../components/videoUtils';
+import {base64ToArrayBuffer} from '../../components/VideoUtils';
 import { useTranslation } from 'react-i18next';
 
 const ListVideo = ({videos = [], onCardClick, className = ''}) => {

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/games")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://www.hocho.me", allowCredentials = "true")
 public class GameController {
 
     private final GameService gameService;

@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,7 +32,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class AuthController {
 
     public static final CustomLogger logger = new CustomLogger(LoggerFactory.getLogger(AuthController.class), DebugModeConfig.CONTROLLER_LAYER);
@@ -144,6 +144,7 @@ public class AuthController {
         logger.warn("No authenticated user found");
         return ResponseEntity.status(401).body("Chưa đăng nhập.");
     }
+
 
     private static UserResponse getUserResponse(User user) {
         UserResponse userResponse = new UserResponse();

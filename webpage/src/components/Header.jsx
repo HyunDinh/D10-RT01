@@ -22,7 +22,8 @@ import {faFacebookF, faLinkedinIn, faTwitter, faYoutube} from '@fortawesome/free
 import {useTranslation} from "react-i18next";
 import ReactCountryFlag from "react-country-flag";
 
-const LANGUAGES = [{code: "vi", labelKey: "lang_vi", defaultLabel: "Tiếng Việt", flag: "VN"}, {
+const LANGUAGES = [{
+    code: "vi", labelKey: "lang_vi", defaultLabel: "Tiếng Việt", flag: "VN"}, {
     code: "en", labelKey: "lang_en", defaultLabel: "English", flag: "US"
 },];
 
@@ -42,7 +43,9 @@ function Header() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const [profileResponse, roleResponse] = await Promise.all([axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true}), axios.get('http://localhost:8080/api/hocho/role', {withCredentials: true}),]);
+                const [profileResponse, roleResponse] = await Promise.all([
+                    axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile', {withCredentials: true}),
+                    axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/role', {withCredentials: true}),]);
                 setUser(profileResponse.data);
                 setIsLoggedIn(true);
                 const userRole = roleResponse.data?.role || localStorage.getItem('userRole') || null;
@@ -74,7 +77,7 @@ function Header() {
 
         const fetchMessages = async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/messages/sessions', {withCredentials: true});
+                const res = await axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/messages/sessions', {withCredentials: true});
                 const totalUnreadChats = res.data.filter((session) => session.unreadCount > 0).length;
                 setUnreadCount(totalUnreadChats);
             } catch {
@@ -84,7 +87,7 @@ function Header() {
 
         const fetchNotifications = async () => {
             try {
-                const res = await axios.get(`http://localhost:8080/api/notifications/user/${user.id}?status=unread`, {
+                const res = await axios.get(`https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/notifications/user/${user.id}?status=unread`, {
                     withCredentials: true,
                 });
                 setUnreadNotifications(res.data.length);
@@ -105,7 +108,7 @@ function Header() {
     const handleLogout = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/api/auth/logout', {}, {withCredentials: true});
+            await axios.post('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/auth/logout', {}, {withCredentials: true});
             setIsLoggedIn(false);
             setRole(null);
             setUser({});
@@ -118,7 +121,7 @@ function Header() {
     };
 
     const getAvatarUrl = () => {
-        const baseUrl = 'http://localhost:8080';
+        const baseUrl = 'https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net';
         if (!isLoggedIn || !user.avatarUrl || user.avatarUrl === 'none') {
             return `${baseUrl}/api/hocho/profile/default.png?t=${new Date().getTime()}`;
         }

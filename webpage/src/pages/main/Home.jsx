@@ -10,7 +10,7 @@ function Home() {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8080/api/hocho/home', {withCredentials: true})
+            .get('https://://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/home', {withCredentials: true})
             .then((response) => {
                 setData(response.data);
                 console.log('Home API data:', response.data);

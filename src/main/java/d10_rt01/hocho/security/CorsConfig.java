@@ -15,7 +15,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://www.hocho.me"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"));
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization",
@@ -27,10 +27,9 @@ public class CorsConfig implements WebMvcConfigurer {
             "Access-Control-Request-Headers"
         ));
         configuration.setExposedHeaders(Arrays.asList(
-            "Access-Control-Allow-Origin",
-            "Access-Control-Allow-Credentials",
             "Authorization",
-            "Location"
+            "Location",
+            "Content-Disposition"
         ));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);

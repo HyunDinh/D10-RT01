@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/AboutUs.css";
+import "../styles/Aboutus.css";
 import Footer from "./Footer.jsx";
 import Header from "./Header.jsx";
 import {useTranslation} from 'react-i18next';
