@@ -30,7 +30,7 @@ function Profile() {
 
     const fetchProfileData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
+            const response = await axios.get('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile', {withCredentials: true});
             setUser(response.data);
             setEditedFullName(response.data.fullName || '');
             setEditedDateOfBirth(response.data.dateOfBirth ? response.data.dateOfBirth.split('T')[0] : '');
@@ -54,7 +54,7 @@ function Profile() {
             return;
         }
         axios
-            .put('http://localhost:8080/api/hocho/profile', {
+            .put('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile', {
                 fullName: editedFullName, dateOfBirth: editedDateOfBirth
             }, {withCredentials: true})
             .then((response) => {
@@ -95,7 +95,7 @@ function Profile() {
         }
 
         axios
-            .put('http://localhost:8080/api/hocho/profile/password', {
+            .put('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile/password', {
                 oldPassword, newPassword, confirmPassword
             }, {withCredentials: true})
             .then(() => {
@@ -119,7 +119,7 @@ function Profile() {
             formData.append('file', file);
             formData.append('username', user.username);
             try {
-                const response = await axios.post('http://localhost:8080/api/hocho/profile/upload', formData, {
+                const response = await axios.post('https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net/api/hocho/profile/upload', formData, {
                     withCredentials: true, headers: {'Content-Type': 'multipart/form-data'},
                 });
                 console.log('Upload response:', response.data);
