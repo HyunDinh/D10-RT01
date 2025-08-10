@@ -12,12 +12,12 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080/',
+        target: 'hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net',
         changeOrigin: true,
         secure: false,
       },
       '/ws': {
-        target: 'http://localhost:8080/',
+        target: 'hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net',
         ws: true,
         changeOrigin: true,
         secure: false
