@@ -16,7 +16,7 @@ const Unauthorized = ({ allowedRoles }) => {
 
     const handleLogout = async () => {
         try {
-            await axios.post('http://localhost:8080/api/auth/logout', {}, { withCredentials: true });
+            await axios.post('/api/auth/logout', {}, { withCredentials: true });
             localStorage.removeItem('userRole');
             navigate('/hocho/login');
         } catch (err) {

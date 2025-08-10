@@ -30,7 +30,7 @@ function Profile() {
 
     const fetchProfileData = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/api/hocho/profile', {withCredentials: true});
+            const response = await axios.get('/api/hocho/profile', {withCredentials: true});
             setUser(response.data);
             setEditedFullName(response.data.fullName || '');
             setEditedDateOfBirth(response.data.dateOfBirth ? response.data.dateOfBirth.split('T')[0] : '');

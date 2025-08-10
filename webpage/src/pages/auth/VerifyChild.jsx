@@ -32,7 +32,7 @@ const VerifyChild = () => {
     useEffect(() => {
         const token = searchParams.get('token');
         if (token) {
-            axios.get(`http://localhost:8080/api/auth/verify-child?token=${token}`)
+            axios.get(`/api/auth/verify-child?token=${token}`)
                 .then(response => {
                     setMessage(response.data);
                     setTimeout(() => navigate('/hocho/login'), 2000);

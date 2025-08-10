@@ -36,7 +36,7 @@ export default function ChildCoursePage() {
   }, []);
 
   const getCourseImageUrl = (courseImageUrl) => {
-    const baseUrl = 'http://localhost:8080';
+    const baseUrl = 'https://hocho-c7ekfwhrehavd6fr.southeastasia-01.azurewebsites.net';
     if (!courseImageUrl || courseImageUrl === 'none') {
       return '/avaBack.jpg';
     }
